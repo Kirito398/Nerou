@@ -16,10 +16,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES +=
+SOURCES += \
+    interactors/maininteractor.cpp \
+    models/modelitem.cpp
 
 HEADERS += \
-    Core_global.h
+    Core_global.h \
+    interactors/maininteractor.h \
+    models/modelitem.h
 
 # Default rules for deployment.
 unix {

@@ -1,8 +1,8 @@
 #include "moveitem.h"
 
-MoveItem::MoveItem(QObject *parent) : QObject(parent), QGraphicsItem()
+MoveItem::MoveItem(QPointF point, QObject *parent) : QObject(parent), QGraphicsItem()
 {
-
+    this->setPos(point);
 }
 
 QRectF MoveItem::boundingRect() const {
@@ -13,6 +13,8 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->setPen(Qt::black);
     painter->setBrush(Qt::green);
     painter->drawRect(-30, -30, 60, 60);
+
+    painter->drawText(mapFromScene(this->pos()) - QPointF(boundingRect().width() / 2.0f - 3.0f, 10.0f), this->objectName());
 
     Q_UNUSED(option);
     Q_UNUSED(widget);

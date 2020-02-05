@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <views/paintscene.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,5 +18,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    PaintScene *scene;
+
+private:
+    void resizeEvent(QResizeEvent * event) override;
 };
 #endif // MAINWINDOW_H

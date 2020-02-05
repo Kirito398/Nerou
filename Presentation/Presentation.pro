@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     views/mainwindow.cpp \
-    models/moveitem.cpp
+    models/moveitem.cpp \
+    views/paintscene.cpp
 
 HEADERS += \
     views/mainwindow.h \
-    models/moveitem.h
+    models/moveitem.h \
+    views/paintscene.h
 
 FORMS += \
     mainwindow.ui
@@ -31,3 +33,10 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Core/release/ -lCore
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Core/debug/ -lCore
+else:unix: LIBS += -L$$OUT_PWD/../Core/ -lCore
+
+INCLUDEPATH += $$PWD/../Core
+DEPENDPATH += $$PWD/../Core

@@ -10,7 +10,7 @@
 class MoveItem : public QObject, public QGraphicsItem
 {
 public:
-    MoveItem(QObject *parent);
+    MoveItem(QPointF point, QObject *parent = 0);
 
 private:
     QRectF boundingRect() const override;
