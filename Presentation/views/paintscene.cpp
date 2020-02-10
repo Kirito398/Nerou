@@ -9,10 +9,13 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (this->itemAt(event->scenePos(), QTransform()) != nullptr)
         QGraphicsScene::mousePressEvent(event);
     else {
-        MoveItem *item = new MoveItem(event->scenePos());
-        item->setObjectName(QString("Neuron_").append(QString::number(interactor->addNewItem())));
-        //item = this->findChild<MoveItem*>(QString(""), Qt::FindChildrenRecursively);
-        this->addItem(item);
+        for (int i = 0; i < 1000; i++) {
+            MoveItem *item = new MoveItem();
+            QString name = QString::number(interactor->addNewItem(item));
+            item->setObjectName(name);
+            //item = this->findChild<MoveItem*>(QString(""), Qt::FindChildrenRecursively);
+            this->addItem(item);
+        }
     }
 }
 

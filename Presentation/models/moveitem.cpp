@@ -1,8 +1,7 @@
 #include "moveitem.h"
 
-MoveItem::MoveItem(QPointF point, QObject *parent) : QObject(parent), QGraphicsItem()
+MoveItem::MoveItem(QObject *parent) : QObject(parent), QGraphicsItem()
 {
-    this->setPos(point);
 }
 
 QRectF MoveItem::boundingRect() const {
@@ -21,7 +20,8 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 }
 
 void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    this->setPos(mapToScene(event->pos()));
+    QPointF position = mapToScene(event->pos());
+    MainInteractor::getInstance()->setItemPosition(position.x(), position.y(), this->objectName().toStdString());
 }
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -34,4 +34,8 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ArrowCursor));
 
     Q_UNUSED(event);
+}
+
+void MoveItem::setPosition(float posX, float posY) {
+    this->setPos(QPointF(posX, posY));
 }

@@ -6,11 +6,13 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QCursor>
+#include <interfaces/moveiteminterface.h>
+#include <interactors/maininteractor.h>
 
-class MoveItem : public QObject, public QGraphicsItem
+class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
 public:
-    MoveItem(QPointF point, QObject *parent = 0);
+    MoveItem(QObject *parent = 0);
 
 private:
     QRectF boundingRect() const override;
@@ -18,6 +20,7 @@ private:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void setPosition(float posX, float posY) override;
 };
 
 #endif // MOVEITEM_H

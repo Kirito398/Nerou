@@ -23,6 +23,7 @@ SOURCES += \
 HEADERS += \
     Core_global.h \
     interactors/maininteractor.h \
+    interfaces/moveiteminterface.h \
     models/modelitem.h
 
 # Default rules for deployment.

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <models/modelitem.h>
+#include <interfaces/moveiteminterface.h>
 
 using namespace std;
 
@@ -10,7 +11,8 @@ class MainInteractor
 {
 public:
     static MainInteractor* getInstance();
-    int addNewItem();
+    int addNewItem(MoveItemInterface * listener);
+    void setItemPosition(float posX, float posY, string objectName);
 
 private:
     MainInteractor();
