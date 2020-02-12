@@ -13,19 +13,24 @@ MainInteractor* MainInteractor::getInstance() {
 
 int MainInteractor::addNewItem(MoveItemInterface *listener) {
     int i = itemsList.size();
-    itemsList.push_back(ModelItem(to_string(i), listener));
+    ModelItem newItem = ModelItem(to_string(i), listener);
+    currentItem = &newItem;
+    itemsList.push_back(newItem);
     return i;
 }
 
-void MainInteractor::setItemPosition(float posX, float posY, string objectName) {
-    int id = stoi(objectName);
-    for (int i = 0; i < itemsList.size(); i++) {
-        if (itemsList[i].objectName == objectName) {
-            itemsList[i].setPosition(posX, posY);
+void MainInteractor::setCurrentItem(string objectName) {
+    for (auto &item : itemsList) {
+        if (item.objectName == objectName) {
+            currentItem = &item;
             break;
         }
     }
-    //itemsList[id].setPosition(posX, posY);
+}
+
+void MainInteractor::setItemPosition(float posX, float posY) {
+    if (currentItem != nullptr)
+        currentItem->setPosition(posX, posY);
 }
 
 MainInteractor * MainInteractor::instance;

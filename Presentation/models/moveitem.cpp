@@ -2,6 +2,7 @@
 
 MoveItem::MoveItem(QObject *parent) : QObject(parent), QGraphicsItem()
 {
+    interactor = MainInteractor::getInstance();
 }
 
 QRectF MoveItem::boundingRect() const {
@@ -21,11 +22,12 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QPointF position = mapToScene(event->pos());
-    MainInteractor::getInstance()->setItemPosition(position.x(), position.y(), this->objectName().toStdString());
+    interactor->setItemPosition(position.x(), position.y());
 }
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ClosedHandCursor));
+    interactor->setCurrentItem(this->objectName().toStdString());
 
     Q_UNUSED(event);
 }
@@ -33,9 +35,17 @@ void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ArrowCursor));
 
+    QPointF position = mapToScene(event->pos());
+    interactor->setItemPosition(position.x(), position.y());
+
     Q_UNUSED(event);
 }
 
 void MoveItem::setPosition(float posX, float posY) {
     this->setPos(QPointF(posX, posY));
+}
+
+void MoveItem::setPosition(QPointF position) {
+    interactor->setCurrentItem(this->objectName().toStdString());
+    interactor->setItemPosition(position.x(), position.y());
 }

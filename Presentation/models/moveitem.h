@@ -13,6 +13,7 @@ class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
 public:
     MoveItem(QObject *parent = 0);
+    void setPosition(QPointF position);
 
 private:
     QRectF boundingRect() const override;
@@ -21,6 +22,9 @@ private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void setPosition(float posX, float posY) override;
+
+private:
+    MainInteractor *interactor;
 };
 
 #endif // MOVEITEM_H
