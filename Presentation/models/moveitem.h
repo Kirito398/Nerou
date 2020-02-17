@@ -25,6 +25,7 @@ private:
 
 private:
     MainInteractor *interactor;
+    bool isSelected;
 };
 
 #endif // MOVEITEM_H

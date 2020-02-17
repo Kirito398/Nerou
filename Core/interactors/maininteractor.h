@@ -20,6 +20,7 @@ private:
     static MainInteractor *instance;
     vector<ModelItem> itemsList;
     ModelItem *currentItem = nullptr;
+    void setCurrentItem(ModelItem *item);
 };
 
 #endif // MAININTERACTOR_H

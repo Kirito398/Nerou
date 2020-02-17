@@ -18,6 +18,7 @@ private:
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void updateItemSelection();
 };
 
 #endif // PAINTSCENE_H

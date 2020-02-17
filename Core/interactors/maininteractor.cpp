@@ -14,7 +14,7 @@ MainInteractor* MainInteractor::getInstance() {
 int MainInteractor::addNewItem(MoveItemInterface *listener) {
     int i = itemsList.size();
     ModelItem newItem = ModelItem(to_string(i), listener);
-    currentItem = &newItem;
+    setCurrentItem(&newItem);
     itemsList.push_back(newItem);
     return i;
 }
@@ -22,10 +22,14 @@ int MainInteractor::addNewItem(MoveItemInterface *listener) {
 void MainInteractor::setCurrentItem(string objectName) {
     for (auto &item : itemsList) {
         if (item.objectName == objectName) {
-            currentItem = &item;
+            setCurrentItem(&item);
             break;
         }
     }
+}
+
+void MainInteractor::setCurrentItem(ModelItem *item) {
+    currentItem = item;
 }
 
 void MainInteractor::setItemPosition(float posX, float posY) {

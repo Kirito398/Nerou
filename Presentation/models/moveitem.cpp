@@ -3,6 +3,7 @@
 MoveItem::MoveItem(QObject *parent) : QObject(parent), QGraphicsItem()
 {
     interactor = MainInteractor::getInstance();
+    isSelected = false;
 }
 
 QRectF MoveItem::boundingRect() const {
@@ -15,6 +16,12 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->drawRect(-30, -30, 60, 60);
 
     painter->drawText(mapFromScene(this->pos()) - QPointF(boundingRect().width() / 2.0f - 3.0f, 10.0f), this->objectName());
+
+    if (isSelected) {
+        painter->setPen(Qt::blue);
+        painter->setBrush(QColor(0, 0, 255, 50));
+        painter->drawRect(boundingRect());
+    }
 
     Q_UNUSED(option);
     Q_UNUSED(widget);

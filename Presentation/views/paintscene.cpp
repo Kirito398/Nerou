@@ -6,6 +6,8 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 }
 
 void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    updateItemSelection();
+
     if (this->itemAt(event->scenePos(), QTransform()) != nullptr)
         QGraphicsScene::mousePressEvent(event);
     else {
@@ -23,6 +25,15 @@ void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
         QGraphicsScene::mouseMoveEvent(event);
     else {
 
+    }
+}
+
+void PaintScene::updateItemSelection() {
+    QList <QGraphicsItem *> items = this->items(itemsBoundingRect(), Qt::ContainsItemShape);
+
+    for (auto item : items) {
+        MoveItem *selectedItem = dynamic_cast<MoveItem *>(item);
+        selectedItem->setSelected(false);
     }
 }
 
