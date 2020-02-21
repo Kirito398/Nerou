@@ -11,16 +11,12 @@ class MainInteractor
 {
 public:
     static MainInteractor* getInstance();
-    int addNewItem(MoveItemInterface * listener);
-    void setItemPosition(float posX, float posY);
-    void setCurrentItem(string objectName);
+    ModelItem* addNewItem(MoveItemInterface * listener);
 
 private:
     MainInteractor();
     static MainInteractor *instance;
     vector<ModelItem> itemsList;
-    ModelItem *currentItem = nullptr;
-    void setCurrentItem(ModelItem *item);
 };
 
 #endif // MAININTERACTOR_H

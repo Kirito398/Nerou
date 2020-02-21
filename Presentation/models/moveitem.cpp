@@ -1,8 +1,9 @@
 #include "moveitem.h"
 
-MoveItem::MoveItem(QObject *parent) : QObject(parent), QGraphicsItem()
+MoveItem::MoveItem(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
 {
-    interactor = MainInteractor::getInstance();
+    listener = MainInteractor::getInstance()->addNewItem(this);
+    this->setPos(position);
     isSelected = false;
 }
 
@@ -14,8 +15,6 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->setPen(Qt::black);
     painter->setBrush(Qt::green);
     painter->drawRect(-30, -30, 60, 60);
-
-    painter->drawText(mapFromScene(this->pos()) - QPointF(boundingRect().width() / 2.0f - 3.0f, 10.0f), this->objectName());
 
     if (isSelected) {
         painter->setPen(Qt::blue);
@@ -29,12 +28,13 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QPointF position = mapToScene(event->pos());
-    interactor->setItemPosition(position.x(), position.y());
+
+    if (listener != nullptr)
+        listener->setPosition(position.x(), position.y());
 }
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ClosedHandCursor));
-    interactor->setCurrentItem(this->objectName().toStdString());
 
     Q_UNUSED(event);
 }
@@ -43,16 +43,11 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ArrowCursor));
 
     QPointF position = mapToScene(event->pos());
-    interactor->setItemPosition(position.x(), position.y());
 
-    Q_UNUSED(event);
+    if (listener != nullptr)
+        listener->setPosition(position.x(), position.y());
 }
 
 void MoveItem::setPosition(float posX, float posY) {
     this->setPos(QPointF(posX, posY));
-}
-
-void MoveItem::setPosition(QPointF position) {
-    interactor->setCurrentItem(this->objectName().toStdString());
-    interactor->setItemPosition(position.x(), position.y());
 }

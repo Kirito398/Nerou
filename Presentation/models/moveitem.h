@@ -12,8 +12,7 @@
 class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
 public:
-    MoveItem(QObject *parent = 0);
-    void setPosition(QPointF position);
+    MoveItem(QPointF position, QObject *parent = 0);
 
 private:
     QRectF boundingRect() const override;
@@ -24,7 +23,7 @@ private:
     void setPosition(float posX, float posY) override;
 
 private:
-    MainInteractor *interactor;
+    ModelItem *listener;
     bool isSelected;
 };
 

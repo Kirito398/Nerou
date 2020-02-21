@@ -1,8 +1,7 @@
 #include "modelitem.h"
 
-ModelItem::ModelItem(string objectName, MoveItemInterface *listener)
+ModelItem::ModelItem(MoveItemInterface *listener)
 {
-    this->objectName = objectName;
     this->listener = listener;
 }
 
@@ -11,5 +10,5 @@ void ModelItem::setPosition(float posX, float posY) {
     this->posY = posY;
 
     if (listener != nullptr)
-        listener->setPosition(posX, posY);
+        listener->setPosition(this->posX, this->posY);
 }

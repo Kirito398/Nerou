@@ -1,7 +1,6 @@
 #ifndef MOVEITEMINTERFACE_H
 #define MOVEITEMINTERFACE_H
 
-
 class MoveItemInterface
 {
 public:

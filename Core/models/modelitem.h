@@ -9,9 +9,8 @@ using namespace std;
 class ModelItem
 {
 public:
-    ModelItem(string objectName, MoveItemInterface *listener);
+    ModelItem(MoveItemInterface *listener);
     void setPosition(float posX, float posY);
-    string objectName;
 
 private:
     float posX, posY;
