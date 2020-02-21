@@ -11,7 +11,9 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (this->itemAt(event->scenePos(), QTransform()) != nullptr)
         QGraphicsScene::mousePressEvent(event);
     else {
-        this->addItem(new MoveItem(event->scenePos()));
+        MoveItem *item = new MoveItem(event->scenePos());
+        item->setView(this);
+        this->addItem(item);
     }
 }
 
@@ -21,6 +23,14 @@ void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     else {
 
     }
+}
+
+void PaintScene::onInputCircleClicked(QPointF position) {
+    //TODO end making arrow
+}
+
+void PaintScene::onOutputCircleClicked(QPointF position) {
+    //TODO start making arrow
 }
 
 void PaintScene::updateItemSelection() {

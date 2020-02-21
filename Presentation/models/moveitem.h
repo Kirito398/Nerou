@@ -8,11 +8,13 @@
 #include <QCursor>
 #include <interfaces/moveiteminterface.h>
 #include <interactors/maininteractor.h>
+#include <interfaces/PaintSceneInterface.h>
 
 class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
 public:
     MoveItem(QPointF position, QObject *parent = 0);
+    void setView(PaintSceneInterface *view);
 
 private:
     QRectF boundingRect() const override;
@@ -24,7 +26,9 @@ private:
 
 private:
     ModelItem *listener;
-    bool isSelected;
+    PaintSceneInterface *view;
+    bool isSelected, isIOClicked;
+    QRectF inCircle, outCircle;
 };
 
 #endif // MOVEITEM_H

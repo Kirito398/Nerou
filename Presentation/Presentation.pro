@@ -22,6 +22,7 @@ SOURCES += \
     views/paintscene.cpp
 
 HEADERS += \
+    interfaces/PaintSceneInterface.h \
     views/mainwindow.h \
     models/moveitem.h \
     views/paintscene.h
