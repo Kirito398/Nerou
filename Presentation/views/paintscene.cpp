@@ -6,31 +6,48 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 }
 
 void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    updateItemSelection();
+    if (event->button() != Qt::LeftButton)
+        return;
 
-    if (this->itemAt(event->scenePos(), QTransform()) != nullptr)
-        QGraphicsScene::mousePressEvent(event);
-    else {
-        MoveItem *item = new MoveItem(event->scenePos());
-        item->setView(this);
-        this->addItem(item);
+    switch (mode) {
+    case Items:
+        if (this->itemAt(event->scenePos(), QTransform()) == nullptr) {
+            MoveItem *item = new MoveItem(event->scenePos());
+            item->setView(this);
+            this->addItem(item);
+        }
+        break;
+    case Arrows:
+        if (mode == Arrows) {
+            line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
+            addItem(line);
+            return;
+        }
+        break;
     }
+
+    QGraphicsScene::mousePressEvent(event);
 }
 
 void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    if (this->itemAt(event->scenePos(), QTransform()) != nullptr)
-        QGraphicsScene::mouseMoveEvent(event);
-    else {
+    if (mode == Arrows && line != nullptr) {
+        QLineF newLine(line->line().p1(), event->scenePos());
+        line->setLine(newLine);
+    } else if (mode == Items) QGraphicsScene::mouseMoveEvent(event);
+}
 
+void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (line != nullptr && mode == Arrows) {
+        removeItem(line);
+        delete line;
     }
+
+    line = nullptr;
+    QGraphicsScene::mouseReleaseEvent(event);
 }
 
-void PaintScene::onInputCircleClicked(QPointF position) {
-    //TODO end making arrow
-}
-
-void PaintScene::onOutputCircleClicked(QPointF position) {
-    //TODO start making arrow
+void PaintScene::updateScene() {
+    this->update();
 }
 
 void PaintScene::updateItemSelection() {
@@ -42,6 +59,6 @@ void PaintScene::updateItemSelection() {
     }
 }
 
-PaintScene::~PaintScene() {
-
+void PaintScene::setMode(Mode mode) {
+    this->mode = mode;
 }

@@ -22,5 +22,9 @@ private:
 
 private:
     void resizeEvent(QResizeEvent * event) override;
+
+private slots:
+    void onEditModeBtnClicked();
+    void onArrowModeBtnClicked();
 };
 #endif // MAINWINDOW_H

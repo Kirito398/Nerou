@@ -27,8 +27,7 @@ private:
 private:
     ModelItem *listener;
     PaintSceneInterface *view;
-    bool isSelected, isIOClicked;
-    QRectF inCircle, outCircle;
+    bool isSelected;
 };
 
 #endif // MOVEITEM_H

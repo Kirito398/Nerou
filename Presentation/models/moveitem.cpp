@@ -6,10 +6,6 @@ MoveItem::MoveItem(QPointF position, QObject *parent) : QObject(parent), QGraphi
     this->setPos(position);
 
     isSelected = false;
-    isIOClicked = false;
-
-    inCircle = QRectF(-30, -5, 10, 10);
-    outCircle = QRectF(20, -5, 10, 10);
 }
 
 void MoveItem::setView(PaintSceneInterface *view) {
@@ -32,28 +28,20 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     }
 
     painter->setBrush(Qt::white);
-    painter->drawEllipse(inCircle);
-    painter->drawEllipse(outCircle);
 
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
 }
 
 void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QPointF position = mapToScene(event->pos());
 
-    if (listener != nullptr && !isIOClicked)
+    if (listener != nullptr)
         listener->setPosition(position.x(), position.y());
 }
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ClosedHandCursor));
-
-    if (outCircle.contains(event->pos())) {
-        isIOClicked = true;
-        view->onOutputCircleClicked(event->pos());
-    } else
-        isIOClicked = false;
 }
 
 void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
@@ -61,7 +49,7 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
     QPointF position = mapToScene(event->pos());
 
-    if (listener != nullptr && !isIOClicked)
+    if (listener != nullptr)
         listener->setPosition(position.x(), position.y());
 }
 

@@ -6,8 +6,7 @@
 class PaintSceneInterface
 {
 public:
-    virtual void onInputCircleClicked(QPointF position) = 0;
-    virtual void onOutputCircleClicked(QPointF position) = 0;
+    virtual void updateScene() = 0;
 };
 
 #endif // PAINTSCENEINTERFACE_H
