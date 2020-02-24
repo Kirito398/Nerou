@@ -3,6 +3,7 @@
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance();
+    line = nullptr;
 }
 
 void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -64,15 +65,6 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void PaintScene::updateScene() {
     this->update();
-}
-
-void PaintScene::updateItemSelection() {
-    QList <QGraphicsItem *> items = this->items(itemsBoundingRect(), Qt::ContainsItemShape);
-
-    for (auto item : items) {
-        MoveItem *selectedItem = dynamic_cast<MoveItem *>(item);
-        selectedItem->setSelected(false);
-    }
 }
 
 void PaintScene::setMode(Mode mode) {

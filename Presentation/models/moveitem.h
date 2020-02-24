@@ -30,7 +30,6 @@ private:
 private:
     ModelItem *listener;
     PaintSceneInterface *view;
-    bool isSelected;
     QPolygonF polygon;
 };
 

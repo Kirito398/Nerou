@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     showMaximized();
 
-    scene = new PaintScene();
+    scene = new PaintScene(this);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

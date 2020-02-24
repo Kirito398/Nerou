@@ -5,7 +5,7 @@ MoveItem::MoveItem(QPointF position, QObject *parent) : QObject(parent), QGraphi
     listener = MainInteractor::getInstance()->addNewItem(this);
     this->setPos(position);
 
-    isSelected = false;
+    setFlag(QGraphicsItem::ItemIsSelectable);
 
     QRectF rect = boundingRect();
     polygon << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft() << rect.topLeft();
@@ -28,13 +28,11 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->setBrush(Qt::green);
     painter->drawRect(-30, -30, 60, 60);
 
-    if (isSelected) {
+    if (isSelected()) {
         painter->setPen(Qt::blue);
         painter->setBrush(QColor(0, 0, 255, 50));
         painter->drawRect(boundingRect());
     }
-
-    painter->setBrush(Qt::white);
 
     Q_UNUSED(option)
     Q_UNUSED(widget)
