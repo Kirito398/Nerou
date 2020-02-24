@@ -5,29 +5,30 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+
 #include <interfaces/PaintSceneInterface.h>
+#include <models/moveitem.h>
 
 #include <math.h>
 
-class ArrowItem : public QObject, public QGraphicsItem
+class ArrowItem : public QGraphicsLineItem
 {
 public:
-    ArrowItem(QPointF point, QObject *parent = nullptr);
+    ArrowItem(MoveItem *startItem, MoveItem *endItem, QGraphicsItem *parent = nullptr);
     QRectF boundingRect() const override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void setView(PaintSceneInterface *view);
-    QPainterPath shape() const override;
+    void updatePosition();
 
 private:
-    QPolygonF selectionPolygon() const;
+
 
 private:
-    QPointF startPoint, endPoint;
     PaintSceneInterface *view;
-    QRectF endBoundingRect;
+    MoveItem *startItem;
+    MoveItem *endItem;
+    QPolygonF arrowHead;
 };
 
 #endif // ARROWITEM_H

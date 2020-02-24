@@ -6,10 +6,17 @@ MoveItem::MoveItem(QPointF position, QObject *parent) : QObject(parent), QGraphi
     this->setPos(position);
 
     isSelected = false;
+
+    QRectF rect = boundingRect();
+    polygon << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft() << rect.topLeft();
 }
 
 void MoveItem::setView(PaintSceneInterface *view) {
     this->view = view;
+}
+
+QPolygonF MoveItem::getPolygon() const {
+    return polygon;
 }
 
 QRectF MoveItem::boundingRect() const {

@@ -18,12 +18,9 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         }
         break;
     case Arrows:
-        if (mode == Arrows) {
-            line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
-            addItem(line);
-            return;
-        }
-        break;
+        line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
+        addItem(line);
+        return;
     }
 
     QGraphicsScene::mousePressEvent(event);
@@ -38,6 +35,25 @@ void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (line != nullptr && mode == Arrows) {
+        QList<QGraphicsItem *> startItems = items(line->line().p1());
+        if (startItems.count() && startItems.first() == line)
+            startItems.removeFirst();
+
+        QList<QGraphicsItem *> endItems = items(line->line().p2());
+        if (endItems.count() && endItems.first() == line)
+            endItems.removeFirst();
+
+        if (startItems.count() && endItems.count() && startItems.first() != endItems.first()) {
+            MoveItem *startItem = qgraphicsitem_cast<MoveItem *>(startItems.first());
+            MoveItem *endItem = qgraphicsitem_cast<MoveItem *>(endItems.first());
+            ArrowItem *arrow = new ArrowItem(startItem, endItem);
+            //add arrow to startitem
+            //add arrow to enditem
+            addItem(arrow);
+            arrow->setZValue(-1000.0);
+            arrow->updatePosition();
+        }
+
         removeItem(line);
         delete line;
     }
