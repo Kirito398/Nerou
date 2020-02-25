@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pbEditMode, SIGNAL(clicked(bool)), this, SLOT(onEditModeBtnClicked()));
     connect(ui->pbArrowMode, SIGNAL(clicked(bool)), this, SLOT(onArrowModeBtnClicked()));
+    connect(ui->pbMoveMode, SIGNAL(clicked(bool)), this, SLOT(onSelectorModeBtnClicked()));
 }
 
 void MainWindow::onEditModeBtnClicked() {
@@ -30,6 +31,10 @@ void MainWindow::onEditModeBtnClicked() {
 
 void MainWindow::onArrowModeBtnClicked() {
     scene->setMode(PaintScene::Arrows);
+}
+
+void MainWindow::onSelectorModeBtnClicked() {
+    scene->setMode(PaintScene::Selector);
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {

@@ -26,5 +26,6 @@ private:
 private slots:
     void onEditModeBtnClicked();
     void onArrowModeBtnClicked();
+    void onSelectorModeBtnClicked();
 };
 #endif // MAINWINDOW_H

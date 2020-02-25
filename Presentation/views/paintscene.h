@@ -14,13 +14,13 @@ class PaintScene : public QGraphicsScene, public PaintSceneInterface
 {
 public:
     PaintScene(QObject *parent = nullptr);
-    enum Mode {Items, Arrows};
+    enum Mode {Selector, Items, Arrows};
     void setMode(Mode mode);
 
 private:
     MainInteractor* interactor;
     ArrowItem* currentArrow;
-    Mode mode = Items;
+    Mode mode;
     QGraphicsLineItem *line;
 
 private:

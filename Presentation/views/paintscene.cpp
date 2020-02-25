@@ -4,6 +4,7 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance();
     line = nullptr;
+    mode = PaintScene::Selector;
 }
 
 void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -19,6 +20,7 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     case Arrows:
         onArrowsModeClicked(event);
         break;
+    default: break;
     }
 
     QGraphicsScene::mousePressEvent(event);
@@ -64,9 +66,11 @@ void PaintScene::addArrowItem() {
         ArrowItem *arrow = new ArrowItem(startItem, endItem);
 
         if (startItem->addArrow(arrow) && endItem->addArrow(arrow)) {
-            addItem(arrow);
+            this->clearSelection();
+            arrow->setSelected(true);
             arrow->setZValue(-1000.0);
             arrow->updatePosition();
+            addItem(arrow);
         }
     }
 

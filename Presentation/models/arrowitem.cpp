@@ -46,22 +46,48 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawLine(line());
     painter->drawPolygon(arrowHead);
 
+    if (isSelected()) {
+        painter->setPen(Qt::blue);
+        painter->setBrush(QColor(0, 0, 255, 50));
+        painter->drawPolygon(selectionPolygon());
+    }
+
     Q_UNUSED(option)
     Q_UNUSED(widget)
 }
 
 QRectF ArrowItem::boundingRect() const {
-    qreal extra = (pen().width() + 20) / 2.0;
-
-    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(), line().p2().y() - line().p1().y()))
-            .normalized()
-            .adjusted(-extra, -extra, extra, extra);
+    return selectionPolygon().boundingRect();
 }
 
 QPainterPath ArrowItem::shape() const {
     QPainterPath path;
-    path.addPolygon(arrowHead);
+    path.addPolygon(selectionPolygon());
     return path;
+}
+
+QPolygonF ArrowItem::selectionPolygon() const {
+    QPolygonF polygon;
+    qreal size = 10;
+
+    QLineF newLine = line();
+    newLine.setLength(line().length() + 15);
+
+    qreal deltaX = line().center().x() - newLine.center().x();
+    qreal deltaY = line().center().y() - newLine.center().y();
+
+    qreal radAngle = newLine.angle() * M_PI / 180;
+    qreal dx = size / 2 * sin(radAngle);
+    qreal dy = size / 2 * cos(radAngle);
+    QPointF offset1 = QPointF(dx + deltaX / 2, dy + deltaY / 2);
+    QPointF offset2 = QPointF(-dx + deltaX / 2, -dy + deltaY / 2);
+
+    polygon << newLine.p1() + offset1
+            << newLine.p1() + offset2
+            << newLine.p2() + offset2
+            << newLine.p2() + offset1;
+
+    return polygon;
 }
 
 void ArrowItem::setView(PaintSceneInterface *view) {

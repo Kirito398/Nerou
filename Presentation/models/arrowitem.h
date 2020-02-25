@@ -5,6 +5,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+#include <QPolygonF>
 
 #include <interfaces/PaintSceneInterface.h>
 #include <models/moveitem.h>
@@ -26,6 +27,9 @@ protected:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+
+private:
+    QPolygonF selectionPolygon() const;
 
 private:
     PaintSceneInterface *view;
