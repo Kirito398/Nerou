@@ -14,7 +14,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
 private:
     Ui::MainWindow *ui;
@@ -22,5 +22,10 @@ private:
 
 private:
     void resizeEvent(QResizeEvent * event) override;
+
+private slots:
+    void onEditModeBtnClicked();
+    void onArrowModeBtnClicked();
+    void onSelectorModeBtnClicked();
 };
 #endif // MAINWINDOW_H

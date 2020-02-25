@@ -3,35 +3,97 @@
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance();
+    line = nullptr;
+    mode = PaintScene::Selector;
 }
 
 void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    updateItemSelection();
+    if (event->button() != Qt::LeftButton)
+        return;
 
-    if (this->itemAt(event->scenePos(), QTransform()) != nullptr)
-        QGraphicsScene::mousePressEvent(event);
-    else {
-        this->addItem(new MoveItem(event->scenePos()));
+    this->clearSelection();
+
+    switch (mode) {
+    case Items:
+        onItemsModeClicked(event);
+        break;
+    case Arrows:
+        onArrowsModeClicked(event);
+        break;
+    default: break;
     }
+
+    QGraphicsScene::mousePressEvent(event);
 }
 
 void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    if (this->itemAt(event->scenePos(), QTransform()) != nullptr)
-        QGraphicsScene::mouseMoveEvent(event);
-    else {
-
-    }
+    if (mode == Arrows && line != nullptr) {
+        QLineF newLine(line->line().p1(), event->scenePos());
+        line->setLine(newLine);
+    } else if (mode == Items) QGraphicsScene::mouseMoveEvent(event);
 }
 
-void PaintScene::updateItemSelection() {
-    QList <QGraphicsItem *> items = this->items(itemsBoundingRect(), Qt::ContainsItemShape);
+void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (line != nullptr && mode == Arrows)
+        addArrowItem();
 
-    for (auto item : items) {
-        MoveItem *selectedItem = dynamic_cast<MoveItem *>(item);
-        selectedItem->setSelected(false);
-    }
+    line = nullptr;
+
+    if (mode == Items)
+        QGraphicsScene::mouseReleaseEvent(event);
 }
 
-PaintScene::~PaintScene() {
+void PaintScene::updateScene() {
+    this->update();
+}
 
+void PaintScene::setMode(Mode mode) {
+    this->mode = mode;
+}
+
+void PaintScene::addArrowItem() {
+    QList<QGraphicsItem *> startItems = items(line->line().p1());
+    if (startItems.count() && startItems.first() == line)
+        startItems.removeFirst();
+
+    QList<QGraphicsItem *> endItems = items(line->line().p2());
+    if (endItems.count() && endItems.first() == line)
+        endItems.removeFirst();
+
+    if (startItems.count() && endItems.count() && startItems.first() != endItems.first()) {
+        MoveItem *startItem = qgraphicsitem_cast<MoveItem *>(startItems.first());
+        MoveItem *endItem = qgraphicsitem_cast<MoveItem *>(endItems.first());
+        ArrowItem *arrow = new ArrowItem(startItem, endItem);
+
+        if (startItem->addArrow(arrow) && endItem->addArrow(arrow)) {
+            this->clearSelection();
+            arrow->setSelected(true);
+            arrow->setZValue(-1000.0);
+            arrow->updatePosition();
+            addItem(arrow);
+        }
+    }
+
+    removeItem(line);
+    delete line;
+}
+
+void PaintScene::addMoveItem(QPointF position) {
+    MoveItem *newItem = new MoveItem(position);
+    newItem->setView(this);
+    newItem->setSelected(true);
+    this->addItem(newItem);
+}
+
+void PaintScene::onItemsModeClicked(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem *item =  this->itemAt(event->scenePos(), QTransform());
+    if (item == nullptr)
+        addMoveItem(event->scenePos());
+    else
+        item->setSelected(true);
+}
+
+void PaintScene::onArrowsModeClicked(QGraphicsSceneMouseEvent *event) {
+    line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
+    addItem(line);
 }

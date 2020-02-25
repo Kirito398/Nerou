@@ -4,7 +4,7 @@
 class MoveItemInterface
 {
 public:
-    virtual void setPosition(float posX, float posY) = 0;
+    virtual void setPosition(double posX, double posY) = 0;
 };
 
 #endif // MOVEITEMINTERFACE_H
