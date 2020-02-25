@@ -10,18 +10,24 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() != Qt::LeftButton)
         return;
 
+    this->clearSelection();
+
     switch (mode) {
-    case Items:
-        if (this->itemAt(event->scenePos(), QTransform()) == nullptr) {
+    case Items: {
+        QGraphicsItem *item =  this->itemAt(event->scenePos(), QTransform());
+        if (item == nullptr) {
             MoveItem *item = new MoveItem(event->scenePos());
             item->setView(this);
             this->addItem(item);
+        } else {
+            item->setSelected(true);
         }
         break;
+    }
     case Arrows:
         line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
         addItem(line);
-        return;
+        break;
     }
 
     QGraphicsScene::mousePressEvent(event);
@@ -39,7 +45,9 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         addArrowItem();
 
     line = nullptr;
-    QGraphicsScene::mouseReleaseEvent(event);
+
+    if (mode == Items)
+        QGraphicsScene::mouseReleaseEvent(event);
 }
 
 void PaintScene::updateScene() {
