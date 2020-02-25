@@ -11,18 +11,21 @@
 
 #include <math.h>
 
+class MoveItem;
+
 class ArrowItem : public QGraphicsLineItem
 {
 public:
     ArrowItem(MoveItem *startItem, MoveItem *endItem, QGraphicsItem *parent = nullptr);
+    void setView(PaintSceneInterface *view);
+    void updatePosition();
+    MoveItem* getStartItem();
+    MoveItem* getEndItem();
+
+protected:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-    void setView(PaintSceneInterface *view);
-    void updatePosition();
-
-private:
-
 
 private:
     PaintSceneInterface *view;

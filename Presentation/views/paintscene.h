@@ -28,6 +28,7 @@ private:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateScene() override;
+    void addArrowItem();
 };
 
 #endif // PAINTSCENE_H

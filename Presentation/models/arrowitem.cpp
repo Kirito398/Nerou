@@ -17,7 +17,7 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setPen(mPen);
     painter->setBrush(Qt::black);
 
-    qreal arrowSize = 20;
+    qreal arrowSize = 10;
 
     QLineF centerLine(startItem->pos(), endItem->pos());
     QPolygonF endPolygon = endItem->getPolygon();
@@ -45,6 +45,9 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     painter->drawLine(line());
     painter->drawPolygon(arrowHead);
+
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
 }
 
 QRectF ArrowItem::boundingRect() const {
@@ -68,4 +71,12 @@ void ArrowItem::setView(PaintSceneInterface *view) {
 void ArrowItem::updatePosition() {
     QLineF line(mapFromItem(startItem, 0, 0), mapFromItem(endItem, 0, 0));
     setLine(line);
+}
+
+MoveItem* ArrowItem::getStartItem() {
+    return startItem;
+}
+
+MoveItem* ArrowItem::getEndItem() {
+    return endItem;
 }

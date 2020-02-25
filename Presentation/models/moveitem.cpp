@@ -7,16 +7,30 @@ MoveItem::MoveItem(QPointF position, QObject *parent) : QObject(parent), QGraphi
 
     setFlag(QGraphicsItem::ItemIsSelectable);
 
-    QRectF rect = boundingRect();
-    polygon << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft() << rect.topLeft();
+    makePolygon();
 }
 
 void MoveItem::setView(PaintSceneInterface *view) {
     this->view = view;
 }
 
+void MoveItem::makePolygon() {
+    QRectF rect = boundingRect();
+    polygon << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft() << rect.topLeft();
+}
+
 QPolygonF MoveItem::getPolygon() const {
     return polygon;
+}
+
+void MoveItem::addArrow(ArrowItem* arrow) {
+    if (arrow->getStartItem() == this) {
+        outputArrows.append(arrow);
+    }
+
+    if (arrow->getEndItem() == this) {
+        inputArrows.append(arrow);
+    }
 }
 
 QRectF MoveItem::boundingRect() const {
@@ -47,6 +61,8 @@ void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ClosedHandCursor));
+
+    Q_UNUSED(event)
 }
 
 void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
