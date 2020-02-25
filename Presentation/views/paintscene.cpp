@@ -63,11 +63,12 @@ void PaintScene::addArrowItem() {
         MoveItem *startItem = qgraphicsitem_cast<MoveItem *>(startItems.first());
         MoveItem *endItem = qgraphicsitem_cast<MoveItem *>(endItems.first());
         ArrowItem *arrow = new ArrowItem(startItem, endItem);
-        startItem->addArrow(arrow);
-        endItem->addArrow(arrow);
-        addItem(arrow);
-        arrow->setZValue(-1000.0);
-        arrow->updatePosition();
+
+        if (startItem->addArrow(arrow) && endItem->addArrow(arrow)) {
+            addItem(arrow);
+            arrow->setZValue(-1000.0);
+            arrow->updatePosition();
+        }
     }
 
     removeItem(line);

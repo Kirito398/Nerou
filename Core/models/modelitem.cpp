@@ -12,3 +12,11 @@ void ModelItem::setPosition(float posX, float posY) {
     if (listener != nullptr)
         listener->setPosition(this->posX, this->posY);
 }
+
+void ModelItem::addInputItem(ModelItem* inputItem) {
+    inputItems.push_back(inputItem);
+}
+
+void ModelItem::addOutputItem(ModelItem* outputItem) {
+    outputItems.push_back(outputItem);
+}

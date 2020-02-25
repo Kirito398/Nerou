@@ -23,14 +23,41 @@ QPolygonF MoveItem::getPolygon() const {
     return polygon;
 }
 
-void MoveItem::addArrow(ArrowItem* arrow) {
-    if (arrow->getStartItem() == this) {
-        outputArrows.append(arrow);
+bool MoveItem::addArrow(ArrowItem* arrow) {
+    if (isArrowAlreadyAdded(arrow)) {
+        return false;
     }
 
-    if (arrow->getEndItem() == this) {
-        inputArrows.append(arrow);
+    MoveItem *startItem = arrow->getStartItem();
+    MoveItem *endItem = arrow->getEndItem();
+
+    if (startItem == this) {
+        outputArrows.append(arrow);
+        listener->addOutputItem(endItem->getItem());
     }
+
+    if (endItem == this) {
+        inputArrows.append(arrow);
+        listener->addInputItem(startItem->getItem());
+    }
+
+    return true;
+}
+
+bool MoveItem::isArrowAlreadyAdded(ArrowItem* arrow) {
+    for (auto item : outputArrows)
+        if (arrow->getStartItem() == item->getStartItem() && arrow->getEndItem() == item->getEndItem())
+            return true;
+
+    for (auto item : inputArrows)
+        if (arrow->getStartItem() == item->getStartItem() && arrow->getEndItem() == item->getEndItem())
+            return true;
+
+    return false;
+}
+
+ModelItem* MoveItem::getItem() {
+    return listener;
 }
 
 QRectF MoveItem::boundingRect() const {

@@ -22,7 +22,8 @@ public:
     MoveItem(QPointF position, QObject *parent = 0);
     void setView(PaintSceneInterface *view);
     QPolygonF getPolygon() const;
-    void addArrow(ArrowItem* arrow);
+    bool addArrow(ArrowItem* arrow);
+    ModelItem* getItem();
 
 private:
     QRectF boundingRect() const override;
@@ -32,6 +33,7 @@ private:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void setPosition(float posX, float posY) override;
     void makePolygon();
+    bool isArrowAlreadyAdded(ArrowItem* arrow);
 
 private:
     ModelItem *listener;
