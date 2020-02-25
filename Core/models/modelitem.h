@@ -12,12 +12,12 @@ class ModelItem
 {
 public:
     ModelItem(MoveItemInterface *listener);
-    void setPosition(float posX, float posY);
+    void setPosition(double posX, double posY);
     void addInputItem(ModelItem* inputItem);
     void addOutputItem(ModelItem* outputItem);
 
 private:
-    float posX, posY;
+    double posX, posY;
     MoveItemInterface *listener = nullptr;
     vector<ModelItem *> inputItems;
     vector<ModelItem *> outputItems;

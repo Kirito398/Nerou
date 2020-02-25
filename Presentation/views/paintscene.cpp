@@ -13,20 +13,11 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     this->clearSelection();
 
     switch (mode) {
-    case Items: {
-        QGraphicsItem *item =  this->itemAt(event->scenePos(), QTransform());
-        if (item == nullptr) {
-            MoveItem *item = new MoveItem(event->scenePos());
-            item->setView(this);
-            this->addItem(item);
-        } else {
-            item->setSelected(true);
-        }
+    case Items:
+        onItemsModeClicked(event);
         break;
-    }
     case Arrows:
-        line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
-        addItem(line);
+        onArrowsModeClicked(event);
         break;
     }
 
@@ -81,4 +72,24 @@ void PaintScene::addArrowItem() {
 
     removeItem(line);
     delete line;
+}
+
+void PaintScene::addMoveItem(QPointF position) {
+    MoveItem *newItem = new MoveItem(position);
+    newItem->setView(this);
+    newItem->setSelected(true);
+    this->addItem(newItem);
+}
+
+void PaintScene::onItemsModeClicked(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem *item =  this->itemAt(event->scenePos(), QTransform());
+    if (item == nullptr)
+        addMoveItem(event->scenePos());
+    else
+        item->setSelected(true);
+}
+
+void PaintScene::onArrowsModeClicked(QGraphicsSceneMouseEvent *event) {
+    line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
+    addItem(line);
 }

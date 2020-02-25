@@ -19,7 +19,7 @@ class ArrowItem;
 class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
 public:
-    MoveItem(QPointF position, QObject *parent = 0);
+    MoveItem(QPointF position, QObject *parent = nullptr);
     void setView(PaintSceneInterface *view);
     QPolygonF getPolygon() const;
     bool addArrow(ArrowItem* arrow);
@@ -27,11 +27,11 @@ public:
 
 private:
     QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void setPosition(float posX, float posY) override;
+    void setPosition(double posX, double posY) override;
     void makePolygon();
     bool isArrowAlreadyAdded(ArrowItem* arrow);
 

@@ -29,6 +29,9 @@ private:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateScene() override;
     void addArrowItem();
+    void addMoveItem(QPointF position);
+    void onItemsModeClicked(QGraphicsSceneMouseEvent *event);
+    void onArrowsModeClicked(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // PAINTSCENE_H

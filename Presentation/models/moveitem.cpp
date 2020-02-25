@@ -101,6 +101,6 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         listener->setPosition(position.x(), position.y());
 }
 
-void MoveItem::setPosition(float posX, float posY) {
+void MoveItem::setPosition(double posX, double posY) {
     this->setPos(QPointF(posX, posY));
 }

@@ -5,7 +5,7 @@ ModelItem::ModelItem(MoveItemInterface *listener)
     this->listener = listener;
 }
 
-void ModelItem::setPosition(float posX, float posY) {
+void ModelItem::setPosition(double posX, double posY) {
     this->posX = posX;
     this->posY = posY;
 
