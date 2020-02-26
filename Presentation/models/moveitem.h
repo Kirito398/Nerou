@@ -24,6 +24,7 @@ public:
     QPolygonF getPolygon() const;
     bool addArrow(ArrowItem* arrow);
     ModelItem* getItem();
+    void setPosition(QPointF position);
 
 private:
     QRectF boundingRect() const override;

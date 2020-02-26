@@ -11,8 +11,11 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 void PaintScene::moveSelectedItem(QPointF delta) {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
-    for (auto item : selectedItems)
-        item->setPos(item->pos() + delta);
+    for (auto item : selectedItems) {
+        MoveItem *moveItem = dynamic_cast<MoveItem *>(item);
+        if (moveItem != nullptr)
+            moveItem->setPosition(item->pos() + delta);
+    }
 }
 
 void PaintScene::onItemsModePress(QGraphicsSceneMouseEvent *event) {
@@ -35,7 +38,10 @@ void PaintScene::onSelectorModePress(QGraphicsSceneMouseEvent *event) {
         selector->setView(this);
         addItem(selector);
     } else {
-        item->setSelected(true);
+        if (!item->isSelected()) {
+            this->clearSelection();
+            item->setSelected(true);
+        }
     }
 }
 
@@ -44,10 +50,11 @@ void PaintScene::onItemsModeMove(QGraphicsSceneMouseEvent *event) {
 }
 
 void PaintScene::onArrowsModeMove(QGraphicsSceneMouseEvent *event) {
-    if (line != nullptr) {
-        QLineF newLine(line->line().p1(), event->scenePos());
-        line->setLine(newLine);
-    }
+    if (line == nullptr)
+        return;
+
+    QLineF newLine(line->line().p1(), event->scenePos());
+    line->setLine(newLine);
 }
 
 void PaintScene::onSelectorModeMove(QGraphicsSceneMouseEvent *event) {
@@ -62,20 +69,27 @@ void PaintScene::onItemsModeRelease(QGraphicsSceneMouseEvent *event) {
 }
 
 void PaintScene::onArrowsModeRelease(QGraphicsSceneMouseEvent *event) {
-    if (line != nullptr)
-        addArrowItem();
+    if (line == nullptr)
+        return;
+
+    addArrowItem();
+
+    Q_UNUSED(event)
 }
 
 void PaintScene::onSelectorModeRelease(QGraphicsSceneMouseEvent *event) {
-    if (selector != nullptr) {
-        QList<QGraphicsItem *> selectedItems = items(selector->boundingRect());
+    if (selector == nullptr)
+        return;
 
-        for (auto item : selectedItems)
-            item->setSelected(true);
+    QList<QGraphicsItem *> selectedItems = items(selector->boundingRect());
 
-        removeItem(selector);
-        delete selector;
-    }
+    for (auto item : selectedItems)
+        item->setSelected(true);
+
+    removeItem(selector);
+    delete selector;
+
+    Q_UNUSED(event)
 }
 
 void PaintScene::setMode(Mode mode) {
@@ -120,7 +134,8 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() != Qt::LeftButton)
         return;
 
-    //this->clearSelection();
+    if (mode != Selector)
+        this->clearSelection();
 
     switch (mode) {
     case Selector:
