@@ -82,8 +82,16 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QPointF position = mapToScene(event->pos());
 
-    if (listener != nullptr)
-        listener->setPosition(position.x(), position.y());
+    QPointF prevP = this->pos();
+    QPointF newP = position;
+    QPointF deltaP = position - prevP;
+
+    /*if (listener == nullptr)
+        return;
+
+    listener->setPosition(position.x(), position.y());*/
+
+    view->moveSelectedItem(deltaP);
 }
 
 void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {

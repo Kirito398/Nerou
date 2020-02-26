@@ -8,42 +8,11 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     mode = PaintScene::Selector;
 }
 
-void PaintScene::setMode(Mode mode) {
-    this->mode = mode;
-}
+void PaintScene::moveSelectedItem(QPointF delta) {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
-void PaintScene::addArrowItem() {
-    QList<QGraphicsItem *> startItems = items(line->line().p1());
-    if (startItems.count() && startItems.first() == line)
-        startItems.removeFirst();
-
-    QList<QGraphicsItem *> endItems = items(line->line().p2());
-    if (endItems.count() && endItems.first() == line)
-        endItems.removeFirst();
-
-    if (startItems.count() && endItems.count() && startItems.first() != endItems.first()) {
-        MoveItem *startItem = qgraphicsitem_cast<MoveItem *>(startItems.first());
-        MoveItem *endItem = qgraphicsitem_cast<MoveItem *>(endItems.first());
-        ArrowItem *arrow = new ArrowItem(startItem, endItem);
-
-        if (startItem->addArrow(arrow) && endItem->addArrow(arrow)) {
-            this->clearSelection();
-            arrow->setSelected(true);
-            arrow->setZValue(-1000.0);
-            arrow->updatePosition();
-            addItem(arrow);
-        }
-    }
-
-    removeItem(line);
-    delete line;
-}
-
-void PaintScene::addMoveItem(QPointF position) {
-    MoveItem *newItem = new MoveItem(position);
-    newItem->setView(this);
-    newItem->setSelected(true);
-    this->addItem(newItem);
+    for (auto item : selectedItems)
+        item->setPos(item->pos() + delta);
 }
 
 void PaintScene::onItemsModePress(QGraphicsSceneMouseEvent *event) {
@@ -109,11 +78,49 @@ void PaintScene::onSelectorModeRelease(QGraphicsSceneMouseEvent *event) {
     }
 }
 
+void PaintScene::setMode(Mode mode) {
+    this->mode = mode;
+}
+
+void PaintScene::addArrowItem() {
+    QList<QGraphicsItem *> startItems = items(line->line().p1());
+    if (startItems.count() && startItems.first() == line)
+        startItems.removeFirst();
+
+    QList<QGraphicsItem *> endItems = items(line->line().p2());
+    if (endItems.count() && endItems.first() == line)
+        endItems.removeFirst();
+
+    if (startItems.count() && endItems.count() && startItems.first() != endItems.first()) {
+        MoveItem *startItem = qgraphicsitem_cast<MoveItem *>(startItems.first());
+        MoveItem *endItem = qgraphicsitem_cast<MoveItem *>(endItems.first());
+        ArrowItem *arrow = new ArrowItem(startItem, endItem);
+
+        if (startItem->addArrow(arrow) && endItem->addArrow(arrow)) {
+            this->clearSelection();
+            arrow->setSelected(true);
+            arrow->setZValue(-1000.0);
+            arrow->updatePosition();
+            addItem(arrow);
+        }
+    }
+
+    removeItem(line);
+    delete line;
+}
+
+void PaintScene::addMoveItem(QPointF position) {
+    MoveItem *newItem = new MoveItem(position);
+    newItem->setView(this);
+    newItem->setSelected(true);
+    this->addItem(newItem);
+}
+
 void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() != Qt::LeftButton)
         return;
 
-    this->clearSelection();
+    //this->clearSelection();
 
     switch (mode) {
     case Selector:

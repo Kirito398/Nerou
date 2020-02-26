@@ -30,6 +30,7 @@ private:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateScene() override;
+    void moveSelectedItem(QPointF delta) override;
     void addArrowItem();
     void addMoveItem(QPointF position);
     void onItemsModePress(QGraphicsSceneMouseEvent *event);
