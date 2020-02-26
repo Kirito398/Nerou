@@ -9,6 +9,7 @@
 #include <interactors/maininteractor.h>
 #include <interfaces/PaintSceneInterface.h>
 #include <models/arrowitem.h>
+#include <models/selectoritem.h>
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface
 {
@@ -22,6 +23,7 @@ private:
     ArrowItem* currentArrow;
     Mode mode;
     QGraphicsLineItem *line;
+    SelectorItem *selector;
 
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -32,6 +34,7 @@ private:
     void addMoveItem(QPointF position);
     void onItemsModeClicked(QGraphicsSceneMouseEvent *event);
     void onArrowsModeClicked(QGraphicsSceneMouseEvent *event);
+    void onSelectorModeClicked(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // PAINTSCENE_H

@@ -28,10 +28,10 @@ public:
 private:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    void setPosition(double posX, double posY) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void setPosition(double posX, double posY) override;
     void makePolygon();
     bool isArrowAlreadyAdded(ArrowItem* arrow);
 

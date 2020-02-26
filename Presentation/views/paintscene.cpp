@@ -4,6 +4,7 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance();
     line = nullptr;
+    selector = nullptr;
     mode = PaintScene::Selector;
 }
 
@@ -14,6 +15,9 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     this->clearSelection();
 
     switch (mode) {
+    case Selector:
+        onSelectorModeClicked(event);
+        break;
     case Items:
         onItemsModeClicked(event);
         break;
@@ -27,20 +31,47 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    if (mode == Arrows && line != nullptr) {
-        QLineF newLine(line->line().p1(), event->scenePos());
-        line->setLine(newLine);
-    } else if (mode == Items) QGraphicsScene::mouseMoveEvent(event);
+    switch (mode) {
+    case Selector: {
+        if (selector != nullptr)
+            selector->setEndPoint(event->scenePos());
+
+        QGraphicsScene::mouseMoveEvent(event);
+        break;
+    }
+    case Arrows: {
+        if (line != nullptr) {
+            QLineF newLine(line->line().p1(), event->scenePos());
+            line->setLine(newLine);
+        }
+        break;
+    }
+    case Items: {
+        QGraphicsScene::mouseMoveEvent(event);
+        break;
+    }
+    }
 }
 
 void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (line != nullptr && mode == Arrows)
         addArrowItem();
 
-    line = nullptr;
-
     if (mode == Items)
         QGraphicsScene::mouseReleaseEvent(event);
+
+    if (selector != nullptr && mode == Selector) {
+        QList<QGraphicsItem *> selectedItems = items(selector->boundingRect());
+
+        for (auto item : selectedItems)
+            item->setSelected(true);
+
+        removeItem(selector);
+        delete selector;
+    }
+
+    selector = nullptr;
+    line = nullptr;
 }
 
 void PaintScene::updateScene() {
@@ -97,3 +128,26 @@ void PaintScene::onArrowsModeClicked(QGraphicsSceneMouseEvent *event) {
     line = new QGraphicsLineItem(QLineF(event->scenePos(), event->scenePos()));
     addItem(line);
 }
+
+void PaintScene::onSelectorModeClicked(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem *item =  this->itemAt(event->scenePos(), QTransform());
+    if (item == nullptr) {
+        selector = new SelectorItem(event->scenePos());
+        selector->setView(this);
+        addItem(selector);
+    } else {
+        item->setSelected(true);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
