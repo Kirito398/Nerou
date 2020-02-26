@@ -101,10 +101,15 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void MoveItem::setPosition(double posX, double posY) {
     this->setPos(QPointF(posX, posY));
+    updateArrowsPosition();
 }
 
 void MoveItem::setPosition(QPointF position) {
-    if (listener == nullptr)
-        return;
-    listener->setPosition(position.x(), position.y());
+    if (listener != nullptr)
+        listener->setPosition(position.x(), position.y());
+}
+
+void MoveItem::updateArrowsPosition() {
+    for(auto arrow : inputArrows)
+        arrow->updatePosition();
 }

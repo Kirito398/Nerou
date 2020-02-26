@@ -35,6 +35,7 @@ private:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void makePolygon();
     bool isArrowAlreadyAdded(ArrowItem* arrow);
+    void updateArrowsPosition();
 
 private:
     ModelItem *listener;
