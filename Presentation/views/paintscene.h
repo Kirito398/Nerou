@@ -32,9 +32,15 @@ private:
     void updateScene() override;
     void addArrowItem();
     void addMoveItem(QPointF position);
-    void onItemsModeClicked(QGraphicsSceneMouseEvent *event);
-    void onArrowsModeClicked(QGraphicsSceneMouseEvent *event);
-    void onSelectorModeClicked(QGraphicsSceneMouseEvent *event);
+    void onItemsModePress(QGraphicsSceneMouseEvent *event);
+    void onArrowsModePress(QGraphicsSceneMouseEvent *event);
+    void onSelectorModePress(QGraphicsSceneMouseEvent *event);
+    void onItemsModeMove(QGraphicsSceneMouseEvent *event);
+    void onArrowsModeMove(QGraphicsSceneMouseEvent *event);
+    void onSelectorModeMove(QGraphicsSceneMouseEvent *event);
+    void onItemsModeRelease(QGraphicsSceneMouseEvent *event);
+    void onArrowsModeRelease(QGraphicsSceneMouseEvent *event);
+    void onSelectorModeRelease(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // PAINTSCENE_H
