@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     view->setRenderHint(QPainter::Antialiasing);
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    mainLayout->addWidget(toolBox);
     mainLayout->addWidget(view);
 
     QWidget *widget = new QWidget;
@@ -53,7 +55,36 @@ QWidget *MainWindow::createToolBoxItem(const QString &name,  MoveItem::ItemType 
 }
 
 void MainWindow::initToolBox() {
-    bgToolBox = new QButtonGroup;
+    bgToolBox = new QButtonGroup(this);
+    bgToolBox->setExclusive(false);
+    connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
+
+    QGridLayout *layout = new QGridLayout;
+    layout->addWidget(createToolBoxItem(tr("Perceptron"), MoveItem::Perceptron));
+
+    layout->setRowStretch(3, 10);
+    layout->setColumnStretch(2, 10);
+
+    QWidget *itemWidget = new QWidget;
+    itemWidget->setLayout(layout);
+
+    toolBox = new QToolBox;
+    toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
+    toolBox->setMinimumWidth(itemWidget->sizeHint().width());
+    toolBox->addItem(itemWidget, tr("Items"));
+}
+
+void MainWindow::onToolsGroupClicked(int id) {
+    QList<QAbstractButton *> buttons = bgToolBox->buttons();
+
+    for(auto *button : buttons) {
+        if (bgToolBox->button(id) != button)
+            button->setChecked(false);
+    }
+
+    bgItems->button(PaintScene::Items)->setChecked(true);
+
+    scene->setMode(PaintScene::Items);
 }
 
 void MainWindow::initToolBars() {

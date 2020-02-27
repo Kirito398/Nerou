@@ -10,6 +10,7 @@
 #include <QComboBox>
 #include <QToolTip>
 #include <QLabel>
+#include <QToolBox>
 
 #include <views/paintscene.h>
 
@@ -48,6 +49,8 @@ private:
 
     QComboBox *cbScale;
 
+    QToolBox *toolBox;
+
 private:
     void resizeEvent(QResizeEvent * event) override;
     void initActions();
@@ -58,6 +61,7 @@ private:
 
 private slots:
     void onItemsGroupClicked();
+    void onToolsGroupClicked(int id);
     void onDeleteActionClicked();
     void onExitActionClicked();
     void onAboutActionClicked();
