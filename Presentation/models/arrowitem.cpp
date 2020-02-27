@@ -73,8 +73,13 @@ QPolygonF ArrowItem::selectionPolygon() const {
     QLineF newLine = line();
     newLine.setLength(line().length() + 15);
 
-    qreal deltaX = line().center().x() - newLine.center().x();
-    qreal deltaY = line().center().y() - newLine.center().y();
+    qreal lineCenterX = (line().p1().x() + line().p2().x()) / 2.0;
+    qreal lineCenterY = (line().p1().y() + line().p2().y()) / 2.0;
+    qreal newLineCenterX = (newLine.p1().x() + newLine.p2().x()) / 2.0;
+    qreal newLineCenterY = (newLine.p1().y() + newLine.p2().y()) / 2.0;
+
+    qreal deltaX = lineCenterX - newLineCenterX;
+    qreal deltaY = lineCenterY - newLineCenterY;
 
     qreal radAngle = newLine.angle() * M_PI / 180;
     qreal dx = size / 2 * sin(radAngle);

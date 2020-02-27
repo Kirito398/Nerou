@@ -24,16 +24,18 @@ public:
     QPolygonF getPolygon() const;
     bool addArrow(ArrowItem* arrow);
     ModelItem* getItem();
+    void setPosition(QPointF position);
 
 private:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    void setPosition(double posX, double posY) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void setPosition(double posX, double posY) override;
     void makePolygon();
     bool isArrowAlreadyAdded(ArrowItem* arrow);
+    void updateArrowsPosition();
 
 private:
     ModelItem *listener;
