@@ -7,7 +7,6 @@
 #include <views/paintscene.h>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
 class QAction;
 class QMenu;
 QT_END_NAMESPACE
@@ -21,8 +20,8 @@ public:
     ~MainWindow() override;
 
 private:
-    Ui::MainWindow *ui;
     PaintScene *scene;
+    QGraphicsView *view;
 
     QAction *deleteAction;
     QAction *exitAction;

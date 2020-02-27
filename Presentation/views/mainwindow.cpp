@@ -5,27 +5,27 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-
     initActions();
     initMenu();
 
-    //showMaximized();
-
     scene = new PaintScene(this);
-    ui->graphicsView->setScene(scene);
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    ui->graphicsView->setAlignment(Qt::AlignCenter);
-    ui->graphicsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    scene->setSceneRect(QRectF(0, 0, 500, 500));
 
-    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    QHBoxLayout * layout = new QHBoxLayout;
+    view = new QGraphicsView(scene);
+    layout->addWidget(view);
 
-    connect(ui->pbEditMode, SIGNAL(clicked(bool)), this, SLOT(onEditModeBtnClicked()));
-    connect(ui->pbArrowMode, SIGNAL(clicked(bool)), this, SLOT(onArrowModeBtnClicked()));
-    connect(ui->pbMoveMode, SIGNAL(clicked(bool)), this, SLOT(onSelectorModeBtnClicked()));
+    QWidget *widget = new QWidget;
+    widget->setLayout(layout);
+
+    setCentralWidget(widget);
+    setWindowTitle("Nerou");
+    setUnifiedTitleAndToolBarOnMac(true);
+
+//    connect(ui->pbEditMode, SIGNAL(clicked(bool)), this, SLOT(onEditModeBtnClicked()));
+//    connect(ui->pbArrowMode, SIGNAL(clicked(bool)), this, SLOT(onArrowModeBtnClicked()));
+//    connect(ui->pbMoveMode, SIGNAL(clicked(bool)), this, SLOT(onSelectorModeBtnClicked()));
 }
 
 void MainWindow::initMenu() {
@@ -109,6 +109,5 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 MainWindow::~MainWindow()
 {
     delete scene;
-    delete ui;
 }
 
