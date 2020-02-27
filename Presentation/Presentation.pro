@@ -31,8 +31,7 @@ HEADERS += \
     models/moveitem.h \
     views/paintscene.h
 
-FORMS += \
-    mainwindow.ui
+RESOURCES += res.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

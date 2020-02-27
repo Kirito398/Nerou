@@ -3,10 +3,14 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QToolBar>
+#include <QToolButton>
+#include <QButtonGroup>
 
 #include <views/paintscene.h>
 
 QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
 class QAction;
 class QMenu;
 QT_END_NAMESPACE
@@ -20,6 +24,7 @@ public:
     ~MainWindow() override;
 
 private:
+    Ui::MainWindow *ui;
     PaintScene *scene;
     QGraphicsView *view;
 
@@ -31,15 +36,22 @@ private:
     QMenu *itemMenu;
     QMenu *aboutMenu;
 
+    QToolBar *itemsToolBar;
+    QToolBar *toolsToolBar;
+
+    QButtonGroup *bgItems;
+//    QPushButton *pbEditMode;
+//    QPushButton *pbArrowMode;
+//    QPushButton *pbMoveMode;
+
 private:
     void resizeEvent(QResizeEvent * event) override;
     void initActions();
     void initMenu();
+    void initToolBars();
 
 private slots:
-    void onEditModeBtnClicked();
-    void onArrowModeBtnClicked();
-    void onSelectorModeBtnClicked();
+    void onItemsGroupClicked();
     void onDeleteActionClicked();
     void onExitActionClicked();
     void onAboutActionClicked();

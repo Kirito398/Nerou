@@ -5,15 +5,22 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
+
     initActions();
     initMenu();
 
     scene = new PaintScene(this);
-    scene->setSceneRect(QRectF(0, 0, 500, 500));
+    scene->setSceneRect(QRectF(0, 0, 640, 480));
+
+    initToolBars();
 
     QHBoxLayout * layout = new QHBoxLayout;
     view = new QGraphicsView(scene);
+    view->setRenderHint(QPainter::Antialiasing);
+    view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     layout->addWidget(view);
 
     QWidget *widget = new QWidget;
@@ -22,10 +29,44 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(widget);
     setWindowTitle("Nerou");
     setUnifiedTitleAndToolBarOnMac(true);
+}
 
-//    connect(ui->pbEditMode, SIGNAL(clicked(bool)), this, SLOT(onEditModeBtnClicked()));
-//    connect(ui->pbArrowMode, SIGNAL(clicked(bool)), this, SLOT(onArrowModeBtnClicked()));
-//    connect(ui->pbMoveMode, SIGNAL(clicked(bool)), this, SLOT(onSelectorModeBtnClicked()));
+void MainWindow::initToolBars() {
+    QToolButton *tbSelectorMode = new QToolButton;
+    tbSelectorMode->setCheckable(true);
+    tbSelectorMode->setChecked(true);
+    tbSelectorMode->setIcon(QIcon(":/images/select_icon.png"));
+    tbSelectorMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    tbSelectorMode->setToolTip(tr("Select and Move"));
+    tbSelectorMode->setStatusTip(tr("Select or move items"));
+
+    QToolButton *tbAddItemMode = new QToolButton;
+    tbAddItemMode->setCheckable(true);
+    tbAddItemMode->setIcon(QIcon(":images/add_item_icon.png"));
+    tbAddItemMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    tbAddItemMode->setToolTip(tr("Add item"));
+    tbAddItemMode->setStatusTip(tr("Add new item"));
+
+    QToolButton *tbAddArrowMode = new QToolButton;
+    tbAddArrowMode->setCheckable(true);
+    tbAddArrowMode->setIcon(QIcon(":/images/add_arrow_icon.png"));
+    tbAddArrowMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
+    tbAddArrowMode->setToolTip(tr("Add arrow"));
+    tbAddArrowMode->setStatusTip(tr("Create items relations"));
+
+    bgItems = new QButtonGroup(this);
+    bgItems->addButton(tbSelectorMode, PaintScene::Selector);
+    bgItems->addButton(tbAddItemMode, PaintScene::Items);
+    bgItems->addButton(tbAddArrowMode, PaintScene::Arrows);
+    connect(bgItems, SIGNAL(buttonClicked(int)), this, SLOT(onItemsGroupClicked()));
+
+    itemsToolBar = addToolBar(tr("Items"));
+    itemsToolBar->addWidget(tbSelectorMode);
+    itemsToolBar->addWidget(tbAddItemMode);
+    itemsToolBar->addWidget(tbAddArrowMode);
+
+    toolsToolBar = addToolBar("Tools");
+    toolsToolBar->addAction(deleteAction);
 }
 
 void MainWindow::initMenu() {
@@ -41,18 +82,19 @@ void MainWindow::initMenu() {
 }
 
 void MainWindow::initActions() {
-    deleteAction = new QAction(tr("Delete"), this);
+    deleteAction = new QAction(QIcon(":/images/delete_icon.png"), tr("Delete"), this);
     deleteAction->setShortcut(tr("Delete"));
     deleteAction->setStatusTip("Delete item");
     connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(onDeleteActionClicked()));
 
-    exitAction = new QAction(tr("Exit"), this);
+    exitAction = new QAction(QIcon(":/images/exit_icon.png") ,tr("Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
-    exitAction->setStatusTip(tr("Quit Neuro"));
+    exitAction->setStatusTip(tr("Quit"));
     connect(exitAction, SIGNAL(triggered(bool)), this, SLOT(onExitActionClicked()));
 
-    aboutAction = new QAction(tr("About"), this);
+    aboutAction = new QAction(QIcon(":/images/about_icon.png"), tr("About"), this);
     aboutAction->setShortcut(tr("F1"));
+    aboutAction->setStatusTip(tr("About"));
     connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(onAboutActionClicked()));
 }
 
@@ -82,24 +124,16 @@ void MainWindow::onDeleteActionClicked() {
     }
 }
 
+void MainWindow::onItemsGroupClicked() {
+    scene->setMode(PaintScene::Mode(bgItems->checkedId()));
+}
+
 void MainWindow::onExitActionClicked() {
     close();
 }
 
 void MainWindow::onAboutActionClicked() {
     QMessageBox::about(this, tr("About"), tr("Nerou project 2020"));
-}
-
-void MainWindow::onEditModeBtnClicked() {
-    scene->setMode(PaintScene::Items);
-}
-
-void MainWindow::onArrowModeBtnClicked() {
-    scene->setMode(PaintScene::Arrows);
-}
-
-void MainWindow::onSelectorModeBtnClicked() {
-    scene->setMode(PaintScene::Selector);
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
@@ -109,5 +143,6 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 MainWindow::~MainWindow()
 {
     delete scene;
+    delete ui;
 }
 
