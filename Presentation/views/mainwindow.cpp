@@ -9,22 +9,22 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    scene = new PaintScene(this);
+    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+
     initActions();
     initMenu();
-
-    scene = new PaintScene(this);
-    scene->setSceneRect(QRectF(0, 0, 640, 480));
-
     initToolBars();
 
-    QHBoxLayout * layout = new QHBoxLayout;
+    QHBoxLayout *mainLayout = new QHBoxLayout;
     view = new QGraphicsView(scene);
     view->setRenderHint(QPainter::Antialiasing);
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    layout->addWidget(view);
+    view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    mainLayout->addWidget(view);
 
     QWidget *widget = new QWidget;
-    widget->setLayout(layout);
+    widget->setLayout(mainLayout);
 
     setCentralWidget(widget);
     setWindowTitle("Nerou");

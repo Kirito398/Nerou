@@ -6,6 +6,7 @@
 #include <QToolBar>
 #include <QToolButton>
 #include <QButtonGroup>
+#include <QHBoxLayout>
 
 #include <views/paintscene.h>
 
@@ -40,9 +41,6 @@ private:
     QToolBar *toolsToolBar;
 
     QButtonGroup *bgItems;
-//    QPushButton *pbEditMode;
-//    QPushButton *pbArrowMode;
-//    QPushButton *pbMoveMode;
 
 private:
     void resizeEvent(QResizeEvent * event) override;
