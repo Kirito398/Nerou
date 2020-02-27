@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
     initActions();
+    initToolBox();
     initMenu();
     initToolBars();
 
@@ -29,6 +30,30 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(widget);
     setWindowTitle("Nerou");
     setUnifiedTitleAndToolBarOnMac(true);
+}
+
+QWidget *MainWindow::createToolBoxItem(const QString &name,  MoveItem::ItemType type) {
+    MoveItem item(QPointF(0, 0), type);
+    QIcon icon(item.getItemIcon());
+
+    QToolButton *button = new QToolButton;
+    button->setIcon(icon);
+    button->setIconSize(QSize(50, 50));
+    button->setCheckable(true);
+    bgToolBox->addButton(button, type);
+
+    QGridLayout *layout = new QGridLayout;
+    layout->addWidget(button, 0, 0, Qt::AlignCenter);
+    layout->addWidget(new QLabel(name), 1, 0, Qt::AlignCenter);
+
+    QWidget *widget = new QWidget;
+    widget->setLayout(layout);
+
+    return widget;
+}
+
+void MainWindow::initToolBox() {
+    bgToolBox = new QButtonGroup;
 }
 
 void MainWindow::initToolBars() {

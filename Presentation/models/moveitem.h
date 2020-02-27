@@ -20,7 +20,10 @@ class ArrowItem;
 class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
 public:
-    MoveItem(QPointF position, QObject *parent = nullptr);
+    enum ItemType {Perceptron, Convolution, Data};
+
+public:
+    MoveItem(QPointF position, ItemType type = Perceptron,  QObject *parent = nullptr);
     void setView(PaintSceneInterface *view);
     QPolygonF getPolygon() const;
     bool addArrow(ArrowItem* arrow);
@@ -28,6 +31,7 @@ public:
     void setPosition(QPointF position);
     void removeArrow(ArrowItem* arrow);
     void removeArrows();
+    QPixmap getItemIcon() const;
 
 private:
     QRectF boundingRect() const override;

@@ -1,6 +1,6 @@
 #include "moveitem.h"
 
-MoveItem::MoveItem(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
+MoveItem::MoveItem(QPointF position, ItemType type, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     listener = MainInteractor::getInstance()->addNewItem(this);
     this->setPos(position);
@@ -127,6 +127,19 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 void MoveItem::setPosition(double posX, double posY) {
     this->setPos(QPointF(posX, posY));
     updateArrowsPosition();
+}
+
+QPixmap MoveItem::getItemIcon() const {
+    QPixmap pixmap(250, 250);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+
+    painter.setPen(Qt::black);
+    painter.setBrush(Qt::green);
+    painter.translate(125, 125);
+    painter.drawRect(-30, -30, 60, 60);
+
+    return pixmap;
 }
 
 void MoveItem::setPosition(QPointF position) {

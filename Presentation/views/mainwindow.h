@@ -8,6 +8,8 @@
 #include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QToolTip>
+#include <QLabel>
 
 #include <views/paintscene.h>
 
@@ -42,6 +44,7 @@ private:
     QToolBar *toolsToolBar;
 
     QButtonGroup *bgItems;
+    QButtonGroup *bgToolBox;
 
     QComboBox *cbScale;
 
@@ -50,6 +53,8 @@ private:
     void initActions();
     void initMenu();
     void initToolBars();
+    void initToolBox();
+    QWidget *createToolBoxItem(const QString &name,  MoveItem::ItemType type);
 
 private slots:
     void onItemsGroupClicked();
