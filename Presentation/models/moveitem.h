@@ -8,6 +8,7 @@
 #include <QCursor>
 #include <QPolygonF>
 #include <QVector>
+#include <QGraphicsScene>
 
 #include <interfaces/moveiteminterface.h>
 #include <interactors/maininteractor.h>
@@ -25,6 +26,8 @@ public:
     bool addArrow(ArrowItem* arrow);
     ModelItem* getItem();
     void setPosition(QPointF position);
+    void removeArrow(ArrowItem* arrow);
+    void removeArrows();
 
 private:
     QRectF boundingRect() const override;

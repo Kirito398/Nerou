@@ -24,9 +24,8 @@ QPolygonF MoveItem::getPolygon() const {
 }
 
 bool MoveItem::addArrow(ArrowItem* arrow) {
-    if (isArrowAlreadyAdded(arrow)) {
+    if (isArrowAlreadyAdded(arrow))
         return false;
-    }
 
     MoveItem *startItem = arrow->getStartItem();
     MoveItem *endItem = arrow->getEndItem();
@@ -42,6 +41,32 @@ bool MoveItem::addArrow(ArrowItem* arrow) {
     }
 
     return true;
+}
+
+void MoveItem::removeArrow(ArrowItem* arrow) {
+    if (outputArrows.contains(arrow))
+        outputArrows.removeAll(arrow);
+
+    if (inputArrows.contains(arrow))
+        inputArrows.removeAll(arrow);
+}
+
+void MoveItem::removeArrows() {
+    for (auto arrow : inputArrows) {
+        inputArrows.removeAll(arrow);
+        arrow->getStartItem()->removeArrow(arrow);
+        arrow->getEndItem()->removeArrow(arrow);
+        scene()->removeItem(arrow);
+        delete arrow;
+    }
+
+    for (auto arrow : outputArrows) {
+        outputArrows.removeAll(arrow);
+        arrow->getStartItem()->removeArrow(arrow);
+        arrow->getEndItem()->removeArrow(arrow);
+        scene()->removeItem(arrow);
+        delete arrow;
+    }
 }
 
 bool MoveItem::isArrowAlreadyAdded(ArrowItem* arrow) {
