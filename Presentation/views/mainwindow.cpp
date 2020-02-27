@@ -65,8 +65,18 @@ void MainWindow::initToolBars() {
     itemsToolBar->addWidget(tbAddItemMode);
     itemsToolBar->addWidget(tbAddArrowMode);
 
+    cbScale = new QComboBox;
+    QStringList scales;
+    scales << tr("25%") << tr("50%") << tr("100%") << tr("150%") << tr("200%") << tr("250%");
+    cbScale->addItems(scales);
+    cbScale->setCurrentIndex(2);
+    cbScale->setToolTip(tr("Zoom"));
+    cbScale->setStatusTip(tr("Zoom scene"));
+    connect(cbScale, SIGNAL(currentTextChanged(const QString &)), this, SLOT(onScaleChanged(const QString &)));
+
     toolsToolBar = addToolBar("Tools");
     toolsToolBar->addAction(deleteAction);
+    toolsToolBar->addWidget(cbScale);
 }
 
 void MainWindow::initMenu() {
@@ -134,6 +144,14 @@ void MainWindow::onExitActionClicked() {
 
 void MainWindow::onAboutActionClicked() {
     QMessageBox::about(this, tr("About"), tr("Nerou project 2020"));
+}
+
+void MainWindow::onScaleChanged(const QString &scale) {
+    double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
+    QMatrix oldMatrix = view->matrix();
+    view->resetMatrix();
+    view->translate(oldMatrix.dx(), oldMatrix.dy());
+    view->scale(newScale, newScale);
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {

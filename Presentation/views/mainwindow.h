@@ -7,6 +7,7 @@
 #include <QToolButton>
 #include <QButtonGroup>
 #include <QHBoxLayout>
+#include <QComboBox>
 
 #include <views/paintscene.h>
 
@@ -42,6 +43,8 @@ private:
 
     QButtonGroup *bgItems;
 
+    QComboBox *cbScale;
+
 private:
     void resizeEvent(QResizeEvent * event) override;
     void initActions();
@@ -53,5 +56,6 @@ private slots:
     void onDeleteActionClicked();
     void onExitActionClicked();
     void onAboutActionClicked();
+    void onScaleChanged(const QString &scale);
 };
 #endif // MAINWINDOW_H
