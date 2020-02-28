@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    mainLayout->addWidget(toolBox);
+    //mainLayout->addWidget(toolBox);
     mainLayout->addWidget(view);
 
     QWidget *widget = new QWidget;
@@ -34,57 +34,21 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
-QWidget *MainWindow::createToolBoxItem(const QString &name,  MoveItem::ItemType type) {
-    MoveItem item(QPointF(0, 0), type);
-    QIcon icon(item.getItemIcon());
-
-    QToolButton *button = new QToolButton;
-    button->setIcon(icon);
-    button->setIconSize(QSize(50, 50));
-    button->setCheckable(true);
-    bgToolBox->addButton(button, type);
-
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(button, 0, 0, Qt::AlignCenter);
-    layout->addWidget(new QLabel(name), 1, 0, Qt::AlignCenter);
-
-    QWidget *widget = new QWidget;
-    widget->setLayout(layout);
-
-    return widget;
-}
-
 void MainWindow::initToolBox() {
+    MoveItem item(QPointF(0, 0), MoveItem::Perceptron);
+    QToolButton *tbPerceptron = new QToolButton;
+    tbPerceptron->setCheckable(true);
+    tbPerceptron->setIcon(QIcon(item.getItemIcon()));
+    //tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    tbPerceptron->setToolTip(tr("Perceptron"));
+    tbPerceptron->setStatusTip(tr("Add perceptron"));
+
     bgToolBox = new QButtonGroup(this);
-    bgToolBox->setExclusive(false);
-    connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
+    bgToolBox->addButton(tbPerceptron, MoveItem::Perceptron);
 
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(createToolBoxItem(tr("Perceptron"), MoveItem::Perceptron));
-
-    layout->setRowStretch(3, 10);
-    layout->setColumnStretch(2, 10);
-
-    QWidget *itemWidget = new QWidget;
-    itemWidget->setLayout(layout);
-
-    toolBox = new QToolBox;
-    toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
-    toolBox->setMinimumWidth(itemWidget->sizeHint().width());
-    toolBox->addItem(itemWidget, tr("Items"));
-}
-
-void MainWindow::onToolsGroupClicked(int id) {
-    QList<QAbstractButton *> buttons = bgToolBox->buttons();
-
-    for(auto *button : buttons) {
-        if (bgToolBox->button(id) != button)
-            button->setChecked(false);
-    }
-
-    bgItems->button(PaintScene::Items)->setChecked(true);
-
-    scene->setMode(PaintScene::Items);
+    toolBoxToolBar = new QToolBar;
+    toolBoxToolBar->addWidget(tbPerceptron);
+    addToolBar(Qt::LeftToolBarArea, toolBoxToolBar);
 }
 
 void MainWindow::initToolBars() {
@@ -133,6 +97,8 @@ void MainWindow::initToolBars() {
     toolsToolBar = addToolBar("Tools");
     toolsToolBar->addAction(deleteAction);
     toolsToolBar->addWidget(cbScale);
+
+    //addToolBar(Qt::TopToolBarArea, toolsToolBar);
 }
 
 void MainWindow::initMenu() {
@@ -219,4 +185,60 @@ MainWindow::~MainWindow()
     delete scene;
     delete ui;
 }
+
+//QWidget *MainWindow::createToolBoxItem(const QString &name,  MoveItem::ItemType type) {
+//    MoveItem item(QPointF(0, 0), type);
+//    QIcon icon(item.getItemIcon());
+
+//    QToolButton *button = new QToolButton;
+//    button->setIcon(icon);
+//    button->setIconSize(QSize(25, 25));
+//    button->setCheckable(true);
+//    bgToolBox->addButton(button, type);
+
+//    QGridLayout *layout = new QGridLayout;
+//    layout->addWidget(button, 0, 0, Qt::AlignCenter);
+//    layout->addWidget(new QLabel(name), 0, 1, Qt::AlignCenter);
+
+//    QWidget *widget = new QWidget;
+//    widget->setLayout(layout);
+
+//    return widget;
+//}
+
+//void MainWindow::initToolBox() {
+//    bgToolBox = new QButtonGroup(this);
+//    bgToolBox->setExclusive(false);
+//    connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
+
+//    QGridLayout *layout = new QGridLayout;
+//    layout->addWidget(createToolBoxItem(tr("Perceptron"), MoveItem::Perceptron));
+//    layout->addWidget(createToolBoxItem(tr("Perceptron"), MoveItem::Perceptron));
+//    layout->addWidget(createToolBoxItem(tr("Perceptron"), MoveItem::Perceptron));
+//    layout->addWidget(createToolBoxItem(tr("Perceptron"), MoveItem::Perceptron));
+//    layout->addWidget(createToolBoxItem(tr("Perceptron"), MoveItem::Perceptron));
+
+//    layout->setRowStretch(5, 5);
+//    layout->setColumnStretch(5, 5);
+
+//    QWidget *itemWidget = new QWidget;
+//    itemWidget->setLayout(layout);
+
+//    toolBox = new QToolBox;
+//    toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
+//    toolBox->setMinimumWidth(itemWidget->sizeHint().width());
+//    toolBox->addItem(itemWidget, tr("Items"));
+//}
+
+//void MainWindow::onToolsGroupClicked(int id) {
+//    QList<QAbstractButton *> buttons = bgToolBox->buttons();
+
+//    for(auto *button : buttons) {
+//        if (bgToolBox->button(id) != button)
+//            button->setChecked(false);
+//    }
+
+//    bgItems->button(PaintScene::Items)->setChecked(true);
+//    scene->setMode(PaintScene::Items);
+//}
 

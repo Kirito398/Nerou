@@ -130,13 +130,13 @@ void MoveItem::setPosition(double posX, double posY) {
 }
 
 QPixmap MoveItem::getItemIcon() const {
-    QPixmap pixmap(250, 250);
+    QPixmap pixmap(100, 100);
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
 
     painter.setPen(Qt::black);
     painter.setBrush(Qt::green);
-    painter.translate(125, 125);
+    painter.translate(50, 50);
     painter.drawRect(-30, -30, 60, 60);
 
     return pixmap;

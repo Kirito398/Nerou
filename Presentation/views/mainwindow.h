@@ -43,13 +43,14 @@ private:
 
     QToolBar *itemsToolBar;
     QToolBar *toolsToolBar;
+    QToolBar *toolBoxToolBar;
 
     QButtonGroup *bgItems;
     QButtonGroup *bgToolBox;
 
     QComboBox *cbScale;
 
-    QToolBox *toolBox;
+    //QToolBox *toolBox;
 
 private:
     void resizeEvent(QResizeEvent * event) override;
@@ -57,14 +58,14 @@ private:
     void initMenu();
     void initToolBars();
     void initToolBox();
-    QWidget *createToolBoxItem(const QString &name,  MoveItem::ItemType type);
+    //QWidget *createToolBoxItem(const QString &name,  MoveItem::ItemType type);
 
 private slots:
     void onItemsGroupClicked();
-    void onToolsGroupClicked(int id);
     void onDeleteActionClicked();
     void onExitActionClicked();
     void onAboutActionClicked();
     void onScaleChanged(const QString &scale);
+    //void onToolsGroupClicked(int id);
 };
 #endif // MAINWINDOW_H
