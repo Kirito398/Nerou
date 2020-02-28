@@ -24,7 +24,7 @@ public:
 
 public:
     MoveItem(QPointF position, ItemType type = Perceptron,  QObject *parent = nullptr);
-    ~MoveItem();
+    ~MoveItem() override;
     void setView(PaintSceneInterface *view);
     bool addArrow(ArrowItem* arrow);
     ModelItem* getItem();
@@ -51,6 +51,7 @@ protected:
 private:
     QVector<ArrowItem *> inputArrows;
     QVector<ArrowItem *> outputArrows;
+    ItemType type;
 };
 
 #endif // MOVEITEM_H

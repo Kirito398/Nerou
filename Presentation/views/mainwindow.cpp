@@ -43,11 +43,20 @@ void MainWindow::initToolBox() {
     tbPerceptron->setToolTip(tr("Perceptron"));
     tbPerceptron->setStatusTip(tr("Add perceptron"));
 
+    item = new ConvolutionItem(QPointF(0, 0));
+    QToolButton *tbConvolution = new QToolButton;
+    tbConvolution->setCheckable(true);
+    tbConvolution->setIcon(QIcon(item->getItemIcon()));
+    tbConvolution->setToolTip(tr("Convolution"));
+    tbConvolution->setStatusTip(tr("Add convolution"));
+
     bgToolBox = new QButtonGroup(this);
     bgToolBox->addButton(tbPerceptron, MoveItem::Perceptron);
+    bgToolBox->addButton(tbConvolution, MoveItem::Convolution);
 
     toolBoxToolBar = new QToolBar;
     toolBoxToolBar->addWidget(tbPerceptron);
+    toolBoxToolBar->addWidget(tbConvolution);
     addToolBar(Qt::LeftToolBarArea, toolBoxToolBar);
 }
 

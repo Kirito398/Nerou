@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     models/arrowitem.cpp \
+    models/convolutionitem.cpp \
     models/perceptronitem.cpp \
     models/selectoritem.cpp \
     views/mainwindow.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
 HEADERS += \
     interfaces/PaintSceneInterface.h \
     models/arrowitem.h \
+    models/convolutionitem.h \
     models/perceptronitem.h \
     models/selectoritem.h \
     views/mainwindow.h \

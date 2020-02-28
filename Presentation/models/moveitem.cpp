@@ -4,6 +4,7 @@ MoveItem::MoveItem(QPointF position, ItemType type, QObject *parent) : QObject(p
 {
     listener = MainInteractor::getInstance()->addNewItem(this);
     this->setPos(position);
+    this->type = type;
 
     setFlag(QGraphicsItem::ItemIsSelectable);
 }
