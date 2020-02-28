@@ -11,7 +11,8 @@ class MainInteractor
 {
 public:
     static MainInteractor* getInstance();
-    ModelItem* addNewItem(MoveItemInterface * listener);
+    ModelItem* addNewItem(MoveItemInterface *listener);
+    void removeItem(MoveItemInterface *item);
 
 private:
     MainInteractor();

@@ -17,4 +17,14 @@ ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener) {
     return newItem;
 }
 
+void MainInteractor::removeItem(MoveItemInterface *item) {
+    for(unsigned long i = 0; i < itemsList.size(); i++) {
+        if (itemsList.at(i).getListener() == item) {
+            itemsList.erase(itemsList.begin() + i);
+            vector<ModelItem>(itemsList).swap(itemsList);
+            break;
+        }
+    }
+}
+
 MainInteractor * MainInteractor::instance;

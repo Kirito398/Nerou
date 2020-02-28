@@ -35,10 +35,10 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::initToolBox() {
-    MoveItem item(QPointF(0, 0), MoveItem::Perceptron);
+    MoveItem *item = new PerceptronItem(QPointF(0, 0));
     QToolButton *tbPerceptron = new QToolButton;
     tbPerceptron->setCheckable(true);
-    tbPerceptron->setIcon(QIcon(item.getItemIcon()));
+    tbPerceptron->setIcon(QIcon(item->getItemIcon()));
     //tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     tbPerceptron->setToolTip(tr("Perceptron"));
     tbPerceptron->setStatusTip(tr("Add perceptron"));
@@ -153,6 +153,7 @@ void MainWindow::onDeleteActionClicked() {
 
         moveItem->removeArrows();
         scene->removeItem(moveItem);
+        delete item;
     }
 }
 

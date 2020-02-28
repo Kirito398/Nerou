@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     models/arrowitem.cpp \
+    models/perceptronitem.cpp \
     models/selectoritem.cpp \
     views/mainwindow.cpp \
     models/moveitem.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     interfaces/PaintSceneInterface.h \
     models/arrowitem.h \
+    models/perceptronitem.h \
     models/selectoritem.h \
     views/mainwindow.h \
     models/moveitem.h \

@@ -24,30 +24,31 @@ public:
 
 public:
     MoveItem(QPointF position, ItemType type = Perceptron,  QObject *parent = nullptr);
+    ~MoveItem();
     void setView(PaintSceneInterface *view);
-    QPolygonF getPolygon() const;
     bool addArrow(ArrowItem* arrow);
     ModelItem* getItem();
     void setPosition(QPointF position);
     void removeArrow(ArrowItem* arrow);
     void removeArrows();
-    QPixmap getItemIcon() const;
+    virtual QPixmap getItemIcon() const = 0;
+    virtual QPolygonF getPolygon() const = 0;
 
 private:
-    QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-    void setPosition(double posX, double posY) override;
+    virtual void makePolygon() = 0;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    void makePolygon();
+    void setPosition(double posX, double posY) override;
     bool isArrowAlreadyAdded(ArrowItem* arrow);
     void updateArrowsPosition();
 
-private:
+protected:
     ModelItem *listener;
     PaintSceneInterface *view;
     QPolygonF polygon;
+
+private:
     QVector<ArrowItem *> inputArrows;
     QVector<ArrowItem *> outputArrows;
 };

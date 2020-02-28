@@ -40,3 +40,7 @@ void ModelItem::removeOutputItem(ModelItem* outputItem) {
         }
     }
 }
+
+MoveItemInterface *ModelItem::getListener() {
+    return listener;
+}

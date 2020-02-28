@@ -124,7 +124,7 @@ void PaintScene::addArrowItem() {
 }
 
 void PaintScene::addMoveItem(QPointF position) {
-    MoveItem *newItem = new MoveItem(position);
+    MoveItem *newItem = new PerceptronItem(position);
     newItem->setView(this);
     newItem->setSelected(true);
     this->addItem(newItem);

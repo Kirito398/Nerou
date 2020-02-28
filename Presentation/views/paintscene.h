@@ -6,6 +6,7 @@
 #include <QGraphicsLineItem>
 
 #include <models/moveitem.h>
+#include <models/perceptronitem.h>
 #include <interactors/maininteractor.h>
 #include <interfaces/PaintSceneInterface.h>
 #include <models/arrowitem.h>
