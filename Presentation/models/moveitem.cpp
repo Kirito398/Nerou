@@ -44,26 +44,30 @@ bool MoveItem::addArrow(ArrowItem* arrow) {
 }
 
 void MoveItem::removeArrow(ArrowItem* arrow) {
-    if (outputArrows.contains(arrow))
+    if (outputArrows.contains(arrow)) {
         outputArrows.removeAll(arrow);
+        listener->removeOutputItem(arrow->getEndItem()->getItem());
+    }
 
-    if (inputArrows.contains(arrow))
+    if (inputArrows.contains(arrow)) {
         inputArrows.removeAll(arrow);
+        listener->removeInputItem(arrow->getStartItem()->getItem());
+    }
 }
 
 void MoveItem::removeArrows() {
     for (auto arrow : inputArrows) {
-        inputArrows.removeAll(arrow);
         arrow->getStartItem()->removeArrow(arrow);
         arrow->getEndItem()->removeArrow(arrow);
+        inputArrows.removeAll(arrow);
         scene()->removeItem(arrow);
         delete arrow;
     }
 
     for (auto arrow : outputArrows) {
-        outputArrows.removeAll(arrow);
         arrow->getStartItem()->removeArrow(arrow);
         arrow->getEndItem()->removeArrow(arrow);
+        outputArrows.removeAll(arrow);
         scene()->removeItem(arrow);
         delete arrow;
     }
