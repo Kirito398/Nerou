@@ -66,6 +66,6 @@ private slots:
     void onExitActionClicked();
     void onAboutActionClicked();
     void onScaleChanged(const QString &scale);
-    //void onToolsGroupClicked(int id);
+    void onToolsGroupClicked(int id);
 };
 #endif // MAINWINDOW_H

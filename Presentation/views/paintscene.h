@@ -19,6 +19,8 @@ public:
     PaintScene(QObject *parent = nullptr);
     enum Mode {Selector, Items, Arrows};
     void setMode(Mode mode);
+    void setItemType(MoveItem::ItemType type);
+    MoveItem::ItemType getItemType();
 
 private:
     MainInteractor* interactor;
@@ -26,6 +28,7 @@ private:
     Mode mode;
     QGraphicsLineItem *line;
     SelectorItem *selector;
+    MoveItem::ItemType itemType;
 
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

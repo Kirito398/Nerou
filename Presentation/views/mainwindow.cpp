@@ -51,13 +51,30 @@ void MainWindow::initToolBox() {
     tbConvolution->setStatusTip(tr("Add convolution"));
 
     bgToolBox = new QButtonGroup(this);
+    bgToolBox->setExclusive(false);
     bgToolBox->addButton(tbPerceptron, MoveItem::Perceptron);
     bgToolBox->addButton(tbConvolution, MoveItem::Convolution);
+    connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
     toolBoxToolBar = new QToolBar;
     toolBoxToolBar->addWidget(tbPerceptron);
     toolBoxToolBar->addWidget(tbConvolution);
     addToolBar(Qt::LeftToolBarArea, toolBoxToolBar);
+}
+
+void MainWindow::onToolsGroupClicked(int id) {
+    QList<QAbstractButton *> buttons = bgToolBox->buttons();
+
+    for(auto *button : buttons) {
+        if (bgToolBox->button(id) != button)
+            button->setChecked(false);
+    }
+
+    bgToolBox->button(id)->setChecked(true);
+    bgItems->button(PaintScene::Items)->setChecked(true);
+
+    scene->setMode(PaintScene::Items);
+    scene->setItemType(MoveItem::ItemType(id));
 }
 
 void MainWindow::initToolBars() {
@@ -168,6 +185,12 @@ void MainWindow::onDeleteActionClicked() {
 
 void MainWindow::onItemsGroupClicked() {
     scene->setMode(PaintScene::Mode(bgItems->checkedId()));
+
+    if (bgToolBox->checkedId() != -1)
+        bgToolBox->button(bgToolBox->checkedId())->setChecked(false);
+
+    if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Items)
+        bgToolBox->button(scene->getItemType())->setChecked(true);
 }
 
 void MainWindow::onExitActionClicked() {

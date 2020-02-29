@@ -6,6 +6,7 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     line = nullptr;
     selector = nullptr;
     mode = PaintScene::Selector;
+    itemType = MoveItem::Perceptron;
 }
 
 void PaintScene::moveSelectedItem(QPointF delta) {
@@ -96,6 +97,14 @@ void PaintScene::setMode(Mode mode) {
     this->mode = mode;
 }
 
+void PaintScene::setItemType(MoveItem::ItemType type) {
+    itemType = type;
+}
+
+MoveItem::ItemType PaintScene::getItemType() {
+    return itemType;
+}
+
 void PaintScene::addArrowItem() {
     QList<QGraphicsItem *> startItems = items(line->line().p1());
     if (startItems.count() && startItems.first() == line)
@@ -124,7 +133,23 @@ void PaintScene::addArrowItem() {
 }
 
 void PaintScene::addMoveItem(QPointF position) {
-    MoveItem *newItem = new PerceptronItem(position);
+    MoveItem *newItem;
+
+    switch (itemType) {
+    case MoveItem::Perceptron : {
+        newItem = new PerceptronItem(position);
+        break;
+    }
+    case MoveItem::Convolution : {
+        newItem = new ConvolutionItem(position);
+        break;
+    }
+    case MoveItem::Data : {
+        newItem = new PerceptronItem(position);
+        break;
+    }
+    }
+
     newItem->setView(this);
     newItem->setSelected(true);
     this->addItem(newItem);
