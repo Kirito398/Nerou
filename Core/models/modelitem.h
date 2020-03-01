@@ -15,6 +15,9 @@ public:
     void setPosition(double posX, double posY);
     void addInputItem(ModelItem* inputItem);
     void addOutputItem(ModelItem* outputItem);
+    void removeInputItem(ModelItem* inputItem);
+    void removeOutputItem(ModelItem* outputItem);
+    MoveItemInterface *getListener();
 
 private:
     double posX, posY;

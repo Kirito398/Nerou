@@ -6,6 +6,8 @@
 #include <QGraphicsLineItem>
 
 #include <models/moveitem.h>
+#include <models/perceptronitem.h>
+#include <models/convolutionitem.h>
 #include <interactors/maininteractor.h>
 #include <interfaces/PaintSceneInterface.h>
 #include <models/arrowitem.h>
@@ -17,6 +19,8 @@ public:
     PaintScene(QObject *parent = nullptr);
     enum Mode {Selector, Items, Arrows};
     void setMode(Mode mode);
+    void setItemType(MoveItem::ItemType type);
+    MoveItem::ItemType getItemType();
 
 private:
     MainInteractor* interactor;
@@ -24,6 +28,7 @@ private:
     Mode mode;
     QGraphicsLineItem *line;
     SelectorItem *selector;
+    MoveItem::ItemType itemType;
 
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
