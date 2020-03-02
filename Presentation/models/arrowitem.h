@@ -9,6 +9,7 @@
 
 #include <interfaces/PaintSceneInterface.h>
 #include <models/moveitem.h>
+#include <models/sinapsmodel.h>
 
 #include <math.h>
 
@@ -18,10 +19,13 @@ class ArrowItem : public QGraphicsLineItem
 {
 public:
     ArrowItem(MoveItem *startItem, MoveItem *endItem, QGraphicsItem *parent = nullptr);
+    ~ArrowItem() override;
     void setView(PaintSceneInterface *view);
     void updatePosition();
     MoveItem* getStartItem();
     MoveItem* getEndItem();
+    void setItem(SinapsModel *item);
+    SinapsModel *getItem();
 
 protected:
     QRectF boundingRect() const override;
@@ -35,6 +39,7 @@ private:
     PaintSceneInterface *view;
     MoveItem *startItem;
     MoveItem *endItem;
+    SinapsModel *item;
     QPolygonF arrowHead;
 };
 

@@ -111,3 +111,16 @@ MoveItem* ArrowItem::getStartItem() {
 MoveItem* ArrowItem::getEndItem() {
     return endItem;
 }
+
+void ArrowItem::setItem(SinapsModel *item) {
+    this->item = item;
+}
+
+SinapsModel *ArrowItem::getItem() {
+    return item;
+}
+
+ArrowItem::~ArrowItem() {
+    MainInteractor::getInstance()->removeSinaps(item);
+    delete item;
+}

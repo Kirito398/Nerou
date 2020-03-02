@@ -17,11 +17,32 @@ ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener) {
     return newItem;
 }
 
+SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
+    SinapsModel *sinaps = new SinapsModel(inputItem, outputItem);
+
+    inputItem->addOutputSinaps(sinaps);
+    outputItem->addInputSinaps(sinaps);
+
+    sinapsModelsList.push_back(sinaps);
+
+    return sinaps;
+}
+
 void MainInteractor::removeItem(MoveItemInterface *item) {
     for(unsigned long i = 0; i < itemsList.size(); i++) {
         if (itemsList.at(i).getListener() == item) {
             itemsList.erase(itemsList.begin() + i);
             vector<ModelItem>(itemsList).swap(itemsList);
+            break;
+        }
+    }
+}
+
+void MainInteractor::removeSinaps(SinapsModel *item) {
+    for(unsigned long i = 0; i < sinapsModelsList.size(); i++) {
+        if (sinapsModelsList.at(i) == item) {
+            sinapsModelsList.erase(sinapsModelsList.begin() + i);
+            vector<SinapsModel *>(sinapsModelsList).swap(sinapsModelsList);
             break;
         }
     }
