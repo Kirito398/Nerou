@@ -2,7 +2,7 @@
 #define MAININTERACTOR_H
 
 #include <vector>
-#include <models/modelitem.h>
+#include <models/perceptronmodel.h>
 #include <models/sinapsmodel.h>
 #include <interfaces/moveiteminterface.h>
 
@@ -12,7 +12,7 @@ class MainInteractor
 {
 public:
     static MainInteractor* getInstance();
-    ModelItem* addNewItem(MoveItemInterface *listener);
+    ModelItem* addNewItem(MoveItemInterface *listener, ModelItem::ItemType type);
     void removeItem(MoveItemInterface *item);
     SinapsModel *makeSinaps(ModelItem *inputItem, ModelItem *outputItem);
     void removeSinaps(SinapsModel *item);

@@ -1,6 +1,6 @@
 #include "convolutionitem.h"
 
-ConvolutionItem::ConvolutionItem(QPointF position, QObject *parent) : MoveItem(position, Convolution, parent)
+ConvolutionItem::ConvolutionItem(QPointF position, QObject *parent) : MoveItem(position, ModelItem::Convolution, parent)
 {
     makePolygon();
 }

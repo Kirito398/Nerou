@@ -52,8 +52,8 @@ void MainWindow::initToolBox() {
 
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);
-    bgToolBox->addButton(tbPerceptron, MoveItem::Perceptron);
-    bgToolBox->addButton(tbConvolution, MoveItem::Convolution);
+    bgToolBox->addButton(tbPerceptron, ModelItem::Perceptron);
+    bgToolBox->addButton(tbConvolution, ModelItem::Convolution);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
     toolBoxToolBar = new QToolBar;
@@ -74,7 +74,7 @@ void MainWindow::onToolsGroupClicked(int id) {
     bgItems->button(PaintScene::Items)->setChecked(true);
 
     scene->setMode(PaintScene::Items);
-    scene->setItemType(MoveItem::ItemType(id));
+    scene->setItemType(ModelItem::ItemType(id));
 }
 
 void MainWindow::initToolBars() {

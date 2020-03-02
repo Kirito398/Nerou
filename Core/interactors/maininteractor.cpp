@@ -11,8 +11,20 @@ MainInteractor* MainInteractor::getInstance() {
     return instance;
 }
 
-ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener) {
-    ModelItem *newItem = new ModelItem(listener);
+ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {
+    ModelItem *newItem;
+
+    switch (type) {
+    case ModelItem::Perceptron : {
+        newItem = new PerceptronModel(listener);
+        break;
+    }
+    case ModelItem::Convolution : {
+        newItem = new ModelItem(listener, ModelItem::Convolution);
+        break;
+    }
+    }
+
     itemsList.push_back(*newItem);
     return newItem;
 }

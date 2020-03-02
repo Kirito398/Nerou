@@ -1,8 +1,9 @@
 #include "modelitem.h"
 
-ModelItem::ModelItem(MoveItemInterface *listener)
+ModelItem::ModelItem(MoveItemInterface *listener, ItemType type)
 {
     this->listener = listener;
+    this->type = type;
 }
 
 void ModelItem::setPosition(double posX, double posY) {

@@ -1,6 +1,6 @@
 #include "perceptronitem.h"
 
-PerceptronItem::PerceptronItem(QPointF position, QObject *parent) : MoveItem(position, Perceptron, parent)
+PerceptronItem::PerceptronItem(QPointF position, QObject *parent) : MoveItem(position, ModelItem::Perceptron, parent)
 {
     makePolygon();
 }

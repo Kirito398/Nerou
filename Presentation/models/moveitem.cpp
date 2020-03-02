@@ -1,8 +1,8 @@
 #include "moveitem.h"
 
-MoveItem::MoveItem(QPointF position, ItemType type, QObject *parent) : QObject(parent), QGraphicsItem()
+MoveItem::MoveItem(QPointF position, ModelItem::ItemType type, QObject *parent) : QObject(parent), QGraphicsItem()
 {
-    listener = MainInteractor::getInstance()->addNewItem(this);
+    listener = MainInteractor::getInstance()->addNewItem(this, type);
     this->setPos(position);
     this->type = type;
 

@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     interactors/maininteractor.cpp \
     models/modelitem.cpp \
+    models/perceptronmodel.cpp \
     models/sinapsmodel.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ HEADERS += \
     interfaces/moveiteminterface.h \
     listeners/SinapsListener.h \
     models/modelitem.h \
+    models/perceptronmodel.h \
     models/sinapsmodel.h
 
 # Default rules for deployment.
