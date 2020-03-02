@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     initToolBox();
     initMenu();
     initToolBars();
+    initControlToolBar();
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     view = new QGraphicsView(scene);
@@ -32,6 +33,11 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(widget);
     setWindowTitle("Nerou");
     setUnifiedTitleAndToolBarOnMac(true);
+}
+
+void MainWindow::initControlToolBar() {
+    controlToolBar = addToolBar(tr("Control"));
+    controlToolBar->addAction(runAction);
 }
 
 void MainWindow::initToolBox() {
@@ -52,8 +58,8 @@ void MainWindow::initToolBox() {
 
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);
-    bgToolBox->addButton(tbPerceptron, MoveItem::Perceptron);
-    bgToolBox->addButton(tbConvolution, MoveItem::Convolution);
+    bgToolBox->addButton(tbPerceptron, ModelItem::Perceptron);
+    bgToolBox->addButton(tbConvolution, ModelItem::Convolution);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
     toolBoxToolBar = new QToolBar;
@@ -74,7 +80,7 @@ void MainWindow::onToolsGroupClicked(int id) {
     bgItems->button(PaintScene::Items)->setChecked(true);
 
     scene->setMode(PaintScene::Items);
-    scene->setItemType(MoveItem::ItemType(id));
+    scene->setItemType(ModelItem::ItemType(id));
 }
 
 void MainWindow::initToolBars() {
@@ -135,6 +141,9 @@ void MainWindow::initMenu() {
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();
 
+    controlMenu = menuBar()->addMenu(tr("Run"));
+    controlMenu->addAction(runAction);
+
     aboutMenu = menuBar()->addMenu(tr("Help"));
     aboutMenu->addAction(aboutAction);
 }
@@ -154,6 +163,10 @@ void MainWindow::initActions() {
     aboutAction->setShortcut(tr("F1"));
     aboutAction->setStatusTip(tr("About"));
     connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(onAboutActionClicked()));
+
+    runAction = new QAction(QIcon(":/images/run_icon.png"), tr("Run"), this);
+    runAction->setStatusTip(tr("Run"));
+    connect(runAction, SIGNAL(triggered(bool)), this, SLOT(onRunActionClicked()));
 }
 
 void MainWindow::onDeleteActionClicked() {
@@ -199,6 +212,10 @@ void MainWindow::onExitActionClicked() {
 
 void MainWindow::onAboutActionClicked() {
     QMessageBox::about(this, tr("About"), tr("Nerou project 2020"));
+}
+
+void MainWindow::onRunActionClicked() {
+    MainInteractor::getInstance()->run();
 }
 
 void MainWindow::onScaleChanged(const QString &scale) {

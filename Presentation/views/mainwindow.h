@@ -36,14 +36,17 @@ private:
     QAction *deleteAction;
     QAction *exitAction;
     QAction *aboutAction;
+    QAction *runAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
+    QMenu *controlMenu;
     QMenu *aboutMenu;
 
     QToolBar *itemsToolBar;
     QToolBar *toolsToolBar;
     QToolBar *toolBoxToolBar;
+    QToolBar *controlToolBar;
 
     QButtonGroup *bgItems;
     QButtonGroup *bgToolBox;
@@ -58,6 +61,7 @@ private:
     void initMenu();
     void initToolBars();
     void initToolBox();
+    void initControlToolBar();
     //QWidget *createToolBoxItem(const QString &name,  MoveItem::ItemType type);
 
 private slots:
@@ -67,5 +71,6 @@ private slots:
     void onAboutActionClicked();
     void onScaleChanged(const QString &scale);
     void onToolsGroupClicked(int id);
+    void onRunActionClicked();
 };
 #endif // MAINWINDOW_H

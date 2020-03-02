@@ -14,16 +14,17 @@
 #include <interactors/maininteractor.h>
 #include <interfaces/PaintSceneInterface.h>
 #include <models/arrowitem.h>
+#include <models/modelitem.h>
 
 class ArrowItem;
 
 class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
 public:
-    enum ItemType {Perceptron, Convolution, Data};
+    //enum ItemType {Perceptron, Convolution, Data};
 
 public:
-    MoveItem(QPointF position, ItemType type = Perceptron,  QObject *parent = nullptr);
+    MoveItem(QPointF position, ModelItem::ItemType type = ModelItem::Perceptron,  QObject *parent = nullptr);
     ~MoveItem() override;
     void setView(PaintSceneInterface *view);
     bool addArrow(ArrowItem* arrow);
@@ -51,7 +52,7 @@ protected:
 private:
     QVector<ArrowItem *> inputArrows;
     QVector<ArrowItem *> outputArrows;
-    ItemType type;
+    ModelItem::ItemType type;
 };
 
 #endif // MOVEITEM_H

@@ -11,15 +11,35 @@ MainInteractor* MainInteractor::getInstance() {
     return instance;
 }
 
-ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener) {
-    ModelItem *newItem = new ModelItem(listener);
-    itemsList.push_back(*newItem);
+void MainInteractor::run() {
+    for (auto sinaps : sinapsModelsList)
+        sinaps->init();
+}
+
+ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {
+    ModelItem *newItem;
+
+    switch (type) {
+    case ModelItem::Perceptron : {
+        newItem = new PerceptronModel(listener);
+        break;
+    }
+    case ModelItem::Convolution : {
+        newItem = new PerceptronModel(listener);
+        break;
+    }
+    }
+
+    itemsList.push_back(newItem);
     return newItem;
 }
 
 SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
-    SinapsModel *sinaps = new SinapsModel(inputItem, outputItem);
-    sinaps->setType(SinapsModel::Weigth);
+    SinapsModel *sinaps = nullptr;
+
+    if (inputItem->getType() == outputItem->getType() && inputItem->getType() == ModelItem::Perceptron) {
+        sinaps = new WeightModel(inputItem, outputItem);
+    }
 
     inputItem->addOutputSinaps(sinaps);
     outputItem->addInputSinaps(sinaps);
@@ -31,9 +51,9 @@ SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputI
 
 void MainInteractor::removeItem(MoveItemInterface *item) {
     for(unsigned long i = 0; i < itemsList.size(); i++) {
-        if (itemsList.at(i).getListener() == item) {
+        if (itemsList.at(i)->getListener() == item) {
             itemsList.erase(itemsList.begin() + i);
-            vector<ModelItem>(itemsList).swap(itemsList);
+            vector<ModelItem *>(itemsList).swap(itemsList);
             break;
         }
     }

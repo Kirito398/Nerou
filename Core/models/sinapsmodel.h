@@ -1,6 +1,8 @@
 #ifndef SINAPSMODEL_H
 #define SINAPSMODEL_H
 
+#include <iostream>
+
 #include <listeners/SinapsListener.h>
 
 class SinapsModel
@@ -9,20 +11,19 @@ public:
     enum SinapsType {Weigth, Core};
 
 public:
-    SinapsModel(SinapsListener *inputListener, SinapsListener *outputListener);
-    void setType(SinapsType type);
-    void init();
+    SinapsModel(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type);
+    virtual void init() = 0;
+    virtual ~SinapsModel();
 
-private:
-    void initWeight();
-    void initCore();
-    void clearValue();
+protected:
+    double random();
 
-private:
+protected:
     SinapsListener *inputListener;
     SinapsListener *outputListener;
+
+private:
     SinapsType type;
-    double *value = nullptr;
 };
 
 #endif // SINAPSMODEL_H

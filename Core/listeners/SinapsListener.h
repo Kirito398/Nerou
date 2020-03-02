@@ -4,7 +4,7 @@
 class SinapsListener
 {
 public:
-
+    virtual void onInputSignalChanged() = 0;
 };
 
 #endif // SINAPSLISTENER_H

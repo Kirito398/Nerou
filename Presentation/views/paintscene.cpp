@@ -6,7 +6,7 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     line = nullptr;
     selector = nullptr;
     mode = PaintScene::Selector;
-    itemType = MoveItem::Perceptron;
+    itemType = ModelItem::Perceptron;
 }
 
 void PaintScene::moveSelectedItem(QPointF delta) {
@@ -97,11 +97,11 @@ void PaintScene::setMode(Mode mode) {
     this->mode = mode;
 }
 
-void PaintScene::setItemType(MoveItem::ItemType type) {
+void PaintScene::setItemType(ModelItem::ItemType type) {
     itemType = type;
 }
 
-MoveItem::ItemType PaintScene::getItemType() {
+ModelItem::ItemType PaintScene::getItemType() {
     return itemType;
 }
 
@@ -137,16 +137,12 @@ void PaintScene::addMoveItem(QPointF position) {
     MoveItem *newItem;
 
     switch (itemType) {
-    case MoveItem::Perceptron : {
+    case ModelItem::Perceptron : {
         newItem = new PerceptronItem(position);
         break;
     }
-    case MoveItem::Convolution : {
+    case ModelItem::Convolution : {
         newItem = new ConvolutionItem(position);
-        break;
-    }
-    case MoveItem::Data : {
-        newItem = new PerceptronItem(position);
         break;
     }
     }

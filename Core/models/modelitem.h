@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 #include <interfaces/moveiteminterface.h>
 #include <listeners/SinapsListener.h>
@@ -13,19 +14,29 @@ using namespace std;
 class ModelItem : public SinapsListener
 {
 public:
-    ModelItem(MoveItemInterface *listener);
+    enum ItemType {Perceptron, Convolution};
+
+public:
+    ModelItem(MoveItemInterface *listener, ItemType type);
     void setPosition(double posX, double posY);
     void addInputSinaps(SinapsModel* inputItem);
     void addOutputSinaps(SinapsModel* outputItem);
     void removeInputSinaps(SinapsModel *inputItem);
     void removeOutputSinaps(SinapsModel *outputItem);
     MoveItemInterface *getListener();
+    ItemType getType();
 
-private:
-    double posX, posY;
+protected:
+    double activateFunction(double value);
+
+protected:
     MoveItemInterface *listener = nullptr;
     vector<SinapsModel *> inputItems;
     vector<SinapsModel *> outputItems;
+
+private:
+    double posX, posY;
+    ItemType type;
 };
 
 #endif // MODELITEM_H
