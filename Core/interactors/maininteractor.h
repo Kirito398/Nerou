@@ -20,7 +20,7 @@ public:
 private:
     MainInteractor();
     static MainInteractor *instance;
-    vector<ModelItem> itemsList;
+    vector<ModelItem *> itemsList;
     vector<SinapsModel *> sinapsModelsList;
 };
 

@@ -3,8 +3,8 @@
 
 class SinapsListener
 {
-public:
-
+protected:
+    virtual void onInputSignalChanged() = 0;
 };
 
 #endif // SINAPSLISTENER_H

@@ -7,6 +7,13 @@ class PerceptronModel : public ModelItem
 {
 public:
     PerceptronModel(MoveItemInterface *listener);
+    void onInputSignalChanged() override;
+
+private:
+    void makeInputSignal();
+
+private:
+    unsigned long inputSignalCount;
 };
 
 #endif // PERCEPTRONMODEL_H
