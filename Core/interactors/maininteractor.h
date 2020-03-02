@@ -16,6 +16,7 @@ public:
     void removeItem(MoveItemInterface *item);
     SinapsModel *makeSinaps(ModelItem *inputItem, ModelItem *outputItem);
     void removeSinaps(SinapsModel *item);
+    void run();
 
 private:
     MainInteractor();

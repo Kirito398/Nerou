@@ -11,6 +11,11 @@ MainInteractor* MainInteractor::getInstance() {
     return instance;
 }
 
+void MainInteractor::run() {
+    for (auto sinaps : sinapsModelsList)
+        sinaps->init();
+}
+
 ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {
     ModelItem *newItem;
 
