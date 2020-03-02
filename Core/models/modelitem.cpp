@@ -13,29 +13,29 @@ void ModelItem::setPosition(double posX, double posY) {
         listener->setPosition(this->posX, this->posY);
 }
 
-void ModelItem::addInputItem(ModelItem* inputItem) {
+void ModelItem::addInputSinaps(SinapsModel* inputItem) {
     inputItems.push_back(inputItem);
 }
 
-void ModelItem::addOutputItem(ModelItem* outputItem) {
+void ModelItem::addOutputSinaps(SinapsModel* outputItem) {
     outputItems.push_back(outputItem);
 }
 
-void ModelItem::removeInputItem(ModelItem* inputItem) {
+void ModelItem::removeInputSinaps(SinapsModel* inputItem) {
     for (unsigned long i = 0; i < inputItems.size(); i++) {
         if (inputItems.at(i) == inputItem) {
             inputItems.erase(inputItems.begin() + i);
-            vector<ModelItem *>(inputItems).swap(inputItems);
+            vector<SinapsModel *>(inputItems).swap(inputItems);
             break;
         }
     }
 }
 
-void ModelItem::removeOutputItem(ModelItem* outputItem) {
+void ModelItem::removeOutputSinaps(SinapsModel *outputItem) {
     for (unsigned long i = 0; i < outputItems.size(); i++) {
         if (outputItems.at(i) == outputItem) {
             outputItems.erase(outputItems.begin() + i);
-            vector<ModelItem *>(outputItems).swap(outputItems);
+            vector<SinapsModel *>(outputItems).swap(outputItems);
             break;
         }
     }

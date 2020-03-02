@@ -124,6 +124,7 @@ void PaintScene::addArrowItem() {
             arrow->setSelected(true);
             arrow->setZValue(-1000.0);
             arrow->updatePosition();
+            arrow->setItem(interactor->makeSinaps(startItem->getItem(), endItem->getItem()));
             addItem(arrow);
         }
     }

@@ -5,25 +5,27 @@
 #include <vector>
 
 #include <interfaces/moveiteminterface.h>
+#include <listeners/SinapsListener.h>
+#include <models/sinapsmodel.h>
 
 using namespace std;
 
-class ModelItem
+class ModelItem : public SinapsListener
 {
 public:
     ModelItem(MoveItemInterface *listener);
     void setPosition(double posX, double posY);
-    void addInputItem(ModelItem* inputItem);
-    void addOutputItem(ModelItem* outputItem);
-    void removeInputItem(ModelItem* inputItem);
-    void removeOutputItem(ModelItem* outputItem);
+    void addInputSinaps(SinapsModel* inputItem);
+    void addOutputSinaps(SinapsModel* outputItem);
+    void removeInputSinaps(SinapsModel *inputItem);
+    void removeOutputSinaps(SinapsModel *outputItem);
     MoveItemInterface *getListener();
 
 private:
     double posX, posY;
     MoveItemInterface *listener = nullptr;
-    vector<ModelItem *> inputItems;
-    vector<ModelItem *> outputItems;
+    vector<SinapsModel *> inputItems;
+    vector<SinapsModel *> outputItems;
 };
 
 #endif // MODELITEM_H

@@ -18,13 +18,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     interactors/maininteractor.cpp \
-    models/modelitem.cpp
+    models/modelitem.cpp \
+    models/sinapsmodel.cpp
 
 HEADERS += \
     Core_global.h \
     interactors/maininteractor.h \
     interfaces/moveiteminterface.h \
-    models/modelitem.h
+    listeners/SinapsListener.h \
+    models/modelitem.h \
+    models/sinapsmodel.h
 
 # Default rules for deployment.
 unix {

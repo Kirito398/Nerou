@@ -40,15 +40,11 @@ bool MoveItem::addArrow(ArrowItem* arrow) {
     MoveItem *startItem = arrow->getStartItem();
     MoveItem *endItem = arrow->getEndItem();
 
-    if (startItem == this) {
+    if (startItem == this)
         outputArrows.append(arrow);
-        listener->addOutputItem(endItem->getItem());
-    }
 
-    if (endItem == this) {
+    if (endItem == this)
         inputArrows.append(arrow);
-        listener->addInputItem(startItem->getItem());
-    }
 
     return true;
 }
@@ -56,12 +52,12 @@ bool MoveItem::addArrow(ArrowItem* arrow) {
 void MoveItem::removeArrow(ArrowItem* arrow) {
     if (outputArrows.contains(arrow)) {
         outputArrows.removeAll(arrow);
-        listener->removeOutputItem(arrow->getEndItem()->getItem());
+        listener->removeOutputSinaps(arrow->getItem());
     }
 
     if (inputArrows.contains(arrow)) {
         inputArrows.removeAll(arrow);
-        listener->removeInputItem(arrow->getStartItem()->getItem());
+        listener->removeInputSinaps(arrow->getItem());
     }
 }
 
