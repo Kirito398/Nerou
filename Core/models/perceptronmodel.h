@@ -2,7 +2,6 @@
 #define PERCEPTRONMODEL_H
 
 #include <models/modelitem.h>
-#include <models/weightmodel.h>
 
 class PerceptronModel : public ModelItem
 {

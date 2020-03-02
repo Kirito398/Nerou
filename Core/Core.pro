@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     interactors/maininteractor.cpp \
+    models/datamodel.cpp \
     models/modelitem.cpp \
     models/perceptronmodel.cpp \
     models/sinapsmodel.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     interactors/maininteractor.h \
     interfaces/moveiteminterface.h \
     listeners/SinapsListener.h \
+    models/datamodel.h \
     models/modelitem.h \
     models/perceptronmodel.h \
     models/sinapsmodel.h \

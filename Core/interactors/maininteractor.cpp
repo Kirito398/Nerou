@@ -14,6 +14,14 @@ MainInteractor* MainInteractor::getInstance() {
 void MainInteractor::run() {
     for (auto sinaps : sinapsModelsList)
         sinaps->init();
+
+    DataModel *data = new DataModel(nullptr);
+    SinapsModel *sinaps = new WeightModel(data, itemsList[0]);
+    data->addOutputSinaps(sinaps);
+    itemsList[0]->addInputSinaps(sinaps);
+    sinaps->init();
+
+    data->sendData();
 }
 
 ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {

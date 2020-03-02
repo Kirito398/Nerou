@@ -6,15 +6,14 @@
 #include <math.h>
 
 #include <interfaces/moveiteminterface.h>
-#include <listeners/SinapsListener.h>
-#include <models/sinapsmodel.h>
+#include <models/weightmodel.h>
 
 using namespace std;
 
 class ModelItem : public SinapsListener
 {
 public:
-    enum ItemType {Perceptron, Convolution};
+    enum ItemType {Perceptron, Convolution, VectorData};
 
 public:
     ModelItem(MoveItemInterface *listener, ItemType type);

@@ -48,6 +48,7 @@ void MainWindow::initToolBox() {
     //tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     tbPerceptron->setToolTip(tr("Perceptron"));
     tbPerceptron->setStatusTip(tr("Add perceptron"));
+    delete item;
 
     item = new ConvolutionItem(QPointF(0, 0));
     QToolButton *tbConvolution = new QToolButton;
@@ -55,6 +56,7 @@ void MainWindow::initToolBox() {
     tbConvolution->setIcon(QIcon(item->getItemIcon()));
     tbConvolution->setToolTip(tr("Convolution"));
     tbConvolution->setStatusTip(tr("Add convolution"));
+    delete item;
 
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);

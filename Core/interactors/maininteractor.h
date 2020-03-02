@@ -3,8 +3,7 @@
 
 #include <vector>
 #include <models/perceptronmodel.h>
-#include <models/sinapsmodel.h>
-#include <interfaces/moveiteminterface.h>
+#include <models/datamodel.h>
 
 using namespace std;
 
