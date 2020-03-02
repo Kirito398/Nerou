@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 #include <interfaces/moveiteminterface.h>
 #include <listeners/SinapsListener.h>
@@ -23,6 +24,10 @@ public:
     void removeInputSinaps(SinapsModel *inputItem);
     void removeOutputSinaps(SinapsModel *outputItem);
     MoveItemInterface *getListener();
+    ItemType getType();
+
+protected:
+    double activateFunction(double value);
 
 protected:
     MoveItemInterface *listener = nullptr;

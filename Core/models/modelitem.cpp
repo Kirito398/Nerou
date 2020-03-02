@@ -42,6 +42,14 @@ void ModelItem::removeOutputSinaps(SinapsModel *outputItem) {
     }
 }
 
+double ModelItem::activateFunction(double value) {
+    return 1.0 / (1.0 + exp(-value));
+}
+
 MoveItemInterface *ModelItem::getListener() {
     return listener;
+}
+
+ModelItem::ItemType ModelItem::getType() {
+    return type;
 }

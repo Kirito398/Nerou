@@ -1,51 +1,16 @@
 #include "sinapsmodel.h"
 
-SinapsModel::SinapsModel(SinapsListener *inputListener, SinapsListener *outputListener)
+SinapsModel::SinapsModel(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type)
 {
     this->inputListener = inputListener;
     this->outputListener = outputListener;
-}
-
-void SinapsModel::setType(SinapsType type) {
     this->type = type;
-    init();
 }
 
-void SinapsModel::init() {
-    if (value != nullptr)
-        clearValue();
-
-    switch(type) {
-    case Weigth : {
-        initWeight();
-        break;
-    }
-    case Core : {
-        initCore();
-        break;
-    }
-    }
+double SinapsModel::random() {
+    return std::rand() % 100 / 100.0 - 0.5;
 }
 
-void SinapsModel::initWeight() {
-    value = new double(5.0);
-}
+SinapsModel::~SinapsModel() {
 
-void SinapsModel::initCore() {
-    value = new double[5];
-}
-
-void SinapsModel::clearValue() {
-    switch(type) {
-    case Weigth : {
-        delete value;
-        break;
-    }
-    case Core : {
-        delete [] value;
-        break;
-    }
-    }
-
-    value = nullptr;
 }

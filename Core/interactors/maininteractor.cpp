@@ -30,8 +30,11 @@ ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::It
 }
 
 SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
-    SinapsModel *sinaps = new SinapsModel(inputItem, outputItem);
-    sinaps->setType(SinapsModel::Weigth);
+    SinapsModel *sinaps = nullptr;
+
+    if (inputItem->getType() == outputItem->getType() && inputItem->getType() == ModelItem::Perceptron) {
+        sinaps = new WeightModel(inputItem, outputItem);
+    }
 
     inputItem->addOutputSinaps(sinaps);
     outputItem->addInputSinaps(sinaps);

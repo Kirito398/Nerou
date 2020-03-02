@@ -20,7 +20,8 @@ SOURCES += \
     interactors/maininteractor.cpp \
     models/modelitem.cpp \
     models/perceptronmodel.cpp \
-    models/sinapsmodel.cpp
+    models/sinapsmodel.cpp \
+    models/weightmodel.cpp
 
 HEADERS += \
     Core_global.h \
@@ -29,7 +30,8 @@ HEADERS += \
     listeners/SinapsListener.h \
     models/modelitem.h \
     models/perceptronmodel.h \
-    models/sinapsmodel.h
+    models/sinapsmodel.h \
+    models/weightmodel.h
 
 # Default rules for deployment.
 unix {
