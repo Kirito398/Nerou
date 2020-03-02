@@ -19,6 +19,7 @@ ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener) {
 
 SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
     SinapsModel *sinaps = new SinapsModel(inputItem, outputItem);
+    sinaps->setType(SinapsModel::Weigth);
 
     inputItem->addOutputSinaps(sinaps);
     outputItem->addInputSinaps(sinaps);
