@@ -3,6 +3,7 @@
 MainInteractor::MainInteractor()
 {
     itemFactory = ItemFactory();
+    sinapsFactory = SinapsFactory();
 }
 
 MainInteractor* MainInteractor::getInstance() {
@@ -31,11 +32,15 @@ ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::It
 }
 
 SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
-    SinapsModel *sinaps = nullptr;
+    SinapsModel::SinapsType type;
 
     if (inputItem->getType() == outputItem->getType() && inputItem->getType() == ModelItem::Perceptron) {
-        sinaps = new WeightModel(inputItem, outputItem);
+        type = SinapsModel::Weigth;
+    } else {
+        type = SinapsModel::Core;
     }
+
+    SinapsModel *sinaps = sinapsFactory.create(inputItem, outputItem, type);
 
     inputItem->addOutputSinaps(sinaps);
     outputItem->addInputSinaps(sinaps);

@@ -19,6 +19,7 @@ private:
     vector<ModelItem *> itemsList;
     vector<SinapsModel *> sinapsModelsList;
     ItemFactory itemFactory;
+    SinapsFactory sinapsFactory;
 };
 
 #endif // MAININTERACTOR_H

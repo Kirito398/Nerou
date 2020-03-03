@@ -6,7 +6,7 @@
 #include <math.h>
 
 #include <interfaces/moveiteminterface.h>
-#include <models/weightmodel.h>
+#include <factories/sinapsfactory.h>
 
 using namespace std;
 

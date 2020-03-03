@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     factories/itemfactory.cpp \
+    factories/sinapsfactory.cpp \
     interactors/maininteractor.cpp \
     models/datamodel.cpp \
     models/modelitem.cpp \
@@ -28,8 +29,11 @@ SOURCES += \
 HEADERS += \
     Core_global.h \
     factories/abstractitemcreator.h \
+    factories/abstractsinapscreator.h \
     factories/itemcreator.h \
     factories/itemfactory.h \
+    factories/sinapscreator.h \
+    factories/sinapsfactory.h \
     interactors/maininteractor.h \
     interfaces/moveiteminterface.h \
     listeners/SinapsListener.h \
