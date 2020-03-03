@@ -21,7 +21,7 @@ void MainInteractor::run() {
     itemsList[0]->addInputSinaps(sinaps);
     sinaps->init();
 
-    //data->sendData();
+    dynamic_cast<DataModel *>(data)->sendData();
 }
 
 ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {

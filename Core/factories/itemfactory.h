@@ -4,6 +4,8 @@
 #include <map>
 
 #include <factories/itemcreator.h>
+#include <models/perceptronmodel.h>
+#include <models/datamodel.h>
 
 class ItemFactory
 {

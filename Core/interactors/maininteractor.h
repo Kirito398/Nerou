@@ -1,8 +1,6 @@
 #ifndef MAININTERACTOR_H
 #define MAININTERACTOR_H
 
-#include <vector>
-
 #include "factories/itemfactory.h"
 
 class MainInteractor
