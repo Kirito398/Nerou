@@ -1,5 +1,8 @@
 #include "itemfactory.h"
 
+#include "models/perceptronmodel.h"
+#include "models/datamodel.h"
+
 ItemFactory::ItemFactory()
 {
     add<PerceptronModel>(ModelItem::Perceptron);

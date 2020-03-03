@@ -1,7 +1,7 @@
 #ifndef SINAPSMODEL_H
 #define SINAPSMODEL_H
 
-#include <listeners/SinapsListener.h>
+#include "listeners/SinapsListener.h"
 
 class SinapsModel
 {

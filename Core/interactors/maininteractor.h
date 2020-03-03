@@ -2,6 +2,7 @@
 #define MAININTERACTOR_H
 
 #include "factories/itemfactory.h"
+#include "factories/sinapsfactory.h"
 
 class MainInteractor
 {

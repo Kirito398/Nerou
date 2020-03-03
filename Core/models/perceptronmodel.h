@@ -1,7 +1,7 @@
 #ifndef PERCEPTRONMODEL_H
 #define PERCEPTRONMODEL_H
 
-#include <models/modelitem.h>
+#include "models/modelitem.h"
 
 class PerceptronModel : public ModelItem
 {

@@ -3,8 +3,7 @@
 
 #include <map>
 
-#include <models/weightmodel.h>
-#include <factories/sinapscreator.h>
+#include "factories/sinapscreator.h"
 
 class SinapsFactory
 {

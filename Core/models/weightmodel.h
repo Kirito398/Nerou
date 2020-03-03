@@ -1,7 +1,7 @@
 #ifndef WEIGHTMODEL_H
 #define WEIGHTMODEL_H
 
-#include <models/sinapsmodel.h>
+#include "models/sinapsmodel.h"
 
 class WeightModel : public SinapsModel
 {

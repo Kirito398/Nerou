@@ -3,9 +3,7 @@
 
 #include <map>
 
-#include <factories/itemcreator.h>
-#include <models/perceptronmodel.h>
-#include <models/datamodel.h>
+#include "factories/itemcreator.h"
 
 class ItemFactory
 {

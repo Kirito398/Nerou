@@ -1,7 +1,5 @@
 #include "sinapsmodel.h"
 
-#include <iostream>
-
 SinapsModel::SinapsModel(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type)
 {
     this->inputListener = inputListener;

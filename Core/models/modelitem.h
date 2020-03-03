@@ -1,12 +1,14 @@
 #ifndef MODELITEM_H
 #define MODELITEM_H
 
-#include <iostream>
 #include <vector>
 #include <math.h>
 
-#include <interfaces/moveiteminterface.h>
-#include <factories/sinapsfactory.h>
+#include "listeners/SinapsListener.h"
+
+class ModelListener;
+class MoveItemInterface;
+class SinapsModel;
 
 using namespace std;
 

@@ -1,5 +1,7 @@
 #include "modelitem.h"
 
+#include "interfaces/moveiteminterface.h"
+
 ModelItem::ModelItem(MoveItemInterface *listener, ItemType type)
 {
     this->listener = listener;

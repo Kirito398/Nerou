@@ -1,7 +1,7 @@
 #ifndef DATAMODEL_H
 #define DATAMODEL_H
 
-#include <models/modelitem.h>
+#include "models/modelitem.h"
 
 class DataModel : public ModelItem
 {

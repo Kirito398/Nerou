@@ -1,7 +1,7 @@
 #ifndef ITEMCREATOR_H
 #define ITEMCREATOR_H
 
-#include <factories/abstractitemcreator.h>
+#include "factories/abstractitemcreator.h"
 
 template <class C>
 class ItemCreator : public AbstractItemCreator
