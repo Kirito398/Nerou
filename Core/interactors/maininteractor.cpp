@@ -2,7 +2,7 @@
 
 MainInteractor::MainInteractor()
 {
-
+    itemFactory = ItemFactory();
 }
 
 MainInteractor* MainInteractor::getInstance() {
@@ -15,29 +15,17 @@ void MainInteractor::run() {
     for (auto sinaps : sinapsModelsList)
         sinaps->init();
 
-    DataModel *data = new DataModel(nullptr);
+    ModelItem *data = itemFactory.create(nullptr, ModelItem::VectorData);
     SinapsModel *sinaps = new WeightModel(data, itemsList[0]);
     data->addOutputSinaps(sinaps);
     itemsList[0]->addInputSinaps(sinaps);
     sinaps->init();
 
-    data->sendData();
+    //data->sendData();
 }
 
 ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {
-    ModelItem *newItem;
-
-    switch (type) {
-    case ModelItem::Perceptron : {
-        newItem = new PerceptronModel(listener);
-        break;
-    }
-    case ModelItem::Convolution : {
-        newItem = new PerceptronModel(listener);
-        break;
-    }
-    }
-
+    ModelItem *newItem = itemFactory.create(listener, type);
     itemsList.push_back(newItem);
     return newItem;
 }

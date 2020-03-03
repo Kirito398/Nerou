@@ -2,10 +2,8 @@
 #define MAININTERACTOR_H
 
 #include <vector>
-#include <models/perceptronmodel.h>
-#include <models/datamodel.h>
 
-using namespace std;
+#include "factories/itemfactory.h"
 
 class MainInteractor
 {
@@ -22,6 +20,7 @@ private:
     static MainInteractor *instance;
     vector<ModelItem *> itemsList;
     vector<SinapsModel *> sinapsModelsList;
+    ItemFactory itemFactory;
 };
 
 #endif // MAININTERACTOR_H

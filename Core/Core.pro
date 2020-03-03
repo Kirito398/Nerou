@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    factories/itemfactory.cpp \
     interactors/maininteractor.cpp \
     models/datamodel.cpp \
     models/modelitem.cpp \
@@ -26,6 +27,9 @@ SOURCES += \
 
 HEADERS += \
     Core_global.h \
+    factories/abstractitemcreator.h \
+    factories/itemcreator.h \
+    factories/itemfactory.h \
     interactors/maininteractor.h \
     interfaces/moveiteminterface.h \
     listeners/SinapsListener.h \
