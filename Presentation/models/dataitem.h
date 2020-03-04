@@ -14,6 +14,12 @@ private:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     void makePolygon() override;
+    void initData();
+
+private:
+    unsigned int rowCount;
+    unsigned int columnCount;
+    double **data;
 };
 
 #endif // DATAITEM_H

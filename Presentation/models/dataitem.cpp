@@ -3,6 +3,21 @@
 DataItem::DataItem(QPointF position, QObject *parent) : MoveItem(position, ModelItem::Data, parent)
 {
     makePolygon();
+
+    rowCount = 2;
+    columnCount = 2;
+
+    initData();
+}
+
+void DataItem::initData() {
+    data = new double*[rowCount];
+    for (unsigned int i = 0; i < rowCount; i++) {
+        data[i] = new double[columnCount];
+
+        for (unsigned int j = 0; j < columnCount; j++)
+            data[i][j] = 0;
+    }
 }
 
 QPixmap DataItem::getItemIcon() const {
