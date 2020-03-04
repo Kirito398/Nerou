@@ -2,7 +2,7 @@
 
 #include "models/weightmodel.h"
 
-DataModel::DataModel(MoveItemInterface *listener) : ModelItem(listener, VectorData)
+DataModel::DataModel(MoveItemInterface *listener) : ModelItem(listener, Data)
 {
 
 }

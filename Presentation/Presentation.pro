@@ -19,6 +19,7 @@ SOURCES += \
     main.cpp \
     models/arrowitem.cpp \
     models/convolutionitem.cpp \
+    models/dataitem.cpp \
     models/perceptronitem.cpp \
     models/selectoritem.cpp \
     views/mainwindow.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     interfaces/PaintSceneInterface.h \
     models/arrowitem.h \
     models/convolutionitem.h \
+    models/dataitem.h \
     models/perceptronitem.h \
     models/selectoritem.h \
     views/mainwindow.h \

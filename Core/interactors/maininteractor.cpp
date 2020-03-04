@@ -16,13 +16,13 @@ void MainInteractor::run() {
     for (auto sinaps : sinapsModelsList)
         sinaps->init();
 
-    ModelItem *data = itemFactory.create(nullptr, ModelItem::VectorData);
-    SinapsModel *sinaps = sinapsFactory.create(data, itemsList[0], SinapsModel::Weigth);
-    data->addOutputSinaps(sinaps);
-    itemsList[0]->addInputSinaps(sinaps);
-    sinaps->init();
+//    ModelItem *data = itemFactory.create(nullptr, ModelItem::Data);
+//    SinapsModel *sinaps = sinapsFactory.create(data, itemsList[0], SinapsModel::Weigth);
+//    data->addOutputSinaps(sinaps);
+//    itemsList[0]->addInputSinaps(sinaps);
+//    sinaps->init();
 
-    dynamic_cast<DataModel *>(data)->sendData();
+//    dynamic_cast<DataModel *>(data)->sendData();
 }
 
 ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {
@@ -34,7 +34,7 @@ ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::It
 SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
     SinapsModel::SinapsType type;
 
-    if (inputItem->getType() == outputItem->getType() && inputItem->getType() == ModelItem::Perceptron) {
+    if (inputItem->getType() == ModelItem::Perceptron || inputItem->getType() == ModelItem::Data) {
         type = SinapsModel::Weigth;
     } else {
         type = SinapsModel::Core;

@@ -49,6 +49,7 @@ void MainWindow::initToolBox() {
     tbPerceptron->setToolTip(tr("Perceptron"));
     tbPerceptron->setStatusTip(tr("Add perceptron"));
     delete item;
+    item = 0;
 
     item = new ConvolutionItem(QPointF(0, 0));
     QToolButton *tbConvolution = new QToolButton;
@@ -57,14 +58,26 @@ void MainWindow::initToolBox() {
     tbConvolution->setToolTip(tr("Convolution"));
     tbConvolution->setStatusTip(tr("Add convolution"));
     delete item;
+    item = 0;
+
+    item = new DataItem(QPointF(0,0));
+    QToolButton *tbData = new QToolButton;
+    tbData->setCheckable(true);
+    tbData->setIcon(QIcon(item->getItemIcon()));
+    tbData->setToolTip(tr("Data"));
+    tbData->setStatusTip(tr("Add data"));
+    delete item;
+    item = 0;
 
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);
     bgToolBox->addButton(tbPerceptron, ModelItem::Perceptron);
     bgToolBox->addButton(tbConvolution, ModelItem::Convolution);
+    bgToolBox->addButton(tbData, ModelItem::Data);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
     toolBoxToolBar = new QToolBar;
+    toolBoxToolBar->addWidget(tbData);
     toolBoxToolBar->addWidget(tbPerceptron);
     toolBoxToolBar->addWidget(tbConvolution);
     addToolBar(Qt::LeftToolBarArea, toolBoxToolBar);

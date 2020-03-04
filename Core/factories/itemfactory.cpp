@@ -6,7 +6,7 @@ ItemFactory::ItemFactory()
 {
     add<PerceptronModel>(ModelItem::Perceptron);
     add<PerceptronModel>(ModelItem::Convolution);
-    add<DataModel>(ModelItem::VectorData);
+    add<DataModel>(ModelItem::Data);
 }
 
 template <class C>

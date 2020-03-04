@@ -145,6 +145,10 @@ void PaintScene::addMoveItem(QPointF position) {
         newItem = new ConvolutionItem(position);
         break;
     }
+    case ModelItem::Data : {
+        newItem = new DataItem(position);
+        break;
+    }
     }
 
     newItem->setView(this);

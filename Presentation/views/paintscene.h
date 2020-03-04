@@ -12,6 +12,7 @@
 #include <interfaces/PaintSceneInterface.h>
 #include <models/arrowitem.h>
 #include <models/selectoritem.h>
+#include <models/dataitem.h>
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface
 {

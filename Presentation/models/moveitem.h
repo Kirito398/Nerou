@@ -20,8 +20,6 @@ class ArrowItem;
 
 class MoveItem : public QObject, public QGraphicsItem, public MoveItemInterface
 {
-public:
-    //enum ItemType {Perceptron, Convolution, Data};
 
 public:
     MoveItem(QPointF position, ModelItem::ItemType type = ModelItem::Perceptron,  QObject *parent = nullptr);

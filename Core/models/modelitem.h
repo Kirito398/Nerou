@@ -14,7 +14,7 @@ using namespace std;
 class ModelItem : public SinapsListener
 {
 public:
-    enum ItemType {Perceptron, Convolution, VectorData};
+    enum ItemType {Perceptron, Convolution, Data};
 
 public:
     ModelItem(MoveItemInterface *listener, ItemType type);
