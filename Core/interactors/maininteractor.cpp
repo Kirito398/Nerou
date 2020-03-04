@@ -17,7 +17,7 @@ void MainInteractor::run() {
         sinaps->init();
 
     ModelItem *data = itemFactory.create(nullptr, ModelItem::VectorData);
-    SinapsModel *sinaps = new WeightModel(data, itemsList[0]);
+    SinapsModel *sinaps = sinapsFactory.create(data, itemsList[0], SinapsModel::Weigth);
     data->addOutputSinaps(sinaps);
     itemsList[0]->addInputSinaps(sinaps);
     sinaps->init();

@@ -1,5 +1,7 @@
 #include "sinapsfactory.h"
 
+#include "models/weightmodel.h"
+
 SinapsFactory::SinapsFactory()
 {
     add<WeightModel>(SinapsModel::Weigth);

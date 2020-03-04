@@ -6,7 +6,6 @@
 
 #include "listeners/SinapsListener.h"
 
-class ModelListener;
 class MoveItemInterface;
 class SinapsModel;
 

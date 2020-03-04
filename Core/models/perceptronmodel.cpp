@@ -1,5 +1,7 @@
 #include "perceptronmodel.h"
 
+#include "models/weightmodel.h"
+
 PerceptronModel::PerceptronModel(MoveItemInterface *listener) : ModelItem(listener, Perceptron)
 {
     inputSignal = nullptr;
@@ -21,7 +23,7 @@ void PerceptronModel::makeInputSignal() {
     inputSignal = new double[inputSignalCount];
 
     for (unsigned long i = 0; i < inputSignalCount; i++) {
-        WeightModel *weight = dynamic_cast<WeightModel *>(inputItems.at(i));
+        WeightModel *weight = static_cast<WeightModel *>(inputItems.at(i));
         inputSignal[i] = weight->getValue();
     }
 }
@@ -36,7 +38,7 @@ void PerceptronModel::calculateOut() {
 
 void PerceptronModel::sendSignal() {
     for (unsigned long i = 0; i < outputItems.size(); i++) {
-        WeightModel *weight = dynamic_cast<WeightModel *>(outputItems.at(i));
+        WeightModel *weight = static_cast<WeightModel *>(outputItems.at(i));
         weight->sendSignal(outValue);
     }
 }

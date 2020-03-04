@@ -5,6 +5,8 @@
 
 #include "factories/itemcreator.h"
 
+#include "models/datamodel.h"
+
 class ItemFactory
 {
 public:

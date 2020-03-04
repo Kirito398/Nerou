@@ -1,6 +1,7 @@
 #include "modelitem.h"
 
 #include "interfaces/moveiteminterface.h"
+#include "models/sinapsmodel.h"
 
 ModelItem::ModelItem(MoveItemInterface *listener, ItemType type)
 {
