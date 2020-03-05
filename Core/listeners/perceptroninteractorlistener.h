@@ -1,0 +1,10 @@
+#ifndef PERCEPTRONINTERACTORLISTENER_H
+#define PERCEPTRONINTERACTORLISTENER_H
+
+
+class PerceptronInteractorListener
+{
+public:
+};
+
+#endif // PERCEPTRONINTERACTORLISTENER_H

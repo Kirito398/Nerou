@@ -1,9 +1,11 @@
 #include "maininteractor.h"
 
+#include "interactors/neuroninteractor.h"
+#include "interactors/sinapsinteractor.h"
+
 MainInteractor::MainInteractor()
 {
-    itemFactory = ItemFactory();
-    sinapsFactory = SinapsFactory();
+
 }
 
 MainInteractor* MainInteractor::getInstance() {
@@ -13,7 +15,7 @@ MainInteractor* MainInteractor::getInstance() {
 }
 
 void MainInteractor::run() {
-    for (auto sinaps : sinapsModelsList)
+    for (auto sinaps : sinapsList)
         sinaps->init();
 
 //    ModelItem *data = itemFactory.create(nullptr, ModelItem::Data);
@@ -25,49 +27,43 @@ void MainInteractor::run() {
 //    dynamic_cast<DataModel *>(data)->sendData();
 }
 
-ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {
-    ModelItem *newItem = itemFactory.create(listener, type);
-    itemsList.push_back(newItem);
-    return newItem;
-}
+//SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
+//    SinapsModel::SinapsType type;
 
-SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
-    SinapsModel::SinapsType type;
+//    if (inputItem->getType() == ModelItem::Perceptron || inputItem->getType() == ModelItem::Data) {
+//        type = SinapsModel::Weigth;
+//    } else {
+//        type = SinapsModel::Core;
+//    }
 
-    if (inputItem->getType() == ModelItem::Perceptron || inputItem->getType() == ModelItem::Data) {
-        type = SinapsModel::Weigth;
-    } else {
-        type = SinapsModel::Core;
-    }
+//    SinapsModel *sinaps = sinapsFactory.create(inputItem, outputItem, type);
 
-    SinapsModel *sinaps = sinapsFactory.create(inputItem, outputItem, type);
+//    inputItem->addOutputSinaps(sinaps);
+//    outputItem->addInputSinaps(sinaps);
 
-    inputItem->addOutputSinaps(sinaps);
-    outputItem->addInputSinaps(sinaps);
+//    sinapsModelsList.push_back(sinaps);
 
-    sinapsModelsList.push_back(sinaps);
+//    return sinaps;
+//}
 
-    return sinaps;
-}
+//void MainInteractor::removeItem(MoveItemInterface *item) {
+//    for(unsigned long i = 0; i < itemsList.size(); i++) {
+//        if (itemsList.at(i)->getListener() == item) {
+//            itemsList.erase(itemsList.begin() + i);
+//            vector<ModelItem *>(itemsList).swap(itemsList);
+//            break;
+//        }
+//    }
+//}
 
-void MainInteractor::removeItem(MoveItemInterface *item) {
-    for(unsigned long i = 0; i < itemsList.size(); i++) {
-        if (itemsList.at(i)->getListener() == item) {
-            itemsList.erase(itemsList.begin() + i);
-            vector<ModelItem *>(itemsList).swap(itemsList);
-            break;
-        }
-    }
-}
-
-void MainInteractor::removeSinaps(SinapsModel *item) {
-    for(unsigned long i = 0; i < sinapsModelsList.size(); i++) {
-        if (sinapsModelsList.at(i) == item) {
-            sinapsModelsList.erase(sinapsModelsList.begin() + i);
-            vector<SinapsModel *>(sinapsModelsList).swap(sinapsModelsList);
-            break;
-        }
-    }
-}
+//void MainInteractor::removeSinaps(SinapsModel *item) {
+//    for(unsigned long i = 0; i < sinapsModelsList.size(); i++) {
+//        if (sinapsModelsList.at(i) == item) {
+//            sinapsModelsList.erase(sinapsModelsList.begin() + i);
+//            vector<SinapsModel *>(sinapsModelsList).swap(sinapsModelsList);
+//            break;
+//        }
+//    }
+//}
 
 MainInteractor * MainInteractor::instance;

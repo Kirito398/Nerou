@@ -1,17 +1,17 @@
-#ifndef SINAPSMODEL_H
-#define SINAPSMODEL_H
+#ifndef SINAPSINTERACTOR_H
+#define SINAPSINTERACTOR_H
 
 #include "listeners/SinapsListener.h"
 
-class SinapsModel
+class SinapsInteractor
 {
 public:
     enum SinapsType {Weigth, Core};
 
 public:
-    SinapsModel(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type);
+    SinapsInteractor(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type);
     virtual void init() = 0;
-    virtual ~SinapsModel();
+    virtual ~SinapsInteractor();
 
 protected:
     double random();
@@ -24,4 +24,4 @@ private:
     SinapsType type;
 };
 
-#endif // SINAPSMODEL_H
+#endif // SINAPSINTERACTOR_H
