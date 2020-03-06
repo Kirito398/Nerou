@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    interactors/coreinteractor.cpp \
     interactors/datainteractor.cpp \
     interactors/maininteractor.cpp \
     interactors/neuroninteractor.cpp \
@@ -26,12 +27,15 @@ SOURCES += \
 
 HEADERS += \
     Core_global.h \
+    interactors/coreinteractor.h \
     interactors/datainteractor.h \
     interactors/maininteractor.h \
     interactors/neuroninteractor.h \
     interactors/perceptroninteractor.h \
     interactors/sinapsinteractor.h \
     interactors/weightinteractor.h \
+    interfaces/coreinterface.h \
+    interfaces/weightinterface.h \
     listeners/SinapsListener.h \
     listeners/datainteractorlistener.h \
     listeners/datapresentorlistener.h \

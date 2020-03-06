@@ -4,7 +4,7 @@
 #include "interactors/neuroninteractor.h"
 #include "listeners/perceptroninteractorlistener.h"
 
-class PerceptronPresenterListener;
+class PerceptronPresentorListener;
 
 class PerceptronInteractor : public NeuronInteractor, public PerceptronInteractorListener
 {
@@ -13,12 +13,14 @@ public:
     void onInputSignalChanged() override;
 
 private:
+    void setView(PerceptronPresentorListener *listener) override;
     void makeInputSignal();
     void calculateOut();
     void sendSignal();
     void clearInputSignal();
 
 private:
+    PerceptronPresentorListener *view;
     unsigned long inputSignalCount;
     double *inputSignal;
     double outValue;

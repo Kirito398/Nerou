@@ -1,12 +1,18 @@
 #include "paintscene.h"
 
+//#include "listeners/perceptroninteractorlistener.h"
+
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance();
     line = nullptr;
     selector = nullptr;
     mode = PaintScene::Selector;
-    itemType = ModelItem::Perceptron;
+    itemType = NeuronInteractor::Perceptron;
+}
+
+void PaintScene::onNewPerceptronCreated(PerceptronInteractorListener *perceptron) {
+
 }
 
 void PaintScene::moveSelectedItem(QPointF delta) {

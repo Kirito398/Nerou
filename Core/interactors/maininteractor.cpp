@@ -2,6 +2,11 @@
 
 #include "interactors/neuroninteractor.h"
 #include "interactors/sinapsinteractor.h"
+#include "interactors/datainteractor.h"
+#include "interactors/perceptroninteractor.h"
+#include "interactors/weightinteractor.h"
+#include "interactors/coreinteractor.h"
+#include "listeners/mainpresentorlistener.h"
 
 MainInteractor::MainInteractor()
 {
@@ -12,6 +17,10 @@ MainInteractor* MainInteractor::getInstance() {
     if (instance == nullptr)
         instance = new MainInteractor();
     return instance;
+}
+
+void MainInteractor::setView(MainPresentorListener *listener) {
+    view = listener;
 }
 
 void MainInteractor::run() {
@@ -25,6 +34,12 @@ void MainInteractor::run() {
 //    sinaps->init();
 
 //    dynamic_cast<DataModel *>(data)->sendData();
+}
+
+void MainInteractor::createNewPerceptron() {
+    PerceptronInteractor *newPerceptron = new PerceptronInteractor();
+    neuronsList.push_back(newPerceptron);
+    view->onNewPerceptronCreated(newPerceptron);
 }
 
 //SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {

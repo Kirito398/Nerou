@@ -1,7 +1,7 @@
 #ifndef SINAPSINTERACTOR_H
 #define SINAPSINTERACTOR_H
 
-#include "listeners/SinapsListener.h"
+class SinapsListener;
 
 class SinapsInteractor
 {

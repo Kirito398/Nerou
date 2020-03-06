@@ -5,11 +5,18 @@
 
 class NeuronInteractor;
 class SinapsInteractor;
+class DataInteractor;
+class PerceptronInteractor;
+class CoreInteractor;
+class WeightInteractor;
+class MainPresentorListener;
 
 class MainInteractor
 {
 public:
-    static MainInteractor* getInstance();
+    static MainInteractor *getInstance();
+    void setView(MainPresentorListener *listener);
+    void createNewPerceptron();
     void run();
 
 private:
@@ -17,6 +24,7 @@ private:
     static MainInteractor *instance;
     std::vector<NeuronInteractor *> neuronsList;
     std::vector<SinapsInteractor *> sinapsList;
+    MainPresentorListener *view;
 };
 
 #endif // MAININTERACTOR_H

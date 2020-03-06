@@ -1,16 +1,16 @@
 #ifndef WEIGHTINTERACTOR_H
 #define WEIGHTINTERACTOR_H
 
-#include "interactors/sinapsinteractor.h"
+#include "interfaces/weightinterface.h"
 
 class SinapsPresentorListener;
 
-class WeightInteractor : public SinapsInteractor
+class WeightInteractor : public WeightInterface
 {
 public:
     WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener);
-    double getValue();
-    void sendSignal(double signal);
+    double getValue() override;
+    void sendSignal(double signal) override;
     void init() override;
 
 private:

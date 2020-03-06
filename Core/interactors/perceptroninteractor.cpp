@@ -1,12 +1,17 @@
 #include "perceptroninteractor.h"
 
-#include "interactors/weightinteractor.h"
+#include "interfaces/weightinterface.h"
 #include "listeners/perceptronpresentorlistener.h"
 
 PerceptronInteractor::PerceptronInteractor()
 {
     inputSignal = nullptr;
     inputSignalCount = 0;
+    view = nullptr;
+}
+
+void PerceptronInteractor::setView(PerceptronPresentorListener *listener) {
+    view = listener;
 }
 
 void PerceptronInteractor::onInputSignalChanged() {
@@ -24,7 +29,7 @@ void PerceptronInteractor::makeInputSignal() {
     inputSignal = new double[inputSignalCount];
 
     for (unsigned long i = 0; i < inputSignalCount; i++) {
-        WeightInteractor *weight = static_cast<WeightInteractor *>(inputsSinaps.at(i));
+        WeightInterface *weight = static_cast<WeightInterface *>(inputsSinaps.at(i));
         inputSignal[i] = weight->getValue();
     }
 }
@@ -39,7 +44,7 @@ void PerceptronInteractor::calculateOut() {
 
 void PerceptronInteractor::sendSignal() {
     for (unsigned long i = 0; i < outputsSinaps.size(); i++) {
-        WeightInteractor *weight = static_cast<WeightInteractor *>(outputsSinaps.at(i));
+        WeightInterface *weight = static_cast<WeightInterface *>(outputsSinaps.at(i));
         weight->sendSignal(outValue);
     }
 }

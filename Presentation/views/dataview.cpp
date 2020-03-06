@@ -1,6 +1,6 @@
-#include "dataitem.h"
+#include "dataview.h"
 
-DataItem::DataItem(QPointF position, QObject *parent) : MoveItem(position, ModelItem::Data, parent)
+DataView::DataView()
 {
     makePolygon();
 
@@ -10,7 +10,7 @@ DataItem::DataItem(QPointF position, QObject *parent) : MoveItem(position, Model
     initData();
 }
 
-void DataItem::initData() {
+void DataView::initData() {
     data = new double*[rowCount];
     for (unsigned int i = 0; i < rowCount; i++) {
         data[i] = new double[columnCount];
@@ -20,7 +20,7 @@ void DataItem::initData() {
     }
 }
 
-QPixmap DataItem::getItemIcon() const {
+QPixmap DataView::getItemIcon() const {
     QPixmap pixmap(100, 100);
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
@@ -33,15 +33,15 @@ QPixmap DataItem::getItemIcon() const {
     return pixmap;
 }
 
-QPolygonF DataItem::getPolygon() const {
+QPolygonF DataView::getPolygon() const {
     return polygon;
 }
 
-QRectF DataItem::boundingRect() const {
+QRectF DataView::boundingRect() const {
     return QRectF (-30, -30, 60, 60);
 }
 
-void DataItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     painter->setPen(Qt::black);
     painter->setBrush(Qt::white);
     painter->drawRect(-30, -30, 60, 60);
@@ -56,7 +56,7 @@ void DataItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(widget)
 }
 
-void DataItem::makePolygon() {
+void DataView::makePolygon() {
     QRectF rect = boundingRect();
     polygon << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft() << rect.topLeft();
 }

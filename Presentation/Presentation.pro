@@ -19,12 +19,14 @@ SOURCES += \
     main.cpp \
     models/arrowitem.cpp \
     models/convolutionitem.cpp \
-    models/dataitem.cpp \
     models/perceptronitem.cpp \
     models/selectoritem.cpp \
+    presenters/datapresentor.cpp \
+    views/dataview.cpp \
     views/mainwindow.cpp \
     models/moveitem.cpp \
-    views/paintscene.cpp
+    views/paintscene.cpp \
+    views/viewitem.cpp
 
 HEADERS += \
     interfaces/PaintSceneInterface.h \
@@ -33,9 +35,12 @@ HEADERS += \
     models/dataitem.h \
     models/perceptronitem.h \
     models/selectoritem.h \
+    presenters/datapresentor.h \
+    views/dataview.h \
     views/mainwindow.h \
     models/moveitem.h \
-    views/paintscene.h
+    views/paintscene.h \
+    views/viewitem.h
 
 RESOURCES += res.qrc
 

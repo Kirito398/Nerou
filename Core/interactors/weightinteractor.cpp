@@ -1,8 +1,9 @@
 #include "weightinteractor.h"
 
 #include "listeners/sinapspresentorlistener.h"
+#include "listeners/SinapsListener.h"
 
-WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : SinapsInteractor(inputListener, outputListener, Weigth)
+WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : WeightInterface(inputListener, outputListener)
 {
     init();
 }

@@ -13,15 +13,16 @@
 #include <models/arrowitem.h>
 #include <models/selectoritem.h>
 #include <models/dataitem.h>
+#include "listeners/mainpresentorlistener.h"
 
-class PaintScene : public QGraphicsScene, public PaintSceneInterface
+class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
 public:
     PaintScene(QObject *parent = nullptr);
     enum Mode {Selector, Items, Arrows};
     void setMode(Mode mode);
-    void setItemType(ModelItem::ItemType type);
-    ModelItem::ItemType getItemType();
+    //void setItemType(ModelItem::ItemType type);
+    //ModelItem::ItemType getItemType();
 
 private:
     MainInteractor* interactor;
@@ -29,9 +30,10 @@ private:
     Mode mode;
     QGraphicsLineItem *line;
     SelectorItem *selector;
-    ModelItem::ItemType itemType;
+    //ModelItem::ItemType itemType;
 
 private:
+    void onNewPerceptronCreated(PerceptronInteractorListener *perceptron) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
