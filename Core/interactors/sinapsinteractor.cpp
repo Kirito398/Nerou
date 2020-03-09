@@ -15,6 +15,10 @@ double SinapsInteractor::random() {
     return std::rand() % 100 / 100.0 - 0.5;
 }
 
+SinapsInteractor::SinapsType SinapsInteractor::getType() {
+    return type;
+}
+
 SinapsInteractor::~SinapsInteractor() {
 
 }

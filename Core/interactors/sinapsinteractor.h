@@ -12,6 +12,7 @@ public:
     SinapsInteractor(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type);
     virtual void init() = 0;
     virtual ~SinapsInteractor();
+    SinapsType getType();
 
 protected:
     double random();

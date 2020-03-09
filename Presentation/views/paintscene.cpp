@@ -11,7 +11,11 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     itemType = NeuronInteractor::Perceptron;
 }
 
-void PaintScene::onNewPerceptronCreated(PerceptronInteractorListener *perceptron) {
+void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
+
+}
+
+void PaintScene::onNewDataAdded(DataInteractorListener *data) {
 
 }
 

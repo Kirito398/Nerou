@@ -7,3 +7,15 @@ CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *ou
 {
 
 }
+
+void CoreInteractor::init() {
+
+}
+
+void CoreInteractor::sendSignal(double *signal, unsigned int row, unsigned int column) {
+
+}
+
+double **CoreInteractor::getValue() {
+
+}

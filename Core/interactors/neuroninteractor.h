@@ -15,6 +15,8 @@ public:
 
 public:
     NeuronInteractor();
+    void setID(unsigned long id);
+    unsigned long getID();
 
 protected:
     double activateFunction(double value);
@@ -23,6 +25,8 @@ protected:
     std::vector<SinapsInteractor *> inputsSinaps;
     std::vector<SinapsInteractor *> outputsSinaps;
 
+private:
+    unsigned long id;
 };
 
 #endif // NEURONINTERACTOR_H

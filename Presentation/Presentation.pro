@@ -24,12 +24,13 @@ SOURCES += \
     presenters/datapresentor.cpp \
     views/dataview.cpp \
     views/mainwindow.cpp \
-    models/moveitem.cpp \
-    views/paintscene.cpp \
-    views/viewitem.cpp
+    views/movingview.cpp \
+    views/paintscene.cpp
 
 HEADERS += \
     interfaces/PaintSceneInterface.h \
+    interfaces/arrowinterface.h \
+    interfaces/movingviewinterface.h \
     models/arrowitem.h \
     models/convolutionitem.h \
     models/dataitem.h \
@@ -38,9 +39,8 @@ HEADERS += \
     presenters/datapresentor.h \
     views/dataview.h \
     views/mainwindow.h \
-    models/moveitem.h \
-    views/paintscene.h \
-    views/viewitem.h
+    views/movingview.h \
+    views/paintscene.h
 
 RESOURCES += res.qrc
 

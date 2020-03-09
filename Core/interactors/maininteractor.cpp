@@ -10,7 +10,7 @@
 
 MainInteractor::MainInteractor()
 {
-
+    createdNeuronCount = 0;
 }
 
 MainInteractor* MainInteractor::getInstance() {
@@ -27,19 +27,52 @@ void MainInteractor::run() {
     for (auto sinaps : sinapsList)
         sinaps->init();
 
-//    ModelItem *data = itemFactory.create(nullptr, ModelItem::Data);
-//    SinapsModel *sinaps = sinapsFactory.create(data, itemsList[0], SinapsModel::Weigth);
-//    data->addOutputSinaps(sinaps);
-//    itemsList[0]->addInputSinaps(sinaps);
-//    sinaps->init();
-
-//    dynamic_cast<DataModel *>(data)->sendData();
+    for (auto data : dataList)
+        data->start();
 }
 
 void MainInteractor::createNewPerceptron() {
     PerceptronInteractor *newPerceptron = new PerceptronInteractor();
+
+    createdNeuronCount++;
+    newPerceptron->setID(createdNeuronCount);
+
     neuronsList.push_back(newPerceptron);
-    view->onNewPerceptronCreated(newPerceptron);
+    view->onNewPerceptronAdded(newPerceptron);
+}
+
+void MainInteractor::createNewData() {
+    DataInteractor *newData = new DataInteractor();
+
+    createdNeuronCount++;
+    newData->setID(createdNeuronCount);
+
+    neuronsList.push_back(newData);
+    dataList.push_back(newData);
+    view->onNewDataAdded(newData);
+}
+
+void MainInteractor::createNewWeight(unsigned long inputID, unsigned long outputID) {
+    NeuronInteractor *inputNeuron = findNeuron(inputID);
+    NeuronInteractor *outputNeuron = findNeuron(outputID);
+
+    WeightInteractor *newWeight = new WeightInteractor(inputNeuron, outputNeuron);
+    sinapsList.push_back(newWeight);
+}
+
+void MainInteractor::createNewCore(unsigned long inputID, unsigned long outputID) {
+    NeuronInteractor *inputNeuron = findNeuron(inputID);
+    NeuronInteractor *outputNeuron = findNeuron(outputID);
+
+    CoreInteractor *newCore = new CoreInteractor(inputNeuron, outputNeuron);
+    sinapsList.push_back(newCore);
+}
+
+NeuronInteractor *MainInteractor::findNeuron(unsigned long id) {
+    for (auto neuron : neuronsList)
+        if (neuron->getID() == id)
+            return neuron;
+    return nullptr;
 }
 
 //SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {

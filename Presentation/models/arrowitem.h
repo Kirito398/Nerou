@@ -9,7 +9,7 @@
 
 #include <interfaces/PaintSceneInterface.h>
 #include <models/moveitem.h>
-#include <models/sinapsmodel.h>
+//#include <models/sinapsmodel.h>
 
 #include <math.h>
 
@@ -24,8 +24,8 @@ public:
     void updatePosition();
     MoveItem* getStartItem();
     MoveItem* getEndItem();
-    void setItem(SinapsModel *item);
-    SinapsModel *getItem();
+    //void setItem(SinapsModel *item);
+    //SinapsModel *getItem();
 
 protected:
     QRectF boundingRect() const override;
@@ -39,7 +39,7 @@ private:
     PaintSceneInterface *view;
     MoveItem *startItem;
     MoveItem *endItem;
-    SinapsModel *item;
+    //SinapsModel *item;
     QPolygonF arrowHead;
 };
 

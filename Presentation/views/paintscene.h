@@ -33,7 +33,8 @@ private:
     //ModelItem::ItemType itemType;
 
 private:
-    void onNewPerceptronCreated(PerceptronInteractorListener *perceptron) override;
+    void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
+    void onNewDataAdded(DataInteractorListener *data) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
