@@ -28,11 +28,12 @@ void MainInteractor::run() {
         sinaps->init();
 }
 
-void MainInteractor::createNewPerceptron() {
+void MainInteractor::createNewPerceptron(double x, double y) {
     PerceptronInteractor *newPerceptron = new PerceptronInteractor();
 
     createdNeuronCount++;
     newPerceptron->setID(createdNeuronCount);
+    newPerceptron->setPosition(x, y);
 
     neuronsList.push_back(newPerceptron);
     view->onNewPerceptronAdded(newPerceptron);

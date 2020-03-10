@@ -12,6 +12,20 @@ PerceptronInteractor::PerceptronInteractor()
 
 void PerceptronInteractor::setView(PerceptronPresentorListener *listener) {
     view = listener;
+
+    view->updatePosition(posX, posY);
+}
+
+void PerceptronInteractor::setPosition(double x, double y) {
+    posX = x;
+    posY = y;
+
+    if (view != nullptr)
+        view->updatePosition(posX, posY);
+}
+
+unsigned long PerceptronInteractor::getID() {
+    return id;
 }
 
 void PerceptronInteractor::onInputSignalChanged() {

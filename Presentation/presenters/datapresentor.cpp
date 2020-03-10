@@ -14,6 +14,7 @@ void DataPresentor::setView(DataViewListener *listener) {
 
 void DataPresentor::setInteractor(DataInteractorListener *listener) {
     interactor = listener;
+    interactor->setView(this);
 }
 
 void DataPresentor::updatePosition(double x, double y) {

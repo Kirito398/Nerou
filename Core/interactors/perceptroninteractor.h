@@ -11,10 +11,12 @@ class PerceptronInteractor : public NeuronInteractor, public PerceptronInteracto
 public:
     PerceptronInteractor();
     void onInputSignalChanged() override;
+    void setPosition(double x, double y) override;
 
 private:
     void setView(PerceptronPresentorListener *listener) override;
     void onDeltaValueChanged() override;
+    unsigned long getID() override;
     void makeInputSignal();
     void calculateOut();
     void sendSignal();

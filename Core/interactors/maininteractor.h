@@ -17,7 +17,7 @@ class MainInteractor
 public:
     static MainInteractor *getInstance();
     void setView(MainPresentorListener *listener);
-    void createNewPerceptron();
+    void createNewPerceptron(double x, double y);
     void createNewData(double x, double y);
     ArrowInteractorListener *createNewWeight(unsigned long inputID, unsigned long outputID);
     ArrowInteractorListener *createNewCore(unsigned long inputID, unsigned long outputID);

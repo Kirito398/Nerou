@@ -4,10 +4,12 @@
 
 #include "views/dataview.h"
 #include "views/arrowview.h"
+#include "views/perceptronview.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance();
+    interactor->setView(this);
     line = nullptr;
     selector = nullptr;
     mode = PaintScene::Selector;
@@ -15,7 +17,12 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 }
 
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
+    PerceptronView *view = new PerceptronView(perceptron);
 
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
 }
 
 void PaintScene::onNewDataAdded(DataInteractorListener *data) {
@@ -171,7 +178,7 @@ void PaintScene::addArrow() {
 void PaintScene::addMovingView(QPointF position) {
     switch (viewType) {
     case MovingView::Perceptron : {
-        interactor->createNewPerceptron();
+        interactor->createNewPerceptron(position.x(), position.y());
         break;
     }
     case MovingView::Convolution : {
