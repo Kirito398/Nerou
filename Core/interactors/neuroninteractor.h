@@ -17,15 +17,18 @@ public:
     NeuronInteractor();
     void setID(unsigned long id);
     unsigned long getID();
+    bool addArrow(SinapsInteractor* arrow);
 
 protected:
     double activateFunction(double value);
 
+private:
+    bool isArrowAlreadyAdded(SinapsInteractor* arrow);
+
 protected:
     std::vector<SinapsInteractor *> inputsSinaps;
     std::vector<SinapsInteractor *> outputsSinaps;
-
-private:
+    double posX, posY;
     unsigned long id;
 };
 

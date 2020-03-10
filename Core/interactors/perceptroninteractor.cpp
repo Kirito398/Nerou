@@ -25,6 +25,10 @@ void PerceptronInteractor::onInputSignalChanged() {
     }
 }
 
+void PerceptronInteractor::onDeltaValueChanged() {
+
+}
+
 void PerceptronInteractor::makeInputSignal() {
     inputSignal = new double[inputSignalCount];
 

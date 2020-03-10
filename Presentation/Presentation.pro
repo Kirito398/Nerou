@@ -17,11 +17,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    models/arrowitem.cpp \
     models/convolutionitem.cpp \
     models/perceptronitem.cpp \
     models/selectoritem.cpp \
+    presenters/arrowpresentor.cpp \
     presenters/datapresentor.cpp \
+    views/arrowview.cpp \
     views/dataview.cpp \
     views/mainwindow.cpp \
     views/movingview.cpp \
@@ -31,12 +32,14 @@ HEADERS += \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
     interfaces/movingviewinterface.h \
-    models/arrowitem.h \
+    listeners/arrowviewlistener.h \
+    listeners/dataviewlistener.h \
     models/convolutionitem.h \
-    models/dataitem.h \
     models/perceptronitem.h \
     models/selectoritem.h \
+    presenters/arrowpresentor.h \
     presenters/datapresentor.h \
+    views/arrowview.h \
     views/dataview.h \
     views/mainwindow.h \
     views/movingview.h \

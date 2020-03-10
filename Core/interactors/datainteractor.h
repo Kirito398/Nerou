@@ -16,12 +16,14 @@ public:
     void onInputSignalChanged() override;
     void onDeltaValueChanged() override;
     void setView(DataPresentorListener *listener) override;
+    void setPosition(double x, double y) override;
 
     void start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
 
 private:
     void sendData();
+    unsigned long getID() override;
 
 private:
     DataPresentorListener *view;

@@ -26,9 +26,6 @@ void MainInteractor::setView(MainPresentorListener *listener) {
 void MainInteractor::run() {
     for (auto sinaps : sinapsList)
         sinaps->init();
-
-    for (auto data : dataList)
-        data->start();
 }
 
 void MainInteractor::createNewPerceptron() {
@@ -41,31 +38,46 @@ void MainInteractor::createNewPerceptron() {
     view->onNewPerceptronAdded(newPerceptron);
 }
 
-void MainInteractor::createNewData() {
+void MainInteractor::createNewData(double x, double y) {
     DataInteractor *newData = new DataInteractor();
 
     createdNeuronCount++;
     newData->setID(createdNeuronCount);
+    newData->setPosition(x, y);
 
     neuronsList.push_back(newData);
     dataList.push_back(newData);
     view->onNewDataAdded(newData);
 }
 
-void MainInteractor::createNewWeight(unsigned long inputID, unsigned long outputID) {
+ArrowInteractorListener *MainInteractor::createNewWeight(unsigned long inputID, unsigned long outputID) {
     NeuronInteractor *inputNeuron = findNeuron(inputID);
     NeuronInteractor *outputNeuron = findNeuron(outputID);
 
     WeightInteractor *newWeight = new WeightInteractor(inputNeuron, outputNeuron);
-    sinapsList.push_back(newWeight);
+
+    if (inputNeuron->addArrow(newWeight) && outputNeuron->addArrow(newWeight)) {
+        sinapsList.push_back(newWeight);
+        return newWeight;
+    }
+
+    delete newWeight;
+    return nullptr;
 }
 
-void MainInteractor::createNewCore(unsigned long inputID, unsigned long outputID) {
+ArrowInteractorListener *MainInteractor::createNewCore(unsigned long inputID, unsigned long outputID) {
     NeuronInteractor *inputNeuron = findNeuron(inputID);
     NeuronInteractor *outputNeuron = findNeuron(outputID);
 
     CoreInteractor *newCore = new CoreInteractor(inputNeuron, outputNeuron);
-    sinapsList.push_back(newCore);
+
+    if (inputNeuron->addArrow(newCore) && outputNeuron->addArrow(newCore)) {
+        sinapsList.push_back(newCore);
+        return newCore;
+    }
+
+    delete newCore;
+    return nullptr;
 }
 
 NeuronInteractor *MainInteractor::findNeuron(unsigned long id) {

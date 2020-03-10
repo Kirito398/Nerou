@@ -18,11 +18,6 @@ void WeightInteractor::sendSignal(double signal) {
     outputListener->onInputSignalChanged();
 }
 
-void WeightInteractor::sendSignal(double **signal) {
-    value = signal[0][0] * weight;
-    outputListener->onInputSignalChanged();
-}
-
 double WeightInteractor::getValue() {
     return value;
 }

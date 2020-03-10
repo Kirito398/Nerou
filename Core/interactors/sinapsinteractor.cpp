@@ -19,6 +19,14 @@ SinapsInteractor::SinapsType SinapsInteractor::getType() {
     return type;
 }
 
+SinapsListener *SinapsInteractor::getInputNeuron() {
+    return inputListener;
+}
+
+SinapsListener *SinapsInteractor::getOutputNeuron() {
+    return outputListener;
+}
+
 SinapsInteractor::~SinapsInteractor() {
 
 }

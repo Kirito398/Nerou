@@ -1,10 +1,16 @@
 #ifndef MOVINGITEMINTERFACE_H
 #define MOVINGITEMINTERFACE_H
 
+class QPointF;
+class QPolygonF;
+class QGraphicsItem;
 
 class MovingViewInterface
 {
 public:
+    virtual QPointF getPosition() = 0;
+    virtual QPolygonF getPolygon() = 0;
+    virtual QGraphicsItem* getItem() = 0;
 };
 
 #endif // MOVINGITEMINTERFACE_H

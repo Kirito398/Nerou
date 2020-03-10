@@ -14,6 +14,7 @@ public:
 
 private:
     void setView(PerceptronPresentorListener *listener) override;
+    void onDeltaValueChanged() override;
     void makeInputSignal();
     void calculateOut();
     void sendSignal();

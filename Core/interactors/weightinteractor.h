@@ -2,10 +2,11 @@
 #define WEIGHTINTERACTOR_H
 
 #include "interfaces/weightinterface.h"
+#include "listeners/arrowinteractorlistener.h"
 
 class SinapsPresentorListener;
 
-class WeightInteractor : public WeightInterface
+class WeightInteractor : public WeightInterface, public ArrowInteractorListener
 {
 public:
     WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener);

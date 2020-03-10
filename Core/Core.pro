@@ -38,6 +38,7 @@ HEADERS += \
     interfaces/repositoryinterface.h \
     interfaces/weightinterface.h \
     listeners/SinapsListener.h \
+    listeners/arrowinteractorlistener.h \
     listeners/datainteractorlistener.h \
     listeners/datapresentorlistener.h \
     listeners/mainpresentorlistener.h \

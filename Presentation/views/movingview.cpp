@@ -7,16 +7,27 @@
 #include "interfaces/arrowinterface.h"
 #include "interfaces/PaintSceneInterface.h"
 
-MovingView::MovingView(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
+MovingView::MovingView(ViewType type, QObject *parent) : QObject(parent), QGraphicsItem()
 {
-    this->setPos(position);
-
+    this->type = type;
     setFlag(QGraphicsItem::ItemIsSelectable);
+}
+
+MovingView::ViewType MovingView::getType() {
+    return type;
+}
+
+QPointF MovingView::getPosition() {
+    return this->pos();
+}
+
+QGraphicsItem *MovingView::getItem() {
+    return this;
 }
 
 void MovingView::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QPointF deltaP = mapToScene(event->pos()) - this->pos();
-    //view->moveSelectedItem(deltaP);
+    view->moveSelectedItem(deltaP);
 }
 
 void MovingView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -28,10 +39,7 @@ void MovingView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void MovingView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ArrowCursor));
 
-    QPointF position = mapToScene(event->pos());
-
-//    if (listener != nullptr)
-//        listener->setPosition(position.x(), position.y());
+    Q_UNUSED(event)
 }
 
 void MovingView::setView(PaintSceneInterface *view) {
@@ -53,16 +61,6 @@ bool MovingView::addArrow(ArrowInterface* arrow) {
 
     return true;
 }
-
-void MovingView::setPosition(QPointF position) {
-//    if (listener != nullptr)
-//        listener->setPosition(position.x(), position.y());
-}
-
-//void MoveItem::setPosition(double posX, double posY) {
-//    this->setPos(QPointF(posX, posY));
-//    updateArrowsPosition();
-//}
 
 void MovingView::removeArrow(ArrowInterface* arrow) {
 //    if (outputArrows.contains(arrow)) {
@@ -91,7 +89,7 @@ void MovingView::removeArrows() {
 //        outputArrows.removeAll(arrow);
 //        scene()->removeItem(arrow);
 //        delete arrow;
-    }
+    //}
 }
 
 bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
@@ -107,6 +105,6 @@ bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
 }
 
 void MovingView::updateArrowsPosition() {
-//    for(auto arrow : inputArrows)
-//        arrow->updatePosition();
+    for(auto arrow : inputArrows)
+        arrow->updatePosition();
 }

@@ -1,23 +1,29 @@
 #include "dataview.h"
 
-DataView::DataView()
+#include <QPainter>
+
+#include "presenters/datapresentor.h"
+
+DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingView(Data, parent)
 {
     makePolygon();
 
-    rowCount = 2;
-    columnCount = 2;
-
-    initData();
+    presentor = new DataPresentor();
+    presentor->setView(this);
+    presentor->setInteractor(listener);
 }
 
-void DataView::initData() {
-    data = new double*[rowCount];
-    for (unsigned int i = 0; i < rowCount; i++) {
-        data[i] = new double[columnCount];
+void DataView::updatePosition(double x, double y) {
+    this->setPos(x, y);
+    updateArrowsPosition();
+}
 
-        for (unsigned int j = 0; j < columnCount; j++)
-            data[i][j] = 0;
-    }
+void DataView::setPosition(QPointF position) {
+    presentor->setPosition(position.x(), position.y());
+}
+
+unsigned long DataView::getID() {
+    return presentor->getID();
 }
 
 QPixmap DataView::getItemIcon() const {
@@ -33,7 +39,7 @@ QPixmap DataView::getItemIcon() const {
     return pixmap;
 }
 
-QPolygonF DataView::getPolygon() const {
+QPolygonF DataView::getPolygon() {
     return polygon;
 }
 

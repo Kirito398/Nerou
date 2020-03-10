@@ -1,7 +1,7 @@
 #ifndef PAINTSCENEINTERFACE_H
 #define PAINTSCENEINTERFACE_H
 
-#include <QPointF>
+class QPointF;
 
 class PaintSceneInterface
 {

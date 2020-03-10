@@ -13,6 +13,8 @@ public:
     virtual void init() = 0;
     virtual ~SinapsInteractor();
     SinapsType getType();
+    SinapsListener *getInputNeuron();
+    SinapsListener *getOutputNeuron();
 
 protected:
     double random();

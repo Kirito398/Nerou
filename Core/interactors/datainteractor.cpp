@@ -17,9 +17,17 @@ DataInteractor::DataInteractor() : NeuronInteractor()
 
 void DataInteractor::setView(DataPresentorListener *listener) {
     view = listener;
+
+    view->updatePosition(posX, posY);
 }
 
+void DataInteractor::setPosition(double x, double y) {
+    posX = x;
+    posY = y;
 
+    if (view != nullptr)
+        view->updatePosition(posX, posY);
+}
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
     repository->loadValue(listPaths[classNumber][iterationNumber], value, &row, &column);
@@ -27,19 +35,6 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
 void DataInteractor::setRepository(RepositoryInterface *repository) {
     this->repository = repository;
-}
-
-void DataInteractor::onValueLoaded(double *value, unsigned int row, unsigned int column) {
-    if (this->value != nullptr) {
-        delete [](this->value);
-        this->value = nullptr;
-    }
-
-    this->value = value;
-    this->row = row;
-    this->column = column;
-
-    sendData();
 }
 
 void DataInteractor::sendData() {
@@ -57,6 +52,10 @@ void DataInteractor::sendData() {
             dynamic_cast<CoreInterface *>(sinaps)->sendSignal(value, row, column);
         return;
     }
+}
+
+unsigned long DataInteractor::getID() {
+    return id;
 }
 
 void DataInteractor::onInputSignalChanged() {
