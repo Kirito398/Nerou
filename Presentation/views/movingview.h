@@ -14,10 +14,10 @@ class MovingView : public QObject, public QGraphicsItem, public MovingViewInterf
 public:
     enum ViewType {Data, Perceptron, Convolution};
     MovingView(ViewType type, QObject *parent = nullptr);
-    //~MovingView() override;
+    ~MovingView() override;
     void setView(PaintSceneInterface *view);
     bool addArrow(ArrowInterface* arrow);
-    void removeArrow(ArrowInterface* arrow);
+    void removeArrow(ArrowInterface* arrow) override;
     void removeArrows();
     ViewType getType();
     virtual unsigned long getID() = 0;

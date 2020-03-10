@@ -10,8 +10,8 @@ class DataInteractorListener;
 class DataView : public MovingView, public DataViewListener
 {
 public:
-    DataView(DataInteractorListener *listener, QObject *parent = nullptr);
-    //~DataView() override;
+    DataView(DataInteractorListener *listener = nullptr, QObject *parent = nullptr);
+    ~DataView() override;
     QPixmap getItemIcon() const override;
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;

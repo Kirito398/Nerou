@@ -39,7 +39,7 @@ void MovingView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void MovingView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     this->setCursor(QCursor(Qt::ArrowCursor));
 
-    Q_UNUSED(event)
+    setPosition(mapToScene(event->pos()));
 }
 
 void MovingView::setView(PaintSceneInterface *view) {
@@ -63,33 +63,23 @@ bool MovingView::addArrow(ArrowInterface* arrow) {
 }
 
 void MovingView::removeArrow(ArrowInterface* arrow) {
-//    if (outputArrows.contains(arrow)) {
-//        outputArrows.removeAll(arrow);
-//        listener->removeOutputSinaps(arrow->getItem());
-//    }
+    if (outputArrows.contains(arrow))
+        outputArrows.removeAll(arrow);
 
-//    if (inputArrows.contains(arrow)) {
-//        inputArrows.removeAll(arrow);
-//        listener->removeInputSinaps(arrow->getItem());
-//    }
+    if (inputArrows.contains(arrow))
+        inputArrows.removeAll(arrow);
 }
 
 void MovingView::removeArrows() {
-//    for (auto arrow : inputArrows) {
-//        arrow->getStartView()->removeArrow(arrow);
-//        arrow->getEndView()->removeArrow(arrow);
-//        inputArrows.removeAll(arrow);
-//        scene()->removeItem(arrow);
-//        delete arrow;
-//    }
+    for (auto arrow : inputArrows) {
+        inputArrows.removeAll(arrow);
+        delete arrow;
+    }
 
-//    for (auto arrow : outputArrows) {
-//        arrow->getStartItem()->removeArrow(arrow);
-//        arrow->getEndItem()->removeArrow(arrow);
-//        outputArrows.removeAll(arrow);
-//        scene()->removeItem(arrow);
-//        delete arrow;
-    //}
+    for (auto arrow : outputArrows) {
+        outputArrows.removeAll(arrow);
+        delete arrow;
+    }
 }
 
 bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
@@ -107,4 +97,11 @@ bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
 void MovingView::updateArrowsPosition() {
     for(auto arrow : inputArrows)
         arrow->updatePosition();
+}
+
+MovingView::~MovingView() {
+    removeArrows();
+
+    if (view != nullptr)
+        view->deleteItem(this);
 }

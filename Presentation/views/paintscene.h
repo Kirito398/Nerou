@@ -34,6 +34,7 @@ private:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateScene() override;
     void moveSelectedItem(QPointF delta) override;
+    void deleteItem(QGraphicsItem *item) override;
     void addArrow();
     void addMovingView(QPointF position);
     void onViewsModePress(QGraphicsSceneMouseEvent *event);

@@ -10,7 +10,9 @@ PerceptronView::PerceptronView(PerceptronInteractorListener *listener, QObject *
 
     presentor = new PerceptronPresentor();
     presentor->setView(this);
-    presentor->setInteractor(listener);
+
+    if (listener != nullptr)
+        presentor->setInteractor(listener);
 }
 
 QPixmap PerceptronView::getItemIcon() const {

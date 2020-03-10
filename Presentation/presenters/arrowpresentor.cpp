@@ -1,6 +1,7 @@
 #include "arrowpresentor.h"
 
 #include "listeners/arrowviewlistener.h"
+#include "listeners/arrowinteractorlistener.h"
 
 ArrowPresentor::ArrowPresentor()
 {
@@ -13,4 +14,9 @@ void ArrowPresentor::setView(ArrowViewListener *listener) {
 
 void ArrowPresentor::setInteractor(ArrowInteractorListener *listener) {
     interactor = listener;
+}
+
+ArrowPresentor::~ArrowPresentor() {
+    delete interactor;
+    interactor = nullptr;
 }

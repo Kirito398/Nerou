@@ -10,6 +10,7 @@ class ArrowPresentor : public SinapsPresentorListener
 {
 public:
     ArrowPresentor();
+    ~ArrowPresentor();
     void setView(ArrowViewListener *listener);
     void setInteractor(ArrowInteractorListener *listener);
 

@@ -4,6 +4,7 @@
 
 #include "interfaces/movingviewinterface.h"
 #include "presenters/arrowpresentor.h"
+#include "interfaces/PaintSceneInterface.h"
 
 ArrowView::ArrowView(ArrowInteractorListener *interactor, MovingViewInterface *startView, MovingViewInterface *endView, QGraphicsItem *parent) : QGraphicsLineItem(parent)
 {
@@ -117,7 +118,17 @@ MovingViewInterface* ArrowView::getEndView() {
     return endView;
 }
 
+void ArrowView::setView(PaintSceneInterface *interface) {
+    view = interface;
+}
+
 ArrowView::~ArrowView() {
+    startView->removeArrow(this);
+    endView->removeArrow(this);
+    view->deleteItem(this);
+
+    delete presentor;
+    presentor = nullptr;
 //    MainInteractor::getInstance()->removeSinaps(item);
 //    delete item;
 }

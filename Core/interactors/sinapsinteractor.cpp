@@ -2,8 +2,6 @@
 
 #include "iostream"
 
-#include "listeners/SinapsListener.h"
-
 SinapsInteractor::SinapsInteractor(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type)
 {
     this->inputListener = inputListener;

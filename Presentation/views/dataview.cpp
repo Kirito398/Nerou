@@ -10,7 +10,9 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
 
     presentor = new DataPresentor();
     presentor->setView(this);
-    presentor->setInteractor(listener);
+
+    if (listener != nullptr)
+        presentor->setInteractor(listener);
 }
 
 void DataView::updatePosition(double x, double y) {
@@ -65,4 +67,8 @@ void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 void DataView::makePolygon() {
     QRectF rect = boundingRect();
     polygon << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft() << rect.topLeft();
+}
+
+DataView::~DataView() {
+
 }

@@ -3,6 +3,10 @@
 
 #include <QScreen>
 
+#include "views/perceptronview.h"
+#include "views/dataview.h"
+#include "views/arrowview.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -41,15 +45,15 @@ void MainWindow::initControlToolBar() {
 }
 
 void MainWindow::initToolBox() {
-    //MovingView *item = new Perceptron(QPointF(0, 0));
+    MovingView *item = new PerceptronView();
     QToolButton *tbPerceptron = new QToolButton;
     tbPerceptron->setCheckable(true);
-    //tbPerceptron->setIcon(QIcon(item->getItemIcon()));
-    //tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    tbPerceptron->setIcon(QIcon(item->getItemIcon()));
+    tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     tbPerceptron->setToolTip(tr("Perceptron"));
     tbPerceptron->setStatusTip(tr("Add perceptron"));
-    //delete item;
-    //item = 0;
+    delete item;
+    item = 0;
 
     //item = new ConvolutionItem(QPointF(0, 0));
     QToolButton *tbConvolution = new QToolButton;
@@ -60,14 +64,14 @@ void MainWindow::initToolBox() {
     //delete item;
     //item = 0;
 
-    //item = new DataItem(QPointF(0,0));
+    item = new DataView();
     QToolButton *tbData = new QToolButton;
     tbData->setCheckable(true);
-    //tbData->setIcon(QIcon(item->getItemIcon()));
+    tbData->setIcon(QIcon(item->getItemIcon()));
     tbData->setToolTip(tr("Data"));
     tbData->setStatusTip(tr("Add data"));
-    //delete item;
-    //item = 0;
+    delete item;
+    item = 0;
 
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);
@@ -187,28 +191,20 @@ void MainWindow::initActions() {
 void MainWindow::onDeleteActionClicked() {
     QList<QGraphicsItem *> selectedItems = scene->selectedItems();
 
-//    for (auto item : selectedItems) {
-//        ArrowItem * arrowItem = dynamic_cast<ArrowView *>(item);
-//        if (arrowItem == nullptr)
-//            continue;
+    for (auto item : selectedItems) {
+        ArrowView * arrowView = dynamic_cast<ArrowView *>(item);
+        if (arrowView == nullptr)
+            continue;
+        delete item;
+    }
 
-//        scene->removeItem(arrowItem);
-//        arrowItem->getStartItem()->removeArrow(arrowItem);
-//        arrowItem->getEndItem()->removeArrow(arrowItem);
-
-//        delete item;
-//    }
-
-//    selectedItems = scene->selectedItems();
-//    for (auto item : selectedItems) {
-//        MovingView *moveItem = dynamic_cast<MovingView *>(item);
-//        if (moveItem == nullptr)
-//            continue;
-
-//        moveItem->removeArrows();
-//        scene->removeItem(moveItem);
-//        delete item;
-//    }
+    selectedItems = scene->selectedItems();
+    for (auto item : selectedItems) {
+        MovingView *moveItem = dynamic_cast<MovingView *>(item);
+        if (moveItem == nullptr)
+            continue;
+        delete item;
+    }
 }
 
 void MainWindow::onItemsGroupClicked() {

@@ -5,6 +5,7 @@
 class ArrowInteractorListener
 {
 public:
+    virtual ~ArrowInteractorListener() = default;
 };
 
 #endif // ARROWPRESENTORLISTENER_H

@@ -11,6 +11,7 @@
 class MovingViewInterface;
 class ArrowPresentor;
 class ArrowInteractorListener;
+class PaintSceneInterface;
 
 class ArrowView : public QGraphicsLineItem, public ArrowInterface, public ArrowViewListener
 {
@@ -20,6 +21,7 @@ public:
     MovingViewInterface * getStartView() override;
     MovingViewInterface * getEndView() override;
     void updatePosition() override;
+    void setView(PaintSceneInterface *interface);
 
 private:
     QPolygonF selectionPolygon() const;
@@ -31,6 +33,7 @@ private:
     MovingViewInterface *startView;
     MovingViewInterface *endView;
     ArrowPresentor *presentor;
+    PaintSceneInterface *view;
     QPolygonF arrowHead;
 };
 

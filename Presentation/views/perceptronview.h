@@ -10,7 +10,7 @@ class PerceptronInteractorListener;
 class PerceptronView : public MovingView, public PerceptronViewListener
 {
 public:
-    PerceptronView(PerceptronInteractorListener *listener, QObject *parent = nullptr);
+    PerceptronView(PerceptronInteractorListener *listener = nullptr, QObject *parent = nullptr);
     QPixmap getItemIcon() const override;
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;

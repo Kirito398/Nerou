@@ -163,9 +163,12 @@ void PaintScene::addArrow() {
         if (listener != nullptr) {
             this->clearSelection();
             ArrowView *arrow = new ArrowView(listener, startView, endView);
+            startView->addArrow(arrow);
+            endView->addArrow(arrow);
             arrow->setSelected(true);
             arrow->setZValue(-1000.0);
             arrow->updatePosition();
+            arrow->setView(this);
             addItem(arrow);
         }
     }
@@ -247,4 +250,8 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
 void PaintScene::updateScene() {
     this->update();
+}
+
+void PaintScene::deleteItem(QGraphicsItem *item) {
+    removeItem(item);
 }
