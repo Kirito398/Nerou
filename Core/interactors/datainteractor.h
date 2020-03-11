@@ -22,13 +22,15 @@ public:
 
 private:
     void sendData();
+    void colorsToValue();
     unsigned long getID() override;
     void deleteNeuron() override;
 
 private:
     DataPresentorListener *view;
     RepositoryInterface *repository;
-    double *value;
+    bool isColorMode;
+    double *value, **colorValue;
     unsigned int row, column;
     unsigned long classCounter, iterationColunter;
     std::vector<std::vector<std::string>> listPaths;

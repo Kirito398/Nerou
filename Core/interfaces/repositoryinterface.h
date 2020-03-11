@@ -6,8 +6,8 @@
 class RepositoryInterface
 {
 public:
-    virtual void loadValue(std::string path, double* red, double* green, double* blue, unsigned int* row, unsigned int* column) = 0;
-    virtual void loadValue(std::string path, double* value, unsigned int* row, unsigned int* column);
+    virtual void loadValue(std::string path, double** colorValue) = 0;
+    virtual void loadValue(std::string path, double* value);
 };
 
 #endif // REPOSITORYINTERFACE_H
