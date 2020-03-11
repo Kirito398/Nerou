@@ -29,14 +29,17 @@ void ArrowView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     qreal arrowSize = 10;
 
-    QLineF centerLine(startView->getPosition(), endView->getPosition());
+    QPointF startPoint = startView->getPosition();
+    QPointF endPoint = endView->getPosition();
+
+    QLineF centerLine(startPoint, endPoint);
     QPolygonF endPolygon = endView->getPolygon();
-    QPointF p1 = endPolygon.first() + endView->getPosition();
+    QPointF p1 = endPolygon.first() + endPoint;
     QPointF p2, intersectPoint;
     QLineF polyLine;
 
     for (int i = 1; i < endPolygon.count(); ++i) {
-        p2 = endPolygon.at(i) + endView->getPosition();
+        p2 = endPolygon.at(i) + endPoint;
         polyLine = QLineF(p1, p2);
         QLineF::IntersectType intersectType = polyLine.intersect(centerLine, &intersectPoint);
         if (intersectType == QLineF::BoundedIntersection)
