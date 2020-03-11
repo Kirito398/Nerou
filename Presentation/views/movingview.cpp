@@ -64,19 +64,41 @@ bool MovingView::addArrow(ArrowInterface* arrow) {
 }
 
 void MovingView::removeArrow(ArrowInterface* arrow) {
-    if (outputArrows.contains(arrow))
-        outputArrows.removeAll(arrow);
+    if (outputArrows.contains(arrow)) {
+        QMutableVectorIterator<ArrowInterface *> it(outputArrows);
 
-    if (inputArrows.contains(arrow))
-        inputArrows.removeAll(arrow);
+        while(it.hasNext()) {
+            if (it.next() == arrow)
+                it.remove();
+        }
+    }
+
+    if (inputArrows.contains(arrow)) {
+        QMutableVectorIterator<ArrowInterface *> it(inputArrows);
+
+        while(it.hasNext()) {
+            if (it.next() == arrow)
+                it.remove();
+        }
+    }
 }
 
 void MovingView::removeArrows() {
-    for (auto arrow : inputArrows)
-        delete arrow;
+    QMutableVectorIterator<ArrowInterface *> input(inputArrows);
 
-    for (auto arrow : outputArrows)
+    while (input.hasNext()) {
+        ArrowInterface *arrow = input.next();
+        input.remove();
         delete arrow;
+    }
+
+    QMutableVectorIterator<ArrowInterface *> output(inputArrows);
+
+    while(output.hasNext()) {
+        ArrowInterface *arrow = output.next();
+        output.remove();
+        delete arrow;
+    }
 }
 
 bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
