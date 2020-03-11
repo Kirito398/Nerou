@@ -41,28 +41,36 @@ void MainWindow::initControlToolBar() {
 }
 
 void MainWindow::initToolBox() {
-    MoveItem *item = new PerceptronItem(QPointF(0, 0));
     QToolButton *tbPerceptron = new QToolButton;
     tbPerceptron->setCheckable(true);
-    tbPerceptron->setIcon(QIcon(item->getItemIcon()));
-    //tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    tbPerceptron->setIcon(QIcon(scene->getPerceptronIcon()));
+    tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     tbPerceptron->setToolTip(tr("Perceptron"));
     tbPerceptron->setStatusTip(tr("Add perceptron"));
 
-    item = new ConvolutionItem(QPointF(0, 0));
     QToolButton *tbConvolution = new QToolButton;
     tbConvolution->setCheckable(true);
-    tbConvolution->setIcon(QIcon(item->getItemIcon()));
+    //tbConvolution->setIcon(QIcon(item->getItemIcon()));
     tbConvolution->setToolTip(tr("Convolution"));
     tbConvolution->setStatusTip(tr("Add convolution"));
+    //delete item;
+    //item = 0;
+
+    QToolButton *tbData = new QToolButton;
+    tbData->setCheckable(true);
+    tbData->setIcon(QIcon(scene->getDataIcon()));
+    tbData->setToolTip(tr("Data"));
+    tbData->setStatusTip(tr("Add data"));
 
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);
-    bgToolBox->addButton(tbPerceptron, ModelItem::Perceptron);
-    bgToolBox->addButton(tbConvolution, ModelItem::Convolution);
+    bgToolBox->addButton(tbPerceptron, MovingView::Perceptron);
+    bgToolBox->addButton(tbConvolution, MovingView::Convolution);
+    bgToolBox->addButton(tbData, MovingView::Data);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
     toolBoxToolBar = new QToolBar;
+    toolBoxToolBar->addWidget(tbData);
     toolBoxToolBar->addWidget(tbPerceptron);
     toolBoxToolBar->addWidget(tbConvolution);
     addToolBar(Qt::LeftToolBarArea, toolBoxToolBar);
@@ -77,10 +85,10 @@ void MainWindow::onToolsGroupClicked(int id) {
     }
 
     bgToolBox->button(id)->setChecked(true);
-    bgItems->button(PaintScene::Items)->setChecked(true);
+    bgItems->button(PaintScene::Views)->setChecked(true);
 
-    scene->setMode(PaintScene::Items);
-    scene->setItemType(ModelItem::ItemType(id));
+    scene->setMode(PaintScene::Views);
+    scene->setViewType(MovingView::ViewType(id));
 }
 
 void MainWindow::initToolBars() {
@@ -108,7 +116,7 @@ void MainWindow::initToolBars() {
 
     bgItems = new QButtonGroup(this);
     bgItems->addButton(tbSelectorMode, PaintScene::Selector);
-    bgItems->addButton(tbAddItemMode, PaintScene::Items);
+    bgItems->addButton(tbAddItemMode, PaintScene::Views);
     bgItems->addButton(tbAddArrowMode, PaintScene::Arrows);
     connect(bgItems, SIGNAL(buttonClicked(int)), this, SLOT(onItemsGroupClicked()));
 
@@ -170,30 +178,7 @@ void MainWindow::initActions() {
 }
 
 void MainWindow::onDeleteActionClicked() {
-    QList<QGraphicsItem *> selectedItems = scene->selectedItems();
-
-    for (auto item : selectedItems) {
-        ArrowItem * arrowItem = dynamic_cast<ArrowItem *>(item);
-        if (arrowItem == nullptr)
-            continue;
-
-        scene->removeItem(arrowItem);
-        arrowItem->getStartItem()->removeArrow(arrowItem);
-        arrowItem->getEndItem()->removeArrow(arrowItem);
-
-        delete item;
-    }
-
-    selectedItems = scene->selectedItems();
-    for (auto item : selectedItems) {
-        MoveItem *moveItem = dynamic_cast<MoveItem *>(item);
-        if (moveItem == nullptr)
-            continue;
-
-        moveItem->removeArrows();
-        scene->removeItem(moveItem);
-        delete item;
-    }
+    scene->onDeleteBtnClicked();
 }
 
 void MainWindow::onItemsGroupClicked() {
@@ -202,8 +187,8 @@ void MainWindow::onItemsGroupClicked() {
     if (bgToolBox->checkedId() != -1)
         bgToolBox->button(bgToolBox->checkedId())->setChecked(false);
 
-    if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Items)
-        bgToolBox->button(scene->getItemType())->setChecked(true);
+    if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Views)
+        bgToolBox->button(scene->getViewType())->setChecked(true);
 }
 
 void MainWindow::onExitActionClicked() {
@@ -215,7 +200,7 @@ void MainWindow::onAboutActionClicked() {
 }
 
 void MainWindow::onRunActionClicked() {
-    MainInteractor::getInstance()->run();
+    //MainInteractor::getInstance()->run();
 }
 
 void MainWindow::onScaleChanged(const QString &scale) {

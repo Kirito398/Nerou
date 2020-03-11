@@ -17,23 +17,36 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    models/arrowitem.cpp \
     models/convolutionitem.cpp \
-    models/perceptronitem.cpp \
     models/selectoritem.cpp \
+    presenters/arrowpresentor.cpp \
+    presenters/datapresentor.cpp \
+    presenters/perceptronpresentor.cpp \
+    views/arrowview.cpp \
+    views/dataview.cpp \
     views/mainwindow.cpp \
-    models/moveitem.cpp \
-    views/paintscene.cpp
+    views/movingview.cpp \
+    views/paintscene.cpp \
+    views/perceptronview.cpp
 
 HEADERS += \
     interfaces/PaintSceneInterface.h \
-    models/arrowitem.h \
+    interfaces/arrowinterface.h \
+    interfaces/movingviewinterface.h \
+    listeners/arrowviewlistener.h \
+    listeners/dataviewlistener.h \
+    listeners/perceptronviewlistener.h \
     models/convolutionitem.h \
-    models/perceptronitem.h \
     models/selectoritem.h \
+    presenters/arrowpresentor.h \
+    presenters/datapresentor.h \
+    presenters/perceptronpresentor.h \
+    views/arrowview.h \
+    views/dataview.h \
     views/mainwindow.h \
-    models/moveitem.h \
-    views/paintscene.h
+    views/movingview.h \
+    views/paintscene.h \
+    views/perceptronview.h
 
 RESOURCES += res.qrc
 

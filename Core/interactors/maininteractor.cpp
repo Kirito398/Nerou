@@ -1,8 +1,16 @@
 #include "maininteractor.h"
 
+#include "interactors/neuroninteractor.h"
+#include "interactors/sinapsinteractor.h"
+#include "interactors/datainteractor.h"
+#include "interactors/perceptroninteractor.h"
+#include "interactors/weightinteractor.h"
+#include "interactors/coreinteractor.h"
+#include "listeners/mainpresentorlistener.h"
+
 MainInteractor::MainInteractor()
 {
-
+    createdItemsCounter = 0;
 }
 
 MainInteractor* MainInteractor::getInstance() {
@@ -11,62 +19,122 @@ MainInteractor* MainInteractor::getInstance() {
     return instance;
 }
 
+void MainInteractor::setView(MainPresentorListener *listener) {
+    view = listener;
+}
+
 void MainInteractor::run() {
-    for (auto sinaps : sinapsModelsList)
+    for (auto sinaps : sinapsList)
         sinaps->init();
 }
 
-ModelItem* MainInteractor::addNewItem(MoveItemInterface *listener, ModelItem::ItemType type) {
-    ModelItem *newItem;
+void MainInteractor::createNewPerceptron(double x, double y) {
+    PerceptronInteractor *newPerceptron = new PerceptronInteractor();
 
-    switch (type) {
-    case ModelItem::Perceptron : {
-        newItem = new PerceptronModel(listener);
-        break;
-    }
-    case ModelItem::Convolution : {
-        newItem = new PerceptronModel(listener);
-        break;
-    }
-    }
+    newPerceptron->setID(++createdItemsCounter);
+    newPerceptron->setInteractor(this);
+    newPerceptron->setPosition(x, y);
 
-    itemsList.push_back(newItem);
-    return newItem;
+    neuronsList.push_back(newPerceptron);
+    view->onNewPerceptronAdded(newPerceptron);
 }
 
-SinapsModel *MainInteractor::makeSinaps(ModelItem *inputItem, ModelItem *outputItem) {
-    SinapsModel *sinaps = nullptr;
+void MainInteractor::createNewData(double x, double y) {
+    DataInteractor *newData = new DataInteractor();
 
-    if (inputItem->getType() == outputItem->getType() && inputItem->getType() == ModelItem::Perceptron) {
-        sinaps = new WeightModel(inputItem, outputItem);
-    }
+    newData->setID(++createdItemsCounter);
+    newData->setInteractor(this);
+    newData->setPosition(x, y);
 
-    inputItem->addOutputSinaps(sinaps);
-    outputItem->addInputSinaps(sinaps);
-
-    sinapsModelsList.push_back(sinaps);
-
-    return sinaps;
+    neuronsList.push_back(newData);
+    dataList.push_back(newData);
+    view->onNewDataAdded(newData);
 }
 
-void MainInteractor::removeItem(MoveItemInterface *item) {
-    for(unsigned long i = 0; i < itemsList.size(); i++) {
-        if (itemsList.at(i)->getListener() == item) {
-            itemsList.erase(itemsList.begin() + i);
-            vector<ModelItem *>(itemsList).swap(itemsList);
+ArrowInteractorListener *MainInteractor::createNewWeight(unsigned long inputID, unsigned long outputID) {
+    NeuronInteractor *inputNeuron = findNeuron(inputID);
+    NeuronInteractor *outputNeuron = findNeuron(outputID);
+
+    WeightInteractor *newWeight = new WeightInteractor(inputNeuron, outputNeuron);
+
+    if (inputNeuron->addArrow(newWeight) && outputNeuron->addArrow(newWeight)) {
+        sinapsList.push_back(newWeight);
+        newWeight->setInteractor(this);
+        newWeight->setID(++createdItemsCounter);
+        return newWeight;
+    }
+
+    delete newWeight;
+    return nullptr;
+}
+
+ArrowInteractorListener *MainInteractor::createNewCore(unsigned long inputID, unsigned long outputID) {
+    NeuronInteractor *inputNeuron = findNeuron(inputID);
+    NeuronInteractor *outputNeuron = findNeuron(outputID);
+
+    CoreInteractor *newCore = new CoreInteractor(inputNeuron, outputNeuron);
+
+    if (inputNeuron->addArrow(newCore) && outputNeuron->addArrow(newCore)) {
+        sinapsList.push_back(newCore);
+        newCore->setInteractor(this);
+        newCore->setID(++createdItemsCounter);
+        return newCore;
+    }
+
+    delete newCore;
+    return nullptr;
+}
+
+void MainInteractor::removeNeuron(unsigned long neuronID) {
+    NeuronInteractor *neuron = nullptr;
+
+    for (unsigned long i = 0; i < dataList.size(); i++) {
+        neuron = dataList.at(i);
+
+        if (neuron->getID() == neuronID) {
+            dataList.erase(dataList.begin() + i);
+            std::vector<DataInteractor *>(dataList).swap(dataList);
+            neuron = nullptr;
+            break;
+        }
+    }
+
+    for (unsigned long i = 0; i < neuronsList.size(); i++) {
+        neuron = neuronsList.at(i);
+
+        if (neuron->getID() == neuronID) {
+            neuronsList.erase(neuronsList.begin() + i);
+            std::vector<NeuronInteractor *>(neuronsList).swap(neuronsList);
+
+            delete neuron;
+            neuron = nullptr;
             break;
         }
     }
 }
 
-void MainInteractor::removeSinaps(SinapsModel *item) {
-    for(unsigned long i = 0; i < sinapsModelsList.size(); i++) {
-        if (sinapsModelsList.at(i) == item) {
-            sinapsModelsList.erase(sinapsModelsList.begin() + i);
-            vector<SinapsModel *>(sinapsModelsList).swap(sinapsModelsList);
+void MainInteractor::removeSinaps(unsigned long sinapsID) {
+    SinapsInteractor *sinaps = nullptr;
+
+    for (unsigned long i = 0; i < sinapsList.size(); i++) {
+        sinaps = sinapsList.at(i);
+
+        if (sinaps->getID() == sinapsID) {
+            sinapsList.erase(sinapsList.begin() + i);
+            std::vector<SinapsInteractor *>(sinapsList).swap(sinapsList);
+
+            delete sinaps;
+            sinaps = nullptr;
             break;
         }
     }
+}
+
+NeuronInteractor *MainInteractor::findNeuron(unsigned long id) {
+    for (auto neuron : neuronsList)
+        if (neuron->getID() == id)
+            return neuron;
+    return nullptr;
 }
 
 MainInteractor * MainInteractor::instance;

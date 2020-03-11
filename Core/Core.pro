@@ -17,21 +17,35 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    interactors/coreinteractor.cpp \
+    interactors/datainteractor.cpp \
     interactors/maininteractor.cpp \
-    models/modelitem.cpp \
-    models/perceptronmodel.cpp \
-    models/sinapsmodel.cpp \
-    models/weightmodel.cpp
+    interactors/neuroninteractor.cpp \
+    interactors/perceptroninteractor.cpp \
+    interactors/sinapsinteractor.cpp \
+    interactors/weightinteractor.cpp
 
 HEADERS += \
     Core_global.h \
+    interactors/coreinteractor.h \
+    interactors/datainteractor.h \
     interactors/maininteractor.h \
-    interfaces/moveiteminterface.h \
+    interactors/neuroninteractor.h \
+    interactors/perceptroninteractor.h \
+    interactors/sinapsinteractor.h \
+    interactors/weightinteractor.h \
+    interfaces/coreinterface.h \
+    interfaces/maininteractorinterface.h \
+    interfaces/repositoryinterface.h \
+    interfaces/weightinterface.h \
     listeners/SinapsListener.h \
-    models/modelitem.h \
-    models/perceptronmodel.h \
-    models/sinapsmodel.h \
-    models/weightmodel.h
+    listeners/arrowinteractorlistener.h \
+    listeners/datainteractorlistener.h \
+    listeners/datapresentorlistener.h \
+    listeners/mainpresentorlistener.h \
+    listeners/perceptroninteractorlistener.h \
+    listeners/perceptronpresentorlistener.h \
+    listeners/sinapspresentorlistener.h
 
 # Default rules for deployment.
 unix {

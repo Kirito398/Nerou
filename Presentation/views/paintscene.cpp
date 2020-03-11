@@ -1,28 +1,55 @@
 #include "paintscene.h"
 
+#include <QGraphicsSceneMouseEvent>
+
+#include "views/dataview.h"
+#include "views/arrowview.h"
+#include "views/perceptronview.h"
+#include "models/selectoritem.h"
+#include "interactors/maininteractor.h"
+
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance();
+    interactor->setView(this);
     line = nullptr;
     selector = nullptr;
     mode = PaintScene::Selector;
-    itemType = ModelItem::Perceptron;
+    viewType = MovingView::Perceptron;
+}
+
+void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
+    PerceptronView *view = new PerceptronView(perceptron);
+
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
+}
+
+void PaintScene::onNewDataAdded(DataInteractorListener *data) {
+    DataView *view = new DataView(data);
+
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
 }
 
 void PaintScene::moveSelectedItem(QPointF delta) {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
     for (auto item : selectedItems) {
-        MoveItem *moveItem = dynamic_cast<MoveItem *>(item);
-        if (moveItem != nullptr)
-            moveItem->setPosition(item->pos() + delta);
+        MovingView *view = dynamic_cast<MovingView *>(item);
+        if (view != nullptr)
+            view->setPosition(item->pos() + delta);
     }
 }
 
-void PaintScene::onItemsModePress(QGraphicsSceneMouseEvent *event) {
+void PaintScene::onViewsModePress(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem *item =  this->itemAt(event->scenePos(), QTransform());
     if (item == nullptr)
-        addMoveItem(event->scenePos());
+        addMovingView(event->scenePos());
     else
         item->setSelected(true);
 }
@@ -46,7 +73,7 @@ void PaintScene::onSelectorModePress(QGraphicsSceneMouseEvent *event) {
     }
 }
 
-void PaintScene::onItemsModeMove(QGraphicsSceneMouseEvent *event) {
+void PaintScene::onViewsModeMove(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseMoveEvent(event);
 }
 
@@ -65,7 +92,7 @@ void PaintScene::onSelectorModeMove(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseMoveEvent(event);
 }
 
-void PaintScene::onItemsModeRelease(QGraphicsSceneMouseEvent *event) {
+void PaintScene::onViewsModeRelease(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
 }
 
@@ -73,7 +100,7 @@ void PaintScene::onArrowsModeRelease(QGraphicsSceneMouseEvent *event) {
     if (line == nullptr)
         return;
 
-    addArrowItem();
+    addArrow();
 
     Q_UNUSED(event)
 }
@@ -97,15 +124,15 @@ void PaintScene::setMode(Mode mode) {
     this->mode = mode;
 }
 
-void PaintScene::setItemType(ModelItem::ItemType type) {
-    itemType = type;
+void PaintScene::setViewType(MovingView::ViewType type) {
+    viewType = type;
 }
 
-ModelItem::ItemType PaintScene::getItemType() {
-    return itemType;
+MovingView::ViewType PaintScene::getViewType() {
+    return viewType;
 }
 
-void PaintScene::addArrowItem() {
+void PaintScene::addArrow() {
     QList<QGraphicsItem *> startItems = items(line->line().p1());
     if (startItems.count() && startItems.first() == line)
         startItems.removeFirst();
@@ -115,41 +142,59 @@ void PaintScene::addArrowItem() {
         endItems.removeFirst();
 
     if (startItems.count() && endItems.count() && startItems.first() != endItems.first()) {
-        MoveItem *startItem = qgraphicsitem_cast<MoveItem *>(startItems.first());
-        MoveItem *endItem = qgraphicsitem_cast<MoveItem *>(endItems.first());
-        ArrowItem *arrow = new ArrowItem(startItem, endItem);
+        MovingView *startView = qgraphicsitem_cast<MovingView *>(startItems.first());
+        MovingView *endView = qgraphicsitem_cast<MovingView *>(endItems.first());
+        ArrowInteractorListener *listener = nullptr;
 
-        if (startItem->addArrow(arrow) && endItem->addArrow(arrow)) {
+        if (startView->getType() == endView->getType()) {
+            if (startView->getType() == MovingView::Perceptron)
+                listener = interactor->createNewWeight(startView->getID(), endView->getID());
+
+            if (startView->getType() == MovingView::Convolution)
+                listener = interactor->createNewCore(startView->getID(), endView->getID());
+        }
+
+        if (startView->getType() != endView->getType()) {
+            if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Perceptron)
+                listener = interactor->createNewWeight(startView->getID(), endView->getID());
+
+            if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Convolution)
+                listener = interactor->createNewCore(startView->getID(), endView->getID());
+        }
+
+        if (listener != nullptr) {
             this->clearSelection();
+            ArrowView *arrow = new ArrowView(listener, startView, endView);
+            startView->addArrow(arrow);
+            endView->addArrow(arrow);
             arrow->setSelected(true);
             arrow->setZValue(-1000.0);
             arrow->updatePosition();
-            arrow->setItem(interactor->makeSinaps(startItem->getItem(), endItem->getItem()));
+            arrow->setView(this);
             addItem(arrow);
         }
     }
 
     removeItem(line);
     delete line;
+    line = nullptr;
 }
 
-void PaintScene::addMoveItem(QPointF position) {
-    MoveItem *newItem;
-
-    switch (itemType) {
-    case ModelItem::Perceptron : {
-        newItem = new PerceptronItem(position);
+void PaintScene::addMovingView(QPointF position) {
+    switch (viewType) {
+    case MovingView::Perceptron : {
+        interactor->createNewPerceptron(position.x(), position.y());
         break;
     }
-    case ModelItem::Convolution : {
-        newItem = new ConvolutionItem(position);
+    case MovingView::Convolution : {
+        //interactor->
+        break;
+    }
+    case MovingView::Data : {
+        interactor->createNewData(position.x(), position.y());
         break;
     }
     }
-
-    newItem->setView(this);
-    newItem->setSelected(true);
-    this->addItem(newItem);
 }
 
 void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -163,8 +208,8 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     case Selector:
         onSelectorModePress(event);
         break;
-    case Items:
-        onItemsModePress(event);
+    case Views:
+        onViewsModePress(event);
         break;
     case Arrows:
         onArrowsModePress(event);
@@ -182,8 +227,8 @@ void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     case Arrows:
         onArrowsModeMove(event);
         break;
-    case Items:
-        onItemsModeMove(event);
+    case Views:
+        onViewsModeMove(event);
         break;
     }
 }
@@ -196,8 +241,8 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     case Arrows:
         onArrowsModeRelease(event);
         break;
-    case Items:
-        onItemsModeRelease(event);
+    case Views:
+        onViewsModeRelease(event);
         break;
     }
 
@@ -205,6 +250,37 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     line = nullptr;
 }
 
+QPixmap PaintScene::getPerceptronIcon() const {
+    return PerceptronView().getItemIcon();
+}
+
+QPixmap PaintScene::getDataIcon() const {
+    return DataView().getItemIcon();
+}
+
+void PaintScene::onDeleteBtnClicked() {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+
+    for (auto item : selectedItems) {
+        ArrowView * arrowView = dynamic_cast<ArrowView *>(item);
+        if (arrowView == nullptr)
+            continue;
+        delete item;
+    }
+
+    selectedItems = this->selectedItems();
+    for (auto item : selectedItems) {
+        MovingView *moveItem = dynamic_cast<MovingView *>(item);
+        if (moveItem == nullptr)
+            continue;
+        delete item;
+    }
+}
+
 void PaintScene::updateScene() {
     this->update();
+}
+
+void PaintScene::deleteItem(QGraphicsItem *item) {
+    removeItem(item);
 }
