@@ -11,6 +11,7 @@ MovingView::MovingView(ViewType type, QObject *parent) : QObject(parent), QGraph
 {
     this->type = type;
     setFlag(QGraphicsItem::ItemIsSelectable);
+    view = nullptr;
 }
 
 MovingView::ViewType MovingView::getType() {

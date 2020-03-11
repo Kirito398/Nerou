@@ -1,5 +1,9 @@
 #include "selectoritem.h"
 
+#include <QPainter>
+
+#include "interfaces/PaintSceneInterface.h"
+
 SelectorItem::SelectorItem(QPointF position, QObject *parent) : QObject(parent), QGraphicsItem()
 {
     startPoint = mapFromScene(position);

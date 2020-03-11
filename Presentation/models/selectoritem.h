@@ -3,11 +3,8 @@
 
 #include <QObject>
 #include <QGraphicsItem>
-#include <QPainter>
-#include <QStyleOptionGraphicsItem>
-#include <QRectF>
 
-#include <interfaces/PaintSceneInterface.h>
+class PaintSceneInterface;
 
 class SelectorItem : public QObject, public QGraphicsItem
 {

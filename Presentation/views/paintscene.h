@@ -3,11 +3,12 @@
 
 #include <QGraphicsScene>
 
-#include "interactors/maininteractor.h"
 #include "interfaces/PaintSceneInterface.h"
 #include "listeners/mainpresentorlistener.h"
-#include "models/selectoritem.h"
 #include "views/movingview.h"
+
+class SelectorItem;
+class MainInteractor;
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
@@ -17,10 +18,12 @@ public:
     void setMode(Mode mode);
     void setViewType(MovingView::ViewType type);
     MovingView::ViewType getViewType();
+    void onDeleteBtnClicked();
+    QPixmap getPerceptronIcon() const;
+    QPixmap getDataIcon() const;
 
 private:
     MainInteractor* interactor;
-    //ArrowItem* currentArrow;
     Mode mode;
     QGraphicsLineItem *line;
     SelectorItem *selector;

@@ -5,6 +5,8 @@
 #include "views/dataview.h"
 #include "views/arrowview.h"
 #include "views/perceptronview.h"
+#include "models/selectoritem.h"
+#include "interactors/maininteractor.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
@@ -246,6 +248,33 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
     selector = nullptr;
     line = nullptr;
+}
+
+QPixmap PaintScene::getPerceptronIcon() const {
+    return PerceptronView().getItemIcon();
+}
+
+QPixmap PaintScene::getDataIcon() const {
+    return DataView().getItemIcon();
+}
+
+void PaintScene::onDeleteBtnClicked() {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+
+    for (auto item : selectedItems) {
+        ArrowView * arrowView = dynamic_cast<ArrowView *>(item);
+        if (arrowView == nullptr)
+            continue;
+        delete item;
+    }
+
+    selectedItems = this->selectedItems();
+    for (auto item : selectedItems) {
+        MovingView *moveItem = dynamic_cast<MovingView *>(item);
+        if (moveItem == nullptr)
+            continue;
+        delete item;
+    }
 }
 
 void PaintScene::updateScene() {
