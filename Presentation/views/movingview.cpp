@@ -71,15 +71,11 @@ void MovingView::removeArrow(ArrowInterface* arrow) {
 }
 
 void MovingView::removeArrows() {
-    for (auto arrow : inputArrows) {
-        inputArrows.removeAll(arrow);
+    for (auto arrow : inputArrows)
         delete arrow;
-    }
 
-    for (auto arrow : outputArrows) {
-        outputArrows.removeAll(arrow);
+    for (auto arrow : outputArrows)
         delete arrow;
-    }
 }
 
 bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
@@ -100,8 +96,6 @@ void MovingView::updateArrowsPosition() {
 }
 
 MovingView::~MovingView() {
-    removeArrows();
-
     if (view != nullptr)
         view->deleteItem(this);
 }

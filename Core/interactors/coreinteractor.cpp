@@ -19,3 +19,7 @@ void CoreInteractor::sendSignal(double *signal, unsigned int row, unsigned int c
 double **CoreInteractor::getValue() {
 
 }
+
+void CoreInteractor::deleteSinaps() {
+    removeSinaps();
+}

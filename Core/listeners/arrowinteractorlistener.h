@@ -5,7 +5,7 @@
 class ArrowInteractorListener
 {
 public:
-    virtual ~ArrowInteractorListener() = default;
+    virtual void deleteSinaps() = 0;
 };
 
 #endif // ARROWPRESENTORLISTENER_H

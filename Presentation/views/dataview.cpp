@@ -70,5 +70,8 @@ void DataView::makePolygon() {
 }
 
 DataView::~DataView() {
+    removeArrows();
 
+    delete presentor;
+    presentor = nullptr;
 }

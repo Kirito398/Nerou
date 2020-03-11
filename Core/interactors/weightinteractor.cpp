@@ -21,3 +21,7 @@ void WeightInteractor::sendSignal(double signal) {
 double WeightInteractor::getValue() {
     return value;
 }
+
+void WeightInteractor::deleteSinaps() {
+    removeSinaps();
+}

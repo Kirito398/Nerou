@@ -5,7 +5,7 @@
 
 DataPresentor::DataPresentor()
 {
-
+    interactor = nullptr;
 }
 
 void DataPresentor::setView(DataViewListener *listener) {
@@ -27,4 +27,9 @@ void DataPresentor::setPosition(double x, double y) {
 
 unsigned long DataPresentor::getID() {
     return interactor->getID();
+}
+
+DataPresentor::~DataPresentor() {
+    if (interactor != nullptr)
+        interactor->deleteNeuron();
 }

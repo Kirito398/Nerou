@@ -35,6 +35,7 @@ HEADERS += \
     interactors/sinapsinteractor.h \
     interactors/weightinteractor.h \
     interfaces/coreinterface.h \
+    interfaces/maininteractorinterface.h \
     interfaces/repositoryinterface.h \
     interfaces/weightinterface.h \
     listeners/SinapsListener.h \

@@ -3,6 +3,7 @@
 #include "math.h"
 
 #include "interactors/sinapsinteractor.h"
+#include "interfaces/maininteractorinterface.h"
 
 NeuronInteractor::NeuronInteractor()
 {
@@ -21,6 +22,10 @@ void NeuronInteractor::setID(unsigned long id) {
 
 unsigned long NeuronInteractor::getID() {
     return id;
+}
+
+void NeuronInteractor::setInteractor(MainInteractorInterface *interface) {
+    interactor = interface;
 }
 
 bool NeuronInteractor::addArrow(SinapsInteractor* arrow) {
@@ -49,4 +54,38 @@ bool NeuronInteractor::isArrowAlreadyAdded(SinapsInteractor* arrow) {
             return true;
 
     return false;
+}
+
+void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
+    for (unsigned long i = 0; i < inputsSinaps.size(); i++) {
+        if (inputsSinaps.at(i)->getID() == sinapsID) {
+            inputsSinaps.erase(inputsSinaps.begin() + i);
+            std::vector<SinapsInteractor *>(inputsSinaps).swap(inputsSinaps);
+            return;
+        }
+    }
+
+    for (unsigned long i = 0; i < outputsSinaps.size(); i++) {
+        if (outputsSinaps.at(i)->getID() == sinapsID) {
+            outputsSinaps.erase(outputsSinaps.begin() + i);
+            std::vector<SinapsInteractor *>(outputsSinaps).swap(outputsSinaps);
+            return;
+        }
+    }
+}
+
+void NeuronInteractor::removeSinapses() {
+    for (auto sinaps : inputsSinaps)
+        delete sinaps;
+
+    for (auto sinaps : outputsSinaps)
+        delete sinaps;
+}
+
+void NeuronInteractor::removeNeuron() {
+    interactor->removeNeuron(id);
+}
+
+NeuronInteractor::~NeuronInteractor() {
+    removeSinapses();
 }

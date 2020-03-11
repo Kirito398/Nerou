@@ -17,6 +17,5 @@ void ArrowPresentor::setInteractor(ArrowInteractorListener *listener) {
 }
 
 ArrowPresentor::~ArrowPresentor() {
-    delete interactor;
-    interactor = nullptr;
+    interactor->deleteSinaps();
 }

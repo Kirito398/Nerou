@@ -77,3 +77,10 @@ void PerceptronView::updatePosition(double x, double y) {
 unsigned long PerceptronView::getID() {
     return presentor->getID();
 };
+
+PerceptronView::~PerceptronView() {
+    removeArrows();
+
+    delete presentor;
+    presentor = nullptr;
+}

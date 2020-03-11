@@ -10,6 +10,7 @@ class PerceptronPresentor : public PerceptronPresentorListener
 {
 public:
     PerceptronPresentor();
+    ~PerceptronPresentor();
     void setView(PerceptronViewListener *listener);
     void setInteractor(PerceptronInteractorListener *listener);
     void setPosition(double x, double y);

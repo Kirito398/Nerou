@@ -15,6 +15,9 @@ public:
     void init() override;
 
 private:
+    void deleteSinaps() override;
+
+private:
     double value;
     double weight;
 };

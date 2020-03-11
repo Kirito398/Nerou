@@ -58,6 +58,10 @@ unsigned long DataInteractor::getID() {
     return id;
 }
 
+void DataInteractor::deleteNeuron() {
+    removeNeuron();
+}
+
 void DataInteractor::onInputSignalChanged() {
 
 }

@@ -5,7 +5,7 @@
 
 PerceptronPresentor::PerceptronPresentor()
 {
-
+    interactor = nullptr;
 }
 
 void PerceptronPresentor::setView(PerceptronViewListener *listener) {
@@ -27,4 +27,9 @@ void PerceptronPresentor::setPosition(double x, double y) {
 
 unsigned long PerceptronPresentor::getID() {
     return interactor->getID();
+}
+
+PerceptronPresentor::~PerceptronPresentor() {
+    if (interactor != nullptr)
+        interactor->deleteNeuron();
 }

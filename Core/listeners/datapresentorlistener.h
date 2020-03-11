@@ -5,6 +5,7 @@
 class DataPresentorListener
 {
 public:
+    virtual ~DataPresentorListener() = default;
     virtual void updatePosition(double x, double y) = 0;
 };
 

@@ -73,3 +73,7 @@ void PerceptronInteractor::clearInputSignal() {
 
     inputSignalCount = 0;
 }
+
+void PerceptronInteractor::deleteNeuron() {
+    removeNeuron();
+}

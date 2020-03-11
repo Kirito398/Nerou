@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "interfaces/maininteractorinterface.h"
+
 class NeuronInteractor;
 class SinapsInteractor;
 class DataInteractor;
@@ -12,7 +14,7 @@ class WeightInteractor;
 class MainPresentorListener;
 class ArrowInteractorListener;
 
-class MainInteractor
+class MainInteractor : public MainInteractorInterface
 {
 public:
     static MainInteractor *getInstance();
@@ -21,6 +23,8 @@ public:
     void createNewData(double x, double y);
     ArrowInteractorListener *createNewWeight(unsigned long inputID, unsigned long outputID);
     ArrowInteractorListener *createNewCore(unsigned long inputID, unsigned long outputID);
+    void removeNeuron(unsigned long neuronID) override;
+    void removeSinaps(unsigned long sinapsID) override;
     void run();
 
 private:
@@ -33,7 +37,7 @@ private:
     std::vector<SinapsInteractor *> sinapsList;
     std::vector<DataInteractor *> dataList;
     MainPresentorListener *view;
-    unsigned long createdNeuronCount;
+    unsigned long createdItemsCounter;
 };
 
 #endif // MAININTERACTOR_H

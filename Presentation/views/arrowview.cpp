@@ -129,6 +129,4 @@ ArrowView::~ArrowView() {
 
     delete presentor;
     presentor = nullptr;
-//    MainInteractor::getInstance()->removeSinaps(item);
-//    delete item;
 }

@@ -17,6 +17,7 @@ private:
     void setView(PerceptronPresentorListener *listener) override;
     void onDeltaValueChanged() override;
     unsigned long getID() override;
+    void deleteNeuron() override;
     void makeInputSignal();
     void calculateOut();
     void sendSignal();

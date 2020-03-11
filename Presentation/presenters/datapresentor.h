@@ -11,6 +11,7 @@ class DataPresentor : public DataPresentorListener
 {
 public:
     DataPresentor();
+    ~DataPresentor();
     void setView(DataViewListener *listener);
     void setInteractor(DataInteractorListener *listener);
     void setPosition(double x, double y);
