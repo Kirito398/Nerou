@@ -129,6 +129,7 @@ void ArrowView::setView(PaintSceneInterface *interface) {
 
 void ArrowView::setActive(bool enable) {
     arrowColor = enable ? Qt::green : Qt::black;
+    view->updateScene();
 }
 
 ArrowView::~ArrowView() {
