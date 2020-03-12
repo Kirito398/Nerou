@@ -13,6 +13,9 @@ PerceptronView::PerceptronView(PerceptronInteractorListener *listener, QObject *
 
     if (listener != nullptr)
         presentor->setInteractor(listener);
+
+    neuronColor = Qt::black;
+    value = "";
 }
 
 QPixmap PerceptronView::getItemIcon() const {
@@ -20,8 +23,8 @@ QPixmap PerceptronView::getItemIcon() const {
     pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
 
-    painter.setPen(Qt::black);
-    painter.setBrush(Qt::green);
+    painter.setPen(neuronColor);
+    painter.setBrush(Qt::white);
     painter.translate(50, 50);
     painter.drawEllipse(-30, -30, 60, 60);
 
@@ -47,8 +50,8 @@ QRectF PerceptronView::boundingRect() const {
 }
 
 void PerceptronView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->setPen(Qt::black);
-    painter->setBrush(Qt::green);
+    painter->setPen(neuronColor);
+    painter->setBrush(Qt::white);
     painter->drawEllipse(-30, -30, 60, 60);
 
     if (isSelected()) {
@@ -56,6 +59,9 @@ void PerceptronView::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
         painter->setBrush(QColor(0, 0, 255, 50));
         painter->drawPolygon(polygon);
     }
+
+    painter->setPen(neuronColor);
+    painter->drawText(QPointF(-25, 5), value);
 
     Q_UNUSED(option)
     Q_UNUSED(widget)
@@ -72,6 +78,15 @@ void PerceptronView::makePolygon() {
 void PerceptronView::updatePosition(double x, double y) {
     this->setPos(x, y);
     updateArrowsPosition();
+}
+
+void PerceptronView::setActive(bool enable) {
+    neuronColor = enable ? Qt::green : Qt::black;
+}
+
+void PerceptronView::setOutValue(QString value) {
+    this->value = value;
+    updateScene();
 }
 
 unsigned long PerceptronView::getID() {

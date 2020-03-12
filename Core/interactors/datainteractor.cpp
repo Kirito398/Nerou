@@ -5,7 +5,7 @@
 #include "interfaces/weightinterface.h"
 #include "interfaces/repositoryinterface.h"
 
-DataInteractor::DataInteractor() : NeuronInteractor()
+DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
     view = nullptr;
     value = nullptr;
@@ -15,7 +15,7 @@ DataInteractor::DataInteractor() : NeuronInteractor()
     row = 0;
     classNumber = 0;
     iterationNumber = 0;
-    isColorMode = true;
+    isColorMode = false;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
@@ -26,11 +26,11 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
     if (isColorMode) {
         colorValue = repository->loadColorValue(listPaths[classNumber][iterationNumber]);
-        activateFunction(colorValue, 3, row * column);
+        normalization(colorValue, 3, row * column);
         colorsToValue();
     } else {
         value = repository->loadValue(listPaths[classNumber][iterationNumber]);
-        activateFunction(value, row * column);
+        normalization(value, row * column);
     }
 
     sendData();

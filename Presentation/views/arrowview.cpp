@@ -16,6 +16,8 @@ ArrowView::ArrowView(ArrowInteractorListener *interactor, MovingViewInterface *s
     presentor = new ArrowPresentor();
     presentor->setView(this);
     presentor->setInteractor(interactor);
+
+    arrowColor = Qt::black;
 }
 
 void ArrowView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
@@ -23,9 +25,9 @@ void ArrowView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         return;
 
     QPen mPen = pen();
-    mPen.setColor(Qt::black);
+    mPen.setColor(arrowColor);
     painter->setPen(mPen);
-    painter->setBrush(Qt::black);
+    painter->setBrush(arrowColor);
 
     qreal arrowSize = 10;
 
@@ -123,6 +125,11 @@ MovingViewInterface* ArrowView::getEndView() {
 
 void ArrowView::setView(PaintSceneInterface *interface) {
     view = interface;
+}
+
+void ArrowView::setActive(bool enable) {
+    arrowColor = enable ? Qt::green : Qt::black;
+    view->updateScene();
 }
 
 ArrowView::~ArrowView() {

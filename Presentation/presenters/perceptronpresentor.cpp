@@ -3,6 +3,9 @@
 #include "listeners/perceptroninteractorlistener.h"
 #include "listeners/perceptronviewlistener.h"
 
+#include <QString>
+#include <iostream>
+
 PerceptronPresentor::PerceptronPresentor()
 {
     interactor = nullptr;
@@ -27,6 +30,14 @@ void PerceptronPresentor::setPosition(double x, double y) {
 
 unsigned long PerceptronPresentor::getID() {
     return interactor->getID();
+}
+
+void PerceptronPresentor::setActive(bool enable) {
+    view->setActive(enable);
+}
+
+void PerceptronPresentor::setOutValue(double value) {
+    view->setOutValue(QString::fromStdString(std::to_string(value)));
 }
 
 PerceptronPresentor::~PerceptronPresentor() {

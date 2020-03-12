@@ -16,8 +16,10 @@ public:
 
 private:
     void deleteSinaps() override;
+    void setView(SinapsPresentorListener *listener) override;
 
 private:
+    SinapsPresentorListener *view;
     double value;
     double weight;
 };

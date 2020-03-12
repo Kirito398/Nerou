@@ -28,6 +28,7 @@ private:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    void setActive(bool enable) override;
 
 private:
     MovingViewInterface *startView;
@@ -35,6 +36,7 @@ private:
     ArrowPresentor *presentor;
     PaintSceneInterface *view;
     QPolygonF arrowHead;
+    QColor arrowColor;
 };
 
 #endif // ARROWVIEW_H

@@ -15,6 +15,9 @@ public:
     void setInteractor(ArrowInteractorListener *listener);
 
 private:
+    void setActive(bool enable) override;
+
+private:
     ArrowViewListener *view;
     ArrowInteractorListener *interactor;
 };

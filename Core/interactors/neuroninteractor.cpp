@@ -5,8 +5,9 @@
 #include "interactors/sinapsinteractor.h"
 #include "interfaces/maininteractorinterface.h"
 
-NeuronInteractor::NeuronInteractor()
+NeuronInteractor::NeuronInteractor(NeuronType type)
 {
+    this->type = type;
     id = 0;
     posX = 0;
     posY = 0;
@@ -19,13 +20,37 @@ double NeuronInteractor::activateFunction(double value) {
 void NeuronInteractor::activateFunction(double* value, unsigned int size) {
     for (unsigned int i = 0; i < size; i++)
         value[i] = activateFunction(value[i]);
-
 }
 
 void NeuronInteractor::activateFunction(double** value, unsigned int row, unsigned int column) {
     for (unsigned int i = 0; i < row; i++)
         for (unsigned int j = 0; j < column; j++)
             value[i][j] = activateFunction(value[i][j]);
+}
+
+double NeuronInteractor::normalization(double value, double max, double min) {
+    return (value - min) / (max - min);
+}
+
+void NeuronInteractor::normalization(double* value, unsigned int size) {
+    double max = value[0];
+    double min = value[0];
+
+    for (unsigned int i = 0; i < size; i++) {
+        if (max < value[i])
+            max = value[i];
+
+        if (min > value[i])
+            min = value[i];
+    }
+
+    for (unsigned int i = 0; i < size; i++)
+        value[i] = normalization(value[i], max, min);
+}
+
+void NeuronInteractor::normalization(double** value, unsigned int row, unsigned int column) {
+    for (unsigned long i = 0; i < row; i++)
+        normalization(value[i], column);
 }
 
 void NeuronInteractor::setID(unsigned long id) {
@@ -66,6 +91,10 @@ bool NeuronInteractor::isArrowAlreadyAdded(SinapsInteractor* arrow) {
             return true;
 
     return false;
+}
+
+NeuronType NeuronInteractor::getType() {
+    return type;
 }
 
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
