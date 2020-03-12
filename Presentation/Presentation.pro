@@ -61,3 +61,10 @@ else:unix: LIBS += -L$$OUT_PWD/../Core/ -lCore
 
 INCLUDEPATH += $$PWD/../Core
 DEPENDPATH += $$PWD/../Core
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Data/release/ -lData
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Data/debug/ -lData
+else:unix: LIBS += -L$$OUT_PWD/../Data/ -lData
+
+INCLUDEPATH += $$PWD/../Data
+DEPENDPATH += $$PWD/../Data

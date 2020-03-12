@@ -15,7 +15,7 @@ DataInteractor::DataInteractor() : NeuronInteractor()
     row = 0;
     classNumber = 0;
     iterationNumber = 0;
-    isColorMode = false;
+    isColorMode = true;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
@@ -24,13 +24,15 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
     view->setImage(listPaths[classNumber][iterationNumber]);
 
-//    if (isColorMode) {
-//        repository->loadValue(listPaths[classNumber][iterationNumber], colorValue);
-//        colorsToValue();
-//    } else
-//        repository->loadValue(listPaths[classNumber][iterationNumber], value);
+    if (isColorMode) {
+        colorValue = repository->loadColorValue(listPaths[classNumber][iterationNumber]);
+        colorsToValue();
+    } else
+        value = repository->loadValue(listPaths[classNumber][iterationNumber]);
 
-//    sendData();
+    sendData();
+    clearColorValue();
+    clearValue();
 }
 
 void DataInteractor::sendData() {
@@ -85,6 +87,30 @@ unsigned long DataInteractor::getClassNumber() {
 
 unsigned long DataInteractor::getIterationNumber() {
     return iterationNumber;
+}
+
+void DataInteractor::clearColorValue() {
+    if (colorValue == nullptr)
+        return;
+
+    for (unsigned int i = 0; i < 3; i++)
+        delete [](colorValue[i]);
+    delete [](colorValue);
+
+    colorValue = nullptr;
+}
+
+void DataInteractor::clearValue() {
+    if (value == nullptr)
+        return;
+
+    delete [](value);
+    value = nullptr;
+}
+
+void DataInteractor::setSize(unsigned long row, unsigned long column) {
+    this->row = row;
+    this->column = column;
 }
 
 void DataInteractor::setView(DataPresentorListener *listener) {
