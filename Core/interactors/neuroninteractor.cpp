@@ -5,8 +5,9 @@
 #include "interactors/sinapsinteractor.h"
 #include "interfaces/maininteractorinterface.h"
 
-NeuronInteractor::NeuronInteractor()
+NeuronInteractor::NeuronInteractor(NeuronType type)
 {
+    this->type = type;
     id = 0;
     posX = 0;
     posY = 0;
@@ -90,6 +91,10 @@ bool NeuronInteractor::isArrowAlreadyAdded(SinapsInteractor* arrow) {
             return true;
 
     return false;
+}
+
+NeuronType NeuronInteractor::getType() {
+    return type;
 }
 
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {

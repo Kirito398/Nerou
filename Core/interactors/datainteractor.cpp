@@ -5,7 +5,7 @@
 #include "interfaces/weightinterface.h"
 #include "interfaces/repositoryinterface.h"
 
-DataInteractor::DataInteractor() : NeuronInteractor()
+DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
     view = nullptr;
     value = nullptr;

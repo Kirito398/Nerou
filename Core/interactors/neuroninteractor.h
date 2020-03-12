@@ -11,11 +11,10 @@ class MainInteractorInterface;
 class NeuronInteractor : public SinapsListener
 {
 public:
-    enum NeuronType {Perceptron, Convolution, Data};
     enum FunctionType {Sin};
 
 public:
-    NeuronInteractor();
+    NeuronInteractor(NeuronType type);
     virtual ~NeuronInteractor();
     void setID(unsigned long id);
     unsigned long getID();
@@ -35,12 +34,14 @@ private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);
     void removeSinapses();
     void removeSinaps(unsigned long sinapsID) override;
+    NeuronType getType() override;
 
 protected:
     std::vector<SinapsInteractor *> inputsSinaps;
     std::vector<SinapsInteractor *> outputsSinaps;
     double posX, posY;
     unsigned long id;
+    NeuronType type;
 
 private:
     MainInteractorInterface *interactor;

@@ -3,7 +3,7 @@
 #include "interfaces/weightinterface.h"
 #include "listeners/perceptronpresentorlistener.h"
 
-PerceptronInteractor::PerceptronInteractor()
+PerceptronInteractor::PerceptronInteractor() : NeuronInteractor(Perceptron)
 {
     inputSignal = nullptr;
     inputSignalCount = 0;

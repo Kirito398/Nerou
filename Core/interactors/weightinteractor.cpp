@@ -9,7 +9,7 @@ WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener
 }
 
 void WeightInteractor::init() {
-    weight = random();
+    weight = inputListener->getType() == NeuronType::Data ? 1.0 : random();
     value = 0;
 }
 
