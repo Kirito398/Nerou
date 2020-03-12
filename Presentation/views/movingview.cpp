@@ -118,6 +118,10 @@ void MovingView::updateArrowsPosition() {
         arrow->updatePosition();
 }
 
+void MovingView::updateScene() {
+    view->updateScene();
+}
+
 MovingView::~MovingView() {
     if (view != nullptr)
         view->deleteItem(this);

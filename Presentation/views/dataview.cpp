@@ -2,6 +2,8 @@
 
 #include <QPainter>
 
+#include <QThread>
+
 #include "presenters/datapresentor.h"
 
 DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingView(Data, parent)
@@ -13,6 +15,9 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
 
     if (listener != nullptr)
         presentor->setInteractor(listener);
+
+    bounding = QRectF (-30, -30, 60, 60);
+    imageBounding = QRectF(-30, -30, 30, 30);
 }
 
 void DataView::updatePosition(double x, double y) {
@@ -22,6 +27,11 @@ void DataView::updatePosition(double x, double y) {
 
 void DataView::setPosition(QPointF position) {
     presentor->setPosition(position.x(), position.y());
+}
+
+void DataView::setImage(QString path) {
+    image = QImage(path);
+    updateScene();
 }
 
 unsigned long DataView::getID() {
@@ -36,7 +46,7 @@ QPixmap DataView::getItemIcon() const {
     painter.setPen(Qt::black);
     painter.setBrush(Qt::white);
     painter.translate(50, 50);
-    painter.drawRect(-30, -30, 60, 60);
+    painter.drawRect(bounding);
 
     return pixmap;
 }
@@ -46,27 +56,28 @@ QPolygonF DataView::getPolygon() {
 }
 
 QRectF DataView::boundingRect() const {
-    return QRectF (-30, -30, 60, 60);
+    return bounding;
 }
 
 void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     painter->setPen(Qt::black);
     painter->setBrush(Qt::white);
-    painter->drawRect(-30, -30, 60, 60);
+    painter->drawRect(bounding);
 
     if (isSelected()) {
         painter->setPen(Qt::blue);
         painter->setBrush(QColor(0, 0, 255, 50));
-        painter->drawRect(boundingRect());
+        painter->drawRect(bounding);
     }
+
+    painter->drawImage(imageBounding, image);
 
     Q_UNUSED(option)
     Q_UNUSED(widget)
 }
 
 void DataView::makePolygon() {
-    QRectF rect = boundingRect();
-    polygon << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft() << rect.topLeft();
+    polygon << bounding.topLeft() << bounding.topRight() << bounding.bottomRight() << bounding.bottomLeft() << bounding.topLeft();
 }
 
 DataView::~DataView() {

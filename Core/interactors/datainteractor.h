@@ -1,8 +1,6 @@
 #ifndef DATAINTERACTOR_H
 #define DATAINTERACTOR_H
 
-#include <string>
-
 #include "interactors/neuroninteractor.h"
 #include "listeners/datainteractorlistener.h"
 
@@ -19,12 +17,15 @@ public:
     void setPosition(double x, double y) override;
     void start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
+    unsigned long getClassNumber();
+    unsigned long getIterationNumber();
 
 private:
     void sendData();
     void colorsToValue();
     unsigned long getID() override;
     void deleteNeuron() override;
+    void addClass(std::vector<std::string> list) override;
 
 private:
     DataPresentorListener *view;
@@ -32,7 +33,7 @@ private:
     bool isColorMode;
     double *value, **colorValue;
     unsigned int row, column;
-    unsigned long classCounter, iterationColunter;
+    unsigned long classNumber, iterationNumber;
     std::vector<std::vector<std::string>> listPaths;
 };
 

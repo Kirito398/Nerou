@@ -35,6 +35,7 @@ private:
 
 protected:
     void updateArrowsPosition();
+    void updateScene();
 
 protected:
     PaintSceneInterface *view;
