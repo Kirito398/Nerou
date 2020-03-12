@@ -147,7 +147,7 @@ void MainWindow::initMenu() {
 
     itemMenu = menuBar()->addMenu(tr("Item"));
     itemMenu->addAction(deleteAction);
-    itemMenu->addSeparator();
+    itemMenu->addSeparator();;
 
     controlMenu = menuBar()->addMenu(tr("Run"));
     controlMenu->addAction(runAction);
@@ -161,6 +161,7 @@ void MainWindow::initActions() {
     deleteAction->setShortcut(tr("Delete"));
     deleteAction->setStatusTip("Delete item");
     connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(onDeleteActionClicked()));
+    scene->setDeleteAction(deleteAction);
 
     exitAction = new QAction(QIcon(":/images/exit_icon.png") ,tr("Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);

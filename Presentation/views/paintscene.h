@@ -9,6 +9,7 @@
 
 class SelectorItem;
 class MainInteractor;
+class QAction;
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
@@ -21,7 +22,8 @@ public:
     QPixmap getPerceptronIcon() const;
     QPixmap getDataIcon() const;
     void onDeleteBtnClicked();
-    void onRunBtnClicked();
+    void onRunBtnClicked();;
+    void setDeleteAction(QAction *action);
 
 private:
     MainInteractor* interactor;
@@ -29,6 +31,7 @@ private:
     QGraphicsLineItem *line;
     SelectorItem *selector;
     MovingView::ViewType viewType;
+    QAction *deleteAction;
 
 private:
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
@@ -39,6 +42,8 @@ private:
     void updateScene() override;
     void moveSelectedItem(QPointF delta) override;
     void deleteItem(QGraphicsItem *item) override;
+    QAction *getDeleteAction() override;
+    void clearSelectedItem() override;
     void addArrow();
     void addMovingView(QPointF position);
     void onViewsModePress(QGraphicsSceneMouseEvent *event);

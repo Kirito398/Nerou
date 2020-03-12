@@ -31,7 +31,9 @@ private:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     bool isArrowAlreadyAdded(ArrowInterface* arrow);
+    void initMenu();
 
 protected:
     void updateArrowsPosition();
@@ -45,6 +47,7 @@ private:
     QVector<ArrowInterface *> inputArrows;
     QVector<ArrowInterface *> outputArrows;
     ViewType type;
+    QMenu *menu;
 };
 
 #endif // MOVINGVIEW_H

@@ -283,6 +283,18 @@ void PaintScene::onDeleteBtnClicked() {
     }
 }
 
+void PaintScene::setDeleteAction(QAction *action) {
+    deleteAction = action;
+}
+
+QAction *PaintScene::getDeleteAction() {
+    return deleteAction;
+}
+
+void PaintScene::clearSelectedItem() {
+    clearSelection();
+}
+
 void PaintScene::updateScene() {
     this->update();
     QCoreApplication::processEvents(QEventLoop::WaitForMoreEvents);
