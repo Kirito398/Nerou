@@ -26,6 +26,9 @@ protected:
     double activateFunction(double value);
     void activateFunction(double* value, unsigned int size);
     void activateFunction(double** value, unsigned int row, unsigned int column);
+    double normalization(double value, double max, double min);
+    void normalization(double* value, unsigned int size);
+    void normalization(double** value, unsigned int row, unsigned int column);
     void removeNeuron();
 
 private:
