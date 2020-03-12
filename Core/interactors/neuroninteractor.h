@@ -24,6 +24,8 @@ public:
 
 protected:
     double activateFunction(double value);
+    void activateFunction(double* value, unsigned int size);
+    void activateFunction(double** value, unsigned int row, unsigned int column);
     void removeNeuron();
 
 private:

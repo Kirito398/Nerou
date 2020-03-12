@@ -26,9 +26,12 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
     if (isColorMode) {
         colorValue = repository->loadColorValue(listPaths[classNumber][iterationNumber]);
+        activateFunction(colorValue, 3, row * column);
         colorsToValue();
-    } else
+    } else {
         value = repository->loadValue(listPaths[classNumber][iterationNumber]);
+        activateFunction(value, row * column);
+    }
 
     sendData();
     clearColorValue();
