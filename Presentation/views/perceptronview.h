@@ -23,9 +23,13 @@ private:
     void makePolygon() override;
     void updatePosition(double x, double y) override;
     unsigned long getID() override;
+    void setActive(bool enable) override;
+    void setOutValue(QString value) override;
 
 private:
     PerceptronPresentor *presentor;
+    QColor neuronColor;
+    QString value;
 };
 
 #endif // PERCEPTRONVIEW_H

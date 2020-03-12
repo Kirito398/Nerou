@@ -32,10 +32,12 @@ void PerceptronInteractor::onInputSignalChanged() {
     inputSignalCount++;
 
     if (inputSignalCount == inputsSinaps.size()) {
+        view->setActive(true);
         makeInputSignal();
         calculateOut();
         sendSignal();
         clearInputSignal();
+        view->setActive(false);
     }
 }
 
@@ -58,6 +60,8 @@ void PerceptronInteractor::calculateOut() {
         sum += inputSignal[i];
 
     outValue = activateFunction(sum);
+
+    view->setOutValue(outValue);
 }
 
 void PerceptronInteractor::sendSignal() {
