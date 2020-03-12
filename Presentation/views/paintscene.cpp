@@ -285,7 +285,7 @@ void PaintScene::onDeleteBtnClicked() {
 
 void PaintScene::updateScene() {
     this->update();
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    QCoreApplication::processEvents(QEventLoop::WaitForMoreEvents);
 }
 
 void PaintScene::deleteItem(QGraphicsItem *item) {

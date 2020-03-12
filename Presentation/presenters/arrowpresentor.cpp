@@ -14,6 +14,11 @@ void ArrowPresentor::setView(ArrowViewListener *listener) {
 
 void ArrowPresentor::setInteractor(ArrowInteractorListener *listener) {
     interactor = listener;
+    interactor->setView(this);
+}
+
+void ArrowPresentor::setActive(bool enable) {
+    view->setActive(enable);
 }
 
 ArrowPresentor::~ArrowPresentor() {

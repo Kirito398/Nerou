@@ -5,7 +5,7 @@
 
 CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : CoreInterface(inputListener, outputListener)
 {
-
+    view = nullptr;
 }
 
 void CoreInteractor::init() {
@@ -18,6 +18,10 @@ void CoreInteractor::sendSignal(double *signal, unsigned int row, unsigned int c
 
 double **CoreInteractor::getValue() {
 
+}
+
+void CoreInteractor::setView(SinapsPresentorListener *listener) {
+    view = listener;
 }
 
 void CoreInteractor::deleteSinaps() {

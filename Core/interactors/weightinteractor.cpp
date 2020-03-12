@@ -5,6 +5,8 @@
 
 WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : WeightInterface(inputListener, outputListener)
 {
+    view = nullptr;
+
     init();
 }
 
@@ -14,8 +16,16 @@ void WeightInteractor::init() {
 }
 
 void WeightInteractor::sendSignal(double signal) {
+    view->setActive(true);
+
     value = signal * weight;
     outputListener->onInputSignalChanged();
+
+    view->setActive(false);
+}
+
+void WeightInteractor::setView(SinapsPresentorListener *listener) {
+    this->view = listener;
 }
 
 double WeightInteractor::getValue() {

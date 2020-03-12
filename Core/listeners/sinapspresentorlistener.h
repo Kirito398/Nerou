@@ -5,7 +5,7 @@
 class SinapsPresentorListener
 {
 public:
-
+    virtual void setActive(bool enable) = 0;
 };
 
 #endif // SINAPSPRESENTORLISTENER_H
