@@ -24,8 +24,22 @@ void MainInteractor::setView(MainPresentorListener *listener) {
 }
 
 void MainInteractor::run() {
+    if (dataList.empty())
+        return;
+
     for (auto sinaps : sinapsList)
         sinaps->init();
+
+    unsigned long classNumber = dataList.at(0)->getClassNumber();
+    unsigned long iterationNumber = dataList.at(0)->getIterationNumber();
+
+    for (unsigned long i = 0; i < classNumber; i++) {
+        for (unsigned long j = 0; j < iterationNumber; j++) {
+            for (auto neuron : dataList) {
+                neuron->start(i, j);
+            }
+        }
+    }
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {

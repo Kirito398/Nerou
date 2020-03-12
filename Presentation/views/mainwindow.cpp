@@ -200,7 +200,7 @@ void MainWindow::onAboutActionClicked() {
 }
 
 void MainWindow::onRunActionClicked() {
-    //MainInteractor::getInstance()->run();
+    scene->onRunBtnClicked();
 }
 
 void MainWindow::onScaleChanged(const QString &scale) {

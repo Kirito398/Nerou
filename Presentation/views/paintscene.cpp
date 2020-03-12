@@ -1,6 +1,7 @@
 #include "paintscene.h"
 
 #include <QGraphicsSceneMouseEvent>
+#include <QCoreApplication>
 
 #include "views/dataview.h"
 #include "views/arrowview.h"
@@ -258,6 +259,10 @@ QPixmap PaintScene::getDataIcon() const {
     return DataView().getItemIcon();
 }
 
+void PaintScene::onRunBtnClicked() {
+    interactor->run();
+}
+
 void PaintScene::onDeleteBtnClicked() {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
@@ -279,6 +284,7 @@ void PaintScene::onDeleteBtnClicked() {
 
 void PaintScene::updateScene() {
     this->update();
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
 }
 
 void PaintScene::deleteItem(QGraphicsItem *item) {

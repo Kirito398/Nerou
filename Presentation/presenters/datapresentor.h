@@ -19,6 +19,7 @@ public:
 
 private:
     void updatePosition(double x, double y) override;
+    void setImage(std::string path) override;
 
 private:
     DataViewListener *view;

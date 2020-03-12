@@ -18,9 +18,10 @@ public:
     void setMode(Mode mode);
     void setViewType(MovingView::ViewType type);
     MovingView::ViewType getViewType();
-    void onDeleteBtnClicked();
     QPixmap getPerceptronIcon() const;
     QPixmap getDataIcon() const;
+    void onDeleteBtnClicked();
+    void onRunBtnClicked();
 
 private:
     MainInteractor* interactor;
