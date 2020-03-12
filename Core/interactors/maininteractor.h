@@ -13,11 +13,12 @@ class CoreInteractor;
 class WeightInteractor;
 class MainPresentorListener;
 class ArrowInteractorListener;
+class RepositoryInterface;
 
 class MainInteractor : public MainInteractorInterface
 {
 public:
-    static MainInteractor *getInstance();
+    static MainInteractor *getInstance(RepositoryInterface *repository);
     void setView(MainPresentorListener *listener);
     void createNewPerceptron(double x, double y);
     void createNewData(double x, double y);
@@ -28,15 +29,16 @@ public:
     void run();
 
 private:
+    MainInteractor(RepositoryInterface *repository);
     NeuronInteractor *findNeuron(unsigned long id);
 
 private:
-    MainInteractor();
     static MainInteractor *instance;
+    MainPresentorListener *view;
+    RepositoryInterface *repository;
     std::vector<NeuronInteractor *> neuronsList;
     std::vector<SinapsInteractor *> sinapsList;
     std::vector<DataInteractor *> dataList;
-    MainPresentorListener *view;
     unsigned long createdItemsCounter;
 };
 

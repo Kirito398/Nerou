@@ -7,15 +7,17 @@
 #include "interactors/weightinteractor.h"
 #include "interactors/coreinteractor.h"
 #include "listeners/mainpresentorlistener.h"
+#include "interfaces/repositoryinterface.h"
 
-MainInteractor::MainInteractor()
+MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
+    this->repository = repository;
     createdItemsCounter = 0;
 }
 
-MainInteractor* MainInteractor::getInstance() {
+MainInteractor* MainInteractor::getInstance(RepositoryInterface *repository) {
     if (instance == nullptr)
-        instance = new MainInteractor();
+        instance = new MainInteractor(repository);
     return instance;
 }
 
@@ -58,6 +60,7 @@ void MainInteractor::createNewData(double x, double y) {
 
     newData->setID(++createdItemsCounter);
     newData->setInteractor(this);
+    newData->setRepository(repository);
     newData->setPosition(x, y);
 
     neuronsList.push_back(newData);

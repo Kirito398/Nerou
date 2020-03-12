@@ -14,6 +14,7 @@ public:
     virtual void deleteNeuron() = 0;
     virtual void addClass(std::vector<std::string> list) = 0;
     virtual unsigned long getID() = 0;
+    virtual void setSize(unsigned long row, unsigned long column) = 0;
 };
 
 #endif // DATAINTERACTORLISTENER_H

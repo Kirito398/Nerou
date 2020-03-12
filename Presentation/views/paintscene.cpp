@@ -8,10 +8,11 @@
 #include "views/perceptronview.h"
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
+#include "repositories/mainrepository.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
-    interactor = MainInteractor::getInstance();
+    interactor = MainInteractor::getInstance(new MainRepository());
     interactor->setView(this);
     line = nullptr;
     selector = nullptr;

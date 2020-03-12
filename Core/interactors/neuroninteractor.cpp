@@ -16,6 +16,18 @@ double NeuronInteractor::activateFunction(double value) {
     return 1.0 / (1.0 + exp(-value));
 }
 
+void NeuronInteractor::activateFunction(double* value, unsigned int size) {
+    for (unsigned int i = 0; i < size; i++)
+        value[i] = activateFunction(value[i]);
+
+}
+
+void NeuronInteractor::activateFunction(double** value, unsigned int row, unsigned int column) {
+    for (unsigned int i = 0; i < row; i++)
+        for (unsigned int j = 0; j < column; j++)
+            value[i][j] = activateFunction(value[i][j]);
+}
+
 void NeuronInteractor::setID(unsigned long id) {
     this->id = id;
 }

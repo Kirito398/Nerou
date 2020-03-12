@@ -30,6 +30,7 @@ void DataPresentor::setInteractor(DataInteractorListener *listener) {
     }
 
     interactor->addClass(classList);
+    interactor->setSize(28, 28);
 }
 
 void DataPresentor::updatePosition(double x, double y) {
