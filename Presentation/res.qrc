@@ -7,5 +7,9 @@
         <file>images/add_arrow_icon.png</file>
         <file>images/add_item_icon.png</file>
         <file>images/run_icon.png</file>
+        <file>images/add_neurons_icon.png</file>
+        <file>images/debug_icon.png</file>
+        <file>images/pause_icon.png</file>
+        <file>images/stop_icon.png</file>
     </qresource>
 </RCC>

@@ -1,6 +1,7 @@
 #include "perceptronview.h"
 
 #include <QPainter>
+#include <math.h>
 
 #include "presenters/perceptronpresentor.h"
 

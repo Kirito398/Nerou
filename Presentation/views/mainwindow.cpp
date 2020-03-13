@@ -6,6 +6,11 @@
 #include <QToolBar>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QGraphicsView>
+#include <QMenu>
+#include <QMenuBar>
 
 #include "views/paintscene.h"
 
@@ -142,6 +147,7 @@ void MainWindow::initToolBars() {
     connect(cbScale, SIGNAL(currentTextChanged(const QString &)), this, SLOT(onScaleChanged(const QString &)));
 
     toolsToolBar = addToolBar("Tools");
+    toolsToolBar->addAction(addOutputNeuronsAction);
     toolsToolBar->addAction(deleteAction);
     toolsToolBar->addWidget(cbScale);
 
@@ -155,7 +161,7 @@ void MainWindow::initMenu() {
     itemMenu = menuBar()->addMenu(tr("Item"));
     itemMenu->addAction(addOutputNeuronsAction);
     itemMenu->addAction(deleteAction);
-    itemMenu->addSeparator();;
+    itemMenu->addSeparator();
 
     controlMenu = menuBar()->addMenu(tr("Run"));
     controlMenu->addAction(runAction);
@@ -184,8 +190,8 @@ void MainWindow::initActions() {
     runAction->setStatusTip(tr("Run"));
     connect(runAction, SIGNAL(triggered(bool)), this, SLOT(onRunActionClicked()));
 
-    addOutputNeuronsAction = new QAction(tr("Add Outputs Perceptrons"), this);
-    addOutputNeuronsAction->setStatusTip(tr("Add outputs perceptron"));
+    addOutputNeuronsAction = new QAction(QIcon(":/images/add_neurons_icon.png"), tr("Add Output Neurons"), this);
+    addOutputNeuronsAction->setStatusTip(tr("Add output neurons"));
     connect(addOutputNeuronsAction, SIGNAL(triggered(bool)), this, SLOT(onAddOutputNeuronsActionClicked()));
 }
 
@@ -235,7 +241,7 @@ QAction *MainWindow::getAction(int type) {
         case AddOutputNeurons : return addOutputNeuronsAction;
         case Delete : return deleteAction;
         default: return nullptr;
-    };
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
