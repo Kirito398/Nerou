@@ -153,6 +153,7 @@ void MainWindow::initMenu() {
     fileMenu->addAction(exitAction);
 
     itemMenu = menuBar()->addMenu(tr("Item"));
+    itemMenu->addAction(addOutputNeuronsAction);
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();;
 
@@ -183,16 +184,16 @@ void MainWindow::initActions() {
     runAction->setStatusTip(tr("Run"));
     connect(runAction, SIGNAL(triggered(bool)), this, SLOT(onRunActionClicked()));
 
-    addOutputsPerceptronAction = new QAction(tr("Add Outputs Perceptrons"), this);
-    addOutputsPerceptronAction->setStatusTip(tr("Add outputs perceptron"));
-    connect(addOutputsPerceptronAction, SIGNAL(triggered(bool)), this, SLOT(onAddOutputsPerceptronsActionClicked()));
+    addOutputNeuronsAction = new QAction(tr("Add Outputs Perceptrons"), this);
+    addOutputNeuronsAction->setStatusTip(tr("Add outputs perceptron"));
+    connect(addOutputNeuronsAction, SIGNAL(triggered(bool)), this, SLOT(onAddOutputNeuronsActionClicked()));
 }
 
-void MainWindow::onAddOutputsPerceptronsActionClicked() {
+void MainWindow::onAddOutputNeuronsActionClicked() {
     bgItems->button(PaintScene::Selector)->setChecked(true);
     onItemsGroupClicked();
 
-    scene->onAddOutputsPerceptronActionClicked();
+    scene->onAddOutputNeuronsActionClicked();
 }
 
 void MainWindow::onDeleteActionClicked() {
@@ -231,7 +232,7 @@ void MainWindow::onScaleChanged(const QString &scale) {
 
 QAction *MainWindow::getAction(int type) {
     switch (type) {
-        case AddOutputsPerceptron : return addOutputsPerceptronAction;
+        case AddOutputNeurons : return addOutputNeuronsAction;
         case Delete : return deleteAction;
         default: return nullptr;
     };

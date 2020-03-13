@@ -139,7 +139,7 @@ void MovingView::updateItem(QGraphicsItem *item) {
 void MovingView::initMenu() {
     menu = new QMenu();
     menu->addAction(view->getAction(Delete));
-    menu->addAction(view->getAction(AddOutputsPerceptron));
+    menu->addAction(view->getAction(AddOutputNeurons));
 }
 
 MovingView::~MovingView() {

@@ -32,7 +32,7 @@ private:
     QAction *exitAction;
     QAction *aboutAction;
     QAction *runAction;
-    QAction *addOutputsPerceptronAction;
+    QAction *addOutputNeuronsAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -69,6 +69,6 @@ private slots:
     void onScaleChanged(const QString &scale);
     void onToolsGroupClicked(int id);
     void onRunActionClicked();
-    void onAddOutputsPerceptronsActionClicked();
+    void onAddOutputNeuronsActionClicked();
 };
 #endif // MAINWINDOW_H

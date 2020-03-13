@@ -285,7 +285,7 @@ void PaintScene::onDeleteBtnClicked() {
     }
 }
 
-void PaintScene::onAddOutputsPerceptronActionClicked() {
+void PaintScene::onAddOutputNeuronsActionClicked() {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
     MovingView *inputView = nullptr;

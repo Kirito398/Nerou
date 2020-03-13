@@ -25,7 +25,7 @@ public:
     QPixmap getDataIcon() const;
     void onDeleteBtnClicked();
     void onRunBtnClicked();
-    void onAddOutputsPerceptronActionClicked();
+    void onAddOutputNeuronsActionClicked();
 
 private:
     MainWindowInterface *view;

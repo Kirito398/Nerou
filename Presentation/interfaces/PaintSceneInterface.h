@@ -5,7 +5,7 @@ class QPointF;
 class QGraphicsItem;
 class QAction;
 
-enum ActionType {Delete, AddOutputsPerceptron};
+enum ActionType {Delete, AddOutputNeurons};
 
 class PaintSceneInterface
 {
