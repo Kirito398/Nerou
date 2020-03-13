@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dialogs/addoutputneuronsdialog.cpp \
     main.cpp \
     models/convolutionitem.cpp \
     models/selectoritem.cpp \
@@ -30,8 +31,10 @@ SOURCES += \
     views/perceptronview.cpp
 
 HEADERS += \
+    dialogs/addoutputneuronsdialog.h \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
+    interfaces/mainwindowinterface.h \
     interfaces/movingviewinterface.h \
     listeners/arrowviewlistener.h \
     listeners/dataviewlistener.h \

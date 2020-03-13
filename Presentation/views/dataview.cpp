@@ -1,7 +1,6 @@
 #include "dataview.h"
 
 #include <QPainter>
-
 #include <QThread>
 
 #include "presenters/datapresentor.h"
@@ -31,7 +30,7 @@ void DataView::setPosition(QPointF position) {
 
 void DataView::setImage(QString path) {
     image = QImage(path);
-    updateScene();
+    updateItem(this);
 }
 
 unsigned long DataView::getID() {

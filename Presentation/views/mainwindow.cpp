@@ -2,6 +2,17 @@
 #include "ui_mainwindow.h"
 
 #include <QScreen>
+#include <QToolButton>
+#include <QToolBar>
+#include <QComboBox>
+#include <QMessageBox>
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QGraphicsView>
+#include <QMenu>
+#include <QMenuBar>
+
+#include "views/paintscene.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     scene = new PaintScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    scene->setView(this);
 
     initActions();
     initToolBox();
@@ -135,6 +147,7 @@ void MainWindow::initToolBars() {
     connect(cbScale, SIGNAL(currentTextChanged(const QString &)), this, SLOT(onScaleChanged(const QString &)));
 
     toolsToolBar = addToolBar("Tools");
+    toolsToolBar->addAction(addOutputNeuronsAction);
     toolsToolBar->addAction(deleteAction);
     toolsToolBar->addWidget(cbScale);
 
@@ -146,6 +159,7 @@ void MainWindow::initMenu() {
     fileMenu->addAction(exitAction);
 
     itemMenu = menuBar()->addMenu(tr("Item"));
+    itemMenu->addAction(addOutputNeuronsAction);
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();
 
@@ -175,6 +189,17 @@ void MainWindow::initActions() {
     runAction = new QAction(QIcon(":/images/run_icon.png"), tr("Run"), this);
     runAction->setStatusTip(tr("Run"));
     connect(runAction, SIGNAL(triggered(bool)), this, SLOT(onRunActionClicked()));
+
+    addOutputNeuronsAction = new QAction(QIcon(":/images/add_neurons_icon.png"), tr("Add Output Neurons"), this);
+    addOutputNeuronsAction->setStatusTip(tr("Add output neurons"));
+    connect(addOutputNeuronsAction, SIGNAL(triggered(bool)), this, SLOT(onAddOutputNeuronsActionClicked()));
+}
+
+void MainWindow::onAddOutputNeuronsActionClicked() {
+    bgItems->button(PaintScene::Selector)->setChecked(true);
+    onItemsGroupClicked();
+
+    scene->onAddOutputNeuronsActionClicked();
 }
 
 void MainWindow::onDeleteActionClicked() {
@@ -209,6 +234,14 @@ void MainWindow::onScaleChanged(const QString &scale) {
     view->resetMatrix();
     view->translate(oldMatrix.dx(), oldMatrix.dy());
     view->scale(newScale, newScale);
+}
+
+QAction *MainWindow::getAction(int type) {
+    switch (type) {
+        case AddOutputNeurons : return addOutputNeuronsAction;
+        case Delete : return deleteAction;
+        default: return nullptr;
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {

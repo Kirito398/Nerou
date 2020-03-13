@@ -9,6 +9,8 @@
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
+#include "interfaces/mainwindowinterface.h"
+#include "dialogs/addoutputneuronsdialog.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
@@ -283,9 +285,69 @@ void PaintScene::onDeleteBtnClicked() {
     }
 }
 
+void PaintScene::onAddOutputNeuronsActionClicked() {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+
+    MovingView *inputView = nullptr;
+    for (auto item : selectedItems) {
+        inputView = dynamic_cast<MovingView *>(item);
+        if (inputView != nullptr)
+            break;
+    }
+
+    if (inputView == nullptr)
+        return;
+
+    AddOutputNeuronsDialog dlg;
+    int result = dlg.exec();
+
+    if (result == QDialog::Rejected)
+        return;
+
+    int number = dlg.getNeuronsNumber().toInt();
+
+    if (number <= 0)
+        return;
+
+    clearSelectedItem();
+
+    double delta = 120;
+    double posX = inputView->pos().x() + 600;
+    double posY = inputView->pos().y() - number / 2 * delta;
+
+    for (int i = 0; i < number; i++)
+        interactor->createNewPerceptron(posX, posY + delta * i);
+
+    selectedItems.clear();
+    selectedItems = this->selectedItems();
+
+    for (auto item : selectedItems) {
+        line = new QGraphicsLineItem(QLineF(inputView->pos(), item->pos()));
+        addItem(line);
+        addArrow();
+    }
+}
+
+void PaintScene::setView(MainWindowInterface *interface) {
+    view = interface;
+}
+
+QAction *PaintScene::getAction(int type) {
+    return view->getAction(type);
+}
+
+void PaintScene::clearSelectedItem() {
+    clearSelection();
+}
+
 void PaintScene::updateScene() {
     this->update();
-    QCoreApplication::processEvents(QEventLoop::WaitForMoreEvents);
+}
+
+void PaintScene::updateItem(QGraphicsItem *item) {
+    QSizeF size = item->boundingRect().size();
+    update(QRectF(item->pos() - QPointF(-size.width() / 2.0, -size.height() / 2.0), size));
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
 }
 
 void PaintScene::deleteItem(QGraphicsItem *item) {

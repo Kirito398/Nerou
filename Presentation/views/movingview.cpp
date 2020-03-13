@@ -3,6 +3,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QCursor>
 #include <QVector>
+#include <QMenu>
 
 #include "interfaces/arrowinterface.h"
 #include "interfaces/PaintSceneInterface.h"
@@ -43,8 +44,17 @@ void MovingView::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     setPosition(mapToScene(event->pos()));
 }
 
+void MovingView::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+    if (!isSelected())
+        view->clearSelectedItem();
+
+    setSelected(true);
+    menu->exec(event->screenPos());
+}
+
 void MovingView::setView(PaintSceneInterface *view) {
     this->view = view;
+    initMenu();
 }
 
 bool MovingView::addArrow(ArrowInterface* arrow) {
@@ -120,6 +130,16 @@ void MovingView::updateArrowsPosition() {
 
 void MovingView::updateScene() {
     view->updateScene();
+}
+
+void MovingView::updateItem(QGraphicsItem *item) {
+    view->updateItem(item);
+}
+
+void MovingView::initMenu() {
+    menu = new QMenu();
+    menu->addAction(view->getAction(Delete));
+    menu->addAction(view->getAction(AddOutputNeurons));
 }
 
 MovingView::~MovingView() {

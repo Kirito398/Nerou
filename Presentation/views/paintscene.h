@@ -9,6 +9,8 @@
 
 class SelectorItem;
 class MainInteractor;
+class QAction;
+class MainWindowInterface;
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
@@ -17,13 +19,16 @@ public:
     enum Mode {Selector, Views, Arrows};
     void setMode(Mode mode);
     void setViewType(MovingView::ViewType type);
+    void setView(MainWindowInterface *interface);
     MovingView::ViewType getViewType();
     QPixmap getPerceptronIcon() const;
     QPixmap getDataIcon() const;
     void onDeleteBtnClicked();
     void onRunBtnClicked();
+    void onAddOutputNeuronsActionClicked();
 
 private:
+    MainWindowInterface *view;
     MainInteractor* interactor;
     Mode mode;
     QGraphicsLineItem *line;
@@ -37,8 +42,11 @@ private:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateScene() override;
+    void updateItem(QGraphicsItem *item) override;
     void moveSelectedItem(QPointF delta) override;
     void deleteItem(QGraphicsItem *item) override;
+    QAction *getAction(int type) override;
+    void clearSelectedItem() override;
     void addArrow();
     void addMovingView(QPointF position);
     void onViewsModePress(QGraphicsSceneMouseEvent *event);
