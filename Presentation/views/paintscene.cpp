@@ -9,6 +9,7 @@
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
+#include "interfaces/mainwindowinterface.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
@@ -283,12 +284,12 @@ void PaintScene::onDeleteBtnClicked() {
     }
 }
 
-void PaintScene::setDeleteAction(QAction *action) {
-    deleteAction = action;
+void PaintScene::setView(MainWindowInterface *interface) {
+    view = interface;
 }
 
-QAction *PaintScene::getDeleteAction() {
-    return deleteAction;
+QAction *PaintScene::getAction(int type) {
+    return view->getAction(type);
 }
 
 void PaintScene::clearSelectedItem() {

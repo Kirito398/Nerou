@@ -32,6 +32,7 @@ SOURCES += \
 HEADERS += \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
+    interfaces/mainwindowinterface.h \
     interfaces/movingviewinterface.h \
     listeners/arrowviewlistener.h \
     listeners/dataviewlistener.h \

@@ -134,7 +134,8 @@ void MovingView::updateScene() {
 
 void MovingView::initMenu() {
     menu = new QMenu();
-    menu->addAction(view->getDeleteAction());
+    menu->addAction(view->getAction(Delete));
+    menu->addAction(view->getAction(AddOutputsPerceptron));
 }
 
 MovingView::~MovingView() {

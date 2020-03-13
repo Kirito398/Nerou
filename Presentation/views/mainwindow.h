@@ -2,25 +2,20 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMessageBox>
-#include <QToolBar>
-#include <QToolButton>
-#include <QButtonGroup>
-#include <QHBoxLayout>
-#include <QComboBox>
-#include <QToolTip>
-#include <QLabel>
-#include <QToolBox>
 
-#include <views/paintscene.h>
+#include "interfaces/mainwindowinterface.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 class QAction;
 class QMenu;
+class QGraphicsView;
+class PaintScene;
+class QButtonGroup;
+class QComboBox;
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public MainWindowInterface
 {
     Q_OBJECT
 
@@ -37,6 +32,7 @@ private:
     QAction *exitAction;
     QAction *aboutAction;
     QAction *runAction;
+    QAction *addOutputsPerceptronAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -56,6 +52,7 @@ private:
     //QToolBox *toolBox;
 
 private:
+    QAction *getAction(int type) override;
     void resizeEvent(QResizeEvent * event) override;
     void initActions();
     void initMenu();
@@ -72,5 +69,6 @@ private slots:
     void onScaleChanged(const QString &scale);
     void onToolsGroupClicked(int id);
     void onRunActionClicked();
+    void onAddOutputsPerceptronsActionClicked();
 };
 #endif // MAINWINDOW_H

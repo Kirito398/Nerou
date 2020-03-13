@@ -2,6 +2,12 @@
 #include "ui_mainwindow.h"
 
 #include <QScreen>
+#include <QToolButton>
+#include <QToolBar>
+#include <QComboBox>
+#include <QMessageBox>
+
+#include "views/paintscene.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     scene = new PaintScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    scene->setView(this);
 
     initActions();
     initToolBox();
@@ -161,7 +168,6 @@ void MainWindow::initActions() {
     deleteAction->setShortcut(tr("Delete"));
     deleteAction->setStatusTip("Delete item");
     connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(onDeleteActionClicked()));
-    scene->setDeleteAction(deleteAction);
 
     exitAction = new QAction(QIcon(":/images/exit_icon.png") ,tr("Exit"), this);
     exitAction->setShortcuts(QKeySequence::Quit);
@@ -176,6 +182,15 @@ void MainWindow::initActions() {
     runAction = new QAction(QIcon(":/images/run_icon.png"), tr("Run"), this);
     runAction->setStatusTip(tr("Run"));
     connect(runAction, SIGNAL(triggered(bool)), this, SLOT(onRunActionClicked()));
+
+    addOutputsPerceptronAction = new QAction(tr("Add Outputs Perceptrons"), this);
+    addOutputsPerceptronAction->setStatusTip(tr("Add outputs perceptron"));
+    connect(addOutputsPerceptronAction, SIGNAL(triggered(bool)), this, SLOT(onAddOutputsPerceptronsActionClicked()));
+}
+
+void MainWindow::onAddOutputsPerceptronsActionClicked() {
+    bgItems->button(PaintScene::Selector)->setChecked(true);
+    onItemsGroupClicked();
 }
 
 void MainWindow::onDeleteActionClicked() {
@@ -210,6 +225,14 @@ void MainWindow::onScaleChanged(const QString &scale) {
     view->resetMatrix();
     view->translate(oldMatrix.dx(), oldMatrix.dy());
     view->scale(newScale, newScale);
+}
+
+QAction *MainWindow::getAction(int type) {
+    switch (type) {
+        case AddOutputsPerceptron : return addOutputsPerceptronAction;
+        case Delete : return deleteAction;
+        default: return nullptr;
+    };
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
