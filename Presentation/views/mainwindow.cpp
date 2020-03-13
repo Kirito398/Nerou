@@ -191,6 +191,8 @@ void MainWindow::initActions() {
 void MainWindow::onAddOutputsPerceptronsActionClicked() {
     bgItems->button(PaintScene::Selector)->setChecked(true);
     onItemsGroupClicked();
+
+    scene->onAddOutputsPerceptronActionClicked();
 }
 
 void MainWindow::onDeleteActionClicked() {

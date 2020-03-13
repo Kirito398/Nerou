@@ -25,6 +25,7 @@ public:
     QPixmap getDataIcon() const;
     void onDeleteBtnClicked();
     void onRunBtnClicked();
+    void onAddOutputsPerceptronActionClicked();
 
 private:
     MainWindowInterface *view;
@@ -41,6 +42,7 @@ private:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateScene() override;
+    void updateItem(QGraphicsItem *item) override;
     void moveSelectedItem(QPointF delta) override;
     void deleteItem(QGraphicsItem *item) override;
     QAction *getAction(int type) override;

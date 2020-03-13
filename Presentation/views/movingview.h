@@ -38,6 +38,7 @@ private:
 protected:
     void updateArrowsPosition();
     void updateScene();
+    void updateItem(QGraphicsItem *item);
 
 protected:
     PaintSceneInterface *view;

@@ -284,6 +284,39 @@ void PaintScene::onDeleteBtnClicked() {
     }
 }
 
+void PaintScene::onAddOutputsPerceptronActionClicked() {
+    unsigned int number = 724;
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+
+    MovingView *inputView = nullptr;
+    for (auto item : selectedItems) {
+        inputView = dynamic_cast<MovingView *>(item);
+        if (inputView != nullptr)
+            break;
+    }
+
+    if (inputView == nullptr)
+        return;
+
+    clearSelectedItem();
+
+    double delta = 120;
+    double posX = inputView->pos().x() + 600;
+    double posY = inputView->pos().y() - number / 2 * delta;
+
+    for (unsigned int i = 0; i < number; i++)
+        interactor->createNewPerceptron(posX, posY + delta * i);
+
+    selectedItems.clear();
+    selectedItems = this->selectedItems();
+
+    for (auto item : selectedItems) {
+        line = new QGraphicsLineItem(QLineF(inputView->pos(), item->pos()));
+        addItem(line);
+        addArrow();
+    }
+}
+
 void PaintScene::setView(MainWindowInterface *interface) {
     view = interface;
 }
@@ -298,7 +331,11 @@ void PaintScene::clearSelectedItem() {
 
 void PaintScene::updateScene() {
     this->update();
-    QCoreApplication::processEvents(QEventLoop::WaitForMoreEvents);
+}
+
+void PaintScene::updateItem(QGraphicsItem *item) {
+    update(item->boundingRect());
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
 }
 
 void PaintScene::deleteItem(QGraphicsItem *item) {

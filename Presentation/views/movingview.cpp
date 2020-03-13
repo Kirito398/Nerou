@@ -132,6 +132,10 @@ void MovingView::updateScene() {
     view->updateScene();
 }
 
+void MovingView::updateItem(QGraphicsItem *item) {
+    view->updateItem(item);
+}
+
 void MovingView::initMenu() {
     menu = new QMenu();
     menu->addAction(view->getAction(Delete));

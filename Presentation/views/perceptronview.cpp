@@ -86,7 +86,7 @@ void PerceptronView::setActive(bool enable) {
 
 void PerceptronView::setOutValue(QString value) {
     this->value = value;
-    updateScene();
+    //updateItem(this);
 }
 
 unsigned long PerceptronView::getID() {
