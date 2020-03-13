@@ -13,6 +13,8 @@ MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
     this->repository = repository;
     createdItemsCounter = 0;
+
+    clearProcessParameters();
 }
 
 MainInteractor* MainInteractor::getInstance(RepositoryInterface *repository) {
@@ -34,14 +36,27 @@ void MainInteractor::run() {
 
     unsigned long classNumber = dataList.at(0)->getClassNumber();
     unsigned long iterationNumber = dataList.at(0)->getIterationNumber();
+    unsigned long neuronNumber = dataList.size();
 
-    for (unsigned long i = 0; i < classNumber; i++) {
-        for (unsigned long j = 0; j < iterationNumber; j++) {
-            for (auto neuron : dataList) {
-                neuron->start(i, j);
+    for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
+        for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+            for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
+                if (isStopped) {
+                    onProcessStopped();
+                    return;
+                }
+
+                if (isPaused) {
+                    onProcessPaused(i, j, k);
+                    return;
+                }
+
+                dataList.at(k)->start(i, j);
             }
         }
     }
+
+    clearProcessParameters();
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
@@ -145,6 +160,41 @@ void MainInteractor::removeSinaps(unsigned long sinapsID) {
             break;
         }
     }
+}
+
+void MainInteractor::stop() {
+    isStopped = true;
+}
+
+void MainInteractor::pause() {
+    isPaused = true;
+}
+
+void MainInteractor::debugRun() {
+    isDebug = true;
+}
+
+void MainInteractor::onProcessStopped() {
+    for (auto neuron : neuronsList)
+        neuron->clean();
+
+    clearProcessParameters();
+}
+
+void MainInteractor::onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber) {
+    isPaused = false;
+    this->pausedClassNumber = pausedClassNumber;
+    this->pausedIterationNumber = pausedIterationNumber;
+    this->pausedNeuronNumber = pausedNeuronNumber;
+}
+
+void MainInteractor::clearProcessParameters() {
+    isStopped = false;
+    isPaused = false;
+    isDebug = false;
+    pausedClassNumber = 0;
+    pausedIterationNumber = 0;
+    pausedNeuronNumber = 0;
 }
 
 NeuronInteractor *MainInteractor::findNeuron(unsigned long id) {

@@ -328,6 +328,18 @@ void PaintScene::onAddOutputNeuronsActionClicked() {
     }
 }
 
+void PaintScene::onStopActionClicked() {
+    interactor->stop();
+}
+
+void PaintScene::onPauseActionClicked() {
+    interactor->pause();
+}
+
+void PaintScene::onDebugActionClicked() {
+    interactor->debugRun();
+}
+
 void PaintScene::setView(MainWindowInterface *interface) {
     view = interface;
 }

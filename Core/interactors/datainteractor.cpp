@@ -138,6 +138,12 @@ void DataInteractor::deleteNeuron() {
     removeNeuron();
 }
 
+void DataInteractor::clean() {
+    clearValue();
+    clearColorValue();
+    view->setImage("");
+}
+
 void DataInteractor::onInputSignalChanged() {
 
 }

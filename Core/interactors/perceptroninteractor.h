@@ -18,6 +18,7 @@ private:
     void onDeltaValueChanged() override;
     unsigned long getID() override;
     void deleteNeuron() override;
+    void clean() override;
     void makeInputSignal();
     void calculateOut();
     void sendSignal();

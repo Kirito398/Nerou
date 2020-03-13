@@ -33,6 +33,9 @@ private:
     QAction *aboutAction;
     QAction *runAction;
     QAction *addOutputNeuronsAction;
+    QAction *stopAction;
+    QAction *pauseAction;
+    QAction *debugAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -70,5 +73,8 @@ private slots:
     void onToolsGroupClicked(int id);
     void onRunActionClicked();
     void onAddOutputNeuronsActionClicked();
+    void onStopActionClicked();
+    void onPauseActionClicked();
+    void onDebugActionClicked();
 };
 #endif // MAINWINDOW_H

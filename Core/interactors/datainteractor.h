@@ -29,6 +29,7 @@ private:
     void onDeltaValueChanged() override;
     void setView(DataPresentorListener *listener) override;
     void setSize(unsigned long row, unsigned long column) override;
+    void clean() override;
 
 private:
     DataPresentorListener *view;

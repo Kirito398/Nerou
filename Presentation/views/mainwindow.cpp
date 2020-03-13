@@ -50,6 +50,9 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::initControlToolBar() {
     controlToolBar = addToolBar(tr("Control"));
     controlToolBar->addAction(runAction);
+    controlToolBar->addAction(debugAction);
+    controlToolBar->addAction(pauseAction);
+    controlToolBar->addAction(stopAction);
 }
 
 void MainWindow::initToolBox() {
@@ -193,6 +196,18 @@ void MainWindow::initActions() {
     addOutputNeuronsAction = new QAction(QIcon(":/images/add_neurons_icon.png"), tr("Add Output Neurons"), this);
     addOutputNeuronsAction->setStatusTip(tr("Add output neurons"));
     connect(addOutputNeuronsAction, SIGNAL(triggered(bool)), this, SLOT(onAddOutputNeuronsActionClicked()));
+
+    stopAction = new QAction(QIcon(":/images/stop_icon.png"), tr("Stop"), this);
+    stopAction->setStatusTip(tr("Stop process"));
+    connect(stopAction, SIGNAL(triggered(bool)), this, SLOT(onStopActionClicked()));
+
+    pauseAction = new QAction(QIcon(":/images/pause_icon.png"), tr("Pause"), this);
+    pauseAction->setStatusTip(tr("Pause process"));
+    connect(pauseAction, SIGNAL(triggered(bool)), this, SLOT(onPauseActionClicked()));
+
+    debugAction = new QAction(QIcon(":/images/debug_icon.png"), tr("Stop"), this);
+    debugAction->setStatusTip(tr("Start debug"));
+    connect(debugAction, SIGNAL(triggered(bool)), this, SLOT(onDebugActionClicked()));
 }
 
 void MainWindow::onAddOutputNeuronsActionClicked() {
@@ -226,6 +241,18 @@ void MainWindow::onAboutActionClicked() {
 
 void MainWindow::onRunActionClicked() {
     scene->onRunBtnClicked();
+}
+
+void MainWindow::onStopActionClicked() {
+    scene->onStopActionClicked();
+}
+
+void MainWindow::onPauseActionClicked() {
+    scene->onPauseActionClicked();
+}
+
+void MainWindow::onDebugActionClicked() {
+    scene->onDebugActionClicked();
 }
 
 void MainWindow::onScaleChanged(const QString &scale) {
