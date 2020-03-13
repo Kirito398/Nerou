@@ -10,6 +10,7 @@
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
 #include "interfaces/mainwindowinterface.h"
+#include "dialogs/addoutputneuronsdialog.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
@@ -285,7 +286,6 @@ void PaintScene::onDeleteBtnClicked() {
 }
 
 void PaintScene::onAddOutputsPerceptronActionClicked() {
-    unsigned int number = 20;
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
     MovingView *inputView = nullptr;
@@ -298,13 +298,24 @@ void PaintScene::onAddOutputsPerceptronActionClicked() {
     if (inputView == nullptr)
         return;
 
+    AddOutputNeuronsDialog dlg;
+    int result = dlg.exec();
+
+    if (result == QDialog::Rejected)
+        return;
+
+    int number = dlg.getNeuronsNumber().toInt();
+
+    if (number <= 0)
+        return;
+
     clearSelectedItem();
 
     double delta = 120;
     double posX = inputView->pos().x() + 600;
     double posY = inputView->pos().y() - number / 2 * delta;
 
-    for (unsigned int i = 0; i < number; i++)
+    for (int i = 0; i < number; i++)
         interactor->createNewPerceptron(posX, posY + delta * i);
 
     selectedItems.clear();
