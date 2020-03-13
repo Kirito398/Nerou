@@ -285,7 +285,7 @@ void PaintScene::onDeleteBtnClicked() {
 }
 
 void PaintScene::onAddOutputsPerceptronActionClicked() {
-    unsigned int number = 724;
+    unsigned int number = 20;
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
     MovingView *inputView = nullptr;
@@ -334,7 +334,8 @@ void PaintScene::updateScene() {
 }
 
 void PaintScene::updateItem(QGraphicsItem *item) {
-    update(item->boundingRect());
+    QSizeF size = item->boundingRect().size();
+    update(QRectF(item->pos() - QPointF(-size.width() / 2.0, -size.height() / 2.0), size));
     QCoreApplication::processEvents(QEventLoop::AllEvents);
 }
 

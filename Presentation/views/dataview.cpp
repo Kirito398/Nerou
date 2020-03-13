@@ -1,7 +1,6 @@
 #include "dataview.h"
 
 #include <QPainter>
-
 #include <QThread>
 
 #include "presenters/datapresentor.h"
