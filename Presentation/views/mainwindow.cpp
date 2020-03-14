@@ -205,7 +205,7 @@ void MainWindow::initActions() {
     pauseAction->setStatusTip(tr("Pause process"));
     connect(pauseAction, SIGNAL(triggered(bool)), this, SLOT(onPauseActionClicked()));
 
-    debugAction = new QAction(QIcon(":/images/debug_icon.png"), tr("Stop"), this);
+    debugAction = new QAction(QIcon(":/images/debug_icon.png"), tr("Debug"), this);
     debugAction->setStatusTip(tr("Start debug"));
     connect(debugAction, SIGNAL(triggered(bool)), this, SLOT(onDebugActionClicked()));
 }
