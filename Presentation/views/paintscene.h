@@ -1,50 +1,64 @@
 #ifndef PAINTSCENE_H
 #define PAINTSCENE_H
 
-#include <QObject>
 #include <QGraphicsScene>
-#include <QGraphicsLineItem>
 
-#include <models/moveitem.h>
-#include <models/perceptronitem.h>
-#include <models/convolutionitem.h>
-#include <interactors/maininteractor.h>
-#include <interfaces/PaintSceneInterface.h>
-#include <models/arrowitem.h>
-#include <models/selectoritem.h>
+#include "interfaces/PaintSceneInterface.h"
+#include "listeners/mainpresentorlistener.h"
+#include "views/movingview.h"
 
-class PaintScene : public QGraphicsScene, public PaintSceneInterface
+class SelectorItem;
+class MainInteractor;
+class QAction;
+class MainWindowInterface;
+
+class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
 public:
     PaintScene(QObject *parent = nullptr);
-    enum Mode {Selector, Items, Arrows};
+    enum Mode {Selector, Views, Arrows};
     void setMode(Mode mode);
-    void setItemType(MoveItem::ItemType type);
-    MoveItem::ItemType getItemType();
+    void setViewType(MovingView::ViewType type);
+    void setView(MainWindowInterface *interface);
+    MovingView::ViewType getViewType();
+    QPixmap getPerceptronIcon() const;
+    QPixmap getDataIcon() const;
+    void onDeleteBtnClicked();
+    void onRunBtnClicked();
+    void onAddOutputNeuronsActionClicked();
+    void onStopActionClicked();
+    void onPauseActionClicked();
+    void onDebugActionClicked();
 
 private:
+    MainWindowInterface *view;
     MainInteractor* interactor;
-    ArrowItem* currentArrow;
     Mode mode;
     QGraphicsLineItem *line;
     SelectorItem *selector;
-    MoveItem::ItemType itemType;
+    MovingView::ViewType viewType;
 
 private:
+    void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
+    void onNewDataAdded(DataInteractorListener *data) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void updateScene() override;
+    void updateItem(QGraphicsItem *item) override;
     void moveSelectedItem(QPointF delta) override;
-    void addArrowItem();
-    void addMoveItem(QPointF position);
-    void onItemsModePress(QGraphicsSceneMouseEvent *event);
+    void deleteItem(QGraphicsItem *item) override;
+    QAction *getAction(int type) override;
+    void clearSelectedItem() override;
+    void addArrow();
+    void addMovingView(QPointF position);
+    void onViewsModePress(QGraphicsSceneMouseEvent *event);
     void onArrowsModePress(QGraphicsSceneMouseEvent *event);
     void onSelectorModePress(QGraphicsSceneMouseEvent *event);
-    void onItemsModeMove(QGraphicsSceneMouseEvent *event);
+    void onViewsModeMove(QGraphicsSceneMouseEvent *event);
     void onArrowsModeMove(QGraphicsSceneMouseEvent *event);
     void onSelectorModeMove(QGraphicsSceneMouseEvent *event);
-    void onItemsModeRelease(QGraphicsSceneMouseEvent *event);
+    void onViewsModeRelease(QGraphicsSceneMouseEvent *event);
     void onArrowsModeRelease(QGraphicsSceneMouseEvent *event);
     void onSelectorModeRelease(QGraphicsSceneMouseEvent *event);
 };

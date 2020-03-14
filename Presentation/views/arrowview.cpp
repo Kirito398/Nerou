@@ -1,32 +1,47 @@
-#include "arrowitem.h"
+#include "arrowview.h"
 
-ArrowItem::ArrowItem(MoveItem* startItem, MoveItem* endItem, QGraphicsItem *parent) : QGraphicsLineItem(parent)
+#include <QPainter>
+
+#include "interfaces/movingviewinterface.h"
+#include "presenters/arrowpresentor.h"
+#include "interfaces/PaintSceneInterface.h"
+
+ArrowView::ArrowView(ArrowInteractorListener *interactor, MovingViewInterface *startView, MovingViewInterface *endView, QGraphicsItem *parent) : QGraphicsLineItem(parent)
 {
-    this->startItem = startItem;
-    this->endItem = endItem;
+    this->startView = startView;
+    this->endView = endView;
 
     setFlag(QGraphicsItem::ItemIsSelectable);
+
+    presentor = new ArrowPresentor();
+    presentor->setView(this);
+    presentor->setInteractor(interactor);
+
+    arrowColor = Qt::black;
 }
 
-void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    if (startItem->collidesWithItem(endItem))
+void ArrowView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    if (startView->getItem()->collidesWithItem(endView->getItem()))
         return;
 
     QPen mPen = pen();
-    mPen.setColor(Qt::black);
+    mPen.setColor(arrowColor);
     painter->setPen(mPen);
-    painter->setBrush(Qt::black);
+    painter->setBrush(arrowColor);
 
     qreal arrowSize = 10;
 
-    QLineF centerLine(startItem->pos(), endItem->pos());
-    QPolygonF endPolygon = endItem->getPolygon();
-    QPointF p1 = endPolygon.first() + endItem->pos();
+    QPointF startPoint = startView->getPosition();
+    QPointF endPoint = endView->getPosition();
+
+    QLineF centerLine(startPoint, endPoint);
+    QPolygonF endPolygon = endView->getPolygon();
+    QPointF p1 = endPolygon.first() + endPoint;
     QPointF p2, intersectPoint;
     QLineF polyLine;
 
     for (int i = 1; i < endPolygon.count(); ++i) {
-        p2 = endPolygon.at(i) + endItem->pos();
+        p2 = endPolygon.at(i) + endPoint;
         polyLine = QLineF(p1, p2);
         QLineF::IntersectType intersectType = polyLine.intersect(centerLine, &intersectPoint);
         if (intersectType == QLineF::BoundedIntersection)
@@ -34,7 +49,7 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         p1 = p2;
     }
 
-    setLine(QLineF(intersectPoint, startItem->pos()));
+    setLine(QLineF(intersectPoint, startView->getPosition()));
 
     double angle = atan2(-line().dy(), line().dx());
     QPointF arrowP1 = line().p1() + QPointF(sin(angle + M_PI / 3) * arrowSize, cos(angle + M_PI / 3) * arrowSize);
@@ -56,17 +71,17 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(widget)
 }
 
-QRectF ArrowItem::boundingRect() const {
+QRectF ArrowView::boundingRect() const {
     return selectionPolygon().boundingRect();
 }
 
-QPainterPath ArrowItem::shape() const {
+QPainterPath ArrowView::shape() const {
     QPainterPath path;
     path.addPolygon(selectionPolygon());
     return path;
 }
 
-QPolygonF ArrowItem::selectionPolygon() const {
+QPolygonF ArrowView::selectionPolygon() const {
     QPolygonF polygon;
     qreal size = 10;
 
@@ -95,32 +110,33 @@ QPolygonF ArrowItem::selectionPolygon() const {
     return polygon;
 }
 
-void ArrowItem::setView(PaintSceneInterface *view) {
-    this->view = view;
-}
-
-void ArrowItem::updatePosition() {
-    QLineF line(mapFromItem(startItem, 0, 0), mapFromItem(endItem, 0, 0));
+void ArrowView::updatePosition() {
+    QLineF line(mapFromItem(startView->getItem(), 0, 0), mapFromItem(endView->getItem(), 0, 0));
     setLine(line);
 }
 
-MoveItem* ArrowItem::getStartItem() {
-    return startItem;
+MovingViewInterface* ArrowView::getStartView() {
+    return startView;
 }
 
-MoveItem* ArrowItem::getEndItem() {
-    return endItem;
+MovingViewInterface* ArrowView::getEndView() {
+    return endView;
 }
 
-void ArrowItem::setItem(SinapsModel *item) {
-    this->item = item;
+void ArrowView::setView(PaintSceneInterface *interface) {
+    view = interface;
 }
 
-SinapsModel *ArrowItem::getItem() {
-    return item;
+void ArrowView::setActive(bool enable) {
+    arrowColor = enable ? Qt::green : Qt::black;
+    view->updateItem(this);
 }
 
-ArrowItem::~ArrowItem() {
-    MainInteractor::getInstance()->removeSinaps(item);
-    delete item;
+ArrowView::~ArrowView() {
+    startView->removeArrow(this);
+    endView->removeArrow(this);
+    view->deleteItem(this);
+
+    delete presentor;
+    presentor = nullptr;
 }

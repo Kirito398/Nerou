@@ -16,24 +16,40 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dialogs/addoutputneuronsdialog.cpp \
     main.cpp \
-    models/arrowitem.cpp \
     models/convolutionitem.cpp \
-    models/perceptronitem.cpp \
     models/selectoritem.cpp \
+    presenters/arrowpresentor.cpp \
+    presenters/datapresentor.cpp \
+    presenters/perceptronpresentor.cpp \
+    views/arrowview.cpp \
+    views/dataview.cpp \
     views/mainwindow.cpp \
-    models/moveitem.cpp \
-    views/paintscene.cpp
+    views/movingview.cpp \
+    views/paintscene.cpp \
+    views/perceptronview.cpp
 
 HEADERS += \
+    dialogs/addoutputneuronsdialog.h \
     interfaces/PaintSceneInterface.h \
-    models/arrowitem.h \
+    interfaces/arrowinterface.h \
+    interfaces/mainwindowinterface.h \
+    interfaces/movingviewinterface.h \
+    listeners/arrowviewlistener.h \
+    listeners/dataviewlistener.h \
+    listeners/perceptronviewlistener.h \
     models/convolutionitem.h \
-    models/perceptronitem.h \
     models/selectoritem.h \
+    presenters/arrowpresentor.h \
+    presenters/datapresentor.h \
+    presenters/perceptronpresentor.h \
+    views/arrowview.h \
+    views/dataview.h \
     views/mainwindow.h \
-    models/moveitem.h \
-    views/paintscene.h
+    views/movingview.h \
+    views/paintscene.h \
+    views/perceptronview.h
 
 RESOURCES += res.qrc
 
@@ -48,3 +64,10 @@ else:unix: LIBS += -L$$OUT_PWD/../Core/ -lCore
 
 INCLUDEPATH += $$PWD/../Core
 DEPENDPATH += $$PWD/../Core
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Data/release/ -lData
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Data/debug/ -lData
+else:unix: LIBS += -L$$OUT_PWD/../Data/ -lData
+
+INCLUDEPATH += $$PWD/../Data
+DEPENDPATH += $$PWD/../Data

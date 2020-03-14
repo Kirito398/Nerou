@@ -2,6 +2,17 @@
 #include "ui_mainwindow.h"
 
 #include <QScreen>
+#include <QToolButton>
+#include <QToolBar>
+#include <QComboBox>
+#include <QMessageBox>
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QGraphicsView>
+#include <QMenu>
+#include <QMenuBar>
+
+#include "views/paintscene.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,11 +22,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     scene = new PaintScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    scene->setView(this);
 
     initActions();
     initToolBox();
     initMenu();
     initToolBars();
+    initControlToolBar();
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     view = new QGraphicsView(scene);
@@ -34,29 +47,45 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
+void MainWindow::initControlToolBar() {
+    controlToolBar = addToolBar(tr("Control"));
+    controlToolBar->addAction(runAction);
+    controlToolBar->addAction(debugAction);
+    controlToolBar->addAction(pauseAction);
+    controlToolBar->addAction(stopAction);
+}
+
 void MainWindow::initToolBox() {
-    MoveItem *item = new PerceptronItem(QPointF(0, 0));
     QToolButton *tbPerceptron = new QToolButton;
     tbPerceptron->setCheckable(true);
-    tbPerceptron->setIcon(QIcon(item->getItemIcon()));
-    //tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    tbPerceptron->setIcon(QIcon(scene->getPerceptronIcon()));
+    tbPerceptron->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
     tbPerceptron->setToolTip(tr("Perceptron"));
     tbPerceptron->setStatusTip(tr("Add perceptron"));
 
-    item = new ConvolutionItem(QPointF(0, 0));
     QToolButton *tbConvolution = new QToolButton;
     tbConvolution->setCheckable(true);
-    tbConvolution->setIcon(QIcon(item->getItemIcon()));
+    //tbConvolution->setIcon(QIcon(item->getItemIcon()));
     tbConvolution->setToolTip(tr("Convolution"));
     tbConvolution->setStatusTip(tr("Add convolution"));
+    //delete item;
+    //item = 0;
+
+    QToolButton *tbData = new QToolButton;
+    tbData->setCheckable(true);
+    tbData->setIcon(QIcon(scene->getDataIcon()));
+    tbData->setToolTip(tr("Data"));
+    tbData->setStatusTip(tr("Add data"));
 
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);
-    bgToolBox->addButton(tbPerceptron, MoveItem::Perceptron);
-    bgToolBox->addButton(tbConvolution, MoveItem::Convolution);
+    bgToolBox->addButton(tbPerceptron, MovingView::Perceptron);
+    bgToolBox->addButton(tbConvolution, MovingView::Convolution);
+    bgToolBox->addButton(tbData, MovingView::Data);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
     toolBoxToolBar = new QToolBar;
+    toolBoxToolBar->addWidget(tbData);
     toolBoxToolBar->addWidget(tbPerceptron);
     toolBoxToolBar->addWidget(tbConvolution);
     addToolBar(Qt::LeftToolBarArea, toolBoxToolBar);
@@ -71,10 +100,10 @@ void MainWindow::onToolsGroupClicked(int id) {
     }
 
     bgToolBox->button(id)->setChecked(true);
-    bgItems->button(PaintScene::Items)->setChecked(true);
+    bgItems->button(PaintScene::Views)->setChecked(true);
 
-    scene->setMode(PaintScene::Items);
-    scene->setItemType(MoveItem::ItemType(id));
+    scene->setMode(PaintScene::Views);
+    scene->setViewType(MovingView::ViewType(id));
 }
 
 void MainWindow::initToolBars() {
@@ -102,7 +131,7 @@ void MainWindow::initToolBars() {
 
     bgItems = new QButtonGroup(this);
     bgItems->addButton(tbSelectorMode, PaintScene::Selector);
-    bgItems->addButton(tbAddItemMode, PaintScene::Items);
+    bgItems->addButton(tbAddItemMode, PaintScene::Views);
     bgItems->addButton(tbAddArrowMode, PaintScene::Arrows);
     connect(bgItems, SIGNAL(buttonClicked(int)), this, SLOT(onItemsGroupClicked()));
 
@@ -121,6 +150,7 @@ void MainWindow::initToolBars() {
     connect(cbScale, SIGNAL(currentTextChanged(const QString &)), this, SLOT(onScaleChanged(const QString &)));
 
     toolsToolBar = addToolBar("Tools");
+    toolsToolBar->addAction(addOutputNeuronsAction);
     toolsToolBar->addAction(deleteAction);
     toolsToolBar->addWidget(cbScale);
 
@@ -132,8 +162,12 @@ void MainWindow::initMenu() {
     fileMenu->addAction(exitAction);
 
     itemMenu = menuBar()->addMenu(tr("Item"));
+    itemMenu->addAction(addOutputNeuronsAction);
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();
+
+    controlMenu = menuBar()->addMenu(tr("Run"));
+    controlMenu->addAction(runAction);
 
     aboutMenu = menuBar()->addMenu(tr("Help"));
     aboutMenu->addAction(aboutAction);
@@ -154,33 +188,37 @@ void MainWindow::initActions() {
     aboutAction->setShortcut(tr("F1"));
     aboutAction->setStatusTip(tr("About"));
     connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(onAboutActionClicked()));
+
+    runAction = new QAction(QIcon(":/images/run_icon.png"), tr("Run"), this);
+    runAction->setStatusTip(tr("Run"));
+    connect(runAction, SIGNAL(triggered(bool)), this, SLOT(onRunActionClicked()));
+
+    addOutputNeuronsAction = new QAction(QIcon(":/images/add_neurons_icon.png"), tr("Add Output Neurons"), this);
+    addOutputNeuronsAction->setStatusTip(tr("Add output neurons"));
+    connect(addOutputNeuronsAction, SIGNAL(triggered(bool)), this, SLOT(onAddOutputNeuronsActionClicked()));
+
+    stopAction = new QAction(QIcon(":/images/stop_icon.png"), tr("Stop"), this);
+    stopAction->setStatusTip(tr("Stop process"));
+    connect(stopAction, SIGNAL(triggered(bool)), this, SLOT(onStopActionClicked()));
+
+    pauseAction = new QAction(QIcon(":/images/pause_icon.png"), tr("Pause"), this);
+    pauseAction->setStatusTip(tr("Pause process"));
+    connect(pauseAction, SIGNAL(triggered(bool)), this, SLOT(onPauseActionClicked()));
+
+    debugAction = new QAction(QIcon(":/images/debug_icon.png"), tr("Debug"), this);
+    debugAction->setStatusTip(tr("Start debug"));
+    connect(debugAction, SIGNAL(triggered(bool)), this, SLOT(onDebugActionClicked()));
+}
+
+void MainWindow::onAddOutputNeuronsActionClicked() {
+    bgItems->button(PaintScene::Selector)->setChecked(true);
+    onItemsGroupClicked();
+
+    scene->onAddOutputNeuronsActionClicked();
 }
 
 void MainWindow::onDeleteActionClicked() {
-    QList<QGraphicsItem *> selectedItems = scene->selectedItems();
-
-    for (auto item : selectedItems) {
-        ArrowItem * arrowItem = dynamic_cast<ArrowItem *>(item);
-        if (arrowItem == nullptr)
-            continue;
-
-        scene->removeItem(arrowItem);
-        arrowItem->getStartItem()->removeArrow(arrowItem);
-        arrowItem->getEndItem()->removeArrow(arrowItem);
-
-        delete item;
-    }
-
-    selectedItems = scene->selectedItems();
-    for (auto item : selectedItems) {
-        MoveItem *moveItem = dynamic_cast<MoveItem *>(item);
-        if (moveItem == nullptr)
-            continue;
-
-        moveItem->removeArrows();
-        scene->removeItem(moveItem);
-        delete item;
-    }
+    scene->onDeleteBtnClicked();
 }
 
 void MainWindow::onItemsGroupClicked() {
@@ -189,8 +227,8 @@ void MainWindow::onItemsGroupClicked() {
     if (bgToolBox->checkedId() != -1)
         bgToolBox->button(bgToolBox->checkedId())->setChecked(false);
 
-    if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Items)
-        bgToolBox->button(scene->getItemType())->setChecked(true);
+    if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Views)
+        bgToolBox->button(scene->getViewType())->setChecked(true);
 }
 
 void MainWindow::onExitActionClicked() {
@@ -201,12 +239,36 @@ void MainWindow::onAboutActionClicked() {
     QMessageBox::about(this, tr("About"), tr("Nerou project 2020"));
 }
 
+void MainWindow::onRunActionClicked() {
+    scene->onRunBtnClicked();
+}
+
+void MainWindow::onStopActionClicked() {
+    scene->onStopActionClicked();
+}
+
+void MainWindow::onPauseActionClicked() {
+    scene->onPauseActionClicked();
+}
+
+void MainWindow::onDebugActionClicked() {
+    scene->onDebugActionClicked();
+}
+
 void MainWindow::onScaleChanged(const QString &scale) {
     double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
     QMatrix oldMatrix = view->matrix();
     view->resetMatrix();
     view->translate(oldMatrix.dx(), oldMatrix.dy());
     view->scale(newScale, newScale);
+}
+
+QAction *MainWindow::getAction(int type) {
+    switch (type) {
+        case AddOutputNeurons : return addOutputNeuronsAction;
+        case Delete : return deleteAction;
+        default: return nullptr;
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
