@@ -211,6 +211,9 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         this->clearSelection();
 
     switch (mode) {
+    case ScroolHandDrag:
+        onSelectorModePress(event);
+        break;
     case Selector:
         onSelectorModePress(event);
         break;
@@ -227,6 +230,9 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     switch (mode) {
+    case ScroolHandDrag:
+        onSelectorModeMove(event);
+        break;
     case Selector:
         onSelectorModeMove(event);
         break;
@@ -241,6 +247,9 @@ void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     switch (mode) {
+    case ScroolHandDrag:
+        onSelectorModeRelease(event);
+        break;
     case Selector:
         onSelectorModeRelease(event);
         break;

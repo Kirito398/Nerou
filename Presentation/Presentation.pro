@@ -25,6 +25,7 @@ SOURCES += \
     presenters/perceptronpresentor.cpp \
     views/arrowview.cpp \
     views/dataview.cpp \
+    views/graphicview.cpp \
     views/mainwindow.cpp \
     views/movingview.cpp \
     views/paintscene.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     presenters/perceptronpresentor.h \
     views/arrowview.h \
     views/dataview.h \
+    views/graphicview.h \
     views/mainwindow.h \
     views/movingview.h \
     views/paintscene.h \

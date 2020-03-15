@@ -11,5 +11,7 @@
         <file>images/debug_icon.png</file>
         <file>images/pause_icon.png</file>
         <file>images/stop_icon.png</file>
+        <file>images/zoom_reset_icon.png</file>
+        <file>images/scrool_hand_drag_icon.png</file>
     </qresource>
 </RCC>

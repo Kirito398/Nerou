@@ -9,10 +9,11 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 class QAction;
 class QMenu;
-class QGraphicsView;
 class PaintScene;
 class QButtonGroup;
 class QComboBox;
+class GraphicView;
+class QSlider;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow, public MainWindowInterface
@@ -26,7 +27,7 @@ public:
 private:
     Ui::MainWindow *ui;
     PaintScene *scene;
-    QGraphicsView *view;
+    GraphicView *view;
 
     QAction *deleteAction;
     QAction *exitAction;
@@ -36,6 +37,7 @@ private:
     QAction *stopAction;
     QAction *pauseAction;
     QAction *debugAction;
+    QAction *resetZoomAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -50,13 +52,15 @@ private:
     QButtonGroup *bgItems;
     QButtonGroup *bgToolBox;
 
-    QComboBox *cbScale;
+    QSlider *zoomSlider;
 
     //QToolBox *toolBox;
 
 private:
     QAction *getAction(int type) override;
     void resizeEvent(QResizeEvent * event) override;
+    void zoomIn() override;
+    void zoomOut() override;
     void initActions();
     void initMenu();
     void initToolBars();
@@ -69,12 +73,13 @@ private slots:
     void onDeleteActionClicked();
     void onExitActionClicked();
     void onAboutActionClicked();
-    void onScaleChanged(const QString &scale);
     void onToolsGroupClicked(int id);
     void onRunActionClicked();
     void onAddOutputNeuronsActionClicked();
     void onStopActionClicked();
     void onPauseActionClicked();
     void onDebugActionClicked();
+    void onZoomSliderValueChanged();
+    void onResetZoomActionClicked();
 };
 #endif // MAINWINDOW_H
