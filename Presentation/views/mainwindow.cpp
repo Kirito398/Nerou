@@ -68,6 +68,7 @@ void MainWindow::initControlToolBar() {
     controlToolBar->addAction(debugAction);
     controlToolBar->addAction(pauseAction);
     controlToolBar->addAction(stopAction);
+    controlToolBar->addAction(resetZoomAction);
 }
 
 void MainWindow::initToolBox() {
@@ -223,6 +224,10 @@ void MainWindow::initActions() {
     debugAction = new QAction(QIcon(":/images/debug_icon.png"), tr("Debug"), this);
     debugAction->setStatusTip(tr("Start debug"));
     connect(debugAction, SIGNAL(triggered(bool)), this, SLOT(onDebugActionClicked()));
+
+    resetZoomAction = new QAction(QIcon(":/images/zoom_reset_icon.png"), tr("Reset zoom"), this);
+    resetZoomAction->setStatusTip(tr("Reset scene zoom"));
+    connect(resetZoomAction, SIGNAL(triggered(bool)), this, SLOT(onResetZoomActionClicked()));
 }
 
 void MainWindow::onAddOutputNeuronsActionClicked() {
@@ -244,6 +249,10 @@ void MainWindow::onItemsGroupClicked() {
 
     if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Views)
         bgToolBox->button(scene->getViewType())->setChecked(true);
+}
+
+void MainWindow::onResetZoomActionClicked() {
+    zoomSlider->setValue(250);
 }
 
 void MainWindow::onExitActionClicked() {
