@@ -128,6 +128,9 @@ void ArrowView::setView(PaintSceneInterface *interface) {
 }
 
 void ArrowView::setActive(bool enable) {
+//    if (startView->getInputArrowNumber() > 100 || startView->getOutputArrowNumber() > 100 || endView->getInputArrowNumber() > 100 || endView->getOutputArrowNumber() > 100)
+//        return;
+
     arrowColor = enable ? Qt::green : Qt::black;
     view->updateItem(this);
 }

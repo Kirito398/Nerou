@@ -136,6 +136,14 @@ void MovingView::updateItem(QGraphicsItem *item) {
     view->updateItem(item);
 }
 
+int MovingView::getInputArrowNumber() {
+    return inputArrows.size();
+}
+
+int MovingView::getOutputArrowNumber() {
+    return outputArrows.size();
+}
+
 void MovingView::initMenu() {
     menu = new QMenu();
     menu->addAction(view->getAction(Delete));

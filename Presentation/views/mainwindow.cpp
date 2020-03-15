@@ -12,6 +12,9 @@
 #include <QMenu>
 #include <QMenuBar>
 
+#include <QGLWidget>
+#include <QGLFormat>
+
 #include "views/paintscene.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -32,9 +35,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     view = new QGraphicsView(scene);
+
     view->setRenderHint(QPainter::Antialiasing);
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    QGLFormat format(QGL::SampleBuffers);
+//    format.setDoubleBuffer(true);
+//    format.setDirectRendering(true);
+//    format.setAccum(true);
+    QGLWidget *openGL = new QGLWidget(format);
+    view->setViewport(openGL);
 
     //mainLayout->addWidget(toolBox);
     mainLayout->addWidget(view);
