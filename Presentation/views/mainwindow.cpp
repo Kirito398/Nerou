@@ -8,7 +8,6 @@
 #include <QMessageBox>
 #include <QButtonGroup>
 #include <QHBoxLayout>
-#include <QGraphicsView>
 #include <QMenu>
 #include <QMenuBar>
 
@@ -16,6 +15,7 @@
 #include <QGLFormat>
 
 #include "views/paintscene.h"
+#include "views/graphicview.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,9 +34,11 @@ MainWindow::MainWindow(QWidget *parent)
     initControlToolBar();
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    view = new QGraphicsView(scene);
+    view = new GraphicView(scene);
 
     view->setRenderHint(QPainter::Antialiasing);
+    view->setOptimizationFlags(QGraphicsView::DontSavePainterState);
+    view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 

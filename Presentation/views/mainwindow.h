@@ -9,10 +9,10 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 class QAction;
 class QMenu;
-class QGraphicsView;
 class PaintScene;
 class QButtonGroup;
 class QComboBox;
+class QGraphicsView;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow, public MainWindowInterface
