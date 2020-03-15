@@ -27,10 +27,16 @@ public:
     void removeNeuron(unsigned long neuronID) override;
     void removeSinaps(unsigned long sinapsID) override;
     void run();
+    void stop();
+    void pause();
+    void debugRun();
 
 private:
     MainInteractor(RepositoryInterface *repository);
     NeuronInteractor *findNeuron(unsigned long id);
+    void onProcessStopped();
+    void onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber);
+    void clearProcessParameters();
 
 private:
     static MainInteractor *instance;
@@ -40,6 +46,8 @@ private:
     std::vector<SinapsInteractor *> sinapsList;
     std::vector<DataInteractor *> dataList;
     unsigned long createdItemsCounter;
+    bool isStopped, isPaused, isDebug;
+    unsigned long pausedClassNumber, pausedIterationNumber, pausedNeuronNumber;
 };
 
 #endif // MAININTERACTOR_H

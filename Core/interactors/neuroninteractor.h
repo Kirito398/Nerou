@@ -16,6 +16,7 @@ public:
 public:
     NeuronInteractor(NeuronType type);
     virtual ~NeuronInteractor();
+    virtual void clean() = 0;
     void setID(unsigned long id);
     unsigned long getID();
     bool addArrow(SinapsInteractor* arrow);

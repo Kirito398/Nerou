@@ -26,6 +26,9 @@ public:
     void onDeleteBtnClicked();
     void onRunBtnClicked();
     void onAddOutputNeuronsActionClicked();
+    void onStopActionClicked();
+    void onPauseActionClicked();
+    void onDebugActionClicked();
 
 private:
     MainWindowInterface *view;

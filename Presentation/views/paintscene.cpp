@@ -262,10 +262,6 @@ QPixmap PaintScene::getDataIcon() const {
     return DataView().getItemIcon();
 }
 
-void PaintScene::onRunBtnClicked() {
-    interactor->run();
-}
-
 void PaintScene::onDeleteBtnClicked() {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
@@ -326,6 +322,22 @@ void PaintScene::onAddOutputNeuronsActionClicked() {
         addItem(line);
         addArrow();
     }
+}
+
+void PaintScene::onRunBtnClicked() {
+    interactor->run();
+}
+
+void PaintScene::onStopActionClicked() {
+    interactor->stop();
+}
+
+void PaintScene::onPauseActionClicked() {
+    interactor->pause();
+}
+
+void PaintScene::onDebugActionClicked() {
+    interactor->debugRun();
 }
 
 void PaintScene::setView(MainWindowInterface *interface) {
