@@ -17,7 +17,7 @@ class PaintScene : public QGraphicsScene, public PaintSceneInterface, public Mai
 {
 public:
     PaintScene(QObject *parent = nullptr);
-    enum Mode {Selector, Views, Arrows};
+    enum Mode {Selector, Views, Arrows, ScroolHandDrag};
     void setMode(Mode mode);
     void setViewType(MovingView::ViewType type);
     void setView(MainWindowInterface *interfaces);

@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     view = new GraphicView(this, scene);
 
     view->setRenderHint(QPainter::Antialiasing);
+    view->setDragMode(QGraphicsView::NoDrag);
     view->setOptimizationFlags(QGraphicsView::DontSavePainterState);
     view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -120,6 +121,8 @@ void MainWindow::onToolsGroupClicked(int id) {
 
     scene->setMode(PaintScene::Views);
     scene->setViewType(MovingView::ViewType(id));
+
+    view->setDragMode(QGraphicsView::NoDrag);
 }
 
 void MainWindow::initToolBars() {
@@ -145,16 +148,25 @@ void MainWindow::initToolBars() {
     tbAddArrowMode->setToolTip(tr("Add arrow"));
     tbAddArrowMode->setStatusTip(tr("Create items relations"));
 
+    QToolButton *tbScroolHandDragMode = new QToolButton;
+    tbScroolHandDragMode->setCheckable(true);
+    tbScroolHandDragMode->setIcon(QIcon(":/images/scrool_hand_drag_icon.png"));
+    tbScroolHandDragMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+    tbScroolHandDragMode->setToolTip(tr("Hand drag"));
+    tbScroolHandDragMode->setStatusTip(tr("Scrool hand drag mode"));
+
     bgItems = new QButtonGroup(this);
     bgItems->addButton(tbSelectorMode, PaintScene::Selector);
     bgItems->addButton(tbAddItemMode, PaintScene::Views);
     bgItems->addButton(tbAddArrowMode, PaintScene::Arrows);
+    bgItems->addButton(tbScroolHandDragMode, PaintScene::ScroolHandDrag);
     connect(bgItems, SIGNAL(buttonClicked(int)), this, SLOT(onItemsGroupClicked()));
 
     itemsToolBar = addToolBar(tr("Items"));
     itemsToolBar->addWidget(tbSelectorMode);
     itemsToolBar->addWidget(tbAddItemMode);
     itemsToolBar->addWidget(tbAddArrowMode);
+    itemsToolBar->addWidget(tbScroolHandDragMode);
 
     toolsToolBar = addToolBar("Tools");
     toolsToolBar->addAction(addOutputNeuronsAction);
@@ -249,6 +261,11 @@ void MainWindow::onItemsGroupClicked() {
 
     if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Views)
         bgToolBox->button(scene->getViewType())->setChecked(true);
+
+    if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::ScroolHandDrag)
+        view->setDragMode(QGraphicsView::ScrollHandDrag);
+    else
+        view->setDragMode(QGraphicsView::NoDrag);
 }
 
 void MainWindow::onResetZoomActionClicked() {
