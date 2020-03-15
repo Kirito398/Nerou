@@ -1,30 +1,21 @@
 #include "graphicview.h"
 
 #include <QWheelEvent>
-#include <QtMath>
 
-GraphicView::GraphicView(QGraphicsScene *scene) : QGraphicsView(scene) {
-    zoomValue = 0;
+#include "interfaces/mainwindowinterface.h"
+
+GraphicView::GraphicView(MainWindowInterface *view, QGraphicsScene *scene) : QGraphicsView(scene) {
+    this->view = view;
 }
 
 void GraphicView::wheelEvent(QWheelEvent *e){
     if (e->modifiers() & Qt::ControlModifier) {
         if (e->delta() > 0)
-            zoomValue += 6;
+            view->zoomIn();
         else
-            zoomValue -= 6;
+            view->zoomOut();
         e->accept();
-        setupMatrix();
     } else {
         QGraphicsView::wheelEvent(e);
     }
-}
-
-void GraphicView::setupMatrix() {
-    qreal scale = qPow(qreal(2), zoomValue / qreal(50));
-
-    QMatrix matrix;
-    matrix.scale(scale, scale);
-
-    setMatrix(matrix);
 }

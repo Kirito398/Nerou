@@ -3,18 +3,19 @@
 
 #include <QGraphicsView>
 
+class MainWindowInterface;
+
 class GraphicView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    GraphicView(QGraphicsScene *scene);
+    GraphicView(MainWindowInterface *view, QGraphicsScene *scene);
 
 protected:
     void wheelEvent(QWheelEvent *e) override;
 
 private:
-    void setupMatrix();
-    int zoomValue;
+    MainWindowInterface *view;
 };
 
 #endif // GRAPHICVIEW_H

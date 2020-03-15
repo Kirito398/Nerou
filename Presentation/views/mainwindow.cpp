@@ -10,6 +10,8 @@
 #include <QHBoxLayout>
 #include <QMenu>
 #include <QMenuBar>
+#include <QtMath>
+#include <QSlider>
 
 #include <QGLWidget>
 #include <QGLFormat>
@@ -34,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     initControlToolBar();
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    view = new GraphicView(scene);
+    view = new GraphicView(this, scene);
 
     view->setRenderHint(QPainter::Antialiasing);
     view->setOptimizationFlags(QGraphicsView::DontSavePainterState);
@@ -153,21 +155,21 @@ void MainWindow::initToolBars() {
     itemsToolBar->addWidget(tbAddItemMode);
     itemsToolBar->addWidget(tbAddArrowMode);
 
-    cbScale = new QComboBox;
-    QStringList scales;
-    scales << tr("25%") << tr("50%") << tr("100%") << tr("150%") << tr("200%") << tr("250%");
-    cbScale->addItems(scales);
-    cbScale->setCurrentIndex(2);
-    cbScale->setToolTip(tr("Zoom"));
-    cbScale->setStatusTip(tr("Zoom scene"));
-    connect(cbScale, SIGNAL(currentTextChanged(const QString &)), this, SLOT(onScaleChanged(const QString &)));
-
     toolsToolBar = addToolBar("Tools");
     toolsToolBar->addAction(addOutputNeuronsAction);
     toolsToolBar->addAction(deleteAction);
-    toolsToolBar->addWidget(cbScale);
 
-    //addToolBar(Qt::TopToolBarArea, toolsToolBar);
+    zoomSlider = new QSlider();
+    zoomSlider->setMinimum(0);
+    zoomSlider->setMaximum(500);
+    zoomSlider->setValue(250);
+    zoomSlider->setTickPosition(QSlider::TicksBelow);
+    zoomSlider->setOrientation(Qt::Horizontal);
+    connect(zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(onZoomSliderValueChanged()));
+
+    QToolBar *zoomToolBar = new QToolBar(tr("Zoom"));
+    zoomToolBar->addWidget(zoomSlider);
+    addToolBar(Qt::BottomToolBarArea, zoomToolBar);
 }
 
 void MainWindow::initMenu() {
@@ -268,12 +270,21 @@ void MainWindow::onDebugActionClicked() {
     scene->onDebugActionClicked();
 }
 
-void MainWindow::onScaleChanged(const QString &scale) {
-    double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
-    QMatrix oldMatrix = view->matrix();
-    view->resetMatrix();
-    view->translate(oldMatrix.dx(), oldMatrix.dy());
-    view->scale(newScale, newScale);
+void MainWindow::zoomIn() {
+    zoomSlider->setValue(zoomSlider->value() + 6);
+}
+
+void MainWindow::zoomOut() {
+    zoomSlider->setValue(zoomSlider->value() - 6);
+}
+
+void MainWindow::onZoomSliderValueChanged() {
+    qreal scale = qPow(qreal(2), (zoomSlider->value() - 250) / qreal(50));
+
+    QMatrix matrix;
+    matrix.scale(scale, scale);
+
+    view->setMatrix(matrix);
 }
 
 QAction *MainWindow::getAction(int type) {
