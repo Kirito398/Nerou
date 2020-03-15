@@ -51,6 +51,7 @@ private:
     QAction *getAction(int type) override;
     void clearSelectedItem() override;
     void addArrow();
+    void addArrow(MovingView *startView, MovingView *endView);
     void addMovingView(QPointF position);
     void onViewsModePress(QGraphicsSceneMouseEvent *event);
     void onArrowsModePress(QGraphicsSceneMouseEvent *event);
