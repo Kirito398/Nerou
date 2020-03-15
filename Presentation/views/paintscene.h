@@ -6,11 +6,12 @@
 #include "interfaces/PaintSceneInterface.h"
 #include "listeners/mainpresentorlistener.h"
 #include "views/movingview.h"
+#include "interfaces/mainwindowinterface.h"
 
 class SelectorItem;
 class MainInteractor;
 class QAction;
-class MainWindowInterface;
+//class MainWindowInterface;
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
@@ -19,7 +20,7 @@ public:
     enum Mode {Selector, Views, Arrows};
     void setMode(Mode mode);
     void setViewType(MovingView::ViewType type);
-    void setView(MainWindowInterface *interface);
+    void setView(MainWindowInterface *interfaces);
     MovingView::ViewType getViewType();
     QPixmap getPerceptronIcon() const;
     QPixmap getDataIcon() const;

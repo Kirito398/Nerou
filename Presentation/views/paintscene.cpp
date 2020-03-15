@@ -364,8 +364,8 @@ void PaintScene::onDebugActionClicked() {
     interactor->debugRun();
 }
 
-void PaintScene::setView(MainWindowInterface *interface) {
-    view = interface;
+void PaintScene::setView(MainWindowInterface *interfaces) {
+    view = interfaces;
 }
 
 QAction *PaintScene::getAction(int type) {

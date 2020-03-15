@@ -32,6 +32,8 @@ private:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    int getInputArrowNumber() override;
+    int getOutputArrowNumber() override;
     bool isArrowAlreadyAdded(ArrowInterface* arrow);
     void initMenu();
 
