@@ -1,5 +1,6 @@
-QT       += core gui opengl
+#QT       += core gui
 
+qtHaveModule(opengl): QT += opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
 #include <QScreen>
 #include <QToolButton>
@@ -12,19 +11,19 @@
 #include <QMenuBar>
 #include <QtMath>
 #include <QSlider>
+#include <QStatusBar>
 
+#ifndef QT_NO_OPEN_GL
 #include <QGLWidget>
 #include <QGLFormat>
+#endif
 
 #include "views/paintscene.h"
 #include "views/graphicview.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-
     scene = new PaintScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     scene->setView(this);
@@ -45,12 +44,14 @@ MainWindow::MainWindow(QWidget *parent)
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+    #ifndef QT_NO_OPEN_GL
     QGLFormat format(QGL::SampleBuffers);
 //    format.setDoubleBuffer(true);
 //    format.setDirectRendering(true);
 //    format.setAccum(true);
     QGLWidget *openGL = new QGLWidget(format);
     view->setViewport(openGL);
+    #endif
 
     //mainLayout->addWidget(toolBox);
     mainLayout->addWidget(view);
@@ -61,6 +62,12 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(widget);
     setWindowTitle("Nerou");
     setUnifiedTitleAndToolBarOnMac(true);
+
+    QStatusBar *statusBar = new QStatusBar(this);
+    statusBar->setObjectName(QStringLiteral("statusbar"));
+    setStatusBar(statusBar);
+
+    this->resize(800, 600);
 }
 
 void MainWindow::initControlToolBar() {

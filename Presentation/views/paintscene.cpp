@@ -302,6 +302,9 @@ void PaintScene::onAddOutputNeuronsActionClicked() {
             inputsView.append(view);
     }
 
+    if (inputsView.empty())
+        return;
+
     QPointF position = inputsView[0]->pos();
     double maxX = position.x();
     double maxY = position.y();

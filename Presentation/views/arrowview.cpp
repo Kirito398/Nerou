@@ -43,7 +43,7 @@ void ArrowView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     for (int i = 1; i < endPolygon.count(); ++i) {
         p2 = endPolygon.at(i) + endPoint;
         polyLine = QLineF(p1, p2);
-        QLineF::IntersectType intersectType = polyLine.intersect(centerLine, &intersectPoint);
+        QLineF::IntersectType intersectType = polyLine.intersects(centerLine, &intersectPoint);
         if (intersectType == QLineF::BoundedIntersection)
             break;
         p1 = p2;
