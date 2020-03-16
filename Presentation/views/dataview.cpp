@@ -83,15 +83,9 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
     if (parametersDialog == nullptr) {
         parametersDialog = new DataParametersDialog();
-        connect(parametersDialog, SIGNAL(applied()), SLOT(onApplied()));
-        connect(parametersDialog, SIGNAL(accepted()), SLOT(onApplied()));
     }
 
     parametersDialog->show();
-}
-
-void DataView::onApplied() {
-
 }
 
 void DataView::makePolygon() {

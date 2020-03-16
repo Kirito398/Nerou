@@ -6,7 +6,6 @@
 #include "interfaces/mainwindowinterface.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
 class QAction;
 class QMenu;
 class PaintScene;
@@ -25,7 +24,6 @@ public:
     ~MainWindow() override;
 
 private:
-    Ui::MainWindow *ui;
     PaintScene *scene;
     GraphicView *view;
 

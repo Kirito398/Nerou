@@ -2,22 +2,75 @@
 
 #include <QBoxLayout>
 #include <QPushButton>
+#include <QTableWidget>
+#include <QHeaderView>
 
 DataParametersDialog::DataParametersDialog(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Data block parameters"));
     setFixedSize(QSize(350, 500));
 
-    QBoxLayout *layout = new QVBoxLayout();
+    layout = new QVBoxLayout();
 
+    initControllButtons();
+    initTable();
+    initButtons();
+
+    setLayout(layout);
+}
+
+void DataParametersDialog::onApplied() {
+
+}
+
+void DataParametersDialog::onAccept() {
+    onApplied();
+    emit QDialog::accept();
+}
+
+void DataParametersDialog::add() {
+
+}
+
+void DataParametersDialog::remove() {
+
+}
+
+void DataParametersDialog::initControllButtons() {
+    QBoxLayout *tableControllButtonsLayout = new QHBoxLayout();
+
+    QPushButton *pbAdd = new QPushButton(tr("Add"));
+    connect(pbAdd, &QPushButton::clicked, this, &DataParametersDialog::add);
+    tableControllButtonsLayout->addWidget(pbAdd);
+
+    QPushButton *pbRemove = new QPushButton(tr("Remove"));
+    connect(pbRemove, &QPushButton::clicked, this, &DataParametersDialog::remove);
+    tableControllButtonsLayout->addWidget(pbRemove);
+
+    layout->addLayout(tableControllButtonsLayout);
+}
+
+void DataParametersDialog::initTable() {
+    QTableWidget *table = new QTableWidget();
+    table->setColumnCount(3);
+
+    QStringList list;
+    list << tr("TrainingSet") << tr("TestingSet") << tr("Neuron");
+    table->setHorizontalHeaderLabels(list);
+    table->horizontalHeader()->setStretchLastSection(true);
+
+    layout->addWidget(table);
+}
+
+void DataParametersDialog::initButtons() {
     QBoxLayout *buttonsLayout = new QHBoxLayout();
 
     QPushButton *pbOk = new QPushButton(tr("OK"));
-    connect(pbOk, SIGNAL(clicked()), SLOT(accept()));
+    connect(pbOk, &QPushButton::clicked, this, &DataParametersDialog::onAccept);
     buttonsLayout->addWidget(pbOk);
 
     QPushButton *pbApply = new QPushButton(tr("Apply"));
-    connect(pbApply, SIGNAL(clicked()), SIGNAL(applied()));
+    connect(pbApply, &QPushButton::clicked, this, &DataParametersDialog::onApplied);
     buttonsLayout->addWidget(pbApply);
 
     QPushButton *pbCancel = new QPushButton(tr("Cancel"));
@@ -25,5 +78,4 @@ DataParametersDialog::DataParametersDialog(QWidget *parent) : QDialog(parent)
     buttonsLayout->addWidget(pbCancel);
 
     layout->addLayout(buttonsLayout);
-    setLayout(layout);
 }

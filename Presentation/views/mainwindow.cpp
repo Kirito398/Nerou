@@ -335,7 +335,6 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 MainWindow::~MainWindow()
 {
     delete scene;
-    delete ui;
 }
 
 //QWidget *MainWindow::createToolBoxItem(const QString &name,  MoveItem::ItemType type) {
