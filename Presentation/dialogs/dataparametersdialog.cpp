@@ -30,6 +30,12 @@ void DataParametersDialog::onAccept() {
 
 void DataParametersDialog::add() {
 
+
+    int i = table->rowCount();
+    table->insertRow(i);
+    table->setItem(i, 0, new QTableWidgetItem());
+    table->setItem(i, 1, new QTableWidgetItem());
+    table->setItem(i, 2, new QTableWidgetItem());
 }
 
 void DataParametersDialog::remove() {
@@ -51,13 +57,15 @@ void DataParametersDialog::initControllButtons() {
 }
 
 void DataParametersDialog::initTable() {
-    QTableWidget *table = new QTableWidget();
+    table = new QTableWidget();
     table->setColumnCount(3);
 
     QStringList list;
     list << tr("TrainingSet") << tr("TestingSet") << tr("Neuron");
     table->setHorizontalHeaderLabels(list);
     table->horizontalHeader()->setStretchLastSection(true);
+    table->setShowGrid(true);
+    table->setEditTriggers(QTableWidget::NoEditTriggers);
 
     layout->addWidget(table);
 }

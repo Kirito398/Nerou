@@ -4,6 +4,7 @@
 #include <QDialog>
 
 class QBoxLayout;
+class QTableWidget;
 
 class DataParametersDialog : public QDialog
 {
@@ -15,6 +16,7 @@ public:
 
 private:
     QBoxLayout *layout;
+    QTableWidget *table;
 
 private slots:
     void onApplied();
