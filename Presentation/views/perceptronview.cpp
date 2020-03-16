@@ -68,6 +68,10 @@ void PerceptronView::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     Q_UNUSED(widget)
 }
 
+void PerceptronView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+
+}
+
 void PerceptronView::makePolygon() {
     for (int i = -30; i <= 30; i++)
         polygon << QPointF(i, sqrt(900 - pow(i, 2.0)));

@@ -6,6 +6,7 @@
 
 class DataPresentor;
 class DataInteractorListener;
+class DataParametersDialog;
 
 class DataView : public MovingView, public DataViewListener
 {
@@ -23,11 +24,16 @@ private:
     void updatePosition(double x, double y) override;
     unsigned long getID() override;
     void setImage(QString path) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     DataPresentor *presentor;
     QImage image;
     QRectF bounding, imageBounding;
+    DataParametersDialog *parametersDialog;
+
+private slots:
+    void onApplied();
 };
 
 #endif // DATAVIEW_H

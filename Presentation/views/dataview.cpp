@@ -4,6 +4,7 @@
 #include <QThread>
 
 #include "presenters/datapresentor.h"
+#include "dialogs/dataparametersdialog.h"
 
 DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingView(Data, parent)
 {
@@ -17,6 +18,8 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
 
     bounding = QRectF (-30, -30, 60, 60);
     imageBounding = QRectF(-30, -30, 30, 30);
+
+    parametersDialog = nullptr;
 }
 
 void DataView::updatePosition(double x, double y) {
@@ -73,6 +76,22 @@ void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     Q_UNUSED(option)
     Q_UNUSED(widget)
+}
+
+void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event)
+
+    if (parametersDialog == nullptr) {
+        parametersDialog = new DataParametersDialog();
+        connect(parametersDialog, SIGNAL(applied()), SLOT(onApplied()));
+        connect(parametersDialog, SIGNAL(accepted()), SLOT(onApplied()));
+    }
+
+    parametersDialog->show();
+}
+
+void DataView::onApplied() {
+
 }
 
 void DataView::makePolygon() {

@@ -31,6 +31,7 @@ private:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override = 0;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     int getInputArrowNumber() override;
     int getOutputArrowNumber() override;

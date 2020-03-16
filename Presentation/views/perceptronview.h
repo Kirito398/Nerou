@@ -25,6 +25,7 @@ private:
     unsigned long getID() override;
     void setActive(bool enable) override;
     void setOutValue(QString value) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     PerceptronPresentor *presentor;
