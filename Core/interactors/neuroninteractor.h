@@ -18,7 +18,7 @@ public:
     virtual ~NeuronInteractor();
     virtual void clean() = 0;
     void setID(unsigned long id);
-    unsigned long getID();
+    unsigned long getID() override;
     bool addArrow(SinapsInteractor* arrow);
     void setInteractor(MainInteractorInterface *interface);
 
@@ -29,6 +29,7 @@ protected:
     double normalization(double value, double max, double min);
     void normalization(double* value, unsigned int size);
     void normalization(double** value, unsigned int row, unsigned int column);
+    void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID);
     void removeNeuron();
 
 private:

@@ -5,12 +5,15 @@
 #include <QTableWidget>
 #include <QHeaderView>
 
+#include "dialogs/dataaddtableitemdialog.h"
+
 DataParametersDialog::DataParametersDialog(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Data block parameters"));
-    setFixedSize(QSize(350, 500));
+    resize(QSize(600, 350));
 
     layout = new QVBoxLayout();
+    dialog = nullptr;
 
     initControllButtons();
     initTable();
@@ -19,23 +22,26 @@ DataParametersDialog::DataParametersDialog(QWidget *parent) : QDialog(parent)
     setLayout(layout);
 }
 
-void DataParametersDialog::onApplied() {
-
-}
-
-void DataParametersDialog::onAccept() {
-    onApplied();
-    emit QDialog::accept();
-}
-
 void DataParametersDialog::add() {
+    if (dialog == nullptr) {
+        dialog = new DataAddTableItemDialog(this);
+        connect(dialog, SIGNAL(onApplied()), this, SLOT(addNewSet()));
+    }
 
+    dialog->show();
+}
 
+void DataParametersDialog::addNewSet() {
     int i = table->rowCount();
     table->insertRow(i);
-    table->setItem(i, 0, new QTableWidgetItem());
-    table->setItem(i, 1, new QTableWidgetItem());
+    table->setItem(i, 0, new QTableWidgetItem(dialog->getTrainingSetPath()));
+    table->setItem(i, 1, new QTableWidgetItem(dialog->getTestingSetPath()));
     table->setItem(i, 2, new QTableWidgetItem());
+
+    table->item(i, 0)->setToolTip(dialog->getTrainingSetPath());
+    table->item(i, 1)->setToolTip(dialog->getTestingSetPath());
+
+    table->resizeColumnToContents(i);
 }
 
 void DataParametersDialog::remove() {
@@ -66,6 +72,7 @@ void DataParametersDialog::initTable() {
     table->horizontalHeader()->setStretchLastSection(true);
     table->setShowGrid(true);
     table->setEditTriggers(QTableWidget::NoEditTriggers);
+    table->horizontalHeader()->setDefaultSectionSize(table->size().width() / 3);
 
     layout->addWidget(table);
 }
@@ -74,7 +81,8 @@ void DataParametersDialog::initButtons() {
     QBoxLayout *buttonsLayout = new QHBoxLayout();
 
     QPushButton *pbOk = new QPushButton(tr("OK"));
-    connect(pbOk, &QPushButton::clicked, this, &DataParametersDialog::onAccept);
+    connect(pbOk, &QPushButton::clicked, this, &DataParametersDialog::onApplied);
+    connect(pbOk, &QPushButton::clicked, this, &QDialog::accept);
     buttonsLayout->addWidget(pbOk);
 
     QPushButton *pbApply = new QPushButton(tr("Apply"));

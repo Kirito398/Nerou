@@ -83,6 +83,13 @@ void MainInteractor::createNewData(double x, double y) {
     view->onNewDataAdded(newData);
 }
 
+void MainInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
+    if (dynamic_cast<PerceptronInteractor *>(findNeuron(learningNeuronID)) != nullptr)
+        createNewWeight(learningNeuronID, dataNeuronID);
+    else
+        createNewCore(learningNeuronID, dataNeuronID);
+}
+
 ArrowInteractorListener *MainInteractor::createNewWeight(unsigned long inputID, unsigned long outputID) {
     NeuronInteractor *inputNeuron = findNeuron(inputID);
     NeuronInteractor *outputNeuron = findNeuron(outputID);

@@ -53,6 +53,14 @@ void NeuronInteractor::normalization(double** value, unsigned int row, unsigned 
         normalization(value[i], column);
 }
 
+void NeuronInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
+    for (auto sinaps : inputsSinaps)
+        if (sinaps->getOutputNeuron()->getID() == learningNeuronID)
+            return;
+
+    interactor->makeLearningSinaps(learningNeuronID, dataNeuronID);
+}
+
 void NeuronInteractor::setID(unsigned long id) {
     this->id = id;
 }

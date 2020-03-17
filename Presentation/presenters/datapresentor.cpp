@@ -1,6 +1,7 @@
 #include "datapresentor.h"
 
 #include <QDir>
+#include <QSize>
 
 #include "listeners/datainteractorlistener.h"
 #include "listeners/dataviewlistener.h"
@@ -17,20 +18,31 @@ void DataPresentor::setView(DataViewListener *listener) {
 void DataPresentor::setInteractor(DataInteractorListener *listener) {
     interactor = listener;
     interactor->setView(this);
+}
 
-    QDir dir("TrainSet");
-    QString mainPath = "TrainSet/0/";
-    dir.setPath(mainPath);
-    QStringList listPath = dir.entryList(QStringList("*.jpg"));
+void DataPresentor::setPathsList(QStringList pathsList, bool isTrainingSet) {
+    interactor->clearPathsList();
 
-    std::vector<std::string> classList;
+    if (pathsList.isEmpty())
+        return;
 
-    for (auto path : listPath) {
-        classList.push_back((mainPath + path).toStdString());
+    QStringList entryList;
+    entryList << "*.jpg" << "*.png";
+
+    for (auto mainPath : pathsList) {
+        QDir dir(mainPath);
+        QStringList listPath = dir.entryList(entryList);
+        std::vector<std::string> classList;
+
+        for (auto path : listPath)
+            classList.push_back((mainPath + "/" + path).toStdString());
+
+        //interactor->addClass(classList, isTrainingSet);
     }
+}
 
-    interactor->addClass(classList);
-    interactor->setSize(28, 28);
+void DataPresentor::setImageSize(QSize size) {
+    interactor->setSize(size.height(), size.width());
 }
 
 void DataPresentor::updatePosition(double x, double y) {

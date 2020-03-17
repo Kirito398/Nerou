@@ -13,23 +13,23 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     repository = nullptr;
     column = 0;
     row = 0;
-    classNumber = 0;
-    iterationNumber = 0;
+    trainingClassNumber = 0;
+    trainingIterationNumber = 0;
     isColorMode = false;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
-    if (iterationNumber > listPaths[classNumber].size())
+    if (iterationNumber > trainingListPaths[classNumber].size())
         return;
 
-    view->setImage(listPaths[classNumber][iterationNumber]);
+    view->setImage(trainingListPaths[classNumber][iterationNumber]);
 
     if (isColorMode) {
-        colorValue = repository->loadColorValue(listPaths[classNumber][iterationNumber]);
+        colorValue = repository->loadColorValue(trainingListPaths[classNumber][iterationNumber]);
         normalization(colorValue, 3, row * column);
         colorsToValue();
     } else {
-        value = repository->loadValue(listPaths[classNumber][iterationNumber]);
+        value = repository->loadValue(trainingListPaths[classNumber][iterationNumber]);
         normalization(value, row * column);
     }
 
@@ -72,12 +72,25 @@ void DataInteractor::colorsToValue() {
     }
 }
 
-void DataInteractor::addClass(std::vector<std::string> list) {
-    listPaths.push_back(list);
-    classNumber++;
+void DataInteractor::addClass(std::vector<std::string> pathList, unsigned long neuronID, bool isTrainingSet) {
+    if (isTrainingSet) {
+        trainingListPaths.push_back(pathList);
+        trainingNeuronsID.push_back(neuronID);
+        trainingClassNumber++;
 
-    if (list.size() > iterationNumber)
-        iterationNumber = list.size();
+        if (pathList.size() > trainingIterationNumber)
+            trainingIterationNumber = pathList.size();
+    }
+
+    makeLearningSinaps(neuronID, id);
+}
+
+void DataInteractor::clearPathsList() {
+    trainingListPaths.clear();
+    trainingNeuronsID.clear();
+
+    for(auto sinaps : inputsSinaps)
+        delete sinaps;
 }
 
 void DataInteractor::setRepository(RepositoryInterface *repository) {
@@ -85,11 +98,11 @@ void DataInteractor::setRepository(RepositoryInterface *repository) {
 }
 
 unsigned long DataInteractor::getClassNumber() {
-    return classNumber;
+    return trainingClassNumber;
 }
 
 unsigned long DataInteractor::getIterationNumber() {
-    return iterationNumber;
+    return trainingIterationNumber;
 }
 
 void DataInteractor::clearColorValue() {

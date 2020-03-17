@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include <QThread>
+#include <QDialog>
 
 #include "presenters/datapresentor.h"
 #include "dialogs/dataparametersdialog.h"
@@ -83,9 +84,15 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
     if (parametersDialog == nullptr) {
         parametersDialog = new DataParametersDialog();
+        connect(parametersDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
+        connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
     }
 
     parametersDialog->show();
+}
+
+void DataView::onParametersUpdated() {
+
 }
 
 void DataView::makePolygon() {

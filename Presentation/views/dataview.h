@@ -31,6 +31,9 @@ private:
     QImage image;
     QRectF bounding, imageBounding;
     DataParametersDialog *parametersDialog;
+
+private slots:
+    void onParametersUpdated();
 };
 
 #endif // DATAVIEW_H
