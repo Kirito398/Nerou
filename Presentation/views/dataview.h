@@ -25,6 +25,7 @@ private:
     unsigned long getID() override;
     void setImage(QString path) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    QStringList getOutputsNeuronsList() override;
 
 private:
     DataPresentor *presentor;

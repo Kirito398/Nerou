@@ -83,7 +83,7 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event)
 
     if (parametersDialog == nullptr) {
-        parametersDialog = new DataParametersDialog();
+        parametersDialog = new DataParametersDialog(this);
         connect(parametersDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
         connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
     }
@@ -93,6 +93,10 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
 void DataView::onParametersUpdated() {
 
+}
+
+QStringList DataView::getOutputsNeuronsList() {
+    return outputsNeuronsList();
 }
 
 void DataView::makePolygon() {

@@ -7,6 +7,7 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 class QBoxLayout;
+class QComboBox;
 
 class DataAddTableItemDialog : public QDialog
 {
@@ -15,6 +16,7 @@ public:
     DataAddTableItemDialog(QWidget *parent = nullptr);
     QString getTrainingSetPath();
     QString getTestingSetPath();
+    void setOutputsNeuronsList(QStringList list);
 
 private:
     void initTrainingLayout();
@@ -28,11 +30,14 @@ private:
     QLabel *testingSetTitle;
     QLabel *trainingSetPathErrors;
     QLabel *testingSetPathErrors;
+    QLabel *neuronTitle;
     QLineEdit *trainingSetPath;
     QLineEdit *testingSetPath;
     QPushButton *pbBrowseTrainingPath;
     QPushButton *pbBrowseTestingPath;
     QSize *defaultImageSize;
+    QComboBox *neuronsComboBox;
+    QStringList neuronsList;
 
 private slots:
     void onTrainingSetBrowseClicked();

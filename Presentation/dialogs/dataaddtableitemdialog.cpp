@@ -6,14 +6,21 @@
 #include <QBoxLayout>
 #include <QFileDialog>
 #include <QImageReader>
+#include <QComboBox>
 
 DataAddTableItemDialog::DataAddTableItemDialog(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Add new set"));
-    setFixedSize(QSize(350, 200));
+    setFixedSize(QSize(350, 250));
 
     layout = new QVBoxLayout();
     defaultImageSize = nullptr;
+
+    neuronTitle = new QLabel(tr("Neuron class:"));
+    neuronsComboBox = new QComboBox();
+
+    layout->addWidget(neuronTitle);
+    layout->addWidget(neuronsComboBox);
 
     initTrainingLayout();
     initTestingLayout();
@@ -30,6 +37,9 @@ void DataAddTableItemDialog::onAccept() {
 bool DataAddTableItemDialog::onAddButtonClicked() {
     QString trainingPath = trainingSetPath->text();
     QString testingPath = testingSetPath->text();
+
+    if (neuronsComboBox->itemText(neuronsComboBox->currentIndex()).isEmpty())
+        return false;
 
     if (trainingPath.isEmpty() && testingPath.isEmpty())
         return false;
@@ -137,7 +147,7 @@ void DataAddTableItemDialog::initControllButtons() {
 }
 
 void DataAddTableItemDialog::initTrainingLayout() {
-    trainingSetTitle = new QLabel(tr("Training set path:"));
+    trainingSetTitle = new QLabel(tr("Training class set:"));
     trainingSetPath = new QLineEdit("");
     trainingSetPathErrors = new QLabel();
     trainingSetPathErrors->setStyleSheet("QLabel {color : red;}");
@@ -157,7 +167,7 @@ void DataAddTableItemDialog::initTrainingLayout() {
 }
 
 void DataAddTableItemDialog::initTestingLayout() {
-    testingSetTitle = new QLabel(tr("Testing set path:"));
+    testingSetTitle = new QLabel(tr("Testing class set:"));
     testingSetPath = new QLineEdit("");
     testingSetPathErrors = new QLabel();
     testingSetPathErrors->setStyleSheet("QLabel {color : red;}");
@@ -174,6 +184,14 @@ void DataAddTableItemDialog::initTestingLayout() {
     testingLayout->addWidget(testingSetPathErrors);
 
     layout->addLayout(testingLayout);
+}
+
+void DataAddTableItemDialog::setOutputsNeuronsList(QStringList list) {
+    neuronsList.clear();
+    neuronsList.append(list);
+
+    neuronsComboBox->clear();
+    neuronsComboBox->addItems(neuronsList);
 }
 
 QString DataAddTableItemDialog::getTrainingSetPath() {

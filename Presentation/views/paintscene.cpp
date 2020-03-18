@@ -380,6 +380,16 @@ void PaintScene::setView(MainWindowInterface *interfaces) {
     view = interfaces;
 }
 
+QStringList PaintScene::getOutputsNeuronsList() {
+    std::vector<unsigned long> list = interactor->getOutputsNeuronsList();
+    QStringList neuronsList;
+
+    for (auto neuron : list)
+        neuronsList << "Neuron_" + QString::number(neuron);
+
+    return neuronsList;
+}
+
 QAction *PaintScene::getAction(int type) {
     return view->getAction(type);
 }

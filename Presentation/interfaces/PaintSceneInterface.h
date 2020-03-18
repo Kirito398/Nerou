@@ -4,6 +4,7 @@
 class QPointF;
 class QGraphicsItem;
 class QAction;
+class QStringList;
 
 enum ActionType {Delete, AddOutputNeurons};
 
@@ -16,6 +17,7 @@ public:
     virtual void deleteItem(QGraphicsItem *item) = 0;
     virtual QAction *getAction(int type) = 0;
     virtual void clearSelectedItem() = 0;
+    virtual QStringList getOutputsNeuronsList() = 0;
 };
 
 #endif // PAINTSCENEINTERFACE_H

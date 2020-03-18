@@ -42,6 +42,7 @@ protected:
     void updateArrowsPosition();
     void updateScene();
     void updateItem(QGraphicsItem *item);
+    QStringList outputsNeuronsList();
 
 protected:
     PaintSceneInterface *view;

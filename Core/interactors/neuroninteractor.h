@@ -21,6 +21,7 @@ public:
     unsigned long getID() override;
     bool addArrow(SinapsInteractor* arrow);
     void setInteractor(MainInteractorInterface *interface);
+    bool isOutputNeuron();
 
 protected:
     double activateFunction(double value);
@@ -43,6 +44,7 @@ protected:
     std::vector<SinapsInteractor *> outputsSinaps;
     double posX, posY;
     unsigned long id;
+    bool isOutput;
     NeuronType type;
 
 private:

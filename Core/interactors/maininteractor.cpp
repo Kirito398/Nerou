@@ -169,6 +169,16 @@ void MainInteractor::removeSinaps(unsigned long sinapsID) {
     }
 }
 
+std::vector<unsigned long> MainInteractor::getOutputsNeuronsList() {
+    std::vector<unsigned long> outputsNeuronsList;
+
+    for (auto neuron : neuronsList)
+        if (neuron->isOutputNeuron())
+            outputsNeuronsList.push_back(neuron->getID());
+
+    return outputsNeuronsList;
+}
+
 void MainInteractor::stop() {
     isStopped = true;
 }

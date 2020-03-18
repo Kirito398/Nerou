@@ -6,12 +6,14 @@
 #include <QHeaderView>
 
 #include "dialogs/dataaddtableitemdialog.h"
+#include "listeners/dataviewlistener.h"
 
-DataParametersDialog::DataParametersDialog(QWidget *parent) : QDialog(parent)
+DataParametersDialog::DataParametersDialog(DataViewListener *view, QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Data block parameters"));
     resize(QSize(600, 350));
 
+    this->view = view;
     layout = new QVBoxLayout();
     dialog = nullptr;
 
@@ -28,6 +30,7 @@ void DataParametersDialog::add() {
         connect(dialog, SIGNAL(onApplied()), this, SLOT(addNewSet()));
     }
 
+    dialog->setOutputsNeuronsList(view->getOutputsNeuronsList());
     dialog->show();
 }
 

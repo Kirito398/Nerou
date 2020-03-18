@@ -6,17 +6,19 @@
 class QBoxLayout;
 class QTableWidget;
 class DataAddTableItemDialog;
+class DataViewListener;
 
 class DataParametersDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DataParametersDialog(QWidget *parent = nullptr);
+    DataParametersDialog(DataViewListener *view, QWidget *parent = nullptr);
     void initControllButtons();
     void initTable();
     void initButtons();
 
 private:
+    DataViewListener *view;
     DataAddTableItemDialog *dialog;
     QBoxLayout *layout;
     QTableWidget *table;
