@@ -5,6 +5,8 @@ ClassModel::ClassModel(unsigned long neuronID)
     this->neuronID = neuronID;
     trainingMainPath = "";
     testingMainPath = "";
+    trainingPathsList.clear();
+    testingPathsList.clear();
 }
 
 void ClassModel::setTrainingPathsList(std::vector<std::string> list) {

@@ -129,7 +129,9 @@ void DataParametersDialog::remove() {
 }
 
 QSize DataParametersDialog::getImageSize() {
-    return QSize(*defaultSize);
+    if (defaultSize != nullptr)
+        return QSize(*defaultSize);
+    else return QSize(0, 0);
 }
 
 void DataParametersDialog::getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs) {

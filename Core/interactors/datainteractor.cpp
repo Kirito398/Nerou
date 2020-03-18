@@ -18,6 +18,9 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
+    if (classList.empty())
+        return;
+
     if (iterationNumber > classList[classNumber].getTrainingPathsList().size())
         return;
 
