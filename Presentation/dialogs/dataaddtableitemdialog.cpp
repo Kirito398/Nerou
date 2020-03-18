@@ -8,7 +8,9 @@
 #include <QImageReader>
 #include <QComboBox>
 
-DataAddTableItemDialog::DataAddTableItemDialog(QWidget *parent) : QDialog(parent)
+#include "interfaces/repositoryinterface.h"
+
+DataAddTableItemDialog::DataAddTableItemDialog(RepositoryInterface *repository, QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Add new set"));
     setFixedSize(QSize(350, 250));
@@ -21,6 +23,8 @@ DataAddTableItemDialog::DataAddTableItemDialog(QWidget *parent) : QDialog(parent
 
     layout->addWidget(neuronTitle);
     layout->addWidget(neuronsComboBox);
+
+    this->repository = repository;
 
     initTrainingLayout();
     initTestingLayout();
@@ -44,33 +48,27 @@ bool DataAddTableItemDialog::onAddButtonClicked() {
     if (trainingPath.isEmpty() && testingPath.isEmpty())
         return false;
 
-    QDir dir(trainingPath);
-    QStringList entryList;
-
-    entryList << "*.jpg" << "*.png";
-
-    QStringList listPath = dir.entryList(entryList);
+    QStringList listPath = getPaths(trainingPath + "/");
 
     if (listPath.isEmpty() && !trainingPath.isEmpty()) {
         trainingSetPathErrors->setText(tr("Image not found!"));
         return false;
     }
 
-    if (!testImageSize(trainingPath, listPath)) {
+    if (!testImageSize(listPath)) {
         trainingSetPathErrors->setText(tr("Image must have the same size!"));
         return false;
     }
 
-    dir.setPath(testingPath);
     listPath.clear();
-    listPath = dir.entryList(entryList);
+    listPath = getPaths(testingPath + "/");
 
     if (listPath.isEmpty() && !testingPath.isEmpty()) {
         testingSetPathErrors->setText(tr("Image not found!"));
         return false;
     }
 
-    if (!testImageSize(testingPath, listPath)) {
+    if (!testImageSize(listPath)) {
         testingSetPathErrors->setText(tr("Image must have the same size!"));
         return false;
     }
@@ -85,19 +83,33 @@ bool DataAddTableItemDialog::onAddButtonClicked() {
     return true;
 }
 
-bool DataAddTableItemDialog::testImageSize(QString mainPath, QStringList listPath) {
-    if (listPath.isEmpty() || mainPath.isEmpty())
+QStringList DataAddTableItemDialog::getPaths(QString mainPath) {
+    QStringList list;
+
+    if (mainPath.isEmpty())
+        return list;
+
+    std::vector<std::string> paths = repository->getPaths(mainPath.toStdString());
+
+    for (auto path : paths)
+        list.append(QString::fromStdString(path));
+
+    return list;
+}
+
+bool DataAddTableItemDialog::testImageSize(QStringList listPath) {
+    if (listPath.isEmpty())
         return true;
 
-    QImageReader reader(mainPath + "/" + listPath.first());
+    QImageReader reader(listPath.first());
     QImage image = reader.read();
 
     if (defaultImageSize == nullptr)
         defaultImageSize = new QSize(image.size());
 
-    if (!listPath.isEmpty() && !mainPath.isEmpty()) {
+    if (!listPath.isEmpty()) {
         for (auto path : listPath) {
-            reader.setFileName(mainPath + "/" + path);
+            reader.setFileName(path);
             image = reader.read();
 
             if (defaultImageSize->width() != image.size().width() || defaultImageSize->height() != image.size().height())

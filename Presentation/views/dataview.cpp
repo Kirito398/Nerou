@@ -85,7 +85,7 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event)
 
     if (parametersDialog == nullptr) {
-        parametersDialog = new DataParametersDialog(this);
+        parametersDialog = new DataParametersDialog(this, presentor);
         connect(parametersDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
         connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
     }

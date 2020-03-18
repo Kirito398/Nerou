@@ -8,6 +8,7 @@
 class QPointF;
 class DataViewListener;
 class DataInteractorListener;
+class RepositoryInterface;
 class QStringList;
 class QSize;
 class QString;
@@ -24,15 +25,16 @@ public:
     void setImageSize(QSize size);
     void updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronsIDs);
     void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronsIDs);
+    RepositoryInterface *getRepository();
 
 private:
     void updatePosition(double x, double y) override;
     void setImage(std::string path) override;
-    std::vector<std::string> getPaths(QString mainPath);
 
 private:
     DataViewListener *view;
     DataInteractorListener *interactor;
+    RepositoryInterface *repository;
 };
 
 #endif // DATAPRESENTOR_H

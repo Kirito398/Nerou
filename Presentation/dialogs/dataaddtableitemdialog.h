@@ -8,12 +8,13 @@ class QLineEdit;
 class QPushButton;
 class QBoxLayout;
 class QComboBox;
+class RepositoryInterface;
 
 class DataAddTableItemDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DataAddTableItemDialog(QWidget *parent = nullptr);
+    DataAddTableItemDialog(RepositoryInterface *repository, QWidget *parent = nullptr);
     QString getTrainingSetPath();
     QString getTestingSetPath();
     QString getNeuronID();
@@ -24,9 +25,11 @@ private:
     void initTrainingLayout();
     void initTestingLayout();
     void initControllButtons();
-    bool testImageSize(QString mainPath, QStringList listPath);
+    bool testImageSize(QStringList listPath);
+    QStringList getPaths(QString mainPath);
 
 private:
+    RepositoryInterface *repository;
     QBoxLayout *layout;
     QLabel *trainingSetTitle;
     QLabel *testingSetTitle;

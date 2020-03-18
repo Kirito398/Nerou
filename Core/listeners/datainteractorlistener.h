@@ -2,8 +2,8 @@
 #define DATAINTERACTORLISTENER_H
 
 class ClassModel;
-
 class DataPresentorListener;
+class RepositoryInterface;
 
 class DataInteractorListener
 {
@@ -17,6 +17,7 @@ public:
     virtual void clearClassList() = 0;
     virtual unsigned long getClassNumber() = 0;
     virtual ClassModel getClass(unsigned long id) = 0;
+    virtual RepositoryInterface *getRepository() = 0;
 };
 
 #endif // DATAINTERACTORLISTENER_H

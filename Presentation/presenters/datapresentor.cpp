@@ -6,6 +6,7 @@
 #include "listeners/datainteractorlistener.h"
 #include "listeners/dataviewlistener.h"
 #include "models/classmodel.h"
+#include "interfaces/repositoryinterface.h"
 
 DataPresentor::DataPresentor()
 {
@@ -19,6 +20,8 @@ void DataPresentor::setView(DataViewListener *listener) {
 void DataPresentor::setInteractor(DataInteractorListener *listener) {
     interactor = listener;
     interactor->setView(this);
+
+    repository = interactor->getRepository();
 }
 
 void DataPresentor::updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronsIDs) {
@@ -30,29 +33,11 @@ void DataPresentor::updateParameters(QStringList trainingList, QStringList testi
         ClassModel model(neuronsIDs[i].split("_")[1].toDouble());
         model.setTrainingMainPath(trainingList[i].toStdString());
         model.setTestingMainPath(testingList[i].toStdString());
-        model.setTrainingPathsList(getPaths(trainingList[i]));
-        model.setTestingPathslist(getPaths(testingList[i]));
+        model.setTrainingPathsList(repository->getPaths(trainingList[i].toStdString()));
+        model.setTestingPathslist(repository->getPaths(testingList[i].toStdString()));
 
         interactor->addClass(model);
     }
-}
-
-std::vector<std::string> DataPresentor::getPaths(QString mainPath) {
-    std::vector<std::string> list;
-
-    if (mainPath.isEmpty())
-        return list;
-
-    QDir dir(mainPath);
-    QStringList entryList;
-    entryList << "*.jpg" << "*.png";
-
-    QStringList listPaths = dir.entryList(entryList);
-
-    for (auto path : listPaths)
-        list.push_back((mainPath + path).toStdString());
-
-    return list;
 }
 
 void DataPresentor::setImageSize(QSize size) {
@@ -85,6 +70,10 @@ void DataPresentor::setPosition(double x, double y) {
 
 unsigned long DataPresentor::getID() {
     return interactor->getID();
+}
+
+RepositoryInterface *DataPresentor::getRepository() {
+    return repository;
 }
 
 DataPresentor::~DataPresentor() {

@@ -164,6 +164,10 @@ void DataInteractor::clean() {
     view->setImage("");
 }
 
+RepositoryInterface *DataInteractor::getRepository() {
+    return repository;
+}
+
 void DataInteractor::onInputSignalChanged() {
 
 }

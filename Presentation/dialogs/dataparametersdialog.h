@@ -8,12 +8,13 @@ class QTableWidget;
 class DataAddTableItemDialog;
 class DataViewListener;
 class QSize;
+class DataPresentor;
 
 class DataParametersDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DataParametersDialog(DataViewListener *view, QWidget *parent = nullptr);
+    DataParametersDialog(DataViewListener *view, DataPresentor *presentor, QWidget *parent = nullptr);
     void initControllButtons();
     void initTable();
     void initButtons();
@@ -26,10 +27,12 @@ private:
     bool checkImageSize();
     void addNewSet(QString trainingSetPath, QString testingSetPath, QString neuronID);
     void enterEvent(QEvent *event) override;
+    QStringList getPaths(QString mainPath);
 
 private:
     QSize *defaultSize;
     DataViewListener *view;
+    DataPresentor *presentor;
     DataAddTableItemDialog *dialog;
     QBoxLayout *layout;
     QTableWidget *table;

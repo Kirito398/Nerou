@@ -9,13 +9,17 @@
 
 #include "dialogs/dataaddtableitemdialog.h"
 #include "listeners/dataviewlistener.h"
+#include "presenters/datapresentor.h"
+#include "interfaces/repositoryinterface.h"
 
-DataParametersDialog::DataParametersDialog(DataViewListener *view, QWidget *parent) : QDialog(parent)
+DataParametersDialog::DataParametersDialog(DataViewListener *view, DataPresentor *presentor, QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Data block parameters"));
     resize(QSize(600, 350));
 
     this->view = view;
+    this->presentor = presentor;
+
     layout = new QVBoxLayout();
     dialog = nullptr;
 
@@ -33,7 +37,7 @@ void DataParametersDialog::enterEvent(QEvent *event) {
 
 void DataParametersDialog::add() {
     if (dialog == nullptr) {
-        dialog = new DataAddTableItemDialog(this);
+        dialog = new DataAddTableItemDialog(presentor->getRepository(), this);
         connect(dialog, SIGNAL(onApplied()), this, SLOT(addNewSet()));
     }
 
@@ -100,15 +104,11 @@ void DataParametersDialog::applied() {
 
 bool DataParametersDialog::checkImageSize() {
     int n = table->rowCount();
-    QStringList entryList;
-    entryList << "*.jpg" << "*.png";
     defaultSize = nullptr;
 
     for (int i = 0; i < n; i++) {
         QString mainPath = table->item(i, 1)->text().isEmpty() ? table->item(i, 2)->text() : table->item(i, 1)->text();
-        QDir dir(mainPath);
-        QStringList pathsList = dir.entryList(entryList);
-        QImage image(mainPath + pathsList[0]);
+        QImage image(getPaths(mainPath)[0]);
 
         if (defaultSize == nullptr)
             defaultSize = new QSize(image.size());
@@ -121,6 +121,20 @@ bool DataParametersDialog::checkImageSize() {
     }
 
     return true;
+}
+
+QStringList DataParametersDialog::getPaths(QString mainPath) {
+    QStringList list;
+
+    if (mainPath.isEmpty())
+        return list;
+
+    std::vector<std::string> paths = presentor->getRepository()->getPaths(mainPath.toStdString());
+
+    for (auto path : paths)
+        list.append(QString::fromStdString(path));
+
+    return list;
 }
 
 void DataParametersDialog::remove() {

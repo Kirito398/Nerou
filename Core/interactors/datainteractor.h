@@ -32,6 +32,7 @@ private:
     void clean() override;
     void clearClassList() override;
     ClassModel getClass(unsigned long id) override;
+    RepositoryInterface *getRepository() override;
 
 private:
     DataPresentorListener *view;
