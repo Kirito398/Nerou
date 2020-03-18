@@ -94,7 +94,9 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void DataView::onParametersUpdated() {
+    QStringList trainingList, testingList, neuronsIDs;
 
+    parametersDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
 }
 
 QStringList DataView::getOutputsNeuronsList() {

@@ -16,9 +16,11 @@ public:
     void initControllButtons();
     void initTable();
     void initButtons();
+    void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs);
 
 private:
     void updateOutputsNeuronsList();
+    bool checkImageSize();
     void enterEvent(QEvent *event) override;
 
 private:
@@ -31,6 +33,9 @@ private slots:
     void add();
     void remove();
     void addNewSet();
+    void accept() override;
+    void applied();
+
 
 signals:
     void onApplied();

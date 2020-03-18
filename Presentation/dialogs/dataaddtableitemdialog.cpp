@@ -113,6 +113,11 @@ void DataAddTableItemDialog::onTrainingSetBrowseClicked() {
     dialog.setOptions(QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog);
     QString path = dialog.getExistingDirectory(this, tr("Set folder"), QDir::currentPath());
 
+    if (defaultImageSize != nullptr) {
+        delete defaultImageSize;
+        defaultImageSize = nullptr;
+    }
+
     if (path.isEmpty())
         return;
 
@@ -121,6 +126,11 @@ void DataAddTableItemDialog::onTrainingSetBrowseClicked() {
 
 void DataAddTableItemDialog::onTestingSetBrowseClicked() {
     QString path = QFileDialog::getExistingDirectory(this, tr("Set folder"), QDir::currentPath());
+
+    if (defaultImageSize != nullptr) {
+        delete defaultImageSize;
+        defaultImageSize = nullptr;
+    }
 
     if (path.isEmpty())
         return;
@@ -192,6 +202,10 @@ void DataAddTableItemDialog::setOutputsNeuronsList(QStringList list) {
 
     neuronsComboBox->clear();
     neuronsComboBox->addItems(neuronsList);
+}
+
+QSize *DataAddTableItemDialog::getDefaultImageSize() {
+    return defaultImageSize;
 }
 
 QString DataAddTableItemDialog::getTrainingSetPath() {

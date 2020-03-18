@@ -17,6 +17,7 @@ public:
     QString getTrainingSetPath();
     QString getTestingSetPath();
     QString getNeuronID();
+    QSize *getDefaultImageSize();
     void setOutputsNeuronsList(QStringList list);
 
 private:
