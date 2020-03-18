@@ -152,6 +152,9 @@ void MovingView::initMenu() {
     menu = new QMenu();
     menu->addAction(view->getAction(Delete));
     menu->addAction(view->getAction(AddOutputNeurons));
+
+    if (type == Perceptron)
+        menu->addAction(view->getAction(MakeOutputNeuron));
 }
 
 MovingView::~MovingView() {

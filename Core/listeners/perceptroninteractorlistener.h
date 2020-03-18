@@ -10,6 +10,7 @@ public:
     virtual void setPosition(double x, double y) = 0;
     virtual void deleteNeuron() = 0;
     virtual unsigned long getID() = 0;
+    virtual void setOutputNeuron(bool enable) = 0;
 };
 
 #endif // PERCEPTRONINTERACTORLISTENER_H

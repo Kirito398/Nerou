@@ -6,7 +6,7 @@ class QGraphicsItem;
 class QAction;
 class QStringList;
 
-enum ActionType {Delete, AddOutputNeurons};
+enum ActionType {Delete, AddOutputNeurons, MakeOutputNeuron};
 
 class PaintSceneInterface
 {

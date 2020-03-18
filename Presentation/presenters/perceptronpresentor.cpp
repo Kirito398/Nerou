@@ -32,6 +32,10 @@ unsigned long PerceptronPresentor::getID() {
     return interactor->getID();
 }
 
+void PerceptronPresentor::setOutputNeuron(bool enable) {
+    interactor->setOutputNeuron(enable);
+}
+
 void PerceptronPresentor::setActive(bool enable) {
     view->setActive(enable);
 }

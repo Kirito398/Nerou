@@ -74,6 +74,10 @@ void PerceptronView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
 }
 
+void PerceptronView::setOutputNeuron(bool enable) {
+    presentor->setOutputNeuron(enable);
+}
+
 void PerceptronView::makePolygon() {
     for (int i = -30; i <= 30; i++)
         polygon << QPointF(i, sqrt(900 - pow(i, 2.0)));

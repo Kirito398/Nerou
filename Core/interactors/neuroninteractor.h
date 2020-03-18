@@ -32,6 +32,7 @@ protected:
     void normalization(double** value, unsigned int row, unsigned int column);
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID);
     void removeNeuron();
+    void isOutputNeuronEnable(bool enable);
 
 private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);

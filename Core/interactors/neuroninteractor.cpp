@@ -11,7 +11,7 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     id = 0;
     posX = 0;
     posY = 0;
-    isOutput = true;
+    isOutput = false;
 }
 
 double NeuronInteractor::activateFunction(double value) {
@@ -108,6 +108,10 @@ NeuronType NeuronInteractor::getType() {
 
 bool NeuronInteractor::isOutputNeuron() {
     return isOutput;
+}
+
+void NeuronInteractor::isOutputNeuronEnable(bool enable) {
+    isOutput = enable;
 }
 
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {

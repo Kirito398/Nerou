@@ -30,6 +30,7 @@ public:
     void onStopActionClicked();
     void onPauseActionClicked();
     void onDebugActionClicked();
+    void onMakeOutputNeuronActionClicked();
 
 private:
     MainWindowInterface *view;

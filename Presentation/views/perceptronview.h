@@ -15,6 +15,7 @@ public:
     QPixmap getItemIcon() const override;
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;
+    void setOutputNeuron(bool enable);
 
 private:
     QPainterPath shape() const override;

@@ -177,6 +177,7 @@ void MainWindow::initToolBars() {
 
     toolsToolBar = addToolBar("Tools");
     toolsToolBar->addAction(addOutputNeuronsAction);
+    toolsToolBar->addAction(makeOutputNeuronAction);
     toolsToolBar->addAction(deleteAction);
 
     zoomSlider = new QSlider();
@@ -198,6 +199,7 @@ void MainWindow::initMenu() {
 
     itemMenu = menuBar()->addMenu(tr("Item"));
     itemMenu->addAction(addOutputNeuronsAction);
+    itemMenu->addAction(makeOutputNeuronAction);
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();
 
@@ -247,6 +249,10 @@ void MainWindow::initActions() {
     resetZoomAction = new QAction(QIcon(":/images/zoom_reset_icon.png"), tr("Reset zoom"), this);
     resetZoomAction->setStatusTip(tr("Reset scene zoom"));
     connect(resetZoomAction, SIGNAL(triggered(bool)), this, SLOT(onResetZoomActionClicked()));
+
+    makeOutputNeuronAction = new QAction(QIcon(":/images/output_neuron_icon.png"), tr("Make output neuron"));
+    makeOutputNeuronAction->setStatusTip(tr("Make selected neuron to the output neuron"));
+    connect(makeOutputNeuronAction, SIGNAL(triggered(bool)), this, SLOT(onMakeOutputNeuronActionClicked()));
 }
 
 void MainWindow::onAddOutputNeuronsActionClicked() {
@@ -303,6 +309,10 @@ void MainWindow::onDebugActionClicked() {
     scene->onDebugActionClicked();
 }
 
+void MainWindow::onMakeOutputNeuronActionClicked() {
+    scene->onMakeOutputNeuronActionClicked();
+}
+
 void MainWindow::zoomIn() {
     zoomSlider->setValue(zoomSlider->value() + 6);
 }
@@ -324,6 +334,7 @@ QAction *MainWindow::getAction(int type) {
     switch (type) {
         case AddOutputNeurons : return addOutputNeuronsAction;
         case Delete : return deleteAction;
+        case MakeOutputNeuron : return makeOutputNeuronAction;
         default: return nullptr;
     }
 }

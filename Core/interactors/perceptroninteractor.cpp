@@ -45,6 +45,10 @@ void PerceptronInteractor::onDeltaValueChanged() {
 
 }
 
+void PerceptronInteractor::setOutputNeuron(bool enable) {
+    isOutputNeuronEnable(enable);
+}
+
 void PerceptronInteractor::makeInputSignal() {
     inputSignal = new double[inputSignalCount];
 

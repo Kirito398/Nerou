@@ -376,6 +376,19 @@ void PaintScene::onDebugActionClicked() {
     interactor->debugRun();
 }
 
+void PaintScene::onMakeOutputNeuronActionClicked() {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+
+    for (auto item : selectedItems) {
+        PerceptronView *perceptron = dynamic_cast<PerceptronView *>(item);
+
+        if (perceptron == nullptr)
+            continue;
+
+        perceptron->setOutputNeuron(true);
+    }
+}
+
 void PaintScene::setView(MainWindowInterface *interfaces) {
     view = interfaces;
 }

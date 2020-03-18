@@ -19,6 +19,7 @@ private:
     unsigned long getID() override;
     void deleteNeuron() override;
     void clean() override;
+    void setOutputNeuron(bool enable) override;
     void makeInputSignal();
     void calculateOut();
     void sendSignal();
