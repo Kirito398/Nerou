@@ -2,6 +2,7 @@
 #define MAININTERACTOR_H
 
 #include <vector>
+#include <string>
 
 #include "interfaces/maininteractorinterface.h"
 
@@ -26,6 +27,7 @@ public:
     ArrowInteractorListener *createNewCore(unsigned long inputID, unsigned long outputID);
     void removeNeuron(unsigned long neuronID) override;
     void removeSinaps(unsigned long sinapsID) override;
+    std::vector<unsigned long> getOutputsNeuronsList();
     void run();
     void stop();
     void pause();
@@ -37,6 +39,7 @@ private:
     void onProcessStopped();
     void onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber);
     void clearProcessParameters();
+    void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) override;
 
 private:
     static MainInteractor *instance;

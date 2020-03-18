@@ -9,6 +9,7 @@ public:
     virtual void onInputSignalChanged() = 0;
     virtual void onDeltaValueChanged() = 0;
     virtual void removeSinaps(unsigned long sinapsID) = 0;
+    virtual unsigned long getID() = 0;
     virtual NeuronType getType() = 0;
 };
 

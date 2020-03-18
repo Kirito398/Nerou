@@ -13,8 +13,8 @@ public:
     DataInteractor();
     void start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
-    unsigned long getClassNumber();
-    unsigned long getIterationNumber();
+    unsigned long getClassNumber() override;
+    unsigned long getTrainingIterationNumber();
     void setPosition(double x, double y) override;
 
 private:
@@ -24,12 +24,15 @@ private:
     void clearValue();
     unsigned long getID() override;
     void deleteNeuron() override;
-    void addClass(std::vector<std::string> list) override;
+    void addClass(ClassModel model) override;
     void onInputSignalChanged() override;
     void onDeltaValueChanged() override;
     void setView(DataPresentorListener *listener) override;
     void setSize(unsigned long row, unsigned long column) override;
     void clean() override;
+    void clearClassList() override;
+    ClassModel getClass(unsigned long id) override;
+    RepositoryInterface *getRepository() override;
 
 private:
     DataPresentorListener *view;
@@ -37,8 +40,7 @@ private:
     bool isColorMode;
     double *value, **colorValue;
     unsigned int row, column;
-    unsigned long classNumber, iterationNumber;
-    std::vector<std::vector<std::string>> listPaths;
+    std::vector<ClassModel> classList;
 };
 
 #endif // DATAINTERACTOR_H

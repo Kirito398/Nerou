@@ -2,8 +2,10 @@
 
 #include <QPainter>
 #include <QThread>
+#include <QDialog>
 
 #include "presenters/datapresentor.h"
+#include "dialogs/dataparametersdialog.h"
 
 DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingView(Data, parent)
 {
@@ -12,11 +14,15 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
     presentor = new DataPresentor();
     presentor->setView(this);
 
-    if (listener != nullptr)
+    if (listener != nullptr) {
         presentor->setInteractor(listener);
+        setToolTip("Neuron_" + QString::number(presentor->getID()));
+    }
 
     bounding = QRectF (-30, -30, 60, 60);
     imageBounding = QRectF(-30, -30, 30, 30);
+
+    parametersDialog = nullptr;
 }
 
 void DataView::updatePosition(double x, double y) {
@@ -73,6 +79,35 @@ void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     Q_UNUSED(option)
     Q_UNUSED(widget)
+}
+
+void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event)
+
+    if (parametersDialog == nullptr) {
+        parametersDialog = new DataParametersDialog(this, presentor);
+        connect(parametersDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
+        connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
+    }
+
+
+    QStringList trainingList, testingList, neuronsIDs;
+    presentor->getParameters(&trainingList, &testingList, &neuronsIDs);
+
+    parametersDialog->updateParameters(trainingList, testingList, neuronsIDs);
+    parametersDialog->show();
+}
+
+void DataView::onParametersUpdated() {
+    QStringList trainingList, testingList, neuronsIDs;
+
+    parametersDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
+    presentor->updateParameters(trainingList, testingList, neuronsIDs);
+    presentor->setImageSize(parametersDialog->getImageSize());
+}
+
+QStringList DataView::getOutputsNeuronsList() {
+    return outputsNeuronsList();
 }
 
 void DataView::makePolygon() {

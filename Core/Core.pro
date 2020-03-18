@@ -23,7 +23,8 @@ SOURCES += \
     interactors/neuroninteractor.cpp \
     interactors/perceptroninteractor.cpp \
     interactors/sinapsinteractor.cpp \
-    interactors/weightinteractor.cpp
+    interactors/weightinteractor.cpp \
+    models/classmodel.cpp
 
 HEADERS += \
     Core_global.h \
@@ -45,7 +46,8 @@ HEADERS += \
     listeners/mainpresentorlistener.h \
     listeners/perceptroninteractorlistener.h \
     listeners/perceptronpresentorlistener.h \
-    listeners/sinapspresentorlistener.h
+    listeners/sinapspresentorlistener.h \
+    models/classmodel.h
 
 # Default rules for deployment.
 unix {

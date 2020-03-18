@@ -18,6 +18,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     dialogs/addoutputneuronsdialog.cpp \
+    dialogs/dataaddtableitemdialog.cpp \
+    dialogs/dataparametersdialog.cpp \
     main.cpp \
     models/convolutionitem.cpp \
     models/selectoritem.cpp \
@@ -34,6 +36,8 @@ SOURCES += \
 
 HEADERS += \
     dialogs/addoutputneuronsdialog.h \
+    dialogs/dataaddtableitemdialog.h \
+    dialogs/dataparametersdialog.h \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
     interfaces/mainwindowinterface.h \

@@ -12,8 +12,10 @@ PerceptronView::PerceptronView(PerceptronInteractorListener *listener, QObject *
     presentor = new PerceptronPresentor();
     presentor->setView(this);
 
-    if (listener != nullptr)
+    if (listener != nullptr) {
         presentor->setInteractor(listener);
+        setToolTip("Neuron_" + QString::number(presentor->getID()));
+    }
 
     neuronColor = Qt::black;
     value = "";
@@ -66,6 +68,10 @@ void PerceptronView::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     Q_UNUSED(option)
     Q_UNUSED(widget)
+}
+
+void PerceptronView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+
 }
 
 void PerceptronView::makePolygon() {

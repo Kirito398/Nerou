@@ -1,9 +1,12 @@
 #include "datapresentor.h"
 
 #include <QDir>
+#include <QSize>
 
 #include "listeners/datainteractorlistener.h"
 #include "listeners/dataviewlistener.h"
+#include "models/classmodel.h"
+#include "interfaces/repositoryinterface.h"
 
 DataPresentor::DataPresentor()
 {
@@ -18,19 +21,39 @@ void DataPresentor::setInteractor(DataInteractorListener *listener) {
     interactor = listener;
     interactor->setView(this);
 
-    QDir dir("TrainSet");
-    QString mainPath = "TrainSet/0/";
-    dir.setPath(mainPath);
-    QStringList listPath = dir.entryList(QStringList("*.jpg"));
+    repository = interactor->getRepository();
+}
 
-    std::vector<std::string> classList;
+void DataPresentor::updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronsIDs) {
+    int n = trainingList.size();
 
-    for (auto path : listPath) {
-        classList.push_back((mainPath + path).toStdString());
+    interactor->clearClassList();
+
+    for (int i = 0; i < n; i++) {
+        ClassModel model(neuronsIDs[i].split("_")[1].toDouble());
+        model.setTrainingMainPath(trainingList[i].toStdString());
+        model.setTestingMainPath(testingList[i].toStdString());
+        model.setTrainingPathsList(repository->getPaths(trainingList[i].toStdString()));
+        model.setTestingPathslist(repository->getPaths(testingList[i].toStdString()));
+
+        interactor->addClass(model);
     }
+}
 
-    interactor->addClass(classList);
-    interactor->setSize(28, 28);
+void DataPresentor::setImageSize(QSize size) {
+    interactor->setSize(size.height(), size.width());
+}
+
+void DataPresentor::getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronsIDs) {
+    unsigned long classNumber = interactor->getClassNumber();
+
+    for (unsigned long i = 0; i < classNumber; i++) {
+        ClassModel model = interactor->getClass(i);
+
+        trainingList->append(QString::fromStdString(model.getTrainingMainPath()));
+        testingList->append(QString::fromStdString(model.getTestingMainPath()));
+        neuronsIDs->append("Neuron_" + QString::number(model.getNeuronID()));
+    }
 }
 
 void DataPresentor::updatePosition(double x, double y) {
@@ -47,6 +70,10 @@ void DataPresentor::setPosition(double x, double y) {
 
 unsigned long DataPresentor::getID() {
     return interactor->getID();
+}
+
+RepositoryInterface *DataPresentor::getRepository() {
+    return repository;
 }
 
 DataPresentor::~DataPresentor() {

@@ -123,6 +123,10 @@ bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
     return false;
 }
 
+QStringList MovingView::outputsNeuronsList() {
+    return view->getOutputsNeuronsList();
+}
+
 void MovingView::updateArrowsPosition() {
     for(auto arrow : inputArrows)
         arrow->updatePosition();

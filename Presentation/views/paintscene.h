@@ -51,6 +51,7 @@ private:
     void deleteItem(QGraphicsItem *item) override;
     QAction *getAction(int type) override;
     void clearSelectedItem() override;
+    QStringList getOutputsNeuronsList() override;
     void addArrow();
     void addArrow(MovingView *startView, MovingView *endView);
     void addMovingView(QPointF position);

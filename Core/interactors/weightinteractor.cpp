@@ -16,12 +16,14 @@ void WeightInteractor::init() {
 }
 
 void WeightInteractor::sendSignal(double signal) {
-    view->setActive(true);
+    if (view != nullptr)
+        view->setActive(true);
 
     value = signal * weight;
     outputListener->onInputSignalChanged();
 
-    view->setActive(false);
+    if (view != nullptr)
+        view->setActive(false);
 }
 
 void WeightInteractor::setView(SinapsPresentorListener *listener) {

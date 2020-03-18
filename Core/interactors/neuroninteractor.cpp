@@ -11,6 +11,7 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     id = 0;
     posX = 0;
     posY = 0;
+    isOutput = true;
 }
 
 double NeuronInteractor::activateFunction(double value) {
@@ -51,6 +52,14 @@ void NeuronInteractor::normalization(double* value, unsigned int size) {
 void NeuronInteractor::normalization(double** value, unsigned int row, unsigned int column) {
     for (unsigned long i = 0; i < row; i++)
         normalization(value[i], column);
+}
+
+void NeuronInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
+    for (auto sinaps : inputsSinaps)
+        if (sinaps->getOutputNeuron()->getID() == learningNeuronID)
+            return;
+
+    interactor->makeLearningSinaps(learningNeuronID, dataNeuronID);
 }
 
 void NeuronInteractor::setID(unsigned long id) {
@@ -95,6 +104,10 @@ bool NeuronInteractor::isArrowAlreadyAdded(SinapsInteractor* arrow) {
 
 NeuronType NeuronInteractor::getType() {
     return type;
+}
+
+bool NeuronInteractor::isOutputNeuron() {
+    return isOutput;
 }
 
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {

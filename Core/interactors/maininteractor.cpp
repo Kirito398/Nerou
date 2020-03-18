@@ -35,11 +35,11 @@ void MainInteractor::run() {
         sinaps->init();
 
     unsigned long classNumber = dataList.at(0)->getClassNumber();
-    unsigned long iterationNumber = dataList.at(0)->getIterationNumber();
+    unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long neuronNumber = dataList.size();
 
-    for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
-        for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+    for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+        for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
             for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
                 if (isStopped) {
                     onProcessStopped();
@@ -81,6 +81,13 @@ void MainInteractor::createNewData(double x, double y) {
     neuronsList.push_back(newData);
     dataList.push_back(newData);
     view->onNewDataAdded(newData);
+}
+
+void MainInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
+    if (dynamic_cast<PerceptronInteractor *>(findNeuron(learningNeuronID)) != nullptr)
+        createNewWeight(learningNeuronID, dataNeuronID);
+    else
+        createNewCore(learningNeuronID, dataNeuronID);
 }
 
 ArrowInteractorListener *MainInteractor::createNewWeight(unsigned long inputID, unsigned long outputID) {
@@ -160,6 +167,16 @@ void MainInteractor::removeSinaps(unsigned long sinapsID) {
             break;
         }
     }
+}
+
+std::vector<unsigned long> MainInteractor::getOutputsNeuronsList() {
+    std::vector<unsigned long> outputsNeuronsList;
+
+    for (auto neuron : neuronsList)
+        if (neuron->isOutputNeuron())
+            outputsNeuronsList.push_back(neuron->getID());
+
+    return outputsNeuronsList;
 }
 
 void MainInteractor::stop() {

@@ -2,6 +2,7 @@
 
 #include <QImage>
 #include <QColor>
+#include <QDir>
 
 MainRepository::MainRepository()
 {
@@ -46,4 +47,23 @@ double **MainRepository::loadColorValue(std::string path) {
     }
 
     return colorValue;
+}
+
+std::vector<std::string> MainRepository::getPaths(std::string mainPath) {
+    std::vector<std::string> list;
+    QString mPath = QString::fromStdString(mainPath);
+
+    if (mPath.isEmpty())
+        return list;
+
+    QDir dir(mPath);
+    QStringList entryList;
+    entryList << "*.jpg" << "*.png";
+
+    QStringList listPaths = dir.entryList(entryList);
+
+    for (auto path : listPaths)
+        list.push_back((mPath + path).toStdString());
+
+    return list;
 }

@@ -4,6 +4,7 @@
 #include "interfaces/coreinterface.h"
 #include "interfaces/weightinterface.h"
 #include "interfaces/repositoryinterface.h"
+#include "models/classmodel.h"
 
 DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
@@ -13,23 +14,24 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     repository = nullptr;
     column = 0;
     row = 0;
-    classNumber = 0;
-    iterationNumber = 0;
     isColorMode = false;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
-    if (iterationNumber > listPaths[classNumber].size())
+    if (classList.empty())
         return;
 
-    view->setImage(listPaths[classNumber][iterationNumber]);
+    if (iterationNumber > classList[classNumber].getTrainingPathsList().size())
+        return;
+
+    view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
 
     if (isColorMode) {
-        colorValue = repository->loadColorValue(listPaths[classNumber][iterationNumber]);
+        colorValue = repository->loadColorValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
         normalization(colorValue, 3, row * column);
         colorsToValue();
     } else {
-        value = repository->loadValue(listPaths[classNumber][iterationNumber]);
+        value = repository->loadValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
         normalization(value, row * column);
     }
 
@@ -72,12 +74,21 @@ void DataInteractor::colorsToValue() {
     }
 }
 
-void DataInteractor::addClass(std::vector<std::string> list) {
-    listPaths.push_back(list);
-    classNumber++;
+void DataInteractor::addClass(ClassModel model) {
+    classList.push_back(model);
 
-    if (list.size() > iterationNumber)
-        iterationNumber = list.size();
+    makeLearningSinaps(model.getNeuronID(), id);
+}
+
+ClassModel DataInteractor::getClass(unsigned long id) {
+    return classList[id];
+}
+
+void DataInteractor::clearClassList() {
+    classList.clear();
+
+    for(auto sinaps : inputsSinaps)
+        sinaps->removeSinaps();
 }
 
 void DataInteractor::setRepository(RepositoryInterface *repository) {
@@ -85,11 +96,20 @@ void DataInteractor::setRepository(RepositoryInterface *repository) {
 }
 
 unsigned long DataInteractor::getClassNumber() {
-    return classNumber;
+    return classList.size();
 }
 
-unsigned long DataInteractor::getIterationNumber() {
-    return iterationNumber;
+unsigned long DataInteractor::getTrainingIterationNumber() {
+    unsigned long number = 0;
+
+    for (auto item : classList) {
+        unsigned long size = item.getTrainingPathsList().size();
+
+        if (size > number)
+            number = size;
+    }
+
+    return number;
 }
 
 void DataInteractor::clearColorValue() {
@@ -142,6 +162,10 @@ void DataInteractor::clean() {
     clearValue();
     clearColorValue();
     view->setImage("");
+}
+
+RepositoryInterface *DataInteractor::getRepository() {
+    return repository;
 }
 
 void DataInteractor::onInputSignalChanged() {
