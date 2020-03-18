@@ -13,7 +13,7 @@ public:
     DataInteractor();
     void start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
-    unsigned long getClassNumber();
+    unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber();
     void setPosition(double x, double y) override;
 
@@ -31,6 +31,7 @@ private:
     void setSize(unsigned long row, unsigned long column) override;
     void clean() override;
     void clearClassList() override;
+    ClassModel getClass(unsigned long id) override;
 
 private:
     DataPresentorListener *view;

@@ -3,6 +3,8 @@
 ClassModel::ClassModel(unsigned long neuronID)
 {
     this->neuronID = neuronID;
+    trainingMainPath = "";
+    testingMainPath = "";
 }
 
 void ClassModel::setTrainingPathsList(std::vector<std::string> list) {
@@ -25,4 +27,20 @@ std::vector<std::string> ClassModel::getTrainingPathsList() {
 
 unsigned long ClassModel::getNeuronID() {
     return neuronID;
+}
+
+void ClassModel::setTrainingMainPath(std::string path) {
+    trainingMainPath = path;
+}
+
+void ClassModel::setTestingMainPath(std::string path){
+    testingMainPath = path;
+}
+
+std::string ClassModel::getTrainingMainPath() {
+    return trainingMainPath;
+}
+
+std::string ClassModel::getTestingMainPath() {
+    return testingMainPath;
 }

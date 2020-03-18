@@ -19,11 +19,12 @@ public:
     void initButtons();
     void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs);
     QSize getImageSize();
-    void clearTable();
+    void updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronIDs);
 
 private:
     void updateOutputsNeuronsList();
     bool checkImageSize();
+    void addNewSet(QString trainingSetPath, QString testingSetPath, QString neuronID);
     void enterEvent(QEvent *event) override;
 
 private:

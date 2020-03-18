@@ -28,6 +28,8 @@ void DataPresentor::updateParameters(QStringList trainingList, QStringList testi
 
     for (int i = 0; i < n; i++) {
         ClassModel model(neuronsIDs[i].split("_")[1].toDouble());
+        model.setTrainingMainPath(trainingList[i].toStdString());
+        model.setTestingMainPath(testingList[i].toStdString());
         model.setTrainingPathsList(getPaths(trainingList[i]));
         model.setTestingPathslist(getPaths(testingList[i]));
 
@@ -55,6 +57,18 @@ std::vector<std::string> DataPresentor::getPaths(QString mainPath) {
 
 void DataPresentor::setImageSize(QSize size) {
     interactor->setSize(size.height(), size.width());
+}
+
+void DataPresentor::getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronsIDs) {
+    unsigned long classNumber = interactor->getClassNumber();
+
+    for (unsigned long i = 0; i < classNumber; i++) {
+        ClassModel model = interactor->getClass(i);
+
+        trainingList->append(QString::fromStdString(model.getTrainingMainPath()));
+        testingList->append(QString::fromStdString(model.getTestingMainPath()));
+        neuronsIDs->append("Neuron_" + QString::number(model.getNeuronID()));
+    }
 }
 
 void DataPresentor::updatePosition(double x, double y) {

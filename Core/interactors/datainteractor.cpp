@@ -77,6 +77,10 @@ void DataInteractor::addClass(ClassModel model) {
     makeLearningSinaps(model.getNeuronID(), id);
 }
 
+ClassModel DataInteractor::getClass(unsigned long id) {
+    return classList[id];
+}
+
 void DataInteractor::clearClassList() {
     classList.clear();
 

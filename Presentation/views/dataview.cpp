@@ -90,7 +90,11 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
         connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
     }
 
-    parametersDialog->clearTable();
+
+    QStringList trainingList, testingList, neuronsIDs;
+    presentor->getParameters(&trainingList, &testingList, &neuronsIDs);
+
+    parametersDialog->updateParameters(trainingList, testingList, neuronsIDs);
     parametersDialog->show();
 }
 

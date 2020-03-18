@@ -23,6 +23,7 @@ public:
     unsigned long getID();
     void setImageSize(QSize size);
     void updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronsIDs);
+    void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronsIDs);
 
 private:
     void updatePosition(double x, double y) override;

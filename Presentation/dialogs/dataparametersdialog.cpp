@@ -57,9 +57,6 @@ void DataParametersDialog::updateOutputsNeuronsList() {
 }
 
 void DataParametersDialog::addNewSet() {
-    int i = table->rowCount();
-    table->insertRow(i);
-
     QString trainingSetPath = dialog->getTrainingSetPath();
     QString testingSetPath = dialog->getTestingSetPath();
     QString neuronID = dialog->getNeuronID();
@@ -69,6 +66,13 @@ void DataParametersDialog::addNewSet() {
 
     if (!trainingSetPath.isEmpty())
         trainingSetPath += "/";
+
+    addNewSet(trainingSetPath, testingSetPath, neuronID);
+}
+
+void DataParametersDialog::addNewSet(QString trainingSetPath, QString testingSetPath, QString neuronID) {
+    int i = table->rowCount();
+    table->insertRow(i);
 
     table->setItem(i, 0, new QTableWidgetItem(neuronID));
     table->setItem(i, 1, new QTableWidgetItem(trainingSetPath));
@@ -138,11 +142,15 @@ void DataParametersDialog::getParameters(QStringList *trainingList, QStringList 
     }
 }
 
-void DataParametersDialog::clearTable() {
-    if (table != nullptr) {
-        table->clearContents();
-        table->setRowCount(0);
-    }
+void DataParametersDialog::updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronIDs) {
+    if (table == nullptr)
+        return;
+
+    table->clearContents();
+    table->setRowCount(0);
+
+    for (int i = 0; i < trainingList.size(); i++)
+        addNewSet(trainingList[i], testingList[i], neuronIDs[i]);
 }
 
 void DataParametersDialog::initControllButtons() {
