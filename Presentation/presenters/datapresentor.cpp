@@ -5,6 +5,7 @@
 
 #include "listeners/datainteractorlistener.h"
 #include "listeners/dataviewlistener.h"
+#include "models/classmodel.h"
 
 DataPresentor::DataPresentor()
 {
@@ -20,25 +21,36 @@ void DataPresentor::setInteractor(DataInteractorListener *listener) {
     interactor->setView(this);
 }
 
-void DataPresentor::setPathsList(QStringList pathsList, bool isTrainingSet) {
-    interactor->clearPathsList();
+void DataPresentor::updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronsIDs) {
+    int n = trainingList.size();
 
-    if (pathsList.isEmpty())
-        return;
+    interactor->clearClassList();
 
+    for (int i = 0; i < n; i++) {
+        ClassModel model(neuronsIDs[i].split("_")[1].toDouble());
+        model.setTrainingPathsList(getPaths(trainingList[i]));
+        model.setTestingPathslist(getPaths(testingList[i]));
+
+        interactor->addClass(model);
+    }
+}
+
+std::vector<std::string> DataPresentor::getPaths(QString mainPath) {
+    std::vector<std::string> list;
+
+    if (mainPath.isEmpty())
+        return list;
+
+    QDir dir(mainPath);
     QStringList entryList;
     entryList << "*.jpg" << "*.png";
 
-    for (auto mainPath : pathsList) {
-        QDir dir(mainPath);
-        QStringList listPath = dir.entryList(entryList);
-        std::vector<std::string> classList;
+    QStringList listPaths = dir.entryList(entryList);
 
-        for (auto path : listPath)
-            classList.push_back((mainPath + "/" + path).toStdString());
+    for (auto path : listPaths)
+        list.push_back((mainPath + path).toStdString());
 
-        //interactor->addClass(classList, isTrainingSet);
-    }
+    return list;
 }
 
 void DataPresentor::setImageSize(QSize size) {

@@ -19,10 +19,10 @@ public:
     void setInteractor(MainInteractorInterface *interface);
     void setID(unsigned long id);
     unsigned long getID() const;
+    void removeSinaps();
 
 protected:
     double random();
-    void removeSinaps();
 
 protected:
     SinapsListener *inputListener;

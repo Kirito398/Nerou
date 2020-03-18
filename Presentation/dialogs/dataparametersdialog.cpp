@@ -99,7 +99,7 @@ bool DataParametersDialog::checkImageSize() {
     int n = table->rowCount();
     QStringList entryList;
     entryList << "*.jpg" << "*.png";
-    QSize *defaultSize = nullptr;
+    defaultSize = nullptr;
 
     for (int i = 0; i < n; i++) {
         QString mainPath = table->item(i, 1)->text().isEmpty() ? table->item(i, 2)->text() : table->item(i, 1)->text();
@@ -123,6 +123,10 @@ bool DataParametersDialog::checkImageSize() {
 void DataParametersDialog::remove() {
     table->model()->removeRow(table->selectionModel()->currentIndex().row());
     updateOutputsNeuronsList();
+}
+
+QSize DataParametersDialog::getImageSize() {
+    return QSize(*defaultSize);
 }
 
 void DataParametersDialog::getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs) {

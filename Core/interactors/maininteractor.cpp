@@ -35,11 +35,11 @@ void MainInteractor::run() {
         sinaps->init();
 
     unsigned long classNumber = dataList.at(0)->getClassNumber();
-    unsigned long iterationNumber = dataList.at(0)->getIterationNumber();
+    unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long neuronNumber = dataList.size();
 
-    for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
-        for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+    for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+        for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
             for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
                 if (isStopped) {
                     onProcessStopped();

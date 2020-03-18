@@ -197,11 +197,16 @@ void DataAddTableItemDialog::initTestingLayout() {
 }
 
 void DataAddTableItemDialog::setOutputsNeuronsList(QStringList list) {
+    QString currentItem = neuronsComboBox->itemText(neuronsComboBox->currentIndex());
+
     neuronsList.clear();
     neuronsList.append(list);
 
     neuronsComboBox->clear();
     neuronsComboBox->addItems(neuronsList);
+
+    if (neuronsList.contains(currentItem))
+        neuronsComboBox->setCurrentIndex(neuronsComboBox->findText(currentItem));
 }
 
 QSize *DataAddTableItemDialog::getDefaultImageSize() {

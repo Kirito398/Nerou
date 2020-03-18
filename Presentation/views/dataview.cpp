@@ -97,6 +97,8 @@ void DataView::onParametersUpdated() {
     QStringList trainingList, testingList, neuronsIDs;
 
     parametersDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
+    presentor->updateParameters(trainingList, testingList, neuronsIDs);
+    presentor->setImageSize(parametersDialog->getImageSize());
 }
 
 QStringList DataView::getOutputsNeuronsList() {

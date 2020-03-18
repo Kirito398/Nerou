@@ -7,6 +7,7 @@ class QBoxLayout;
 class QTableWidget;
 class DataAddTableItemDialog;
 class DataViewListener;
+class QSize;
 
 class DataParametersDialog : public QDialog
 {
@@ -17,6 +18,7 @@ public:
     void initTable();
     void initButtons();
     void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs);
+    QSize getImageSize();
 
 private:
     void updateOutputsNeuronsList();
@@ -24,6 +26,7 @@ private:
     void enterEvent(QEvent *event) override;
 
 private:
+    QSize *defaultSize;
     DataViewListener *view;
     DataAddTableItemDialog *dialog;
     QBoxLayout *layout;
@@ -35,7 +38,6 @@ private slots:
     void addNewSet();
     void accept() override;
     void applied();
-
 
 signals:
     void onApplied();

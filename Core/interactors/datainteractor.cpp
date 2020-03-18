@@ -4,6 +4,7 @@
 #include "interfaces/coreinterface.h"
 #include "interfaces/weightinterface.h"
 #include "interfaces/repositoryinterface.h"
+#include "models/classmodel.h"
 
 DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
@@ -13,23 +14,21 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     repository = nullptr;
     column = 0;
     row = 0;
-    trainingClassNumber = 0;
-    trainingIterationNumber = 0;
     isColorMode = false;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
-    if (iterationNumber > trainingListPaths[classNumber].size())
+    if (iterationNumber > classList[classNumber].getTrainingPathsList().size())
         return;
 
-    view->setImage(trainingListPaths[classNumber][iterationNumber]);
+    view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
 
     if (isColorMode) {
-        colorValue = repository->loadColorValue(trainingListPaths[classNumber][iterationNumber]);
+        colorValue = repository->loadColorValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
         normalization(colorValue, 3, row * column);
         colorsToValue();
     } else {
-        value = repository->loadValue(trainingListPaths[classNumber][iterationNumber]);
+        value = repository->loadValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
         normalization(value, row * column);
     }
 
@@ -72,25 +71,17 @@ void DataInteractor::colorsToValue() {
     }
 }
 
-void DataInteractor::addClass(std::vector<std::string> pathList, unsigned long neuronID, bool isTrainingSet) {
-    if (isTrainingSet) {
-        trainingListPaths.push_back(pathList);
-        trainingNeuronsID.push_back(neuronID);
-        trainingClassNumber++;
+void DataInteractor::addClass(ClassModel model) {
+    classList.push_back(model);
 
-        if (pathList.size() > trainingIterationNumber)
-            trainingIterationNumber = pathList.size();
-    }
-
-    makeLearningSinaps(neuronID, id);
+    makeLearningSinaps(model.getNeuronID(), id);
 }
 
-void DataInteractor::clearPathsList() {
-    trainingListPaths.clear();
-    trainingNeuronsID.clear();
+void DataInteractor::clearClassList() {
+    classList.clear();
 
     for(auto sinaps : inputsSinaps)
-        delete sinaps;
+        sinaps->removeSinaps();
 }
 
 void DataInteractor::setRepository(RepositoryInterface *repository) {
@@ -98,11 +89,20 @@ void DataInteractor::setRepository(RepositoryInterface *repository) {
 }
 
 unsigned long DataInteractor::getClassNumber() {
-    return trainingClassNumber;
+    return classList.size();
 }
 
-unsigned long DataInteractor::getIterationNumber() {
-    return trainingIterationNumber;
+unsigned long DataInteractor::getTrainingIterationNumber() {
+    unsigned long number = 0;
+
+    for (auto item : classList) {
+        unsigned long size = item.getTrainingPathsList().size();
+
+        if (size > number)
+            number = size;
+    }
+
+    return number;
 }
 
 void DataInteractor::clearColorValue() {
