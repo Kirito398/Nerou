@@ -201,3 +201,7 @@ QString DataAddTableItemDialog::getTrainingSetPath() {
 QString DataAddTableItemDialog::getTestingSetPath() {
     return testingSetPath->text();
 }
+
+QString DataAddTableItemDialog::getNeuronID() {
+    return neuronsComboBox->itemText(neuronsComboBox->currentIndex());
+}

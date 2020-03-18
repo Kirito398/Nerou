@@ -12,8 +12,10 @@ PerceptronView::PerceptronView(PerceptronInteractorListener *listener, QObject *
     presentor = new PerceptronPresentor();
     presentor->setView(this);
 
-    if (listener != nullptr)
+    if (listener != nullptr) {
         presentor->setInteractor(listener);
+        setToolTip("Neuron_" + QString::number(presentor->getID()));
+    }
 
     neuronColor = Qt::black;
     value = "";

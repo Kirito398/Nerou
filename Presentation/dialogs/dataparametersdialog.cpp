@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QApplication>
 
 #include "dialogs/dataaddtableitemdialog.h"
 #include "listeners/dataviewlistener.h"
@@ -24,31 +25,59 @@ DataParametersDialog::DataParametersDialog(DataViewListener *view, QWidget *pare
     setLayout(layout);
 }
 
+void DataParametersDialog::enterEvent(QEvent *event) {
+    QDialog::enterEvent(event);
+    updateOutputsNeuronsList();
+}
+
 void DataParametersDialog::add() {
     if (dialog == nullptr) {
         dialog = new DataAddTableItemDialog(this);
         connect(dialog, SIGNAL(onApplied()), this, SLOT(addNewSet()));
     }
 
-    dialog->setOutputsNeuronsList(view->getOutputsNeuronsList());
+    updateOutputsNeuronsList();
     dialog->show();
+}
+
+void DataParametersDialog::updateOutputsNeuronsList() {
+    if (dialog == nullptr)
+        return;
+
+    QStringList list = view->getOutputsNeuronsList();
+
+    for (int i = 0; i < table->rowCount(); i++) {
+        QString neuronID = table->item(i, 0)->text();
+        if (list.contains(neuronID))
+            list.removeAll(neuronID);
+    }
+
+    dialog->setOutputsNeuronsList(list);
 }
 
 void DataParametersDialog::addNewSet() {
     int i = table->rowCount();
     table->insertRow(i);
-    table->setItem(i, 0, new QTableWidgetItem(dialog->getTrainingSetPath()));
-    table->setItem(i, 1, new QTableWidgetItem(dialog->getTestingSetPath()));
-    table->setItem(i, 2, new QTableWidgetItem());
 
-    table->item(i, 0)->setToolTip(dialog->getTrainingSetPath());
-    table->item(i, 1)->setToolTip(dialog->getTestingSetPath());
+    QString trainingSetPath = dialog->getTrainingSetPath();
+    QString testingSetPath = dialog->getTestingSetPath();
+    QString neuronID = dialog->getNeuronID();
+
+    table->setItem(i, 0, new QTableWidgetItem(neuronID));
+    table->setItem(i, 1, new QTableWidgetItem(trainingSetPath));
+    table->setItem(i, 2, new QTableWidgetItem(testingSetPath));
+
+    table->item(i, 0)->setToolTip(neuronID);
+    table->item(i, 1)->setToolTip(trainingSetPath);
+    table->item(i, 2)->setToolTip(testingSetPath);
 
     table->resizeColumnToContents(i);
+    updateOutputsNeuronsList();
 }
 
 void DataParametersDialog::remove() {
-
+    table->model()->removeRow(table->selectionModel()->currentIndex().row());
+    updateOutputsNeuronsList();
 }
 
 void DataParametersDialog::initControllButtons() {
@@ -70,7 +99,7 @@ void DataParametersDialog::initTable() {
     table->setColumnCount(3);
 
     QStringList list;
-    list << tr("TrainingSet") << tr("TestingSet") << tr("Neuron");
+    list << tr("Neuron") << tr("TrainingSet") << tr("TestingSet");
     table->setHorizontalHeaderLabels(list);
     table->horizontalHeader()->setStretchLastSection(true);
     table->setShowGrid(true);

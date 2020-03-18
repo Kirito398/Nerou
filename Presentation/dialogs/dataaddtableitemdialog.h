@@ -16,6 +16,7 @@ public:
     DataAddTableItemDialog(QWidget *parent = nullptr);
     QString getTrainingSetPath();
     QString getTestingSetPath();
+    QString getNeuronID();
     void setOutputsNeuronsList(QStringList list);
 
 private:

@@ -18,6 +18,10 @@ public:
     void initButtons();
 
 private:
+    void updateOutputsNeuronsList();
+    void enterEvent(QEvent *event) override;
+
+private:
     DataViewListener *view;
     DataAddTableItemDialog *dialog;
     QBoxLayout *layout;

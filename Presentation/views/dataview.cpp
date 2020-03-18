@@ -14,8 +14,10 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
     presentor = new DataPresentor();
     presentor->setView(this);
 
-    if (listener != nullptr)
+    if (listener != nullptr) {
         presentor->setInteractor(listener);
+        setToolTip("Neuron_" + QString::number(presentor->getID()));
+    }
 
     bounding = QRectF (-30, -30, 60, 60);
     imageBounding = QRectF(-30, -30, 30, 30);
