@@ -90,6 +90,7 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
         connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
     }
 
+    parametersDialog->clearTable();
     parametersDialog->show();
 }
 

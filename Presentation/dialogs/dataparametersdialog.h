@@ -19,6 +19,7 @@ public:
     void initButtons();
     void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs);
     QSize getImageSize();
+    void clearTable();
 
 private:
     void updateOutputsNeuronsList();

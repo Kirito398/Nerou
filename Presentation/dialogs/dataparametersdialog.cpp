@@ -3,7 +3,6 @@
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QTableWidget>
-#include <QTableView>
 #include <QHeaderView>
 #include <QApplication>
 #include <QDir>
@@ -136,6 +135,13 @@ void DataParametersDialog::getParameters(QStringList *trainingList, QStringList 
         neuronIDs->append(table->item(i, 0)->text());
         trainingList->append(table->item(i, 1)->text());
         testingList->append(table->item(i, 2)->text());
+    }
+}
+
+void DataParametersDialog::clearTable() {
+    if (table != nullptr) {
+        table->clearContents();
+        table->setRowCount(0);
     }
 }
 
