@@ -30,6 +30,7 @@ public:
     void onStopActionClicked();
     void onPauseActionClicked();
     void onDebugActionClicked();
+    void setSelectedItemOutputsEnable(bool enable);
 
 private:
     MainWindowInterface *view;

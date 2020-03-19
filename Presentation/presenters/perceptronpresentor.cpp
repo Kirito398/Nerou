@@ -20,6 +20,10 @@ void PerceptronPresentor::setInteractor(PerceptronInteractorListener *listener) 
     interactor->setView(this);
 }
 
+bool PerceptronPresentor::isOutputNeuron() {
+    return interactor->getIsOutputNeuron();
+}
+
 void PerceptronPresentor::updatePosition(double x, double y) {
     view->updatePosition(x, y);
 }
@@ -30,6 +34,10 @@ void PerceptronPresentor::setPosition(double x, double y) {
 
 unsigned long PerceptronPresentor::getID() {
     return interactor->getID();
+}
+
+void PerceptronPresentor::setOutputNeuron(bool enable) {
+    interactor->setOutputNeuron(enable);
 }
 
 void PerceptronPresentor::setActive(bool enable) {

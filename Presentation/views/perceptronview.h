@@ -15,6 +15,7 @@ public:
     QPixmap getItemIcon() const override;
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;
+    void setOutputNeuron(bool enable);
 
 private:
     QPainterPath shape() const override;
@@ -26,10 +27,11 @@ private:
     void setActive(bool enable) override;
     void setOutValue(QString value) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    bool isOutputNeuron() override;
 
 private:
     PerceptronPresentor *presentor;
-    QColor neuronColor;
+    QColor neuronColor, forwardNeuronBrush, outputNeuronBrush;
     QString value;
 };
 

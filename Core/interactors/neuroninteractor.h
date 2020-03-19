@@ -24,6 +24,7 @@ public:
     bool isOutputNeuron();
 
 protected:
+    virtual void removeSinaps(unsigned long sinapsID) override;
     double activateFunction(double value);
     void activateFunction(double* value, unsigned int size);
     void activateFunction(double** value, unsigned int row, unsigned int column);
@@ -32,11 +33,11 @@ protected:
     void normalization(double** value, unsigned int row, unsigned int column);
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID);
     void removeNeuron();
+    void isOutputNeuronEnable(bool enable);
 
 private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);
     void removeSinapses();
-    void removeSinaps(unsigned long sinapsID) override;
     NeuronType getType() override;
 
 protected:

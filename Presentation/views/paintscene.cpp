@@ -159,6 +159,9 @@ void PaintScene::addArrow() {
 void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
     ArrowInteractorListener *listener = nullptr;
 
+    if (startView->isOutputNeuron())
+        return;
+
     if (startView->getType() == endView->getType()) {
         if (startView->getType() == MovingView::Perceptron)
             listener = interactor->createNewWeight(startView->getID(), endView->getID());
@@ -298,7 +301,9 @@ void PaintScene::onAddOutputNeuronsActionClicked() {
 
     for (auto item : selectedItems) {
         MovingView *view = dynamic_cast<MovingView*>(item);
-        if (view != nullptr)
+        if (view == nullptr)
+            continue;
+        if (!view->isOutputNeuron())
             inputsView.append(view);
     }
 
@@ -374,6 +379,25 @@ void PaintScene::onPauseActionClicked() {
 
 void PaintScene::onDebugActionClicked() {
     interactor->debugRun();
+}
+
+void PaintScene::setSelectedItemOutputsEnable(bool enable) {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    QList<PerceptronView *> perceptronList;
+
+    for (auto item : selectedItems) {
+        PerceptronView *perceptron = dynamic_cast<PerceptronView *>(item);
+
+        if (perceptron == nullptr)
+            continue;
+
+        perceptronList.append(perceptron);
+    }
+
+    for (auto perceptron : perceptronList)
+        perceptron->setOutputNeuron(enable);
+
+    this->clearSelectedItem();
 }
 
 void PaintScene::setView(MainWindowInterface *interfaces) {

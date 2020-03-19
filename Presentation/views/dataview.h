@@ -26,12 +26,14 @@ private:
     void setImage(QString path) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     QStringList getOutputsNeuronsList() override;
+    bool isOutputNeuron() override;
 
 private:
     DataPresentor *presentor;
     QImage image;
     QRectF bounding, imageBounding;
     DataParametersDialog *parametersDialog;
+    QColor brushColor;
 
 private slots:
     void onParametersUpdated();

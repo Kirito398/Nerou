@@ -11,7 +11,7 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     id = 0;
     posX = 0;
     posY = 0;
-    isOutput = true;
+    isOutput = false;
 }
 
 double NeuronInteractor::activateFunction(double value) {
@@ -110,6 +110,10 @@ bool NeuronInteractor::isOutputNeuron() {
     return isOutput;
 }
 
+void NeuronInteractor::isOutputNeuronEnable(bool enable) {
+    isOutput = enable;
+}
+
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
     for (unsigned long i = 0; i < inputsSinaps.size(); i++) {
         if (inputsSinaps.at(i)->getID() == sinapsID) {
@@ -129,11 +133,14 @@ void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
 }
 
 void NeuronInteractor::removeSinapses() {
-    for (auto sinaps : inputsSinaps)
-        delete sinaps;
+    std::vector<SinapsInteractor *> input(inputsSinaps);
+    std::vector<SinapsInteractor *> output(outputsSinaps);
 
-    for (auto sinaps : outputsSinaps)
-        delete sinaps;
+    for (auto sinaps : input)
+        sinaps->removeSinaps();
+
+    for (auto sinaps : output)
+        sinaps->removeSinaps();
 }
 
 void NeuronInteractor::removeNeuron() {

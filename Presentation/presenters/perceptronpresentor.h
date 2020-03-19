@@ -15,6 +15,8 @@ public:
     void setInteractor(PerceptronInteractorListener *listener);
     void setPosition(double x, double y);
     unsigned long getID();
+    void setOutputNeuron(bool enable);
+    bool isOutputNeuron();
 
 private:
     void updatePosition(double x, double y) override;

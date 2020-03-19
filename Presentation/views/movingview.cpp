@@ -13,6 +13,7 @@ MovingView::MovingView(ViewType type, QObject *parent) : QObject(parent), QGraph
     this->type = type;
     setFlag(QGraphicsItem::ItemIsSelectable);
     view = nullptr;
+    menu = nullptr;
 }
 
 MovingView::ViewType MovingView::getType() {
@@ -94,19 +95,26 @@ void MovingView::removeArrow(ArrowInterface* arrow) {
 }
 
 void MovingView::removeArrows() {
+    removeInputArrows();
+    removeOutputArrows();
+}
+
+void MovingView::removeOutputArrows() {
+    QMutableVectorIterator<ArrowInterface *> output(outputArrows);
+
+    while(output.hasNext()) {
+        ArrowInterface *arrow = output.next();
+        output.remove();
+        delete arrow;
+    }
+}
+
+void MovingView::removeInputArrows() {
     QMutableVectorIterator<ArrowInterface *> input(inputArrows);
 
     while (input.hasNext()) {
         ArrowInterface *arrow = input.next();
         input.remove();
-        delete arrow;
-    }
-
-    QMutableVectorIterator<ArrowInterface *> output(inputArrows);
-
-    while(output.hasNext()) {
-        ArrowInterface *arrow = output.next();
-        output.remove();
         delete arrow;
     }
 }
@@ -149,9 +157,22 @@ int MovingView::getOutputArrowNumber() {
 }
 
 void MovingView::initMenu() {
-    menu = new QMenu();
+    if (menu != nullptr)
+        menu->clear();
+    else
+        menu = new QMenu();
+
     menu->addAction(view->getAction(Delete));
-    menu->addAction(view->getAction(AddOutputNeurons));
+
+    if (!isOutputNeuron())
+        menu->addAction(view->getAction(AddOutputNeurons));
+
+    if (type == Perceptron) {
+        if (isOutputNeuron())
+            menu->addAction(view->getAction(MakeForwardNeuron));
+        else
+            menu->addAction(view->getAction(MakeOutputNeuron));
+    }
 }
 
 MovingView::~MovingView() {
