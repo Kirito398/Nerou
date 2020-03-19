@@ -25,6 +25,7 @@ public:
     virtual unsigned long getID() = 0;
     virtual void setPosition(QPointF position) = 0;
     virtual QPixmap getItemIcon() const = 0;
+    virtual bool isOutputNeuron() = 0;
 
 private:
     virtual void makePolygon() = 0;
@@ -41,7 +42,6 @@ private:
 
 protected:
     virtual void initMenu();
-    virtual bool isOutputNeuron() = 0;
     void updateArrowsPosition();
     void updateScene();
     void updateItem(QGraphicsItem *item);

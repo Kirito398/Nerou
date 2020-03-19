@@ -82,6 +82,9 @@ void PerceptronView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void PerceptronView::setOutputNeuron(bool enable) {
+    if (isOutputNeuron() == enable)
+        return;
+
     presentor->setOutputNeuron(enable);
     removeOutputArrows();
     initMenu();
