@@ -12,6 +12,10 @@ void CoreInteractor::init() {
 
 }
 
+void CoreInteractor::updateSinaps() {
+
+}
+
 void CoreInteractor::sendSignal(double *signal, unsigned int row, unsigned int column) {
 
 }

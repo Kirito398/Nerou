@@ -22,15 +22,20 @@ private:
     void setOutputNeuron(bool enable) override;
     bool getIsOutputNeuron() override;
     void makeInputSignal();
+    void makeInputDelta();
     void calculateOut();
+    void calculateDelta();
     void sendSignal();
+    void sendDelta();
     void clearInputSignal();
+    void clearInputDelta();
 
 private:
     PerceptronPresentorListener *view;
-    unsigned long inputSignalCount;
     double *inputSignal;
+    double *inputDelta;
     double outValue;
+    double deltaValue;
 };
 
 #endif // PERCEPTRONINTERACTOR_H
