@@ -58,7 +58,7 @@ std::vector<std::string> MainRepository::getPaths(std::string mainPath) {
 
     QDir dir(mPath);
     QStringList entryList;
-    entryList << "*.jpg" << "*.png";
+    entryList << "*.jpg" << "*.png" << "*.bmp";
 
     QStringList listPaths = dir.entryList(entryList);
 

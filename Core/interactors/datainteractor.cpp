@@ -23,7 +23,7 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
     if (classList.empty())
         return;
 
-    if (iterationNumber > classList[classNumber].getTrainingPathsList().size())
+    if (iterationNumber >= classList[classNumber].getTrainingPathsList().size())
         return;
 
     currentClass = classNumber;
