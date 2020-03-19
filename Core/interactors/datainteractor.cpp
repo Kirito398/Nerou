@@ -14,6 +14,8 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     repository = nullptr;
     column = 0;
     row = 0;
+    inputSignalCount = 0;
+    currentClass = 0;
     isColorMode = false;
 }
 
@@ -23,6 +25,8 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
     if (iterationNumber > classList[classNumber].getTrainingPathsList().size())
         return;
+
+    currentClass = classNumber;
 
     view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
 
@@ -190,7 +194,25 @@ RepositoryInterface *DataInteractor::getRepository() {
 }
 
 void DataInteractor::onInputSignalChanged() {
+    inputSignalCount++;
 
+    if (inputSignalCount == inputsSinaps.size()) {
+        sendDelta();
+        inputSignalCount = 0;
+    }
+}
+
+void DataInteractor::sendDelta() {
+    for (auto sinaps : inputsSinaps) {
+        if (sinaps->getType() == sinaps->Weigth) {
+            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
+
+            if (weight->getOutputNeuron()->getID() == classList[currentClass].getNeuronID())
+                weight->sendDelta(1.0 - weight->getValue());
+            else
+                weight->sendDelta(0.0 - weight->getValue());
+        }
+    }
 }
 
 void DataInteractor::onDeltaValueChanged() {

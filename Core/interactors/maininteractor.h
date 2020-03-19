@@ -39,6 +39,7 @@ private:
     void onProcessStopped();
     void onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber);
     void clearProcessParameters();
+    void updateSinaps();
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) override;
 
 private:

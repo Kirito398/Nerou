@@ -28,6 +28,7 @@ protected:
     double activateFunction(double value);
     void activateFunction(double* value, unsigned int size);
     void activateFunction(double** value, unsigned int row, unsigned int column);
+    double reActivateFunction(double value);
     double normalization(double value, double max, double min);
     void normalization(double* value, unsigned int size);
     void normalization(double** value, unsigned int row, unsigned int column);
@@ -41,6 +42,8 @@ private:
     NeuronType getType() override;
 
 protected:
+    unsigned long inputSignalCount;
+    unsigned long inputDeltaCount;
     std::vector<SinapsInteractor *> inputsSinaps;
     std::vector<SinapsInteractor *> outputsSinaps;
     double posX, posY;

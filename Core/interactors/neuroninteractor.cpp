@@ -29,6 +29,10 @@ void NeuronInteractor::activateFunction(double** value, unsigned int row, unsign
             value[i][j] = activateFunction(value[i][j]);
 }
 
+double NeuronInteractor::reActivateFunction(double value) {
+    return (1.0 - value) * value;
+}
+
 double NeuronInteractor::normalization(double value, double max, double min) {
     return (value - min) / (max - min);
 }

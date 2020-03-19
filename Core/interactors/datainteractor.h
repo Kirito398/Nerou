@@ -34,6 +34,7 @@ private:
     ClassModel getClass(unsigned long id) override;
     RepositoryInterface *getRepository() override;
     void removeSinaps(unsigned long sinapsID) override;
+    void sendDelta();
 
 private:
     DataPresentorListener *view;
@@ -41,6 +42,7 @@ private:
     bool isColorMode;
     double *value, **colorValue;
     unsigned int row, column;
+    unsigned long currentClass;
     std::vector<ClassModel> classList;
 };
 

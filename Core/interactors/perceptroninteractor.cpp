@@ -6,7 +6,9 @@
 PerceptronInteractor::PerceptronInteractor() : NeuronInteractor(Perceptron)
 {
     inputSignal = nullptr;
+    inputDelta = nullptr;
     inputSignalCount = 0;
+    inputDeltaCount = 0;
     view = nullptr;
 }
 
@@ -42,7 +44,14 @@ void PerceptronInteractor::onInputSignalChanged() {
 }
 
 void PerceptronInteractor::onDeltaValueChanged() {
+    inputDeltaCount++;
 
+    if (inputDeltaCount == outputsSinaps.size()) {
+        makeInputDelta();
+        calculateDelta();
+        sendDelta();
+        clearInputDelta();
+    }
 }
 
 void PerceptronInteractor::setOutputNeuron(bool enable) {
@@ -62,6 +71,15 @@ void PerceptronInteractor::makeInputSignal() {
     }
 }
 
+void PerceptronInteractor::makeInputDelta() {
+    inputDelta = new double[inputDeltaCount];
+
+    for (unsigned long i = 0; i < inputDeltaCount; i++) {
+        WeightInterface *weight = static_cast<WeightInterface *>(outputsSinaps.at(i));
+        inputDelta[i] = weight->getDelta();
+    }
+}
+
 void PerceptronInteractor::calculateOut() {
     double sum = 0;
     for (unsigned long i = 0; i < inputSignalCount; i++)
@@ -72,10 +90,25 @@ void PerceptronInteractor::calculateOut() {
     view->setOutValue(outValue);
 }
 
+void PerceptronInteractor::calculateDelta() {
+    double sum  = 0;
+    for (unsigned long i = 0; i < inputDeltaCount; i++)
+        sum += inputDelta[i];
+
+    deltaValue = sum * reActivateFunction(outValue);
+}
+
 void PerceptronInteractor::sendSignal() {
     for (unsigned long i = 0; i < outputsSinaps.size(); i++) {
         WeightInterface *weight = static_cast<WeightInterface *>(outputsSinaps.at(i));
         weight->sendSignal(outValue);
+    }
+}
+
+void PerceptronInteractor::sendDelta() {
+    for (unsigned long i = 0; i < inputsSinaps.size(); i++) {
+        WeightInterface * weight = static_cast<WeightInterface *>(inputsSinaps.at(i));
+        weight->sendDelta(deltaValue);
     }
 }
 
@@ -84,6 +117,13 @@ void PerceptronInteractor::clearInputSignal() {
     inputSignal = nullptr;
 
     inputSignalCount = 0;
+}
+
+void PerceptronInteractor::clearInputDelta() {
+    delete [] inputDelta;
+    inputDelta = nullptr;
+
+    inputDeltaCount = 0;
 }
 
 void PerceptronInteractor::clean() {

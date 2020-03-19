@@ -53,10 +53,17 @@ void MainInteractor::run() {
 
                 dataList.at(k)->start(i, j);
             }
+
+            updateSinaps();
         }
     }
 
     clearProcessParameters();
+}
+
+void MainInteractor::updateSinaps() {
+    for (auto sinaps : sinapsList)
+        sinaps->updateSinaps();
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
