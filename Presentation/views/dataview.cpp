@@ -22,6 +22,8 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
     bounding = QRectF (-30, -30, 60, 60);
     imageBounding = QRectF(-30, -30, 30, 30);
 
+    brushColor = QColor(115, 255, 227);
+
     parametersDialog = nullptr;
 }
 
@@ -49,7 +51,7 @@ QPixmap DataView::getItemIcon() const {
     QPainter painter(&pixmap);
 
     painter.setPen(Qt::black);
-    painter.setBrush(Qt::white);
+    painter.setBrush(brushColor);
     painter.translate(50, 50);
     painter.drawRect(bounding);
 
@@ -66,7 +68,7 @@ QRectF DataView::boundingRect() const {
 
 void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     painter->setPen(Qt::black);
-    painter->setBrush(Qt::white);
+    painter->setBrush(brushColor);
     painter->drawRect(bounding);
 
     if (isSelected()) {

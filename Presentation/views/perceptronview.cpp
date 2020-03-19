@@ -29,7 +29,7 @@ QPixmap PerceptronView::getItemIcon() const {
     QPainter painter(&pixmap);
 
     painter.setPen(neuronColor);
-    painter.setBrush(Qt::white);
+    painter.setBrush(forwardNeuronBrush);
     painter.translate(50, 50);
     painter.drawEllipse(-30, -30, 60, 60);
 

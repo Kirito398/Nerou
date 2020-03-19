@@ -33,6 +33,7 @@ private:
     QImage image;
     QRectF bounding, imageBounding;
     DataParametersDialog *parametersDialog;
+    QColor brushColor;
 
 private slots:
     void onParametersUpdated();
