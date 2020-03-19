@@ -38,6 +38,8 @@ void MainInteractor::run() {
     unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long neuronNumber = dataList.size();
 
+    view->onTrainingStarted();
+
     for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
         for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
             for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {

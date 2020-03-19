@@ -11,7 +11,7 @@
 class SelectorItem;
 class MainInteractor;
 class QAction;
-//class MainWindowInterface;
+class ProgressTrainingDialog;
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
@@ -39,8 +39,10 @@ private:
     QGraphicsLineItem *line;
     SelectorItem *selector;
     MovingView::ViewType viewType;
+    ProgressTrainingDialog *progressDialog;
 
 private:
+    void onTrainingStarted() override;
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
     void onNewDataAdded(DataInteractorListener *data) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

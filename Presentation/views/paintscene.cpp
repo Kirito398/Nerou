@@ -11,6 +11,7 @@
 #include "repositories/mainrepository.h"
 #include "interfaces/mainwindowinterface.h"
 #include "dialogs/addoutputneuronsdialog.h"
+#include "dialogs/progresstrainingdialog.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
@@ -18,8 +19,16 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     interactor->setView(this);
     line = nullptr;
     selector = nullptr;
+    progressDialog = nullptr;
     mode = PaintScene::Selector;
     viewType = MovingView::Perceptron;
+}
+
+void PaintScene::onTrainingStarted() {
+    if (progressDialog == nullptr)
+        progressDialog = new ProgressTrainingDialog();
+
+    progressDialog->show();
 }
 
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {

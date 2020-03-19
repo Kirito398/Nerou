@@ -9,6 +9,7 @@ class MainPresentorListener
 public:
     virtual void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) = 0;
     virtual void onNewDataAdded(DataInteractorListener *data) = 0;
+    virtual void onTrainingStarted() = 0;
 };
 
 #endif // MAINPRESENTORLISTENER_H
