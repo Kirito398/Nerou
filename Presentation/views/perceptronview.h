@@ -27,10 +27,11 @@ private:
     void setActive(bool enable) override;
     void setOutValue(QString value) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    bool isOutputNeuron() override;
 
 private:
     PerceptronPresentor *presentor;
-    QColor neuronColor;
+    QColor neuronColor, forwardNeuronBrush, outputNeuronBrush;
     QString value;
 };
 

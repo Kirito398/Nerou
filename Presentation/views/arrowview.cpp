@@ -140,6 +140,5 @@ ArrowView::~ArrowView() {
     endView->removeArrow(this);
     view->deleteItem(this);
 
-    delete presentor;
     presentor = nullptr;
 }

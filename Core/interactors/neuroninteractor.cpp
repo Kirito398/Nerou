@@ -112,6 +112,10 @@ bool NeuronInteractor::isOutputNeuron() {
 
 void NeuronInteractor::isOutputNeuronEnable(bool enable) {
     isOutput = enable;
+
+    if (!enable)
+        for (auto sinaps : outputsSinaps)
+            sinaps->removeSinaps();
 }
 
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
@@ -133,11 +137,14 @@ void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
 }
 
 void NeuronInteractor::removeSinapses() {
-    for (auto sinaps : inputsSinaps)
-        delete sinaps;
+    std::vector<SinapsInteractor *> input(inputsSinaps);
+    std::vector<SinapsInteractor *> output(outputsSinaps);
 
-    for (auto sinaps : outputsSinaps)
-        delete sinaps;
+    for (auto sinaps : input)
+        sinaps->removeSinaps();
+
+    for (auto sinaps : output)
+        sinaps->removeSinaps();
 }
 
 void NeuronInteractor::removeNeuron() {

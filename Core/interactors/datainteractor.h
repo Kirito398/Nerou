@@ -33,6 +33,7 @@ private:
     void clearClassList() override;
     ClassModel getClass(unsigned long id) override;
     RepositoryInterface *getRepository() override;
+    void removeSinaps(unsigned long sinapsID) override;
 
 private:
     DataPresentorListener *view;

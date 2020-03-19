@@ -106,6 +106,10 @@ void DataView::onParametersUpdated() {
     presentor->setImageSize(parametersDialog->getImageSize());
 }
 
+bool DataView::isOutputNeuron() {
+    return false;
+}
+
 QStringList DataView::getOutputsNeuronsList() {
     return outputsNeuronsList();
 }

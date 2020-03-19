@@ -36,9 +36,10 @@ private:
     int getInputArrowNumber() override;
     int getOutputArrowNumber() override;
     bool isArrowAlreadyAdded(ArrowInterface* arrow);
-    void initMenu();
 
 protected:
+    virtual void initMenu();
+    virtual bool isOutputNeuron() = 0;
     void updateArrowsPosition();
     void updateScene();
     void updateItem(QGraphicsItem *item);
@@ -47,12 +48,12 @@ protected:
 protected:
     PaintSceneInterface *view;
     QPolygonF polygon;
+    QMenu *menu;
 
 private:
     QVector<ArrowInterface *> inputArrows;
     QVector<ArrowInterface *> outputArrows;
     ViewType type;
-    QMenu *menu;
 };
 
 #endif // MOVINGVIEW_H

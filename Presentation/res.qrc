@@ -14,5 +14,6 @@
         <file>images/zoom_reset_icon.png</file>
         <file>images/scrool_hand_drag_icon.png</file>
         <file>images/output_neuron_icon.png</file>
+        <file>images/forward_neuron_icon.png</file>
     </qresource>
 </RCC>

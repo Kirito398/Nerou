@@ -178,6 +178,7 @@ void MainWindow::initToolBars() {
     toolsToolBar = addToolBar("Tools");
     toolsToolBar->addAction(addOutputNeuronsAction);
     toolsToolBar->addAction(makeOutputNeuronAction);
+    toolsToolBar->addAction(makeForwardNeuronAction);
     toolsToolBar->addAction(deleteAction);
 
     zoomSlider = new QSlider();
@@ -200,6 +201,7 @@ void MainWindow::initMenu() {
     itemMenu = menuBar()->addMenu(tr("Item"));
     itemMenu->addAction(addOutputNeuronsAction);
     itemMenu->addAction(makeOutputNeuronAction);
+    itemMenu->addAction(makeForwardNeuronAction);
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();
 
@@ -253,6 +255,10 @@ void MainWindow::initActions() {
     makeOutputNeuronAction = new QAction(QIcon(":/images/output_neuron_icon.png"), tr("Make output neuron"));
     makeOutputNeuronAction->setStatusTip(tr("Make selected neuron to the output neuron"));
     connect(makeOutputNeuronAction, SIGNAL(triggered(bool)), this, SLOT(onMakeOutputNeuronActionClicked()));
+
+    makeForwardNeuronAction = new QAction(QIcon(":/images/forward_neuron_icon.png"), tr("Make forward neuron"));
+    makeForwardNeuronAction->setStatusTip(tr("Make selected neuron to the forward neuron"));
+    connect(makeForwardNeuronAction, SIGNAL(triggered(bool)), this, SLOT(onMakeForwardNeuronActionClicked()));
 }
 
 void MainWindow::onAddOutputNeuronsActionClicked() {
@@ -310,7 +316,11 @@ void MainWindow::onDebugActionClicked() {
 }
 
 void MainWindow::onMakeOutputNeuronActionClicked() {
-    scene->onMakeOutputNeuronActionClicked();
+    scene->setSelectedItemOutputsEnable(true);
+}
+
+void MainWindow::onMakeForwardNeuronActionClicked() {
+    scene->setSelectedItemOutputsEnable(false);
 }
 
 void MainWindow::zoomIn() {
@@ -335,6 +345,7 @@ QAction *MainWindow::getAction(int type) {
         case AddOutputNeurons : return addOutputNeuronsAction;
         case Delete : return deleteAction;
         case MakeOutputNeuron : return makeOutputNeuronAction;
+        case MakeForwardNeuron : return makeForwardNeuronAction;
         default: return nullptr;
     }
 }

@@ -376,7 +376,7 @@ void PaintScene::onDebugActionClicked() {
     interactor->debugRun();
 }
 
-void PaintScene::onMakeOutputNeuronActionClicked() {
+void PaintScene::setSelectedItemOutputsEnable(bool enable) {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
     for (auto item : selectedItems) {
@@ -385,7 +385,7 @@ void PaintScene::onMakeOutputNeuronActionClicked() {
         if (perceptron == nullptr)
             continue;
 
-        perceptron->setOutputNeuron(true);
+        perceptron->setOutputNeuron(enable);
     }
 }
 

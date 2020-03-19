@@ -13,6 +13,7 @@ MovingView::MovingView(ViewType type, QObject *parent) : QObject(parent), QGraph
     this->type = type;
     setFlag(QGraphicsItem::ItemIsSelectable);
     view = nullptr;
+    menu = nullptr;
 }
 
 MovingView::ViewType MovingView::getType() {
@@ -149,12 +150,20 @@ int MovingView::getOutputArrowNumber() {
 }
 
 void MovingView::initMenu() {
-    menu = new QMenu();
+    if (menu != nullptr)
+        menu->clear();
+    else
+        menu = new QMenu();
+
     menu->addAction(view->getAction(Delete));
     menu->addAction(view->getAction(AddOutputNeurons));
 
-    if (type == Perceptron)
-        menu->addAction(view->getAction(MakeOutputNeuron));
+    if (type == Perceptron) {
+        if (isOutputNeuron())
+            menu->addAction(view->getAction(MakeForwardNeuron));
+        else
+            menu->addAction(view->getAction(MakeOutputNeuron));
+    }
 }
 
 MovingView::~MovingView() {

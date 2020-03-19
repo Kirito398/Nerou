@@ -11,6 +11,7 @@ public:
     virtual void deleteNeuron() = 0;
     virtual unsigned long getID() = 0;
     virtual void setOutputNeuron(bool enable) = 0;
+    virtual bool getIsOutputNeuron() = 0;
 };
 
 #endif // PERCEPTRONINTERACTORLISTENER_H

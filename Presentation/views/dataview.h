@@ -26,6 +26,7 @@ private:
     void setImage(QString path) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     QStringList getOutputsNeuronsList() override;
+    bool isOutputNeuron() override;
 
 private:
     DataPresentor *presentor;

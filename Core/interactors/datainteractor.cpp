@@ -154,6 +154,27 @@ unsigned long DataInteractor::getID() {
     return id;
 }
 
+void DataInteractor::removeSinaps(unsigned long sinapsID) {
+    for (auto sinaps : inputsSinaps) {
+        if (sinaps->getID() != sinapsID)
+            continue;
+
+        unsigned long neuronID = sinaps->getInputNeuron()->getID();
+
+        for (unsigned long i = 0; i < classList.size(); i++) {
+            ClassModel model = classList.at(i);
+            if (model.getNeuronID() != neuronID)
+                continue;
+
+            classList.erase(classList.begin() + i);
+            std::vector<ClassModel>(classList).swap(classList);
+            break;
+        }
+    }
+
+    NeuronInteractor::removeSinaps(sinapsID);
+}
+
 void DataInteractor::deleteNeuron() {
     removeNeuron();
 }

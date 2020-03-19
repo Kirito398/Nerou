@@ -18,6 +18,8 @@ PerceptronView::PerceptronView(PerceptronInteractorListener *listener, QObject *
     }
 
     neuronColor = Qt::black;
+    forwardNeuronBrush = QColor(255, 223, 143);
+    outputNeuronBrush = QColor(255, 92, 106);
     value = "";
 }
 
@@ -54,7 +56,12 @@ QRectF PerceptronView::boundingRect() const {
 
 void PerceptronView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     painter->setPen(neuronColor);
-    painter->setBrush(Qt::white);
+
+    if (presentor->isOutputNeuron())
+        painter->setBrush(outputNeuronBrush);
+    else
+        painter->setBrush(forwardNeuronBrush);
+
     painter->drawEllipse(-30, -30, 60, 60);
 
     if (isSelected()) {
@@ -71,11 +78,12 @@ void PerceptronView::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 }
 
 void PerceptronView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-
+    Q_UNUSED(event);
 }
 
 void PerceptronView::setOutputNeuron(bool enable) {
     presentor->setOutputNeuron(enable);
+    initMenu();
 }
 
 void PerceptronView::makePolygon() {
@@ -89,6 +97,10 @@ void PerceptronView::makePolygon() {
 void PerceptronView::updatePosition(double x, double y) {
     this->setPos(x, y);
     updateArrowsPosition();
+}
+
+bool PerceptronView::isOutputNeuron() {
+    return presentor->isOutputNeuron();
 }
 
 void PerceptronView::setActive(bool enable) {
