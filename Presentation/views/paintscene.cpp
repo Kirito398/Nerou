@@ -383,6 +383,7 @@ void PaintScene::onDebugActionClicked() {
 
 void PaintScene::setSelectedItemOutputsEnable(bool enable) {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    QList<PerceptronView *> perceptronList;
 
     for (auto item : selectedItems) {
         PerceptronView *perceptron = dynamic_cast<PerceptronView *>(item);
@@ -390,8 +391,13 @@ void PaintScene::setSelectedItemOutputsEnable(bool enable) {
         if (perceptron == nullptr)
             continue;
 
-        perceptron->setOutputNeuron(enable);
+        perceptronList.append(perceptron);
     }
+
+    for (auto perceptron : perceptronList)
+        perceptron->setOutputNeuron(enable);
+
+    this->clearSelectedItem();
 }
 
 void PaintScene::setView(MainWindowInterface *interfaces) {
