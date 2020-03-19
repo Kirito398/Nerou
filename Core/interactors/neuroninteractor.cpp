@@ -112,10 +112,6 @@ bool NeuronInteractor::isOutputNeuron() {
 
 void NeuronInteractor::isOutputNeuronEnable(bool enable) {
     isOutput = enable;
-
-    if (!enable)
-        for (auto sinaps : outputsSinaps)
-            sinaps->removeSinaps();
 }
 
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {

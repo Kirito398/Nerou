@@ -19,6 +19,8 @@ public:
     bool addArrow(ArrowInterface* arrow);
     void removeArrow(ArrowInterface* arrow) override;
     void removeArrows();
+    void removeOutputArrows();
+    void removeInputArrows();
     ViewType getType();
     virtual unsigned long getID() = 0;
     virtual void setPosition(QPointF position) = 0;

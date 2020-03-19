@@ -95,19 +95,26 @@ void MovingView::removeArrow(ArrowInterface* arrow) {
 }
 
 void MovingView::removeArrows() {
-    QMutableVectorIterator<ArrowInterface *> input(inputArrows);
+    removeInputArrows();
+    removeOutputArrows();
+}
 
-    while (input.hasNext()) {
-        ArrowInterface *arrow = input.next();
-        input.remove();
-        delete arrow;
-    }
-
+void MovingView::removeOutputArrows() {
     QMutableVectorIterator<ArrowInterface *> output(outputArrows);
 
     while(output.hasNext()) {
         ArrowInterface *arrow = output.next();
         output.remove();
+        delete arrow;
+    }
+}
+
+void MovingView::removeInputArrows() {
+    QMutableVectorIterator<ArrowInterface *> input(inputArrows);
+
+    while (input.hasNext()) {
+        ArrowInterface *arrow = input.next();
+        input.remove();
         delete arrow;
     }
 }
