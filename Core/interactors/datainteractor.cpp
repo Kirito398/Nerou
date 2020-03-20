@@ -212,7 +212,7 @@ void DataInteractor::calculateDelta() {
             WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
 
             double delta = 0;
-            if (weight->getOutputNeuron()->getID() == classList[currentClass].getNeuronID())
+            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
                 delta = 1.0 - weight->getValue();
             else
                 delta = 0.0 - weight->getValue();

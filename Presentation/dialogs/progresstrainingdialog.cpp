@@ -39,7 +39,7 @@ void ProgressTrainingDialog::setMaxIteration(unsigned int maxIteration) {
 }
 
 void ProgressTrainingDialog::updateTotalProgressBar() {
-    totalProgressBar->setValue(currentEpoh * currentIteration);
+    totalProgressBar->setValue((currentEpoh - 1) * maxIteration + currentIteration);
 }
 
 void ProgressTrainingDialog::setCurrentEpoh(unsigned int currentEpoh) {
