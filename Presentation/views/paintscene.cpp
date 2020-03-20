@@ -2,6 +2,7 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include <QCoreApplication>
+#include <QFileDialog>
 
 #include "views/dataview.h"
 #include "views/arrowview.h"
@@ -54,11 +55,22 @@ void PaintScene::onTrainingFinished() {
 }
 
 void PaintScene::onLoadingActionClicked() {
-    interactor->load("");
+    QFileDialog dialog(nullptr, tr("Open project"));
+
+    dialog.setMimeTypeFilters(QStringList("*.nro"));
+
+    if (dialog.exec() == QDialog::Accepted)
+        interactor->load(dialog.selectedFiles().first().toStdString());
 }
 
 void PaintScene::onSavingActionClicked() {
-    interactor->save("");
+    QFileDialog dialog(nullptr, tr("Save project"));
+
+    dialog.setMimeTypeFilters(QStringList("*.nro"));
+    dialog.setDefaultSuffix("nro");
+
+    if (dialog.exec() == QDialog::Accepted)
+        interactor->save(dialog.selectedFiles().first().toStdString());
 }
 
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
