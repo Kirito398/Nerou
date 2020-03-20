@@ -42,7 +42,10 @@ private:
     ProgressTrainingDialog *progressDialog;
 
 private:
-    void onTrainingStarted() override;
+    void onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) override;
+    void onEpohChanged(unsigned int currentEpoh) override;
+    void onIterationChanged(unsigned int currentIteration) override;
+    void onTrainingFinished() override;
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
     void onNewDataAdded(DataInteractorListener *data) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

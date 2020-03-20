@@ -24,11 +24,29 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     viewType = MovingView::Perceptron;
 }
 
-void PaintScene::onTrainingStarted() {
+void PaintScene::onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) {
     if (progressDialog == nullptr)
         progressDialog = new ProgressTrainingDialog();
 
+    progressDialog->setMaxIteration(iterationCount);
+    progressDialog->setMaxEpoh(epohCount);
+    progressDialog->setTotalProcess(iterationCount * epohCount);
+
+    QPointF position = view->getSceneTop();
+    progressDialog->setGeometry(position.x() + 50, position.y() + 95, progressDialog->width(), progressDialog->height());
     progressDialog->show();
+}
+
+void PaintScene::onEpohChanged(unsigned int currentEpoh) {
+    progressDialog->setCurrentEpoh(currentEpoh);
+}
+
+void PaintScene::onIterationChanged(unsigned int currentIteration) {
+    progressDialog->setCurrentIteration(currentIteration);
+}
+
+void PaintScene::onTrainingFinished() {
+    progressDialog->onTrainingFinished();
 }
 
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
