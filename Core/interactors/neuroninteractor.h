@@ -22,6 +22,7 @@ public:
     bool addArrow(SinapsInteractor* arrow);
     void setInteractor(MainInteractorInterface *interface);
     bool isOutputNeuron();
+    NeuronType getType() override;
 
 protected:
     virtual void removeSinaps(unsigned long sinapsID) override;
@@ -39,7 +40,6 @@ protected:
 private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);
     void removeSinapses();
-    NeuronType getType() override;
 
 protected:
     unsigned long inputSignalCount;

@@ -2,6 +2,7 @@
 
 #include "interfaces/weightinterface.h"
 #include "listeners/perceptronpresentorlistener.h"
+#include "models/perceptronmodel.h"
 
 PerceptronInteractor::PerceptronInteractor() : NeuronInteractor(Perceptron)
 {
@@ -124,6 +125,18 @@ void PerceptronInteractor::clearInputDelta() {
     inputDelta = nullptr;
 
     inputDeltaCount = 0;
+}
+
+PerceptronModel PerceptronInteractor::getModel() {
+    PerceptronModel model;
+
+    model.setX(posX);
+    model.setY(posY);
+    model.setID(id);
+    model.setType(type);
+    model.setIsOutput(isOutput);
+
+    return model;
 }
 
 void PerceptronInteractor::clean() {

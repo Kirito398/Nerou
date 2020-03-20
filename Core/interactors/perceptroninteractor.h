@@ -5,6 +5,7 @@
 #include "listeners/perceptroninteractorlistener.h"
 
 class PerceptronPresentorListener;
+class PerceptronModel;
 
 class PerceptronInteractor : public NeuronInteractor, public PerceptronInteractorListener
 {
@@ -12,6 +13,7 @@ public:
     PerceptronInteractor();
     void onInputSignalChanged() override;
     void setPosition(double x, double y) override;
+    PerceptronModel getModel();
 
 private:
     void setView(PerceptronPresentorListener *listener) override;

@@ -8,6 +8,9 @@
 #include "interactors/coreinteractor.h"
 #include "listeners/mainpresentorlistener.h"
 #include "interfaces/repositoryinterface.h"
+#include "models/datamodel.h"
+#include "models/perceptronmodel.h"
+#include "models/classmodel.h"
 
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
@@ -211,7 +214,18 @@ void MainInteractor::debugRun() {
 }
 
 void MainInteractor::save(std::string path) {
+    std::vector<DataModel> dataModelList;
+    std::vector<PerceptronModel> perceptronModelList;
 
+    for (auto neuron : neuronsList) {
+        if (neuron->getType() == Perceptron)
+            perceptronModelList.push_back(static_cast<PerceptronInteractor *>(neuron)->getModel());
+
+        if (neuron->getType() == Data)
+            dataModelList.push_back(static_cast<DataInteractor *>(neuron)->getModel());
+    }
+
+    repository->save(path, dataModelList, perceptronModelList);
 }
 
 void MainInteractor::load(std::string path) {
