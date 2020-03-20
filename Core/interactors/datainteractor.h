@@ -16,6 +16,7 @@ public:
     unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber();
     void setPosition(double x, double y) override;
+    double getDelta();
 
 private:
     void sendData();
@@ -35,6 +36,7 @@ private:
     RepositoryInterface *getRepository() override;
     void removeSinaps(unsigned long sinapsID) override;
     void sendDelta();
+    void calculateDelta();
 
 private:
     DataPresentorListener *view;
@@ -43,6 +45,7 @@ private:
     double *value, **colorValue;
     unsigned int row, column;
     unsigned long currentClass;
+    double currentDelta;
     std::vector<ClassModel> classList;
 };
 

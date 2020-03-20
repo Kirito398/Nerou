@@ -16,7 +16,7 @@ private:
 
 private:
     void init() override;
-    void updateSinaps() override;
+    void updateSinaps(double learningRange, double alpha) override;
     void sendSignal(double *signal, unsigned int row, unsigned int column) override;
     double ** getValue() override;
     void deleteSinaps() override;

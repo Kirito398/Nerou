@@ -20,6 +20,7 @@ SOURCES += \
     dialogs/addoutputneuronsdialog.cpp \
     dialogs/dataaddtableitemdialog.cpp \
     dialogs/dataparametersdialog.cpp \
+    dialogs/progresstrainingdialog.cpp \
     main.cpp \
     models/convolutionitem.cpp \
     models/selectoritem.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     dialogs/addoutputneuronsdialog.h \
     dialogs/dataaddtableitemdialog.h \
     dialogs/dataparametersdialog.h \
+    dialogs/progresstrainingdialog.h \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
     interfaces/mainwindowinterface.h \

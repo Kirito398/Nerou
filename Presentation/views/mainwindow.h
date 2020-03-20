@@ -59,6 +59,7 @@ private:
 private:
     QAction *getAction(int type) override;
     void resizeEvent(QResizeEvent * event) override;
+    QPointF getSceneTop() override;
     void zoomIn() override;
     void zoomOut() override;
     void initActions();

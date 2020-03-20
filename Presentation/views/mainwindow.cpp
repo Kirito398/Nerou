@@ -70,6 +70,10 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(800, 600);
 }
 
+QPointF MainWindow::getSceneTop() {
+    return geometry().topLeft() + view->geometry().topLeft();
+}
+
 void MainWindow::initControlToolBar() {
     controlToolBar = addToolBar(tr("Control"));
     controlToolBar->addAction(runAction);

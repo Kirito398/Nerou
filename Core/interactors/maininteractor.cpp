@@ -37,33 +37,45 @@ void MainInteractor::run() {
     unsigned long classNumber = dataList.at(0)->getClassNumber();
     unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long neuronNumber = dataList.size();
+    unsigned long epohNumber = 5;
 
-    for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
-        for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
-            for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
-                if (isStopped) {
-                    onProcessStopped();
-                    return;
+    view->onTrainingStarted(iterationNumber, epohNumber);
+
+    for (unsigned long e = 0; e < epohNumber; e++) {
+        view->onEpohChanged(e + 1);
+
+        for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+            view->onIterationChanged(j + 1);
+
+            for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
+                for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
+                    if (isStopped) {
+                        onProcessStopped();
+                        return;
+                    }
+
+                    if (isPaused) {
+                        onProcessPaused(i, j, k);
+                        return;
+                    }
+
+                    dataList.at(k)->start(i, j);
+                    view->onErrorValueChanged(dataList.at(k)->getDelta());
                 }
 
-                if (isPaused) {
-                    onProcessPaused(i, j, k);
-                    return;
-                }
-
-                dataList.at(k)->start(i, j);
+                updateSinaps();
             }
-
-            updateSinaps();
         }
     }
+
+    view->onTrainingFinished();
 
     clearProcessParameters();
 }
 
 void MainInteractor::updateSinaps() {
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps();
+        sinaps->updateSinaps(0.7, 0);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
