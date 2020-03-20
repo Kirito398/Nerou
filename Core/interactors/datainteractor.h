@@ -11,7 +11,7 @@ class DataInteractor : public NeuronInteractor, public DataInteractorListener
 {
 public:
     DataInteractor();
-    void start(unsigned long classNumber, unsigned long iterationNumber);
+    unsigned long start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
     unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber();
@@ -35,6 +35,7 @@ private:
     RepositoryInterface *getRepository() override;
     void removeSinaps(unsigned long sinapsID) override;
     void sendDelta();
+    void calculateCurrentAnswer();
 
 private:
     DataPresentorListener *view;
@@ -43,6 +44,7 @@ private:
     double *value, **colorValue;
     unsigned int row, column;
     unsigned long currentClass;
+    unsigned long currentAnswerClass;
     std::vector<ClassModel> classList;
 };
 

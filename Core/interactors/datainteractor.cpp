@@ -19,12 +19,14 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     isColorMode = false;
 }
 
-void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
+unsigned long DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
+    currentAnswerClass = classList.size() + 1;
+
     if (classList.empty())
-        return;
+        return currentAnswerClass;
 
     if (iterationNumber >= classList[classNumber].getTrainingPathsList().size())
-        return;
+        return currentAnswerClass;
 
     currentClass = classNumber;
 
@@ -42,6 +44,8 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
     sendData();
     clearColorValue();
     clearValue();
+
+    return currentAnswerClass;
 }
 
 void DataInteractor::sendData() {
@@ -196,9 +200,35 @@ RepositoryInterface *DataInteractor::getRepository() {
 void DataInteractor::onInputSignalChanged() {
     inputSignalCount++;
 
-    if (inputSignalCount == inputsSinaps.size()) {
-        sendDelta();
-        inputSignalCount = 0;
+    if (inputSignalCount != inputsSinaps.size())
+        return;
+
+    calculateCurrentAnswer();
+    sendDelta();
+    inputSignalCount = 0;
+}
+
+void DataInteractor::calculateCurrentAnswer() {
+    double maxSignal = 0;
+    unsigned int answerNeuronID = 0;
+
+    for (auto sinaps : inputsSinaps) {
+        if (sinaps->getType() == sinaps->Weigth) {
+            WeightInterface * weight = static_cast<WeightInterface *>(sinaps);
+
+            if (weight->getValue() > maxSignal) {
+                maxSignal = weight->getValue();
+                answerNeuronID = weight->getOutputNeuron()->getID();
+            }
+        }
+    }
+
+    for (unsigned long i = 0; i < classList.size(); i++) {
+        if (classList[i].getNeuronID() != answerNeuronID)
+            continue;
+
+        currentAnswerClass = i;
+        break;
     }
 }
 
@@ -207,10 +237,13 @@ void DataInteractor::sendDelta() {
         if (sinaps->getType() == sinaps->Weigth) {
             WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
 
+            double delta = 0;
             if (weight->getOutputNeuron()->getID() == classList[currentClass].getNeuronID())
-                weight->sendDelta(1.0 - weight->getValue());
+                delta = 1.0 - weight->getValue();
             else
-                weight->sendDelta(0.0 - weight->getValue());
+                delta = 0.0 - weight->getValue();
+
+            weight->sendDelta(delta * reActivateFunction(weight->getValue()));
         }
     }
 }
