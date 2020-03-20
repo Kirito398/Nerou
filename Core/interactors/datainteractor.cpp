@@ -15,6 +15,7 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     column = 0;
     row = 0;
     inputSignalCount = 0;
+    inputDeltaCount = 0;
     currentClass = 0;
     isColorMode = false;
 }
@@ -91,8 +92,9 @@ ClassModel DataInteractor::getClass(unsigned long id) {
 void DataInteractor::clearClassList() {
     classList.clear();
 
-    for(auto sinaps : inputsSinaps)
-        sinaps->removeSinaps();
+    std::vector<SinapsInteractor *> sinaps(inputsSinaps);
+    for(unsigned long i = 0; i < sinaps.size(); i++)
+        sinaps.at(i)->removeSinaps();
 }
 
 void DataInteractor::setRepository(RepositoryInterface *repository) {
@@ -232,10 +234,26 @@ void DataInteractor::sendDelta() {
     for (auto sinaps : inputsSinaps) {
         if (sinaps->getType() == sinaps->Weigth) {
             WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
-            weight->sendDelta(currentDelta * reActivateFunction(weight->getValue()));
+
+            double delta = 0;
+            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
+                delta = 1.0 - weight->getValue();
+            else
+                delta = 0.0 - weight->getValue();
+
+            weight->sendDelta(delta * reActivateFunction(weight->getValue()));
         }
     }
 }
+
+//void DataInteractor::sendDelta() {
+//    for (auto sinaps : inputsSinaps) {
+//        if (sinaps->getType() == sinaps->Weigth) {
+//            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
+//            weight->sendDelta(currentDelta * reActivateFunction(weight->getValue()));
+//        }
+//    }
+//}
 
 void DataInteractor::onDeltaValueChanged() {
 

@@ -17,12 +17,17 @@ void WeightInteractor::init() {
         weight = random();
     value = 0;
     delta = 0;
-    sumDelta = 0;
+    grad = 0;
+    prevDeltaWeight = 0;
 }
 
-void WeightInteractor::updateSinaps() {
-    weight += sumDelta;
-    sumDelta = 0;
+void WeightInteractor::updateSinaps(double learningRange, double alpha) {
+    //weight += deltaWeight;
+
+    double deltaWeight = grad * learningRange + alpha * prevDeltaWeight;
+    weight += deltaWeight;
+    prevDeltaWeight = deltaWeight;
+    grad = 0;
 }
 
 void WeightInteractor::sendSignal(double signal) {
@@ -37,8 +42,14 @@ void WeightInteractor::sendSignal(double signal) {
 }
 
 void WeightInteractor::sendDelta(double delta) {
+    //double learningRange = 0.7;
+    //double a = 0;
+    //deltaWeight += learningRange * grad + a * this->delta;
+
+    double grad = value * delta;
+    this->grad += grad;
     this->delta = delta;
-    sumDelta += delta;
+
     inputListener->onDeltaValueChanged();
 }
 
@@ -51,7 +62,7 @@ double WeightInteractor::getValue() {
 }
 
 double WeightInteractor::getDelta() {
-    return delta;
+    return delta * weight;
 }
 
 void WeightInteractor::deleteSinaps() {

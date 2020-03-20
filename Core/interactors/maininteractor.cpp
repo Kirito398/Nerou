@@ -75,7 +75,7 @@ void MainInteractor::run() {
 
 void MainInteractor::updateSinaps() {
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps();
+        sinaps->updateSinaps(0.7, 0);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {

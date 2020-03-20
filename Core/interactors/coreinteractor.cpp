@@ -12,7 +12,7 @@ void CoreInteractor::init() {
 
 }
 
-void CoreInteractor::updateSinaps() {
+void CoreInteractor::updateSinaps(double learningRange, double alpha) {
 
 }
 
