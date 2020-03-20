@@ -30,6 +30,8 @@ public:
     void onStopActionClicked();
     void onPauseActionClicked();
     void onDebugActionClicked();
+    void onLoadingActionClicked();
+    void onSavingActionClicked();
     void setSelectedItemOutputsEnable(bool enable);
 
 private:

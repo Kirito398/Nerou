@@ -28,6 +28,8 @@ public:
     void removeNeuron(unsigned long neuronID) override;
     void removeSinaps(unsigned long sinapsID) override;
     std::vector<unsigned long> getOutputsNeuronsList();
+    void save(std::string path);
+    void load(std::string path);
     void run();
     void stop();
     void pause();

@@ -53,6 +53,14 @@ void PaintScene::onTrainingFinished() {
     progressDialog->onTrainingFinished();
 }
 
+void PaintScene::onLoadingActionClicked() {
+    interactor->load("");
+}
+
+void PaintScene::onSavingActionClicked() {
+    interactor->save("");
+}
+
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
     PerceptronView *view = new PerceptronView(perceptron);
 

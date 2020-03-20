@@ -210,6 +210,14 @@ void MainInteractor::debugRun() {
     isDebug = true;
 }
 
+void MainInteractor::save(std::string path) {
+
+}
+
+void MainInteractor::load(std::string path) {
+
+}
+
 void MainInteractor::onProcessStopped() {
     for (auto neuron : neuronsList)
         neuron->clean();
