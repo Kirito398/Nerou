@@ -45,6 +45,10 @@ void PaintScene::onIterationChanged(unsigned int currentIteration) {
     progressDialog->setCurrentIteration(currentIteration);
 }
 
+void PaintScene::onErrorValueChanged(double value) {
+    progressDialog->setCurrentError(value);
+}
+
 void PaintScene::onTrainingFinished() {
     progressDialog->onTrainingFinished();
 }

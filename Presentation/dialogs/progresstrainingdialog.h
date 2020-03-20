@@ -18,19 +18,21 @@ public:
     void setTotalProcess(unsigned int total);
     void setCurrentEpoh(unsigned int currentEpoh);
     void setCurrentIteration(unsigned int currentIteration);
+    void setCurrentError(double value);
     void onTrainingFinished();
 
 private:
     void initTimer();
     void initEpohLayer();
     void initIterationLayer();
+    void initErrorLayer();
     void updateTotalProgressBar();
 
 private:
     QProgressBar *totalProgressBar;
     QTimer *timer;
     QBoxLayout *layout;
-    QLabel *lTime, *lEpoh, *lIteration;
+    QLabel *lTime, *lEpoh, *lIteration, *lError;
     unsigned long seconds;
     unsigned int maxEpoh, maxIteration, currentEpoh, currentIteration;
 

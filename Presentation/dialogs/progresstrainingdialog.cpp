@@ -8,7 +8,7 @@
 ProgressTrainingDialog::ProgressTrainingDialog()
 {
     setWindowTitle(tr("Training progress"));
-    setFixedSize(QSize(200, 125));
+    setFixedSize(QSize(200, 150));
 
     layout = new QVBoxLayout();
 
@@ -16,6 +16,7 @@ ProgressTrainingDialog::ProgressTrainingDialog()
 
     initEpohLayer();
     initIterationLayer();
+    initErrorLayer();
 
     totalProgressBar = new QProgressBar();
     totalProgressBar->setMinimum(0);
@@ -53,16 +54,31 @@ void ProgressTrainingDialog::setCurrentIteration(unsigned int currentIteration) 
     updateTotalProgressBar();
 }
 
+void ProgressTrainingDialog::setCurrentError(double value) {
+    lError->setText(QString::number(value));
+}
+
 void ProgressTrainingDialog::onTrainingFinished() {
     timer->stop();
     seconds = 0;
+}
+
+void ProgressTrainingDialog::initErrorLayer() {
+    QBoxLayout *errorLayout = new QHBoxLayout();
+
+    lError = new QLabel("0.0");
+    QLabel *title = new QLabel(tr("Error: "));
+
+    errorLayout->addWidget(title);
+    errorLayout->addWidget(lError);
+    layout->addLayout(errorLayout);
 }
 
 void ProgressTrainingDialog::initEpohLayer() {
     QBoxLayout *epohLayout = new QHBoxLayout();
 
     lEpoh = new QLabel("0 / 0");
-    QLabel *title = new QLabel("Epoh: ");
+    QLabel *title = new QLabel(tr("Epoh: "));
 
     epohLayout->addWidget(title);
     epohLayout->addWidget(lEpoh);
@@ -73,7 +89,7 @@ void ProgressTrainingDialog::initIterationLayer() {
     QBoxLayout *iterationLayout = new QHBoxLayout();
 
     lIteration = new QLabel("0 / 0");
-    QLabel *title = new QLabel("Iteration: ");
+    QLabel *title = new QLabel(tr("Iteration: "));
 
     iterationLayout->addWidget(title);
     iterationLayout->addWidget(lIteration);

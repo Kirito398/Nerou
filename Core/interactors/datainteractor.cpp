@@ -19,14 +19,12 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     isColorMode = false;
 }
 
-unsigned long DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
-    currentAnswerClass = classList.size() + 1;
-
+void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
     if (classList.empty())
-        return currentAnswerClass;
+        return;
 
     if (iterationNumber >= classList[classNumber].getTrainingPathsList().size())
-        return currentAnswerClass;
+        return;
 
     currentClass = classNumber;
 
@@ -44,8 +42,6 @@ unsigned long DataInteractor::start(unsigned long classNumber, unsigned long ite
     sendData();
     clearColorValue();
     clearValue();
-
-    return currentAnswerClass;
 }
 
 void DataInteractor::sendData() {
@@ -203,36 +199,14 @@ void DataInteractor::onInputSignalChanged() {
     if (inputSignalCount != inputsSinaps.size())
         return;
 
-    calculateCurrentAnswer();
+    calculateDelta();
     sendDelta();
     inputSignalCount = 0;
 }
 
-void DataInteractor::calculateCurrentAnswer() {
-    double maxSignal = 0;
-    unsigned int answerNeuronID = 0;
+void DataInteractor::calculateDelta() {
+    double mse = 0;
 
-    for (auto sinaps : inputsSinaps) {
-        if (sinaps->getType() == sinaps->Weigth) {
-            WeightInterface * weight = static_cast<WeightInterface *>(sinaps);
-
-            if (weight->getValue() > maxSignal) {
-                maxSignal = weight->getValue();
-                answerNeuronID = weight->getOutputNeuron()->getID();
-            }
-        }
-    }
-
-    for (unsigned long i = 0; i < classList.size(); i++) {
-        if (classList[i].getNeuronID() != answerNeuronID)
-            continue;
-
-        currentAnswerClass = i;
-        break;
-    }
-}
-
-void DataInteractor::sendDelta() {
     for (auto sinaps : inputsSinaps) {
         if (sinaps->getType() == sinaps->Weigth) {
             WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
@@ -243,7 +217,22 @@ void DataInteractor::sendDelta() {
             else
                 delta = 0.0 - weight->getValue();
 
-            weight->sendDelta(delta * reActivateFunction(weight->getValue()));
+            mse += (delta * delta);
+        }
+    }
+
+    currentDelta = mse / classList.size();
+}
+
+double DataInteractor::getDelta() {
+    return currentDelta;
+}
+
+void DataInteractor::sendDelta() {
+    for (auto sinaps : inputsSinaps) {
+        if (sinaps->getType() == sinaps->Weigth) {
+            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
+            weight->sendDelta(currentDelta * reActivateFunction(weight->getValue()));
         }
     }
 }
