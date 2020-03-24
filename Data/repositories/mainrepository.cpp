@@ -7,6 +7,7 @@
 #include "models/datamodel.h"
 #include "models/classmodel.h"
 #include "models/perceptronmodel.h"
+#include "models/weightmodel.h"
 #include "interfaces/maininteractorinterface.h"
 
 MainRepository::MainRepository()
@@ -14,15 +15,16 @@ MainRepository::MainRepository()
 
 }
 
-void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList) {
+void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<WeightModel> weightModelList) {
     QFile *file = new QFile(QString::fromStdString(path));
     file->open(QIODevice::WriteOnly);
     QDataStream out(file);
 
     size_t dataSize = dataModelList.size();
     size_t perceptronSize = perceptronModelList.size();
+    size_t weightSize = weightModelList.size();
 
-    out << QString::number(dataSize) << QString::number(perceptronSize);
+    out << QString::number(dataSize) << QString::number(perceptronSize) << QString::number(weightSize);
 
     for (size_t i = 0; i < perceptronSize; i++) {
         PerceptronModel model = perceptronModelList.at(i);
@@ -54,6 +56,15 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
         }
     }
 
+    for (size_t i = 0; i < weightSize; i++) {
+        WeightModel model = weightModelList.at(i);
+        out << QString::number(model.getID())
+            << model.getType()
+            << model.getWeight()
+            << QString::number(model.getInputNeuronID())
+            << QString::number(model.getOutputNeuronID());
+    }
+
     file->close();
     delete file;
 }
@@ -63,11 +74,12 @@ void MainRepository::load(std::string path) {
     file->open(QIODevice::ReadOnly);
     QDataStream in(file);
 
-    QString data, perceptron;
-    in >> data >> perceptron;
+    QString data, perceptron, weight;
+    in >> data >> perceptron >> weight;
 
     size_t dataSize = data.toULong();
     size_t perceptronSize = perceptron.toULong();
+    size_t weightSize = weight.toULong();
 
     for (size_t i = 0; i < perceptronSize; i++) {
         double posX, posY;
@@ -134,6 +146,26 @@ void MainRepository::load(std::string path) {
         model.setIsColorMode(isColorMode);
 
         interactor->onDataModelLoaded(model);
+    }
+
+    for (size_t i = 0; i < weightSize; i++) {
+        QString sinapsID, inputNeuronID, outputNeuronID;
+        int type;
+        double weight;
+
+        in >> sinapsID
+                >> type
+                >> weight
+                >> inputNeuronID
+                >> outputNeuronID;
+
+        WeightModel newSinaps(sinapsID.toULong());
+        newSinaps.setType(type);
+        newSinaps.setWeight(weight);
+        newSinaps.setInputNeuronID(inputNeuronID.toULong());
+        newSinaps.setOutputNeuronID(outputNeuronID.toULong());
+
+        interactor->onWeightModelLoaded(newSinaps);
     }
 
     file->close();

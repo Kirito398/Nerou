@@ -5,6 +5,7 @@
 #include "listeners/arrowinteractorlistener.h"
 
 class SinapsPresentorListener;
+class WeightModel;
 
 class WeightInteractor : public WeightInterface, public ArrowInteractorListener
 {
@@ -15,6 +16,8 @@ public:
     void sendSignal(double signal) override;
     void init() override;
     void updateSinaps(double learningRange, double alpha) override;
+    WeightModel getModel();
+    void setWeight(double weight);
 
 private:
     void sendDelta(double delta) override;

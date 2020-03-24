@@ -28,11 +28,11 @@ protected:
 protected:
     SinapsListener *inputListener;
     SinapsListener *outputListener;
+    unsigned long id;
+    SinapsType type;
 
 private:
-    SinapsType type;
     MainInteractorInterface *interactor;
-    unsigned long id;
 };
 
 #endif // SINAPSINTERACTOR_H

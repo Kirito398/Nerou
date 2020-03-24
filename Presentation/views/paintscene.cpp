@@ -91,6 +91,27 @@ void PaintScene::onNewDataAdded(DataInteractorListener *data) {
     addItem(view);
 }
 
+void PaintScene::onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) {
+    addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
+}
+
+MovingView *PaintScene::findView(unsigned long neuronID) {
+    MovingView *view = nullptr;
+
+    QList<QGraphicsItem *> items = this->items();
+    for (auto item : items) {
+        view = dynamic_cast<MovingView *>(item);
+
+        if (view == nullptr)
+            continue;
+
+        if (view->getID() == neuronID)
+            break;
+    }
+
+    return view;
+}
+
 void PaintScene::moveSelectedItem(QPointF delta) {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
 
@@ -229,15 +250,18 @@ void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
             listener = interactor->createNewCore(startView->getID(), endView->getID());
     }
 
-    if (listener != nullptr) {
-        ArrowView *arrow = new ArrowView(listener, startView, endView);
-        startView->addArrow(arrow);
-        endView->addArrow(arrow);
-        arrow->setZValue(-1000.0);
-        arrow->updatePosition();
-        arrow->setView(this);
-        addItem(arrow);
-    }
+    if (listener != nullptr)
+        addArrow(listener, startView, endView);
+}
+
+void PaintScene::addArrow(ArrowInteractorListener *listener, MovingView *startView, MovingView *endView) {
+    ArrowView *arrow = new ArrowView(listener, startView, endView);
+    startView->addArrow(arrow);
+    endView->addArrow(arrow);
+    arrow->setZValue(-1000.0);
+    arrow->updatePosition();
+    arrow->setView(this);
+    addItem(arrow);
 }
 
 void PaintScene::addMovingView(QPointF position) {

@@ -11,6 +11,7 @@
 #include "models/datamodel.h"
 #include "models/perceptronmodel.h"
 #include "models/classmodel.h"
+#include "models/weightmodel.h"
 
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
@@ -185,6 +186,25 @@ ArrowInteractorListener *MainInteractor::createNewCore(unsigned long inputID, un
     return nullptr;
 }
 
+void MainInteractor::onWeightModelLoaded(WeightModel model) {
+    NeuronInteractor *inputNeuron = findNeuron(model.getInputNeuronID());
+    NeuronInteractor *outputNeuron = findNeuron(model.getOutputNeuronID());
+
+    WeightInteractor *newWeight = new WeightInteractor(inputNeuron, outputNeuron);
+
+    if (inputNeuron->addArrow(newWeight) && outputNeuron->addArrow(newWeight)) {
+        sinapsList.push_back(newWeight);
+        newWeight->setInteractor(this);
+        newWeight->setID(model.getID());
+        newWeight->setWeight(model.getWeight());
+
+        if (createdItemsCounter < model.getID())
+            createdItemsCounter = model.getID();
+
+        view->onNewWeightAdded(newWeight, model.getInputNeuronID(), model.getOutputNeuronID());
+    }
+}
+
 void MainInteractor::removeNeuron(unsigned long neuronID) {
     NeuronInteractor *neuron = nullptr;
 
@@ -255,6 +275,7 @@ void MainInteractor::debugRun() {
 void MainInteractor::save(std::string path) {
     std::vector<DataModel> dataModelList;
     std::vector<PerceptronModel> perceptronModelList;
+    std::vector<WeightModel> weightModelList;
 
     for (auto neuron : neuronsList) {
         if (neuron->getType() == Perceptron)
@@ -264,7 +285,12 @@ void MainInteractor::save(std::string path) {
             dataModelList.push_back(static_cast<DataInteractor *>(neuron)->getModel());
     }
 
-    repository->save(path, dataModelList, perceptronModelList);
+    for (auto sinaps : sinapsList) {
+        if (sinaps->getType() == sinaps->Weigth && sinaps->getOutputNeuron()->getType() != Data)
+            weightModelList.push_back(static_cast<WeightInteractor *>(sinaps)->getModel());
+    }
+
+    repository->save(path, dataModelList, perceptronModelList, weightModelList);
 }
 
 void MainInteractor::load(std::string path) {

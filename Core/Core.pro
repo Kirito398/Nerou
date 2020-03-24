@@ -26,7 +26,8 @@ SOURCES += \
     interactors/weightinteractor.cpp \
     models/classmodel.cpp \
     models/datamodel.cpp \
-    models/perceptronmodel.cpp
+    models/perceptronmodel.cpp \
+    models/weightmodel.cpp
 
 HEADERS += \
     Core_global.h \
@@ -51,7 +52,8 @@ HEADERS += \
     listeners/sinapspresentorlistener.h \
     models/classmodel.h \
     models/datamodel.h \
-    models/perceptronmodel.h
+    models/perceptronmodel.h \
+    models/weightmodel.h
 
 # Default rules for deployment.
 unix {
