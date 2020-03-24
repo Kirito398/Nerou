@@ -106,14 +106,42 @@ void MainInteractor::createNewData(double x, double y) {
     view->onNewDataAdded(newData);
 }
 
+void MainInteractor::createNewPerceptron(PerceptronModel model) {
+    PerceptronInteractor *newPerceptron = new PerceptronInteractor();
+
+    newPerceptron->setInteractor(this);
+
+    if (model.getID() > createdItemsCounter)
+        createdItemsCounter = model.getID();
+
+    neuronsList.push_back(newPerceptron);
+
+    newPerceptron->updateFromModel(model);
+    view->onNewPerceptronAdded(newPerceptron);
+}
+
+void MainInteractor::createNewData(DataModel model) {
+    DataInteractor *newData = new DataInteractor();
+
+    newData->setInteractor(this);
+    newData->setRepository(repository);
+
+    if (model.getID() > createdItemsCounter)
+        createdItemsCounter = model.getID();
+
+    neuronsList.push_back(newData);
+    dataList.push_back(newData);
+
+    newData->updateFromModel(model);
+    view->onNewDataAdded(newData);
+}
+
 void MainInteractor::onDataModelLoaded(DataModel model) {
-    createNewData(model.getX(), model.getY());
-    dataList.back()->updateFromModel(model);
+    createNewData(model);
 }
 
 void MainInteractor::onPerceptronModelLoaded(PerceptronModel model) {
-    createNewPerceptron(model.getX(), model.getY());
-    static_cast<PerceptronInteractor *>(neuronsList.back())->updateFromModel(model);
+    createNewPerceptron(model);
 }
 
 void MainInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
