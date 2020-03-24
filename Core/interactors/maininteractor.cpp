@@ -15,6 +15,7 @@
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
     this->repository = repository;
+    repository->setInteractor(this);
     createdItemsCounter = 0;
 
     clearProcessParameters();
@@ -103,6 +104,16 @@ void MainInteractor::createNewData(double x, double y) {
     neuronsList.push_back(newData);
     dataList.push_back(newData);
     view->onNewDataAdded(newData);
+}
+
+void MainInteractor::onDataModelLoaded(DataModel model) {
+    createNewData(model.getX(), model.getY());
+    dataList.back()->updateFromModel(model);
+}
+
+void MainInteractor::onPerceptronModelLoaded(PerceptronModel model) {
+    createNewPerceptron(model.getX(), model.getY());
+    static_cast<PerceptronInteractor *>(neuronsList.back())->updateFromModel(model);
 }
 
 void MainInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
@@ -229,7 +240,7 @@ void MainInteractor::save(std::string path) {
 }
 
 void MainInteractor::load(std::string path) {
-
+    repository->load(path);
 }
 
 void MainInteractor::onProcessStopped() {

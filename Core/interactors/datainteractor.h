@@ -19,6 +19,7 @@ public:
     void setPosition(double x, double y) override;
     double getDelta();
     DataModel getModel();
+    void updateFromModel(DataModel model);
 
 private:
     void sendData();

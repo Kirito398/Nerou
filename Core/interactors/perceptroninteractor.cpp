@@ -139,6 +139,14 @@ PerceptronModel PerceptronInteractor::getModel() {
     return model;
 }
 
+void PerceptronInteractor::updateFromModel(PerceptronModel model) {
+    posX = model.getX();
+    posY = model.getY();
+    id = model.getID();
+    type = NeuronType(model.getType());
+    isOutput =  model.getIsOutput();
+}
+
 void PerceptronInteractor::clean() {
     clearInputSignal();
     view->setOutValue(0);

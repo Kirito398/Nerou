@@ -14,6 +14,7 @@ public:
     void onInputSignalChanged() override;
     void setPosition(double x, double y) override;
     PerceptronModel getModel();
+    void updateFromModel(PerceptronModel model);
 
 private:
     void setView(PerceptronPresentorListener *listener) override;

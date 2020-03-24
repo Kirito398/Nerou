@@ -65,5 +65,5 @@ std::vector<ClassModel> DataModel::getClassList() {
 }
 
 void DataModel::setClassList(std::vector<ClassModel> list) {
-    //classList.swap(list);
+    classList.swap(list);
 }

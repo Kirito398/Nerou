@@ -43,6 +43,8 @@ private:
     void clearProcessParameters();
     void updateSinaps();
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) override;
+    void onDataModelLoaded(DataModel model) override;
+    void onPerceptronModelLoaded(PerceptronModel model) override;
 
 private:
     static MainInteractor *instance;
