@@ -22,9 +22,15 @@ private:
     unsigned long getID() override;
     void deleteNeuron() override;
     void clean() override;
+    void getInputSignal();
+    void sendSignal();
+    void deleteValue();
 
 private:
     ConvolutionPresentorListener *view;
+    double *value;
+    unsigned int currentRow, currentColumn;
+    bool isActivateFunctionEnabled;
 };
 
 #endif // CONVOLUTIONINTERACTOR_H

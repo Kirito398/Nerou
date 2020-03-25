@@ -3,14 +3,16 @@
 #include "listeners/sinapspresentorlistener.h"
 #include "listeners/SinapsListener.h"
 
+#include <iostream>
+
 CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : CoreInterface(inputListener, outputListener)
 {
     view = nullptr;
     value = nullptr;
     weight = nullptr;
     delta = nullptr;
-    isMaxPoolingEnabled = false;
-    coreSize = 3;
+    isMaxPoolingEnabled = true;
+    coreSize = 5;
     maxPoolingCoreSize = 2;
 }
 
@@ -34,13 +36,23 @@ void CoreInteractor::updateSinaps(double learningRange, double alpha) {
 }
 
 void CoreInteractor::sendSignal(double *signal, unsigned int row, unsigned int column) {
+    view->setActive(true);
     validConvolution(signal, row, column);
 
     outputListener->onInputSignalChanged();
+    view->setActive(false);
 }
 
 void CoreInteractor::validConvolution(double *signal, unsigned int row, unsigned int column) {
     deleteValue();
+
+//    for (unsigned int k = 0; k < row; k++) {
+//        for (unsigned int p = 0; p < column; p++) {
+//            std::cout << signal[k * column + p] << " ";
+//        }
+//        std::cout << std::endl;
+//    }
+//    std::cout << std::endl;
 
     currentRow = row - coreSize + 1;
     currentColumn = column - coreSize + 1;
@@ -59,8 +71,24 @@ void CoreInteractor::validConvolution(double *signal, unsigned int row, unsigned
         }
     }
 
+//    for (unsigned int k = 0; k < currentRow; k++) {
+//        for (unsigned int p = 0; p < currentColumn; p++) {
+//            std::cout << value[k * currentColumn + p] << " ";
+//        }
+//        std::cout << std::endl;
+//    }
+//    std::cout << std::endl;
+
     if (isMaxPoolingEnabled)
         maxPooling();
+
+//    for (unsigned int k = 0; k < currentRow; k++) {
+//        for (unsigned int p = 0; p < currentColumn; p++) {
+//            std::cout << value[k * currentColumn + p] << " ";
+//        }
+//        std::cout << std::endl;
+//    }
+//    std::cout << std::endl;
 }
 
 void CoreInteractor::maxPooling() {
@@ -78,10 +106,12 @@ void CoreInteractor::maxPooling() {
     currentRow = newRow / maxPoolingCoreSize;
     currentColumn = newColumn / maxPoolingCoreSize;
 
+    value = new double[currentRow * currentColumn];
+
     unsigned int l = 0;
     for (unsigned int k = 0; k < newRow; k+=maxPoolingCoreSize) {
         for (unsigned int p = 0; p < newColumn; p+=maxPoolingCoreSize) {
-            double max = 0;
+            double max = temp[k * newColumn + p];
 
             for (unsigned int i = 0; i < maxPoolingCoreSize; i++)
                 for (unsigned int j = 0; j < maxPoolingCoreSize; j++)
@@ -110,7 +140,7 @@ void CoreInteractor::deleteValue() {
     if (value == nullptr)
         return;
 
-    delete [] value;
+    //delete value;
     value = nullptr;
 
     currentRow = 0;

@@ -18,6 +18,8 @@ ConvolutionView::ConvolutionView(ConvolutionInteractorListener *listener, QObjec
 
     neuronColor = Qt::black;
     forwardColor = Qt::white;
+
+    imageBounding = QRectF(-30, -30, 30, 30);
 }
 
 QPixmap ConvolutionView::getItemIcon() const {
@@ -56,8 +58,15 @@ void ConvolutionView::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         painter->drawRect(boundingRect());
     }
 
+    painter->drawImage(imageBounding, image);
+
     Q_UNUSED(option)
     Q_UNUSED(widget)
+}
+
+void ConvolutionView::setOutValue(QImage img) {
+    image = img;
+    updateItem(this);
 }
 
 void ConvolutionView::makePolygon() {

@@ -19,6 +19,7 @@ public:
 private:
     void updatePosition(double x, double y) override;
     void setActive(bool enable) override;
+    void setOutValue(double *value, unsigned int row, unsigned int column) override;
 
 private:
     ConvolutionViewListener *view;

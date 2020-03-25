@@ -25,10 +25,13 @@ private:
     void setActive(bool enable) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     bool isOutputNeuron() override;
+    void setOutValue(QImage img) override;
 
 private:
     ConvolutionPresentor *presentor;
     QColor neuronColor, forwardColor;
+    QImage image;
+    QRectF bounding, imageBounding;
 };
 
 #endif // CONVOLUTIONVIEW_H

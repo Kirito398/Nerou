@@ -8,6 +8,7 @@ public:
     virtual void updatePosition(double x, double y) = 0;
     virtual ~ConvolutionPresentorListener() = default;
     virtual void setActive(bool enable) = 0;
+    virtual void setOutValue(double *value, unsigned int row, unsigned int column) = 0;
 };
 
 #endif // CONVOLUTIONPRESENTORLISTENER_H
