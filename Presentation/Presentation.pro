@@ -22,12 +22,13 @@ SOURCES += \
     dialogs/dataparametersdialog.cpp \
     dialogs/progresstrainingdialog.cpp \
     main.cpp \
-    models/convolutionitem.cpp \
     models/selectoritem.cpp \
     presenters/arrowpresentor.cpp \
+    presenters/convolutionpresentor.cpp \
     presenters/datapresentor.cpp \
     presenters/perceptronpresentor.cpp \
     views/arrowview.cpp \
+    views/convolutionview.cpp \
     views/dataview.cpp \
     views/graphicview.cpp \
     views/mainwindow.cpp \
@@ -45,14 +46,16 @@ HEADERS += \
     interfaces/mainwindowinterface.h \
     interfaces/movingviewinterface.h \
     listeners/arrowviewlistener.h \
+    listeners/convolutionviewlistener.h \
     listeners/dataviewlistener.h \
     listeners/perceptronviewlistener.h \
-    models/convolutionitem.h \
     models/selectoritem.h \
     presenters/arrowpresentor.h \
+    presenters/convolutionpresentor.h \
     presenters/datapresentor.h \
     presenters/perceptronpresentor.h \
     views/arrowview.h \
+    views/convolutionview.h \
     views/dataview.h \
     views/graphicview.h \
     views/mainwindow.h \
