@@ -6,12 +6,14 @@
 #include "interactors/perceptroninteractor.h"
 #include "interactors/weightinteractor.h"
 #include "interactors/coreinteractor.h"
+#include "interactors/convolutioninteractor.h"
 #include "listeners/mainpresentorlistener.h"
 #include "interfaces/repositoryinterface.h"
 #include "models/datamodel.h"
 #include "models/perceptronmodel.h"
 #include "models/classmodel.h"
 #include "models/weightmodel.h"
+#include "models/convolutionmodel.h"
 
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
@@ -107,6 +109,17 @@ void MainInteractor::createNewData(double x, double y) {
     view->onNewDataAdded(newData);
 }
 
+void MainInteractor::createNewConvolution(double x, double y) {
+    ConvolutionInteractor *newConvolution = new ConvolutionInteractor();
+
+    newConvolution->setID(++createdItemsCounter);
+    newConvolution->setInteractor(this);
+    newConvolution->setPosition(x, y);
+
+    neuronsList.push_back(newConvolution);
+    view->onNewConvolutionAdded(newConvolution);
+}
+
 void MainInteractor::createNewPerceptron(PerceptronModel model) {
     PerceptronInteractor *newPerceptron = new PerceptronInteractor();
 
@@ -135,6 +148,20 @@ void MainInteractor::createNewData(DataModel model) {
 
     newData->updateFromModel(model);
     view->onNewDataAdded(newData);
+}
+
+void MainInteractor::createNewConvolution(ConvolutionModel model) {
+    ConvolutionInteractor *newConvolution = new ConvolutionInteractor();
+
+    newConvolution->setInteractor(this);
+
+    if (model.getID() > createdItemsCounter)
+        createdItemsCounter = model.getID();
+
+    neuronsList.push_back(newConvolution);
+
+    newConvolution->updateFromModel(model);
+    view->onNewConvolutionAdded(newConvolution);
 }
 
 void MainInteractor::onDataModelLoaded(DataModel model) {

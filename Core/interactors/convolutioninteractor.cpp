@@ -29,7 +29,7 @@ ConvolutionModel ConvolutionInteractor::getModel() {
 }
 
 void ConvolutionInteractor::updateFromModel(ConvolutionModel model) {
-
+    id = model.getID();
 }
 
 void ConvolutionInteractor::setView(ConvolutionPresentorListener *listener) {

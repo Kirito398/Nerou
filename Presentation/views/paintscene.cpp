@@ -7,6 +7,7 @@
 #include "views/dataview.h"
 #include "views/arrowview.h"
 #include "views/perceptronview.h"
+#include "views/convolutionview.h"
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
@@ -84,6 +85,15 @@ void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) 
 
 void PaintScene::onNewDataAdded(DataInteractorListener *data) {
     DataView *view = new DataView(data);
+
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
+}
+
+void PaintScene::onNewConvolutionAdded(ConvolutionInteractorListener *convolution) {
+    ConvolutionView *view = new ConvolutionView(convolution);
 
     view->setView(this);
     view->setSelected(true);
@@ -271,7 +281,7 @@ void PaintScene::addMovingView(QPointF position) {
         break;
     }
     case MovingView::Convolution : {
-        //interactor->
+        interactor->createNewConvolution(position.x(), position.y());
         break;
     }
     case MovingView::Data : {
@@ -349,6 +359,10 @@ QPixmap PaintScene::getPerceptronIcon() const {
 
 QPixmap PaintScene::getDataIcon() const {
     return DataView().getItemIcon();
+}
+
+QPixmap PaintScene::getConvolutionIcon() const {
+    return ConvolutionView().getItemIcon();
 }
 
 void PaintScene::onDeleteBtnClicked() {

@@ -24,6 +24,7 @@ private:
     unsigned long getID() override;
     void setActive(bool enable) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    bool isOutputNeuron() override;
 
 private:
     ConvolutionPresentor *presentor;

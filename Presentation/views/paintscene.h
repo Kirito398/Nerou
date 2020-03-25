@@ -25,6 +25,7 @@ public:
     MovingView::ViewType getViewType();
     QPixmap getPerceptronIcon() const;
     QPixmap getDataIcon() const;
+    QPixmap getConvolutionIcon() const;
     void onDeleteBtnClicked();
     void onRunBtnClicked();
     void onAddOutputNeuronsActionClicked();
@@ -52,6 +53,7 @@ private:
     void onTrainingFinished() override;
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
     void onNewDataAdded(DataInteractorListener *data) override;
+    void onNewConvolutionAdded(ConvolutionInteractorListener *convolution) override;
     void onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

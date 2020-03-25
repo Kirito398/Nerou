@@ -82,6 +82,10 @@ void ConvolutionView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event);
 }
 
+bool ConvolutionView::isOutputNeuron() {
+    return false;
+}
+
 ConvolutionView::~ConvolutionView() {
     removeArrows();
 
