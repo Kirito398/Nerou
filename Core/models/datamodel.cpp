@@ -67,3 +67,19 @@ std::vector<ClassModel> DataModel::getClassList() {
 void DataModel::setClassList(std::vector<ClassModel> list) {
     classList.swap(list);
 }
+
+unsigned int DataModel::getRow() {
+    return row;
+}
+
+void DataModel::setRow(unsigned int value) {
+    row = value;
+}
+
+unsigned int DataModel::getColumn() {
+    return column;
+}
+
+void DataModel::setColumn(unsigned int value) {
+    column = value;
+}

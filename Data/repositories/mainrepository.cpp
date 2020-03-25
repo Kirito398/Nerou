@@ -42,7 +42,9 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
             << QString::number(model.getID())
             << model.getType()
             << model.getIsOutput()
-            << model.getIsColorMode();
+            << model.getIsColorMode()
+            << model.getRow()
+            << model.getColumn();
 
         std::vector<ClassModel> classList = model.getClassList();
         size_t classSize = classList.size();
@@ -108,12 +110,15 @@ void MainRepository::load(std::string path) {
         QString neuronID;
         int type;
         bool isOutput, isColorMode;
+        unsigned int row, column;
 
         in >> posX >> posY
                 >> neuronID
                 >> type
                 >> isOutput
-                >> isColorMode;
+                >> isColorMode
+                >> row
+                >> column;
 
         std::vector<ClassModel> classList;
         QString size;
@@ -144,6 +149,8 @@ void MainRepository::load(std::string path) {
         model.setIsOutput(isOutput);
         model.setClassList(classList);
         model.setIsColorMode(isColorMode);
+        model.setRow(row);
+        model.setColumn(column);
 
         interactor->onDataModelLoaded(model);
     }

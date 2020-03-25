@@ -237,13 +237,8 @@ DataModel DataInteractor::getModel() {
     model.setIsOutput(isOutput);
     model.setClassList(classList);
     model.setIsColorMode(isColorMode);
-
-//    std::vector<ClassModel *> list;
-
-//    for (size_t i = 0; i < classList.size(); i++)
-//        list.push_back(&classList.at(i));
-
-//    model.setClassList(list);
+    model.setRow(row);
+    model.setColumn(column);
 
     return model;
 }
@@ -255,12 +250,13 @@ void DataInteractor::updateFromModel(DataModel model) {
     type = NeuronType(model.getType());
     isOutput = model.getIsOutput();
     isColorMode = model.getIsColorMode();
+    row = model.getRow();
+    column = model.getColumn();
 
     std::vector<ClassModel> list = model.getClassList();
 
-    for (size_t i = 0; i < list.size(); i++) {
+    for (size_t i = 0; i < list.size(); i++)
         addClass(list.at(i));
-    }
 }
 
 double DataInteractor::getDelta() {

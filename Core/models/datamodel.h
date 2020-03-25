@@ -23,6 +23,10 @@ public:
     void setIsColorMode(bool enable);
     std::vector<ClassModel> getClassList();
     void setClassList(std::vector<ClassModel> list);
+    unsigned int getRow();
+    void setRow(unsigned int value);
+    unsigned int getColumn();
+    void setColumn(unsigned int value);
 
 private:
     double posX, posY;
@@ -31,6 +35,7 @@ private:
     int type;
     bool isColorMode;
     std::vector<ClassModel> classList;
+    unsigned int row, column;
 };
 
 #endif // DATAMODEL_H
