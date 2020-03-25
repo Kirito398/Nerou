@@ -2,6 +2,7 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include <QCoreApplication>
+#include <QFileDialog>
 
 #include "views/dataview.h"
 #include "views/arrowview.h"
@@ -53,6 +54,25 @@ void PaintScene::onTrainingFinished() {
     progressDialog->onTrainingFinished();
 }
 
+void PaintScene::onLoadingActionClicked() {
+    QFileDialog dialog(nullptr, tr("Open project"));
+
+    dialog.setMimeTypeFilters(QStringList("*.nro"));
+
+    if (dialog.exec() == QDialog::Accepted)
+        interactor->load(dialog.selectedFiles().first().toStdString());
+}
+
+void PaintScene::onSavingActionClicked() {
+    QFileDialog dialog(nullptr, tr("Save project"));
+
+    dialog.setMimeTypeFilters(QStringList("*.nro"));
+    dialog.setDefaultSuffix("nro");
+
+    if (dialog.exec() == QDialog::Accepted)
+        interactor->save(dialog.selectedFiles().first().toStdString());
+}
+
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
     PerceptronView *view = new PerceptronView(perceptron);
 
@@ -69,6 +89,27 @@ void PaintScene::onNewDataAdded(DataInteractorListener *data) {
     view->setSelected(true);
 
     addItem(view);
+}
+
+void PaintScene::onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) {
+    addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
+}
+
+MovingView *PaintScene::findView(unsigned long neuronID) {
+    MovingView *view = nullptr;
+
+    QList<QGraphicsItem *> items = this->items();
+    for (auto item : items) {
+        view = dynamic_cast<MovingView *>(item);
+
+        if (view == nullptr)
+            continue;
+
+        if (view->getID() == neuronID)
+            break;
+    }
+
+    return view;
 }
 
 void PaintScene::moveSelectedItem(QPointF delta) {
@@ -209,15 +250,18 @@ void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
             listener = interactor->createNewCore(startView->getID(), endView->getID());
     }
 
-    if (listener != nullptr) {
-        ArrowView *arrow = new ArrowView(listener, startView, endView);
-        startView->addArrow(arrow);
-        endView->addArrow(arrow);
-        arrow->setZValue(-1000.0);
-        arrow->updatePosition();
-        arrow->setView(this);
-        addItem(arrow);
-    }
+    if (listener != nullptr)
+        addArrow(listener, startView, endView);
+}
+
+void PaintScene::addArrow(ArrowInteractorListener *listener, MovingView *startView, MovingView *endView) {
+    ArrowView *arrow = new ArrowView(listener, startView, endView);
+    startView->addArrow(arrow);
+    endView->addArrow(arrow);
+    arrow->setZValue(-1000.0);
+    arrow->updatePosition();
+    arrow->setView(this);
+    addItem(arrow);
 }
 
 void PaintScene::addMovingView(QPointF position) {

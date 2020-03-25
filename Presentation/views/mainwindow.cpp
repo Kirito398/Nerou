@@ -200,6 +200,8 @@ void MainWindow::initToolBars() {
 
 void MainWindow::initMenu() {
     fileMenu = menuBar()->addMenu(tr("File"));
+    fileMenu->addAction(loadingAction);
+    fileMenu->addAction(savingAction);
     fileMenu->addAction(exitAction);
 
     itemMenu = menuBar()->addMenu(tr("Item"));
@@ -263,6 +265,16 @@ void MainWindow::initActions() {
     makeForwardNeuronAction = new QAction(QIcon(":/images/forward_neuron_icon.png"), tr("Make forward neuron"));
     makeForwardNeuronAction->setStatusTip(tr("Make selected neuron to the forward neuron"));
     connect(makeForwardNeuronAction, SIGNAL(triggered(bool)), this, SLOT(onMakeForwardNeuronActionClicked()));
+
+    savingAction = new QAction(QIcon(":/images/save_icon.png"), tr("Save project"));
+    savingAction->setStatusTip(tr("Save project"));
+    savingAction->setShortcuts(QKeySequence::Save);
+    connect(savingAction, SIGNAL(triggered(bool)), this, SLOT(onSaveActionClicked()));
+
+    loadingAction = new QAction(QIcon(":/images/open_icon.png"), tr("Open project"));
+    loadingAction->setStatusTip(tr("Open project"));
+    loadingAction->setShortcuts(QKeySequence::Open);
+    connect(loadingAction, SIGNAL(triggered(bool)), this, SLOT(onOpenActionClicked()));
 }
 
 void MainWindow::onAddOutputNeuronsActionClicked() {
@@ -297,6 +309,14 @@ void MainWindow::onResetZoomActionClicked() {
 
 void MainWindow::onExitActionClicked() {
     close();
+}
+
+void MainWindow::onSaveActionClicked() {
+    scene->onSavingActionClicked();
+}
+
+void MainWindow::onOpenActionClicked(){
+    scene->onLoadingActionClicked();
 }
 
 void MainWindow::onAboutActionClicked() {

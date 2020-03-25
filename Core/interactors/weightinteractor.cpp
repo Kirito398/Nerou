@@ -2,6 +2,7 @@
 
 #include "listeners/sinapspresentorlistener.h"
 #include "listeners/SinapsListener.h"
+#include "models/weightmodel.h"
 
 WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : WeightInterface(inputListener, outputListener)
 {
@@ -19,6 +20,20 @@ void WeightInteractor::init() {
     delta = 0;
     grad = 0;
     prevDeltaWeight = 0;
+}
+
+WeightModel WeightInteractor::getModel() {
+    WeightModel model(id);
+    model.setType(type);
+    model.setWeight(weight);
+    model.setInputNeuronID(inputListener->getID());
+    model.setOutputNeuronID(outputListener->getID());
+
+    return model;
+}
+
+void WeightInteractor::setWeight(double weight) {
+    this->weight = weight;
 }
 
 void WeightInteractor::updateSinaps(double learningRange, double alpha) {

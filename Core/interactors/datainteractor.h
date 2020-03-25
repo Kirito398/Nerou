@@ -6,6 +6,7 @@
 
 class DataPresentorListener;
 class RepositoryInterface;
+class DataModel;
 
 class DataInteractor : public NeuronInteractor, public DataInteractorListener
 {
@@ -17,6 +18,8 @@ public:
     unsigned long getTrainingIterationNumber();
     void setPosition(double x, double y) override;
     double getDelta();
+    DataModel getModel();
+    void updateFromModel(DataModel model);
 
 private:
     void sendData();
@@ -41,11 +44,12 @@ private:
 private:
     DataPresentorListener *view;
     RepositoryInterface *repository;
-    bool isColorMode;
     double *value, **colorValue;
     unsigned int row, column;
     unsigned long currentClass;
     double currentDelta;
+    //Need to save
+    bool isColorMode;
     std::vector<ClassModel> classList;
 };
 

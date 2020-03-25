@@ -15,6 +15,8 @@ class WeightInteractor;
 class MainPresentorListener;
 class ArrowInteractorListener;
 class RepositoryInterface;
+class DataModel;
+class PerceptronModel;
 
 class MainInteractor : public MainInteractorInterface
 {
@@ -28,6 +30,8 @@ public:
     void removeNeuron(unsigned long neuronID) override;
     void removeSinaps(unsigned long sinapsID) override;
     std::vector<unsigned long> getOutputsNeuronsList();
+    void save(std::string path);
+    void load(std::string path);
     void run();
     void stop();
     void pause();
@@ -35,12 +39,17 @@ public:
 
 private:
     MainInteractor(RepositoryInterface *repository);
+    void createNewPerceptron(PerceptronModel model);
+    void createNewData(DataModel model);
     NeuronInteractor *findNeuron(unsigned long id);
     void onProcessStopped();
     void onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber);
     void clearProcessParameters();
     void updateSinaps();
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) override;
+    void onDataModelLoaded(DataModel model) override;
+    void onPerceptronModelLoaded(PerceptronModel model) override;
+    void onWeightModelLoaded(WeightModel model) override;
 
 private:
     static MainInteractor *instance;

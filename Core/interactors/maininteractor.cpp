@@ -8,10 +8,15 @@
 #include "interactors/coreinteractor.h"
 #include "listeners/mainpresentorlistener.h"
 #include "interfaces/repositoryinterface.h"
+#include "models/datamodel.h"
+#include "models/perceptronmodel.h"
+#include "models/classmodel.h"
+#include "models/weightmodel.h"
 
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
     this->repository = repository;
+    repository->setInteractor(this);
     createdItemsCounter = 0;
 
     clearProcessParameters();
@@ -102,6 +107,44 @@ void MainInteractor::createNewData(double x, double y) {
     view->onNewDataAdded(newData);
 }
 
+void MainInteractor::createNewPerceptron(PerceptronModel model) {
+    PerceptronInteractor *newPerceptron = new PerceptronInteractor();
+
+    newPerceptron->setInteractor(this);
+
+    if (model.getID() > createdItemsCounter)
+        createdItemsCounter = model.getID();
+
+    neuronsList.push_back(newPerceptron);
+
+    newPerceptron->updateFromModel(model);
+    view->onNewPerceptronAdded(newPerceptron);
+}
+
+void MainInteractor::createNewData(DataModel model) {
+    DataInteractor *newData = new DataInteractor();
+
+    newData->setInteractor(this);
+    newData->setRepository(repository);
+
+    if (model.getID() > createdItemsCounter)
+        createdItemsCounter = model.getID();
+
+    neuronsList.push_back(newData);
+    dataList.push_back(newData);
+
+    newData->updateFromModel(model);
+    view->onNewDataAdded(newData);
+}
+
+void MainInteractor::onDataModelLoaded(DataModel model) {
+    createNewData(model);
+}
+
+void MainInteractor::onPerceptronModelLoaded(PerceptronModel model) {
+    createNewPerceptron(model);
+}
+
 void MainInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
     if (dynamic_cast<PerceptronInteractor *>(findNeuron(learningNeuronID)) != nullptr)
         createNewWeight(learningNeuronID, dataNeuronID);
@@ -141,6 +184,25 @@ ArrowInteractorListener *MainInteractor::createNewCore(unsigned long inputID, un
 
     delete newCore;
     return nullptr;
+}
+
+void MainInteractor::onWeightModelLoaded(WeightModel model) {
+    NeuronInteractor *inputNeuron = findNeuron(model.getInputNeuronID());
+    NeuronInteractor *outputNeuron = findNeuron(model.getOutputNeuronID());
+
+    WeightInteractor *newWeight = new WeightInteractor(inputNeuron, outputNeuron);
+
+    if (inputNeuron->addArrow(newWeight) && outputNeuron->addArrow(newWeight)) {
+        sinapsList.push_back(newWeight);
+        newWeight->setInteractor(this);
+        newWeight->setID(model.getID());
+        newWeight->setWeight(model.getWeight());
+
+        if (createdItemsCounter < model.getID())
+            createdItemsCounter = model.getID();
+
+        view->onNewWeightAdded(newWeight, model.getInputNeuronID(), model.getOutputNeuronID());
+    }
 }
 
 void MainInteractor::removeNeuron(unsigned long neuronID) {
@@ -208,6 +270,31 @@ void MainInteractor::pause() {
 
 void MainInteractor::debugRun() {
     isDebug = true;
+}
+
+void MainInteractor::save(std::string path) {
+    std::vector<DataModel> dataModelList;
+    std::vector<PerceptronModel> perceptronModelList;
+    std::vector<WeightModel> weightModelList;
+
+    for (auto neuron : neuronsList) {
+        if (neuron->getType() == Perceptron)
+            perceptronModelList.push_back(static_cast<PerceptronInteractor *>(neuron)->getModel());
+
+        if (neuron->getType() == Data)
+            dataModelList.push_back(static_cast<DataInteractor *>(neuron)->getModel());
+    }
+
+    for (auto sinaps : sinapsList) {
+        if (sinaps->getType() == sinaps->Weigth && sinaps->getOutputNeuron()->getType() != Data)
+            weightModelList.push_back(static_cast<WeightInteractor *>(sinaps)->getModel());
+    }
+
+    repository->save(path, dataModelList, perceptronModelList, weightModelList);
+}
+
+void MainInteractor::load(std::string path) {
+    repository->load(path);
 }
 
 void MainInteractor::onProcessStopped() {

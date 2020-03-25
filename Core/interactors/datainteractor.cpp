@@ -5,6 +5,7 @@
 #include "interfaces/weightinterface.h"
 #include "interfaces/repositoryinterface.h"
 #include "models/classmodel.h"
+#include "models/datamodel.h"
 
 DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
@@ -224,6 +225,38 @@ void DataInteractor::calculateDelta() {
     }
 
     currentDelta = mse / classList.size();
+}
+
+DataModel DataInteractor::getModel() {
+    DataModel model;
+
+    model.setX(posX);
+    model.setY(posY);
+    model.setID(id);
+    model.setType(type);
+    model.setIsOutput(isOutput);
+    model.setClassList(classList);
+    model.setIsColorMode(isColorMode);
+    model.setRow(row);
+    model.setColumn(column);
+
+    return model;
+}
+
+void DataInteractor::updateFromModel(DataModel model) {
+    posX = model.getX();
+    posY = model.getY();
+    id = model.getID();
+    type = NeuronType(model.getType());
+    isOutput = model.getIsOutput();
+    isColorMode = model.getIsColorMode();
+    row = model.getRow();
+    column = model.getColumn();
+
+    std::vector<ClassModel> list = model.getClassList();
+
+    for (size_t i = 0; i < list.size(); i++)
+        addClass(list.at(i));
 }
 
 double DataInteractor::getDelta() {

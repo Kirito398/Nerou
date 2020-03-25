@@ -12,6 +12,7 @@ class SelectorItem;
 class MainInteractor;
 class QAction;
 class ProgressTrainingDialog;
+class ArrowInteractorListener;
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
@@ -30,6 +31,8 @@ public:
     void onStopActionClicked();
     void onPauseActionClicked();
     void onDebugActionClicked();
+    void onLoadingActionClicked();
+    void onSavingActionClicked();
     void setSelectedItemOutputsEnable(bool enable);
 
 private:
@@ -49,6 +52,7 @@ private:
     void onTrainingFinished() override;
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
     void onNewDataAdded(DataInteractorListener *data) override;
+    void onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
@@ -61,6 +65,8 @@ private:
     QStringList getOutputsNeuronsList() override;
     void addArrow();
     void addArrow(MovingView *startView, MovingView *endView);
+    void addArrow(ArrowInteractorListener *listener, MovingView *startView, MovingView *endView);
+    MovingView *findView(unsigned long neuronID);
     void addMovingView(QPointF position);
     void onViewsModePress(QGraphicsSceneMouseEvent *event);
     void onArrowsModePress(QGraphicsSceneMouseEvent *event);

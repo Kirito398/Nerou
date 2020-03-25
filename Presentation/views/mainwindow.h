@@ -38,6 +38,8 @@ private:
     QAction *resetZoomAction;
     QAction *makeOutputNeuronAction;
     QAction *makeForwardNeuronAction;
+    QAction *savingAction;
+    QAction *loadingAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -84,5 +86,7 @@ private slots:
     void onResetZoomActionClicked();
     void onMakeOutputNeuronActionClicked();
     void onMakeForwardNeuronActionClicked();
+    void onSaveActionClicked();
+    void onOpenActionClicked();
 };
 #endif // MAINWINDOW_H
