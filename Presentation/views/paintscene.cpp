@@ -258,6 +258,9 @@ void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
 
         if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Convolution)
             listener = interactor->createNewCore(startView->getID(), endView->getID());
+
+        if (startView->getType() == MovingView::Convolution && endView->getType() == MovingView::Perceptron)
+            listener = interactor->createNewWeight(startView->getID(), endView->getID());
     }
 
     if (listener != nullptr)
