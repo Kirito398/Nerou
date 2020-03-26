@@ -25,6 +25,11 @@ void ConvolutionPresentor::setPosition(double x, double y) {
 }
 
 void ConvolutionPresentor::setOutValue(double *value, unsigned int row, unsigned int column) {
+    if (value == nullptr) {
+        view->setOutValue(QImage());
+        return;
+    }
+
     QImage img(QSize(column, row), QImage::Format_RGB32);
 
     for (unsigned int i = 0; i < row; i++)

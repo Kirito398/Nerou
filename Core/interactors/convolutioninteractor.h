@@ -25,10 +25,13 @@ private:
     void getInputSignal();
     void sendSignal();
     void deleteValue();
+    void makeInputDelta();
+    void sendDelta();
+    void deleteDelta();
 
 private:
     ConvolutionPresentorListener *view;
-    double *value;
+    double *value, *inputDelta;
     unsigned int currentRow, currentColumn;
     bool isActivateFunctionEnabled;
 };

@@ -9,6 +9,7 @@ ConvolutionInteractor::ConvolutionInteractor() : NeuronInteractor(Convolution)
 {
     view = nullptr;
     value = nullptr;
+    inputDelta = nullptr;
     currentRow = 0;
     currentColumn = 0;
     inputSignalCount = 0;
@@ -53,7 +54,14 @@ void ConvolutionInteractor::setView(ConvolutionPresentorListener *listener) {
 }
 
 void ConvolutionInteractor::onDeltaValueChanged() {
+    inputDeltaCount++;
 
+    if (inputDeltaCount != outputsSinaps.size())
+        return;
+
+    makeInputDelta();
+    sendDelta();
+    //deleteDelta();
 }
 
 unsigned long ConvolutionInteractor::getID() {
@@ -74,19 +82,38 @@ void ConvolutionInteractor::getInputSignal() {
     view->setActive(false);
 }
 
+void ConvolutionInteractor::makeInputDelta() {
+    if (outputsSinaps.at(0)->getType() == outputsSinaps.at(0)->Core) {
+        inputDelta = static_cast<CoreInterface *>(outputsSinaps.at(0))->getDelta();
+        return;
+    }
+
+    inputDelta = new double[inputDeltaCount];
+
+    for (unsigned long i = 0; i < inputDeltaCount; i++) {
+        WeightInterface *weight = static_cast<WeightInterface *>(outputsSinaps.at(i));
+        inputDelta[i] = weight->getDelta();
+    }
+}
+
 void ConvolutionInteractor::sendSignal() {
     unsigned int size = currentRow * currentColumn;
     unsigned long weightCounter = 0;
 
     for (auto sinaps : outputsSinaps) {
         if (sinaps->getType() == sinaps->Weigth) {
-            dynamic_cast<WeightInterface *>(sinaps)->sendSignal(value[weightCounter++ % size]);
+            static_cast<WeightInterface *>(sinaps)->sendSignal(value[weightCounter++ % size]);
             continue;
         }
 
-        CoreInterface *core = dynamic_cast<CoreInterface *>(sinaps);
+        CoreInterface *core = static_cast<CoreInterface *>(sinaps);
         core->sendSignal(value, currentRow, currentColumn);
     }
+}
+
+void ConvolutionInteractor::sendDelta() {
+    for (auto sinaps : inputsSinaps)
+        static_cast<CoreInterface *>(sinaps)->sendDelta(inputDelta);
 }
 
 void ConvolutionInteractor::deleteValue() {
@@ -97,11 +124,22 @@ void ConvolutionInteractor::deleteValue() {
     value = nullptr;
 }
 
+void ConvolutionInteractor::deleteDelta() {
+    if (inputDelta == nullptr)
+        return;
+
+    delete [] inputDelta;
+    inputDelta = nullptr;
+
+    inputDeltaCount = 0;
+}
+
 void ConvolutionInteractor::deleteNeuron() {
     removeNeuron();
 }
 
 void ConvolutionInteractor::clean() {
-    //clearInputSignal();
-    //view->setOutValue();
+    deleteValue();
+    deleteDelta();
+    view->setOutValue(nullptr, 0, 0);
 }

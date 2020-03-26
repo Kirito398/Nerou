@@ -20,9 +20,16 @@ private:
     unsigned int getColumn() override;
     void deleteSinaps() override;
     void setView(SinapsPresentorListener *listener) override;
+    double * getDelta() override;
+    void sendDelta(double *delta) override;
     void deleteValue();
+    void deleteMaxValue();
+    void deleteDelta();
     void validConvolution(double *signal, unsigned int row, unsigned int column);
+    void revConvolution(double *delta);
     void maxPooling();
+    void maxPoolingRev(double *delta);
+    double* convolution(double *input, unsigned int row, unsigned int column);
 
 private:
     SinapsPresentorListener *view;
@@ -30,6 +37,7 @@ private:
     double *value;
     double *weight;
     double *delta;
+    bool *maxValue;
     bool isMaxPoolingEnabled;
 };
 
