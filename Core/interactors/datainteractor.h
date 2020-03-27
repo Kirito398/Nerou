@@ -31,7 +31,6 @@ private:
     void onInputSignalChanged() override;
     void onDeltaValueChanged() override;
     void setView(DataPresentorListener *listener) override;
-    void setSize(unsigned long row, unsigned long column) override;
     void clean() override;
     void clearClassList() override;
     ClassModel getClass(unsigned long id) override;
@@ -45,7 +44,6 @@ private:
     RepositoryInterface *repository;
     std::vector<std::vector<double>> value;
     std::vector<std::vector<std::vector<double>>> colorValue;
-    unsigned int row, column;
     unsigned long currentClass;
     double currentDelta;
     //Need to save

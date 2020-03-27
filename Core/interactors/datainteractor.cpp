@@ -11,8 +11,6 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
     view = nullptr;
     repository = nullptr;
-    column = 0;
-    row = 0;
     inputSignalCount = 0;
     inputDeltaCount = 0;
     currentClass = 0;
@@ -48,7 +46,7 @@ void DataInteractor::sendData() {
     if (outputsSinaps.empty())
         return;
 
-    unsigned int size = isColorMode ? column * row * 3 : column * row;
+    unsigned int size = isColorMode ? colorValue[0][0].size() * colorValue[0].size() * colorValue.size() : value[0].size() * value.size();
     unsigned long weightCounter = 0;
     unsigned long coreCounter = 0;
 
@@ -78,8 +76,8 @@ void DataInteractor::sendData() {
 }
 
 double *DataInteractor::colorsToValue() {
-    unsigned int size = column * row;
-    double *value = new double[size * 3];
+    unsigned int size = colorValue[0][0].size() * colorValue[0].size();
+    double *value = new double[size * colorValue.size()];
 
     for (unsigned int i = 0; i < colorValue.size(); i++) {
         for (unsigned int j = 0; j < colorValue[i].size(); j++) {
@@ -143,11 +141,6 @@ unsigned long DataInteractor::getTrainingIterationNumber() {
     }
 
     return number;
-}
-
-void DataInteractor::setSize(unsigned long row, unsigned long column) {
-    this->row = row;
-    this->column = column;
 }
 
 void DataInteractor::setView(DataPresentorListener *listener) {
@@ -244,8 +237,6 @@ DataModel DataInteractor::getModel() {
     model.setIsOutput(isOutput);
     model.setClassList(classList);
     model.setIsColorMode(isColorMode);
-    model.setRow(row);
-    model.setColumn(column);
 
     return model;
 }
@@ -257,8 +248,6 @@ void DataInteractor::updateFromModel(DataModel model) {
     type = NeuronType(model.getType());
     isOutput = model.getIsOutput();
     isColorMode = model.getIsColorMode();
-    row = model.getRow();
-    column = model.getColumn();
 
     std::vector<ClassModel> list = model.getClassList();
 

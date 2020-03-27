@@ -105,7 +105,6 @@ void DataView::onParametersUpdated() {
 
     parametersDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
     presentor->updateParameters(trainingList, testingList, neuronsIDs);
-    presentor->setImageSize(parametersDialog->getImageSize());
 }
 
 bool DataView::isOutputNeuron() {

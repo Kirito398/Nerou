@@ -22,7 +22,6 @@ public:
     void setInteractor(DataInteractorListener *listener);
     void setPosition(double x, double y);
     unsigned long getID();
-    void setImageSize(QSize size);
     void updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronsIDs);
     void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronsIDs);
     RepositoryInterface *getRepository();

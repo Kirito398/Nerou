@@ -40,10 +40,6 @@ void DataPresentor::updateParameters(QStringList trainingList, QStringList testi
     }
 }
 
-void DataPresentor::setImageSize(QSize size) {
-    interactor->setSize(size.height(), size.width());
-}
-
 void DataPresentor::getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronsIDs) {
     unsigned long classNumber = interactor->getClassNumber();
 
