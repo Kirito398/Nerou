@@ -12,9 +12,13 @@ CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *ou
     isMaxPoolingEnabled = true;
     coreSize = 5;
     maxPoolingCoreSize = 2;
+
+    init();
 }
 
 void CoreInteractor::init() {
+    weight.clear();
+
     for (unsigned int i = 0; i < coreSize; i++) {
         weight.push_back(std::vector<double>());
         for (unsigned int j = 0; j < coreSize; j++) {

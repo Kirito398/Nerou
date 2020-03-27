@@ -94,9 +94,9 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
 
         out << QString::number(row) << QString::number(column);
 
-        for (size_t i = 0; i < row; i++)
+        for (size_t k = 0; k < row; k++)
             for (size_t j = 0; j < column; j++)
-                out << weight[i][j];
+                out << weight[k][j];
     }
 
     file->close();
