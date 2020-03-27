@@ -39,7 +39,8 @@ void CoreInteractor::sendSignal(std::vector<std::vector<double>> signal) {
     view->setActive(false);
 }
 
-std::vector<std::vector<double>> CoreInteractor::convolution(std::vector<std::vector<double>> input) {
+std::vector<std::vector<double>> CoreInteractor::convolution(std::vector<std::vector<double>> input, std::vector<std::vector<double>> core) {
+    unsigned int coreSize = core.size();
     unsigned int newRow = input.size() - coreSize + 1;
     unsigned int newColumn = input[0].size() - coreSize + 1;
 
@@ -53,7 +54,7 @@ std::vector<std::vector<double>> CoreInteractor::convolution(std::vector<std::ve
 
             for (unsigned int i = 0; i < coreSize; i++)
                 for (unsigned int j = 0; j < coreSize; j++)
-                    sum += input[k + i][p + j] * weight[i][j];
+                    sum += input[k + i][p + j] * core[i][j];
 
             output[k][p] = sum;
         }
@@ -64,7 +65,7 @@ std::vector<std::vector<double>> CoreInteractor::convolution(std::vector<std::ve
 
 void CoreInteractor::validConvolution(std::vector<std::vector<double> > signal) {
     value.clear();
-    value = convolution(signal);
+    value = convolution(signal, weight);
 
     if (isMaxPoolingEnabled)
         maxPooling();
@@ -141,7 +142,7 @@ void CoreInteractor::revConvolution(std::vector<std::vector<double>> delta) {
         for (unsigned int j = 0; j < currentColumn; j++)
             temp[i + deltaCore][j + deltaCore] = delta[i][j];
 
-    this->delta = convolution(temp);
+    this->delta = convolution(temp, weight); //rotate weight to 180
 }
 
 std::vector<std::vector<double>> CoreInteractor::maxPoolingRev(std::vector<std::vector<double>> delta) {

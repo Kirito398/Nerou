@@ -27,7 +27,7 @@ private:
     void revConvolution(std::vector<std::vector<double>> delta);
     void maxPooling();
     std::vector<std::vector<double>> maxPoolingRev(std::vector<std::vector<double>> delta);
-    std::vector<std::vector<double>> convolution(std::vector<std::vector<double> > input);
+    std::vector<std::vector<double>> convolution(std::vector<std::vector<double> > input, std::vector<std::vector<double> > core);
 
 private:
     SinapsPresentorListener *view;
