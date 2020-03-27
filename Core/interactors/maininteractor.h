@@ -54,6 +54,7 @@ private:
     void onPerceptronModelLoaded(PerceptronModel model) override;
     void onConvolutionModelLoaded(ConvolutionModel model) override;
     void onWeightModelLoaded(WeightModel model) override;
+    void onCoreModelLoaded(CoreModel model) override;
 
 private:
     static MainInteractor *instance;

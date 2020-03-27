@@ -55,6 +55,7 @@ private:
     void onNewDataAdded(DataInteractorListener *data) override;
     void onNewConvolutionAdded(ConvolutionInteractorListener *convolution) override;
     void onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) override;
+    void onNewCoreAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;

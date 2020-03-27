@@ -27,6 +27,7 @@ SOURCES += \
     interactors/weightinteractor.cpp \
     models/classmodel.cpp \
     models/convolutionmodel.cpp \
+    models/coremodel.cpp \
     models/datamodel.cpp \
     models/perceptronmodel.cpp \
     models/weightmodel.cpp
@@ -57,6 +58,7 @@ HEADERS += \
     listeners/sinapspresentorlistener.h \
     models/classmodel.h \
     models/convolutionmodel.h \
+    models/coremodel.h \
     models/datamodel.h \
     models/perceptronmodel.h \
     models/weightmodel.h

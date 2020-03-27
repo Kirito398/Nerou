@@ -5,11 +5,14 @@
 #include "listeners/arrowinteractorlistener.h"
 
 class SinapsPresentorListener;
+class CoreModel;
 
 class CoreInteractor : public CoreInterface, public ArrowInteractorListener
 {
 public:
     CoreInteractor(SinapsListener *inputListener, SinapsListener *outputListener);
+    CoreModel getModel();
+    void updateFromModel(CoreModel model);
 
 private:
     void init() override;

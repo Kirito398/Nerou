@@ -9,6 +9,7 @@
 #include "models/perceptronmodel.h"
 #include "models/convolutionmodel.h"
 #include "models/weightmodel.h"
+#include "models/coremodel.h"
 #include "interfaces/maininteractorinterface.h"
 
 MainRepository::MainRepository()
@@ -16,7 +17,7 @@ MainRepository::MainRepository()
 
 }
 
-void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList) {
+void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList, std::vector<CoreModel> coreModelList) {
     QFile *file = new QFile(QString::fromStdString(path));
     file->open(QIODevice::WriteOnly);
     QDataStream out(file);
@@ -25,8 +26,9 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
     size_t perceptronSize = perceptronModelList.size();
     size_t convolutionSize = convolutionModelList.size();
     size_t weightSize = weightModelList.size();
+    size_t coreSize = coreModelList.size();
 
-    out << QString::number(dataSize) << QString::number(perceptronSize) << QString::number(convolutionSize) << QString::number(weightSize);
+    out << QString::number(dataSize) << QString::number(perceptronSize) << QString::number(convolutionSize) << QString::number(weightSize) << QString::number(coreSize);
 
     for (size_t i = 0; i < perceptronSize; i++) {
         PerceptronModel model = perceptronModelList.at(i);
@@ -76,6 +78,27 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
             << QString::number(model.getOutputNeuronID());
     }
 
+    for (size_t i = 0; i < coreSize; i++) {
+        CoreModel model = coreModelList.at(i);
+        out << QString::number(model.getID())
+            << model.getType()
+            << QString::number(model.getCoreSize())
+            << QString::number(model.getInputNeuronID())
+            << QString::number(model.getOutputNeuronID())
+            << model.getIsMaxPoolingEnable()
+            << QString::number(model.getMaxPoolingCoreSize());
+
+        std::vector<std::vector<double>> weight = model.getWeight();
+        size_t row = weight.size();
+        size_t column = weight[0].size();
+
+        out << QString::number(row) << QString::number(column);
+
+        for (size_t i = 0; i < row; i++)
+            for (size_t j = 0; j < column; j++)
+                out << weight[i][j];
+    }
+
     file->close();
     delete file;
 }
@@ -85,13 +108,14 @@ void MainRepository::load(std::string path) {
     file->open(QIODevice::ReadOnly);
     QDataStream in(file);
 
-    QString data, perceptron, convolution, weight;
-    in >> data >> perceptron >> convolution >> weight;
+    QString data, perceptron, convolution, weight, core;
+    in >> data >> perceptron >> convolution >> weight >> core;
 
     size_t dataSize = data.toULong();
     size_t perceptronSize = perceptron.toULong();
     size_t convolutionSize = convolution.toULong();
     size_t weightSize = weight.toULong();
+    size_t coreSize = core.toULong();
 
     for (size_t i = 0; i < perceptronSize; i++) {
         double posX, posY;
@@ -199,6 +223,46 @@ void MainRepository::load(std::string path) {
         newSinaps.setOutputNeuronID(outputNeuronID.toULong());
 
         interactor->onWeightModelLoaded(newSinaps);
+    }
+
+    for (size_t i = 0; i < coreSize; i++) {
+        QString sinapsID, cSize, inputNeuronID, outputNeuronID, maxPoolingCoreSize;
+        int type;
+        bool isMaxPoolingEnable;
+
+        in >> sinapsID
+                >> type
+                >> cSize
+                >> inputNeuronID
+                >> outputNeuronID
+                >> isMaxPoolingEnable
+                >> maxPoolingCoreSize;
+
+        QString rowS, columnS;
+
+        in >> rowS >> columnS;
+
+        size_t row = rowS.toULong();
+        size_t column = columnS.toULong();
+        std::vector<std::vector<double>> weight;
+
+        for (size_t i = 0; i < row; i++)
+            weight.push_back(std::vector<double>(column));
+
+        for (size_t i = 0; i < row; i++)
+            for (size_t j = 0; j < column; j++)
+                in >> weight[i][j];
+
+        CoreModel model(sinapsID.toULong());
+        model.setType(type);
+        model.setWeight(weight);
+        model.setCoreSize(cSize.toULong());
+        model.setInputNeuronID(inputNeuronID.toULong());
+        model.setOutputNeuronID(outputNeuronID.toULong());
+        model.setIsMaxPoolingEnable(isMaxPoolingEnable);
+        model.setMaxPoolingCoreSize(maxPoolingCoreSize.toULong());
+
+        interactor->onCoreModelLoaded(model);
     }
 
     file->close();

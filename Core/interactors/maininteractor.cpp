@@ -14,6 +14,7 @@
 #include "models/classmodel.h"
 #include "models/weightmodel.h"
 #include "models/convolutionmodel.h"
+#include "models/coremodel.h"
 
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
@@ -236,6 +237,25 @@ void MainInteractor::onWeightModelLoaded(WeightModel model) {
     }
 }
 
+void MainInteractor::onCoreModelLoaded(CoreModel model) {
+    NeuronInteractor *inputNeuron = findNeuron(model.getInputNeuronID());
+    NeuronInteractor *outputNeuron = findNeuron(model.getOutputNeuronID());
+
+    CoreInteractor *newCore = new CoreInteractor(inputNeuron, outputNeuron);
+
+    if (inputNeuron->addArrow(newCore) && outputNeuron->addArrow(newCore)) {
+        sinapsList.push_back(newCore);
+        newCore->setInteractor(this);
+        newCore->setID(model.getID());
+        newCore->updateFromModel(model);
+
+        if (createdItemsCounter < model.getID())
+            createdItemsCounter = model.getID();
+
+        view->onNewCoreAdded(newCore, model.getInputNeuronID(), model.getOutputNeuronID());
+    }
+}
+
 void MainInteractor::removeNeuron(unsigned long neuronID) {
     NeuronInteractor *neuron = nullptr;
 
@@ -308,6 +328,7 @@ void MainInteractor::save(std::string path) {
     std::vector<PerceptronModel> perceptronModelList;
     std::vector<ConvolutionModel> convolutionModelList;
     std::vector<WeightModel> weightModelList;
+    std::vector<CoreModel> coreModelList;
 
     for (auto neuron : neuronsList) {
         if (neuron->getType() == Perceptron)
@@ -323,9 +344,12 @@ void MainInteractor::save(std::string path) {
     for (auto sinaps : sinapsList) {
         if (sinaps->getType() == sinaps->Weigth && sinaps->getOutputNeuron()->getType() != Data)
             weightModelList.push_back(static_cast<WeightInteractor *>(sinaps)->getModel());
+
+        if (sinaps->getType() == sinaps->Core && sinaps->getOutputNeuron()->getType() != Data)
+            coreModelList.push_back(static_cast<CoreInteractor *>(sinaps)->getModel());
     }
 
-    repository->save(path, dataModelList, perceptronModelList, convolutionModelList, weightModelList);
+    repository->save(path, dataModelList, perceptronModelList, convolutionModelList, weightModelList, coreModelList);
 }
 
 void MainInteractor::load(std::string path) {

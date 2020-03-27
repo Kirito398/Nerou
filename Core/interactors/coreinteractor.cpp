@@ -4,6 +4,7 @@
 
 #include "listeners/sinapspresentorlistener.h"
 #include "listeners/SinapsListener.h"
+#include "models/coremodel.h"
 
 CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : CoreInterface(inputListener, outputListener)
 {
@@ -165,6 +166,28 @@ std::vector<std::vector<double>> CoreInteractor::maxPoolingRev(std::vector<std::
     }
 
     return delta;
+}
+
+CoreModel CoreInteractor::getModel() {
+    CoreModel model(id);
+
+    model.setType(type);
+    model.setWeight(weight);
+    model.setCoreSize(coreSize);
+    model.setInputNeuronID(inputListener->getID());
+    model.setOutputNeuronID(outputListener->getID());
+    model.setIsMaxPoolingEnable(isMaxPoolingEnabled);
+    model.setMaxPoolingCoreSize(maxPoolingCoreSize);
+
+    return model;
+}
+
+void CoreInteractor::updateFromModel(CoreModel model) {
+    weight.clear();
+    weight = model.getWeight();
+    coreSize = model.getCoreSize();
+    isMaxPoolingEnabled = model.getIsMaxPoolingEnable();
+    maxPoolingCoreSize = model.getMaxPoolingCoreSize();
 }
 
 std::vector<std::vector<double>> CoreInteractor::getValue() {

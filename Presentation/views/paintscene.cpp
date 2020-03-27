@@ -105,6 +105,10 @@ void PaintScene::onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long 
     addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
 }
 
+void PaintScene::onNewCoreAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) {
+    addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
+}
+
 MovingView *PaintScene::findView(unsigned long neuronID) {
     MovingView *view = nullptr;
 
