@@ -14,30 +14,25 @@ public:
 private:
     void init() override;
     void updateSinaps(double learningRange, double alpha) override;
-    void sendSignal(double *signal, unsigned int row, unsigned int column) override;
-    double *getValue() override;
-    unsigned int getRow() override;
-    unsigned int getColumn() override;
+    void sendSignal(std::vector<std::vector<double>> signal) override;
+    std::vector<std::vector<double>> getValue() override;
     void deleteSinaps() override;
     void setView(SinapsPresentorListener *listener) override;
-    double * getDelta() override;
-    void sendDelta(double *delta) override;
-    void deleteValue();
-    void deleteMaxValue();
-    void deleteDelta();
-    void validConvolution(double *signal, unsigned int row, unsigned int column);
-    void revConvolution(double *delta);
+    std::vector<std::vector<double>> getDelta() override;
+    void sendDelta(std::vector<std::vector<double>> delta) override;
+    void validConvolution(std::vector<std::vector<double>> signal);
+    void revConvolution(std::vector<std::vector<double>> delta);
     void maxPooling();
-    void maxPoolingRev(double *delta);
-    double* convolution(double *input, unsigned int row, unsigned int column);
+    std::vector<std::vector<double>> maxPoolingRev(std::vector<std::vector<double>> delta);
+    std::vector<std::vector<double>> convolution(std::vector<std::vector<double> > input);
 
 private:
     SinapsPresentorListener *view;
-    unsigned int coreSize, maxPoolingCoreSize, currentRow, currentColumn;
-    double *value;
-    double *weight;
-    double *delta;
-    bool *maxValue;
+    unsigned int coreSize, maxPoolingCoreSize;
+    std::vector<std::vector<double>> value;
+    std::vector<std::vector<double>> weight;
+    std::vector<std::vector<double>> delta;
+    std::vector<std::vector<bool>> maxValue;
     bool isMaxPoolingEnabled;
 };
 

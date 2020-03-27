@@ -8,73 +8,66 @@
 CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : CoreInterface(inputListener, outputListener)
 {
     view = nullptr;
-    value = nullptr;
-    weight = nullptr;
-    delta = nullptr;
-    maxValue = nullptr;
     isMaxPoolingEnabled = true;
     coreSize = 5;
     maxPoolingCoreSize = 2;
 }
 
 void CoreInteractor::init() {
-    if (weight != nullptr) {
-        delete [] weight;
-        weight = nullptr;
+    for (unsigned int i = 0; i < coreSize; i++) {
+        weight.push_back(std::vector<double>());
+        for (unsigned int j = 0; j < coreSize; j++) {
+            weight[i].push_back(random());
+        }
     }
-
-    unsigned int size = coreSize * coreSize;
-    weight = new double[size];
-
-    for (unsigned int i = 0; i < size; i++)
-        weight[i] = random();
-
-    //deleteValue();
 }
 
 void CoreInteractor::updateSinaps(double learningRange, double alpha) {
 
 }
 
-void CoreInteractor::sendSignal(double *signal, unsigned int row, unsigned int column) {
+void CoreInteractor::sendSignal(std::vector<std::vector<double>> signal) {
     view->setActive(true);
-    validConvolution(signal, row, column);
+    validConvolution(signal);
 
     outputListener->onInputSignalChanged();
     view->setActive(false);
 }
 
-double *CoreInteractor::convolution(double *input, unsigned int row, unsigned int column) {
-    currentRow = row - coreSize + 1;
-    currentColumn = column - coreSize + 1;
+std::vector<std::vector<double>> CoreInteractor::convolution(std::vector<std::vector<double>> input) {
+    unsigned int newRow = input.size() - coreSize + 1;
+    unsigned int newColumn = input[0].size() - coreSize + 1;
 
-    double *output = new double[currentRow * currentColumn];
+    std::vector<std::vector<double>> output;
+    for (unsigned int i = 0; i < newRow; i++)
+        output.push_back(std::vector<double>(newColumn));
 
-    for (unsigned int k = 0; k < currentRow; k++) {
-        for (unsigned int p = 0; p < currentColumn; p++) {
+    for (unsigned int k = 0; k < newRow; k++) {
+        for (unsigned int p = 0; p < newColumn; p++) {
             double sum = 0;
 
             for (unsigned int i = 0; i < coreSize; i++)
                 for (unsigned int j = 0; j < coreSize; j++)
-                    sum += input[(k + i) * currentColumn + (p + j)] * weight[i * coreSize + j];
+                    sum += input[k + i][p + j] * weight[i][j];
 
-            output[k * currentColumn + p] = sum;
+            output[k][p] = sum;
         }
     }
 
     return output;
 }
 
-void CoreInteractor::validConvolution(double *signal, unsigned int row, unsigned int column) {
-    //deleteValue();
-
-    value = convolution(signal, row, column);
+void CoreInteractor::validConvolution(std::vector<std::vector<double> > signal) {
+    value.clear();
+    value = convolution(signal);
 
     if (isMaxPoolingEnabled)
         maxPooling();
 }
 
 void CoreInteractor::maxPooling() {
+    unsigned int currentRow = value.size();
+    unsigned int currentColumn = value[0].size();
     unsigned int newRow = currentRow + (currentRow % maxPoolingCoreSize);
     unsigned int newColumn = currentColumn + (currentColumn % maxPoolingCoreSize);
 
@@ -87,23 +80,20 @@ void CoreInteractor::maxPooling() {
 
     for (unsigned int i = 0; i < currentRow; i++)
         for (unsigned int j = 0; j < currentColumn; j++)
-            temp[i * currentColumn + j] = value[i * currentColumn + j];
+            temp[i * currentColumn + j] = value[i][j];
 
-    deleteValue();
-    //deleteMaxValue();
-
-    maxValue = new bool[newRow * newColumn];
-
+    maxValue.clear();
     for (unsigned int i = 0; i < newRow; i++)
-        for (unsigned int j = 0; j < newColumn; j++)
-            maxValue[i * newColumn + j] = false;
+        maxValue.push_back(std::vector<bool>(newColumn, false));
 
     currentRow = newRow / maxPoolingCoreSize;
     currentColumn = newColumn / maxPoolingCoreSize;
 
-    value = new double[currentRow * currentColumn];
+    value.clear();
+    for (unsigned int i = 0; i < currentRow; i++)
+        value.push_back(std::vector<double>(currentColumn));
 
-    unsigned int l = 0;
+    unsigned int l = 0, m = 0;
     for (unsigned int k = 0; k < newRow; k+=maxPoolingCoreSize) {
         for (unsigned int p = 0; p < newColumn; p+=maxPoolingCoreSize) {
             double max = temp[k * newColumn + p];
@@ -117,106 +107,77 @@ void CoreInteractor::maxPooling() {
                         maxJ = p + j;
                     }
 
-            maxValue[maxI * newColumn + maxJ] = true;
-            value[l] = max;
+            maxValue[maxI][maxJ] = true;
+            value[m][l] = max;
             l++;
         }
+        l = 0;
+        m++;
     }
 
     delete [] temp;
 }
 
-void CoreInteractor::revConvolution(double *delta) {
+void CoreInteractor::revConvolution(std::vector<std::vector<double>> delta) {
     if (isMaxPoolingEnabled)
-        maxPoolingRev(delta);
+        delta = maxPoolingRev(delta);
 
     unsigned int deltaCore = coreSize - 1;
+    unsigned int currentRow = delta.size();
+    unsigned int currentColumn = delta[0].size();
     unsigned int newRow = deltaCore * 2 + currentRow;
     unsigned int newColumn = deltaCore * 2 + currentColumn;
 
-    double *temp = new double[newRow * newColumn];
+    std::vector<std::vector<double>> temp;
     for (unsigned int i = 0; i < newRow; i++)
-        for (unsigned int j = 0; j < newColumn; j++)
-            temp[i * newColumn + j] = 0;
+        temp.push_back(std::vector<double>(newColumn, 0));
 
     for (unsigned int i = 0; i < currentRow; i++)
         for (unsigned int j = 0; j < currentColumn; j++)
-            temp[(i + deltaCore) * currentColumn + (j + deltaCore)] = delta[i * currentColumn + j];
+            temp[i + deltaCore][j + deltaCore] = delta[i][j];
 
-    //deleteDelta();
-    this->delta = convolution(temp, newRow, newColumn);
-
-    delete [](temp);
+    this->delta = convolution(temp);
 }
 
-void CoreInteractor::maxPoolingRev(double *delta) {
-    unsigned int newRow = currentRow * maxPoolingCoreSize;
-    unsigned int newColumn = currentColumn * maxPoolingCoreSize;
+std::vector<std::vector<double>> CoreInteractor::maxPoolingRev(std::vector<std::vector<double>> delta) {
+    unsigned int newRow = delta.size() * maxPoolingCoreSize;
+    unsigned int newColumn = delta[0].size() * maxPoolingCoreSize;
 
-    double *temp = new double[newRow * newColumn];
+    std::vector<std::vector<double>> temp(delta);
+    delta.clear();
+    for (unsigned int i = 0; i < newRow; i++)
+        delta.push_back(std::vector<double>(newColumn, 0));
 
-    unsigned int l = 0;
+    unsigned int k = 0, p = 0;
     for (unsigned int i = 0; i < newRow; i++) {
         for (unsigned int j = 0; j < newColumn; j++) {
-            if (maxValue[i * newColumn + j]) {
-                temp[i * newColumn + j] = delta[l];
-                l++;
-            } else {
-                temp[i * newColumn + j] = 0;
+            if (!maxValue[i][j])
+                continue;
+
+            delta[i][j] = temp[k][p];
+            p++;
+
+            if (p == temp[0].size()) {
+                p = 0;
+                k++;
             }
         }
     }
 
-    delete [] delta;
-    delta = temp;
-}
-
-double *CoreInteractor::getValue() {
-    return value;
-}
-
-unsigned int CoreInteractor::getRow() {
-    return currentRow;
-}
-
-unsigned int CoreInteractor::getColumn() {
-    return currentColumn;
-}
-
-double *CoreInteractor::getDelta() {
     return delta;
 }
 
-void CoreInteractor::sendDelta(double *delta) {
+std::vector<std::vector<double>> CoreInteractor::getValue() {
+    return value;
+}
+
+std::vector<std::vector<double>>CoreInteractor::getDelta() {
+    return delta;
+}
+
+void CoreInteractor::sendDelta(std::vector<std::vector<double>> delta) {
     revConvolution(delta);
     inputListener->onDeltaValueChanged();
-}
-
-void CoreInteractor::deleteValue() {
-    if (value == nullptr)
-        return;
-
-    delete [](value);
-    value = nullptr;
-
-    currentRow = 0;
-    currentColumn = 0;
-}
-
-void CoreInteractor::deleteMaxValue() {
-    if (maxValue == nullptr)
-        return;
-
-    delete [] maxValue;
-    maxValue = nullptr;
-}
-
-void CoreInteractor::deleteDelta() {
-    if (delta == nullptr)
-        return;
-
-    delete [] delta;
-    delta = nullptr;
 }
 
 void CoreInteractor::setView(SinapsPresentorListener *listener) {

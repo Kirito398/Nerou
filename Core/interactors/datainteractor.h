@@ -23,9 +23,8 @@ public:
 
 private:
     void sendData();
-    void colorsToValue();
-    void clearColorValue();
-    void clearValue();
+    double *colorsToValue();
+    double *valueToLine();
     unsigned long getID() override;
     void deleteNeuron() override;
     void addClass(ClassModel model) override;
@@ -44,7 +43,8 @@ private:
 private:
     DataPresentorListener *view;
     RepositoryInterface *repository;
-    double *value, **colorValue;
+    std::vector<std::vector<double>> value;
+    std::vector<std::vector<std::vector<double>>> colorValue;
     unsigned int row, column;
     unsigned long currentClass;
     double currentDelta;

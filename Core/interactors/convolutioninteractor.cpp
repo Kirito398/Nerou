@@ -8,8 +8,6 @@
 ConvolutionInteractor::ConvolutionInteractor() : NeuronInteractor(Convolution)
 {
     view = nullptr;
-    value = nullptr;
-    inputDelta = nullptr;
     currentRow = 0;
     currentColumn = 0;
     inputSignalCount = 0;
@@ -24,10 +22,19 @@ void ConvolutionInteractor::onInputSignalChanged() {
         return;
 
     getInputSignal();
-    if (isActivateFunctionEnabled) activateFunction(value, currentRow * currentColumn);
+    if (isActivateFunctionEnabled) activate();
     sendSignal();
-    deleteValue();
     inputSignalCount = 0;
+}
+
+void ConvolutionInteractor::activate() {
+    for (unsigned int i = 0; i < value.size(); i++)
+        for (unsigned int j = 0; j < value[i].size(); j++)
+            value[i][j] = activateFunction(value[i][j]);
+
+//    for (auto row : value)
+//        for (auto item : row)
+//        item = activateFunction(item);
 }
 
 void ConvolutionInteractor::setPosition(double x, double y) {
@@ -61,7 +68,7 @@ void ConvolutionInteractor::onDeltaValueChanged() {
 
     makeInputDelta();
     sendDelta();
-    //deleteDelta();
+    inputDeltaCount = 0;
 }
 
 unsigned long ConvolutionInteractor::getID() {
@@ -70,15 +77,12 @@ unsigned long ConvolutionInteractor::getID() {
 
 void ConvolutionInteractor::getInputSignal() {
     view->setActive(true);
-    if (value != nullptr)
-        deleteValue();
 
+    value.clear();
     CoreInterface *sinaps = static_cast<CoreInterface *>(inputsSinaps.at(0));
     value = sinaps->getValue();
-    currentRow = sinaps->getRow();
-    currentColumn = sinaps->getColumn();
 
-    view->setOutValue(value, currentRow, currentColumn);
+    view->setOutValue(value);
     view->setActive(false);
 }
 
@@ -88,26 +92,45 @@ void ConvolutionInteractor::makeInputDelta() {
         return;
     }
 
-    inputDelta = new double[inputDeltaCount];
+    inputDelta.clear();
+    double temp[inputDeltaCount];
+
+    for (unsigned int i = 0; i < inputDeltaCount; i++)
+        temp[i] = 0;
 
     for (unsigned long i = 0; i < inputDeltaCount; i++) {
         WeightInterface *weight = static_cast<WeightInterface *>(outputsSinaps.at(i));
-        inputDelta[i] = weight->getDelta();
+        temp [i] = weight->getDelta();
+    }
+
+    for (unsigned int i = 0; i < value.size(); i++) {
+        inputDelta.push_back(std::vector<double>());
+        for (unsigned int j = 0; j < value[i].size(); j++) {
+            if (i * value[i].size() >= inputDeltaCount)
+                inputDelta[i].push_back(0);
+            else
+                inputDelta[i].push_back(temp[i * value[i].size()]);
+        }
     }
 }
 
 void ConvolutionInteractor::sendSignal() {
-    unsigned int size = currentRow * currentColumn;
+    unsigned int size = value.size() * value[0].size();
     unsigned long weightCounter = 0;
+
+    double temp[size];
+    for (unsigned int i = 0; i < value.size(); i++)
+        for (unsigned int j = 0; j < value[i].size(); j++)
+            temp[i * value[i].size() + j] = value[i][j];
 
     for (auto sinaps : outputsSinaps) {
         if (sinaps->getType() == sinaps->Weigth) {
-            static_cast<WeightInterface *>(sinaps)->sendSignal(value[weightCounter++ % size]);
+            static_cast<WeightInterface *>(sinaps)->sendSignal(temp[weightCounter++ % size]);
             continue;
         }
 
         CoreInterface *core = static_cast<CoreInterface *>(sinaps);
-        core->sendSignal(value, currentRow, currentColumn);
+        core->sendSignal(value);
     }
 }
 
@@ -116,30 +139,12 @@ void ConvolutionInteractor::sendDelta() {
         static_cast<CoreInterface *>(sinaps)->sendDelta(inputDelta);
 }
 
-void ConvolutionInteractor::deleteValue() {
-    if (value == nullptr)
-        return;
-
-    delete [] value;
-    value = nullptr;
-}
-
-void ConvolutionInteractor::deleteDelta() {
-    if (inputDelta == nullptr)
-        return;
-
-    delete [] inputDelta;
-    inputDelta = nullptr;
-
-    inputDeltaCount = 0;
-}
-
 void ConvolutionInteractor::deleteNeuron() {
     removeNeuron();
 }
 
 void ConvolutionInteractor::clean() {
-    deleteValue();
-    deleteDelta();
-    view->setOutValue(nullptr, 0, 0);
+    value.clear();
+    inputDelta.clear();
+    view->setOutValue(value);
 }

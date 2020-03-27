@@ -37,25 +37,32 @@ double NeuronInteractor::normalization(double value, double max, double min) {
     return (value - min) / (max - min);
 }
 
-void NeuronInteractor::normalization(double* value, unsigned int size) {
-    double max = value[0];
-    double min = value[0];
+std::vector<std::vector<double>> NeuronInteractor::normalization(std::vector<std::vector<double>> value) {
+    double max = value[0][0];
+    double min = value[0][0];
 
-    for (unsigned int i = 0; i < size; i++) {
-        if (max < value[i])
-            max = value[i];
+    for (auto row : value)
+        for (auto item : row) {
+            if (max < item) max = item;
+            if (min > item) min = item;
+        }
 
-        if (min > value[i])
-            min = value[i];
-    }
+    for (unsigned int i = 0; i < value.size(); i++)
+        for (unsigned int j = 0; j < value[i].size(); j++)
+            value[i][j] = normalization(value[i][j], max, min);
 
-    for (unsigned int i = 0; i < size; i++)
-        value[i] = normalization(value[i], max, min);
+//    for (auto row : value)
+//        for (auto item : row)
+//            item = normalization(item, max, min);
+
+    return value;
 }
 
-void NeuronInteractor::normalization(double** value, unsigned int row, unsigned int column) {
-    for (unsigned long i = 0; i < row; i++)
-        normalization(value[i], column);
+std::vector<std::vector<std::vector<double> > > NeuronInteractor::normalization(std::vector<std::vector<std::vector<double> > > value) {
+    for (auto color : value)
+        normalization(color);
+
+    return value;
 }
 
 void NeuronInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {

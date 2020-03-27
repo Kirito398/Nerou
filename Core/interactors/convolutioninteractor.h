@@ -22,16 +22,16 @@ private:
     unsigned long getID() override;
     void deleteNeuron() override;
     void clean() override;
+    void activate();
     void getInputSignal();
     void sendSignal();
-    void deleteValue();
     void makeInputDelta();
     void sendDelta();
-    void deleteDelta();
 
 private:
     ConvolutionPresentorListener *view;
-    double *value, *inputDelta;
+    //double *value, *inputDelta;
+    std::vector<std::vector<double>> value, inputDelta;
     unsigned int currentRow, currentColumn;
     bool isActivateFunctionEnabled;
 };

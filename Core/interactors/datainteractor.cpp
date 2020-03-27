@@ -10,8 +10,6 @@
 DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
     view = nullptr;
-    value = nullptr;
-    colorValue = nullptr;
     repository = nullptr;
     column = 0;
     row = 0;
@@ -34,16 +32,16 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
     if (isColorMode) {
         colorValue = repository->loadColorValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
-        normalization(colorValue, 3, row * column);
+        colorValue = normalization(colorValue);
         colorsToValue();
     } else {
-        value = repository->loadValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
-        normalization(value, row * column);
+        value.clear();
+        value = normalization(repository->loadValue(classList[classNumber].getTrainingPathsList()[iterationNumber]));
     }
 
     sendData();
-    clearColorValue();
-    clearValue();
+    colorValue.clear();
+    value.clear();
 }
 
 void DataInteractor::sendData() {
@@ -54,30 +52,58 @@ void DataInteractor::sendData() {
     unsigned long weightCounter = 0;
     unsigned long coreCounter = 0;
 
+    double *temp;
+    if (isColorMode)
+        temp = colorsToValue();
+    else
+        temp = valueToLine();
+
+
     for (auto sinaps : outputsSinaps) {
         if (sinaps->getType() == sinaps->Weigth) {
-            dynamic_cast<WeightInterface *>(sinaps)->sendSignal(value[weightCounter++ % size]);
+            dynamic_cast<WeightInterface *>(sinaps)->sendSignal(temp[weightCounter++ % size]);
             continue;
         }
 
         CoreInterface *core = dynamic_cast<CoreInterface *>(sinaps);
 
+
         if (isColorMode)
-            core->sendSignal(colorValue[coreCounter++ % 3], row, column);
+            core->sendSignal(colorValue[coreCounter++ % 3]);
         else
-            core->sendSignal(value, row, column);
+            core->sendSignal(value);
     }
+
+    delete [] temp;
 }
 
-void DataInteractor::colorsToValue() {
+double *DataInteractor::colorsToValue() {
     unsigned int size = column * row;
-    value = new double[size * 3];
+    double *value = new double[size * 3];
 
-    for (unsigned int i = 0; i < 3; i++) {
-        for (unsigned int j = 0; j < size; j++) {
-            value[i*size+j] = colorValue[i][j];
+    for (unsigned int i = 0; i < colorValue.size(); i++) {
+        for (unsigned int j = 0; j < colorValue[i].size(); j++) {
+            for (unsigned int k = 0; k < colorValue[i][j].size(); k++) {
+                value[i*size+j] = colorValue[i][j][k];
+            }
         }
     }
+
+    return value;
+}
+
+double *DataInteractor::valueToLine() {
+    unsigned int size = value.size() * value[0].size();
+
+    double *line = new double[size];
+
+    for (unsigned int i = 0; i < value.size(); i++) {
+        for (unsigned int j = 0; j < value[i].size(); j++) {
+            line[i * value[i].size() + j] = value[i][j];
+        }
+    }
+
+    return line;
 }
 
 void DataInteractor::addClass(ClassModel model) {
@@ -117,25 +143,6 @@ unsigned long DataInteractor::getTrainingIterationNumber() {
     }
 
     return number;
-}
-
-void DataInteractor::clearColorValue() {
-    if (colorValue == nullptr)
-        return;
-
-    for (unsigned int i = 0; i < 3; i++)
-        delete [](colorValue[i]);
-    delete [](colorValue);
-
-    colorValue = nullptr;
-}
-
-void DataInteractor::clearValue() {
-    if (value == nullptr)
-        return;
-
-    delete [](value);
-    value = nullptr;
 }
 
 void DataInteractor::setSize(unsigned long row, unsigned long column) {
@@ -187,8 +194,8 @@ void DataInteractor::deleteNeuron() {
 }
 
 void DataInteractor::clean() {
-    clearValue();
-    clearColorValue();
+    value.clear();
+    colorValue.clear();
     view->setImage("");
 }
 

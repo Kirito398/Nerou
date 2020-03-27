@@ -183,40 +183,42 @@ void MainRepository::setInteractor(MainInteractorInterface *interactor) {
     this->interactor = interactor;
 }
 
-double *MainRepository::loadValue(std::string path) {
+std::vector<std::vector<double> > MainRepository::loadValue(std::string path) {
     QImage img(QString::fromStdString(path));
 
     unsigned int width = img.width();
     unsigned int height = img.height();
 
-    double *value = new double[width * height];
+    std::vector<std::vector<double>> value;
+    for (unsigned int i = 0; i < width; i++)
+        value.push_back(std::vector<double>(height));
 
     for (unsigned int i = 0; i < width; i++) {
         for (unsigned j = 0; j < height; j++) {
             QColor pixel(img.pixel(i, j));
-            value[i * height + j] = (pixel.red() + pixel.green() + pixel.blue()) / 3.0;
+            value[i][j] = (pixel.red() + pixel.green() + pixel.blue()) / 3.0;
         }
     }
 
     return value;
 }
 
-double **MainRepository::loadColorValue(std::string path) {
+std::vector<std::vector<std::vector<double> > > MainRepository::loadColorValue(std::string path) {
     QImage img(QString::fromStdString(path));
 
     unsigned int width = img.width();
     unsigned int height = img.height();
 
-    double **colorValue = new double*[3];
+    std::vector<std::vector<std::vector<double>>> colorValue;
     for (unsigned int i = 0; i < 3; i++)
-        colorValue[i] = new double[width * height];
+        colorValue.push_back(std::vector<std::vector<double>>());
 
     for (unsigned int i = 0; i < width; i++) {
         for (unsigned j = 0; j < height; j++) {
             QColor pixel(img.pixel(i, j));
-            colorValue[0][i * height + j] = pixel.red();
-            colorValue[1][i * height + j] = pixel.green();
-            colorValue[2][i * height + j] = pixel.blue();
+            colorValue[0][i][j] = pixel.red();
+            colorValue[1][i][j] = pixel.green();
+            colorValue[2][i][j] = pixel.blue();
         }
     }
 

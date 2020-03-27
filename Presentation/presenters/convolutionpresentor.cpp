@@ -24,17 +24,20 @@ void ConvolutionPresentor::setPosition(double x, double y) {
     interactor->setPosition(x, y);
 }
 
-void ConvolutionPresentor::setOutValue(double *value, unsigned int row, unsigned int column) {
-    if (value == nullptr) {
+void ConvolutionPresentor::setOutValue(std::vector<std::vector<double> > value) {
+    if (value.empty()) {
         view->setOutValue(QImage());
         return;
     }
+
+    unsigned int row = value.size();
+    unsigned int column = value[0].size();
 
     QImage img(QSize(column, row), QImage::Format_RGB32);
 
     for (unsigned int i = 0; i < row; i++)
         for (unsigned int j = 0; j < column; j++) {
-            int pixel = value[i * column + j] * 255;
+            int pixel = value[i][j] * 255;
             img.setPixel(i, j, QColor(pixel ,pixel, pixel).rgb());
         }
 
