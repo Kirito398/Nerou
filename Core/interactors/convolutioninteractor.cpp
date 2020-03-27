@@ -8,8 +8,6 @@
 ConvolutionInteractor::ConvolutionInteractor() : NeuronInteractor(Convolution)
 {
     view = nullptr;
-    currentRow = 0;
-    currentColumn = 0;
     inputSignalCount = 0;
     inputDeltaCount = 0;
     isActivateFunctionEnabled = true;
@@ -31,10 +29,6 @@ void ConvolutionInteractor::activate() {
     for (unsigned int i = 0; i < value.size(); i++)
         for (unsigned int j = 0; j < value[i].size(); j++)
             value[i][j] = activateFunction(value[i][j]);
-
-//    for (auto row : value)
-//        for (auto item : row)
-//        item = activateFunction(item);
 }
 
 void ConvolutionInteractor::setPosition(double x, double y) {
@@ -48,11 +42,20 @@ void ConvolutionInteractor::setPosition(double x, double y) {
 ConvolutionModel ConvolutionInteractor::getModel() {
     ConvolutionModel model(id);
 
+    model.setX(posX);
+    model.setY(posY);
+    model.setType(type);
+    model.setIsActivateFunctionEnabled(isActivateFunctionEnabled);
+
     return model;
 }
 
 void ConvolutionInteractor::updateFromModel(ConvolutionModel model) {
     id = model.getID();
+    posX = model.getX();
+    posY = model.getY();
+    //type = NeuronType(model.getType());
+    isActivateFunctionEnabled = model.getIsActivateFunctionEnabled();
 }
 
 void ConvolutionInteractor::setView(ConvolutionPresentorListener *listener) {

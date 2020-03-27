@@ -143,7 +143,7 @@ void PerceptronInteractor::updateFromModel(PerceptronModel model) {
     posX = model.getX();
     posY = model.getY();
     id = model.getID();
-    type = NeuronType(model.getType());
+    //type = NeuronType(model.getType());
     isOutput =  model.getIsOutput();
 }
 

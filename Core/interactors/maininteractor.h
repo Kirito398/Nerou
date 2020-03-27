@@ -52,6 +52,7 @@ private:
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) override;
     void onDataModelLoaded(DataModel model) override;
     void onPerceptronModelLoaded(PerceptronModel model) override;
+    void onConvolutionModelLoaded(ConvolutionModel model) override;
     void onWeightModelLoaded(WeightModel model) override;
 
 private:

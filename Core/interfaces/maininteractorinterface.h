@@ -5,6 +5,7 @@ class ArrowInteractorListener;
 class DataModel;
 class PerceptronModel;
 class WeightModel;
+class ConvolutionModel;
 
 class MainInteractorInterface
 {
@@ -14,6 +15,7 @@ public:
     virtual void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) = 0;
     virtual void onDataModelLoaded(DataModel model) = 0;
     virtual void onPerceptronModelLoaded(PerceptronModel model) = 0;
+    virtual void onConvolutionModelLoaded(ConvolutionModel model) = 0;
     virtual void onWeightModelLoaded(WeightModel model) = 0;
 };
 

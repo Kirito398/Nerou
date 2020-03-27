@@ -172,6 +172,10 @@ void MainInteractor::onPerceptronModelLoaded(PerceptronModel model) {
     createNewPerceptron(model);
 }
 
+void MainInteractor::onConvolutionModelLoaded(ConvolutionModel model) {
+    createNewConvolution(model);
+}
+
 void MainInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
     if (dynamic_cast<PerceptronInteractor *>(findNeuron(learningNeuronID)) != nullptr)
         createNewWeight(learningNeuronID, dataNeuronID);
@@ -302,6 +306,7 @@ void MainInteractor::debugRun() {
 void MainInteractor::save(std::string path) {
     std::vector<DataModel> dataModelList;
     std::vector<PerceptronModel> perceptronModelList;
+    std::vector<ConvolutionModel> convolutionModelList;
     std::vector<WeightModel> weightModelList;
 
     for (auto neuron : neuronsList) {
@@ -310,6 +315,9 @@ void MainInteractor::save(std::string path) {
 
         if (neuron->getType() == Data)
             dataModelList.push_back(static_cast<DataInteractor *>(neuron)->getModel());
+
+        if (neuron->getType() == Convolution)
+            convolutionModelList.push_back(static_cast<ConvolutionInteractor *>(neuron)->getModel());
     }
 
     for (auto sinaps : sinapsList) {
@@ -317,7 +325,7 @@ void MainInteractor::save(std::string path) {
             weightModelList.push_back(static_cast<WeightInteractor *>(sinaps)->getModel());
     }
 
-    repository->save(path, dataModelList, perceptronModelList, weightModelList);
+    repository->save(path, dataModelList, perceptronModelList, convolutionModelList, weightModelList);
 }
 
 void MainInteractor::load(std::string path) {

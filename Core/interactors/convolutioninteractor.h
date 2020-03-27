@@ -30,9 +30,7 @@ private:
 
 private:
     ConvolutionPresentorListener *view;
-    //double *value, *inputDelta;
     std::vector<std::vector<double>> value, inputDelta;
-    unsigned int currentRow, currentColumn;
     bool isActivateFunctionEnabled;
 };
 

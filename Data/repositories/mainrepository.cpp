@@ -7,6 +7,7 @@
 #include "models/datamodel.h"
 #include "models/classmodel.h"
 #include "models/perceptronmodel.h"
+#include "models/convolutionmodel.h"
 #include "models/weightmodel.h"
 #include "interfaces/maininteractorinterface.h"
 
@@ -15,16 +16,17 @@ MainRepository::MainRepository()
 
 }
 
-void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<WeightModel> weightModelList) {
+void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList) {
     QFile *file = new QFile(QString::fromStdString(path));
     file->open(QIODevice::WriteOnly);
     QDataStream out(file);
 
     size_t dataSize = dataModelList.size();
     size_t perceptronSize = perceptronModelList.size();
+    size_t convolutionSize = convolutionModelList.size();
     size_t weightSize = weightModelList.size();
 
-    out << QString::number(dataSize) << QString::number(perceptronSize) << QString::number(weightSize);
+    out << QString::number(dataSize) << QString::number(perceptronSize) << QString::number(convolutionSize) << QString::number(weightSize);
 
     for (size_t i = 0; i < perceptronSize; i++) {
         PerceptronModel model = perceptronModelList.at(i);
@@ -33,6 +35,15 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
             << QString::number(model.getID())
             << model.getType()
             << model.getIsOutput();
+    }
+
+    for (size_t i = 0; i < convolutionSize; i++) {
+        ConvolutionModel model = convolutionModelList.at(i);
+        out << model.getX()
+            << model.getY()
+            << QString::number(model.getID())
+            << model.getType()
+            << model.getIsActivateFunctionEnabled();
     }
 
     for (size_t i = 0; i < dataSize; i++) {
@@ -74,11 +85,12 @@ void MainRepository::load(std::string path) {
     file->open(QIODevice::ReadOnly);
     QDataStream in(file);
 
-    QString data, perceptron, weight;
-    in >> data >> perceptron >> weight;
+    QString data, perceptron, convolution, weight;
+    in >> data >> perceptron >> convolution >> weight;
 
     size_t dataSize = data.toULong();
     size_t perceptronSize = perceptron.toULong();
+    size_t convolutionSize = convolution.toULong();
     size_t weightSize = weight.toULong();
 
     for (size_t i = 0; i < perceptronSize; i++) {
@@ -101,6 +113,27 @@ void MainRepository::load(std::string path) {
         model.setIsOutput(isOutput);
 
         interactor->onPerceptronModelLoaded(model);
+    }
+
+    for (size_t i = 0; i < convolutionSize; i++) {
+        double posX, posY;
+        QString neuronID;
+        int type;
+        bool isActivateFunctionEnabled;
+
+        in >> posX
+                >> posY
+                >> neuronID
+                >> type
+                >> isActivateFunctionEnabled;
+
+        ConvolutionModel model(neuronID.toULong());
+        model.setX(posX);
+        model.setY(posY);
+        model.setType(type);
+        model.setIsActivateFunctionEnabled(isActivateFunctionEnabled);
+
+        interactor->onConvolutionModelLoaded(model);
     }
 
     for (size_t i = 0; i < dataSize; i++) {
