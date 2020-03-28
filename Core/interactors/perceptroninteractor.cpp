@@ -92,6 +92,11 @@ void PerceptronInteractor::calculateOut() {
 }
 
 void PerceptronInteractor::calculateDelta() {
+    if (inputsSinaps.size() == 1 && inputsSinaps[0]->getOutputNeuron()->getType() == Data) {
+        deltaValue = inputDelta[0];
+        return;
+    }
+
     double sum  = 0;
     for (unsigned long i = 0; i < inputDeltaCount; i++)
         sum += inputDelta[i];

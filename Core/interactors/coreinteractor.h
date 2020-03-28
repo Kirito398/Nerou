@@ -28,6 +28,7 @@ private:
     void maxPooling();
     std::vector<std::vector<double>> maxPoolingRev(std::vector<std::vector<double>> delta);
     std::vector<std::vector<double>> convolution(std::vector<std::vector<double> > input, std::vector<std::vector<double> > core);
+    std::vector<std::vector<double>> rotate180(std::vector<std::vector<double>> input);
 
 private:
     SinapsPresentorListener *view;
@@ -36,6 +37,8 @@ private:
     std::vector<std::vector<double>> weight;
     std::vector<std::vector<double>> delta;
     std::vector<std::vector<bool>> maxValue;
+    std::vector<std::vector<double>> inputSignal;
+    std::vector<std::vector<double>> grad;
     bool isMaxPoolingEnabled;
 };
 

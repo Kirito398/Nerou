@@ -38,6 +38,8 @@ void WeightInteractor::setWeight(double weight) {
 
 void WeightInteractor::updateSinaps(double learningRange, double alpha) {
     //weight += deltaWeight;
+    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+        return;
 
     double deltaWeight = grad * learningRange + alpha * prevDeltaWeight;
     weight += deltaWeight;

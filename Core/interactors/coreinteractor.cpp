@@ -25,14 +25,26 @@ void CoreInteractor::init() {
             weight[i].push_back(random());
         }
     }
+
+    grad.clear();
+    for (unsigned int i = 0; i < coreSize; i++)
+        grad.push_back(std::vector<double>(coreSize, 0));
 }
 
 void CoreInteractor::updateSinaps(double learningRange, double alpha) {
+    for (unsigned int i = 0; i < coreSize; i++)
+        for (unsigned int j = 0; j < coreSize; j++)
+            weight[i][j] += grad[i][j] * learningRange;
 
+    grad.clear();
+    for (unsigned int i = 0; i < coreSize; i++)
+        grad.push_back(std::vector<double>(coreSize, 0));
 }
 
 void CoreInteractor::sendSignal(std::vector<std::vector<double>> signal) {
     view->setActive(true);
+    inputSignal.clear();
+    inputSignal = signal;
     validConvolution(signal);
 
     outputListener->onInputSignalChanged();
@@ -142,7 +154,13 @@ void CoreInteractor::revConvolution(std::vector<std::vector<double>> delta) {
         for (unsigned int j = 0; j < currentColumn; j++)
             temp[i + deltaCore][j + deltaCore] = delta[i][j];
 
-    this->delta = convolution(temp, weight); //rotate weight to 180
+    this->delta = convolution(temp, rotate180(weight));
+
+    std::vector<std::vector<double>> newGrad = convolution(inputSignal, rotate180(delta));
+
+    for (unsigned int i = 0; i < coreSize; i++)
+        for (unsigned int j = 0; j < coreSize; j++)
+            grad[i][j] += newGrad[i][j];
 }
 
 std::vector<std::vector<double>> CoreInteractor::maxPoolingRev(std::vector<std::vector<double>> delta) {
@@ -171,6 +189,20 @@ std::vector<std::vector<double>> CoreInteractor::maxPoolingRev(std::vector<std::
     }
 
     return delta;
+}
+
+std::vector<std::vector<double>> CoreInteractor::rotate180(std::vector<std::vector<double>> input) {
+    unsigned int size = input.size();
+
+    std::vector<std::vector<double>> output;
+    for (unsigned int i = 0; i < size; i++)
+        output.push_back(std::vector<double>(size));
+
+    for (unsigned int i = 0; i < size; i++)
+        for (unsigned int j = 0; j < size; j++)
+            output[size - i - 1][size - j - 1] = input[i][j];
+
+    return output;
 }
 
 CoreModel CoreInteractor::getModel() {

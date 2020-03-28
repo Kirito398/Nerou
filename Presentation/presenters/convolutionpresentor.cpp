@@ -1,6 +1,7 @@
 #include "convolutionpresentor.h"
 
 #include <QImage>
+#include <QColor>
 
 #include "listeners/convolutioninteractorlistener.h"
 #include "listeners/convolutionviewlistener.h"
