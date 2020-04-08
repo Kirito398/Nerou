@@ -40,6 +40,9 @@ protected:
 private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);
     void removeSinapses();
+    double sigmoidFunction(double value);
+    double tanhFunction(double value);
+    double reluFunction(double value);
 
 protected:
     unsigned long inputSignalCount;

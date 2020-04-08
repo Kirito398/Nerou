@@ -21,6 +21,7 @@ MainInteractor::MainInteractor(RepositoryInterface *repository)
     this->repository = repository;
     repository->setInteractor(this);
     createdItemsCounter = 0;
+    activateFunctionType = Sigmoid;
 
     clearProcessParameters();
 }
@@ -361,6 +362,10 @@ void MainInteractor::onProcessStopped() {
         neuron->clean();
 
     clearProcessParameters();
+}
+
+ActivateFunctionType MainInteractor::getActivateFunctionType() {
+    return activateFunctionType;
 }
 
 void MainInteractor::onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber) {

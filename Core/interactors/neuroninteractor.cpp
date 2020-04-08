@@ -12,10 +12,20 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     posX = 0;
     posY = 0;
     isOutput = false;
+    interactor = nullptr;
 }
 
 double NeuronInteractor::activateFunction(double value) {
-    return 1.0 / (1.0 + exp(-value));
+    double result = value;
+
+    switch(interactor->getActivateFunctionType()) {
+        case Sigmoid: { result = sigmoidFunction(value); break; }
+        case Tanh: { result = tanhFunction(value); break; }
+        case ReLU: { result = reluFunction(value); break; }
+        case Linear: { result = value; break; }
+    }
+
+    return result;
 }
 
 void NeuronInteractor::activateFunction(double* value, unsigned int size) {
@@ -63,6 +73,18 @@ std::vector<std::vector<std::vector<double> > > NeuronInteractor::normalization(
         normalization(color);
 
     return value;
+}
+
+double NeuronInteractor::sigmoidFunction(double value) {
+    return 1.0 / (1.0 + exp(-value));
+}
+
+double NeuronInteractor::tanhFunction(double value) {
+    return (exp(2 * value) - 1) / (exp(2 * value) + 1);
+}
+
+double NeuronInteractor::reluFunction(double value) {
+    return value <= 0 ? 0 : value;
 }
 
 void NeuronInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {

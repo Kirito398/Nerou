@@ -55,9 +55,11 @@ private:
     void onConvolutionModelLoaded(ConvolutionModel model) override;
     void onWeightModelLoaded(WeightModel model) override;
     void onCoreModelLoaded(CoreModel model) override;
+    ActivateFunctionType getActivateFunctionType() override;
 
 private:
     static MainInteractor *instance;
+    ActivateFunctionType activateFunctionType;
     MainPresentorListener *view;
     RepositoryInterface *repository;
     std::vector<NeuronInteractor *> neuronsList;

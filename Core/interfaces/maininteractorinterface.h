@@ -8,6 +8,8 @@ class WeightModel;
 class ConvolutionModel;
 class CoreModel;
 
+enum ActivateFunctionType {Linear, Sigmoid, Tanh, ReLU};
+
 class MainInteractorInterface
 {
 public:
@@ -19,6 +21,7 @@ public:
     virtual void onConvolutionModelLoaded(ConvolutionModel model) = 0;
     virtual void onWeightModelLoaded(WeightModel model) = 0;
     virtual void onCoreModelLoaded(CoreModel model) = 0;
+    virtual ActivateFunctionType getActivateFunctionType() = 0;
 };
 
 #endif // MAININTERACTORINTERFACE_H
