@@ -17,6 +17,7 @@ class ArrowInteractorListener;
 class RepositoryInterface;
 class DataModel;
 class PerceptronModel;
+class ConvolutionModel;
 
 class MainInteractor : public MainInteractorInterface
 {
@@ -25,6 +26,7 @@ public:
     void setView(MainPresentorListener *listener);
     void createNewPerceptron(double x, double y);
     void createNewData(double x, double y);
+    void createNewConvolution(double x, double y);
     ArrowInteractorListener *createNewWeight(unsigned long inputID, unsigned long outputID);
     ArrowInteractorListener *createNewCore(unsigned long inputID, unsigned long outputID);
     void removeNeuron(unsigned long neuronID) override;
@@ -41,6 +43,7 @@ private:
     MainInteractor(RepositoryInterface *repository);
     void createNewPerceptron(PerceptronModel model);
     void createNewData(DataModel model);
+    void createNewConvolution(ConvolutionModel model);
     NeuronInteractor *findNeuron(unsigned long id);
     void onProcessStopped();
     void onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber);
@@ -49,7 +52,9 @@ private:
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) override;
     void onDataModelLoaded(DataModel model) override;
     void onPerceptronModelLoaded(PerceptronModel model) override;
+    void onConvolutionModelLoaded(ConvolutionModel model) override;
     void onWeightModelLoaded(WeightModel model) override;
+    void onCoreModelLoaded(CoreModel model) override;
 
 private:
     static MainInteractor *instance;

@@ -23,16 +23,14 @@ public:
 
 private:
     void sendData();
-    void colorsToValue();
-    void clearColorValue();
-    void clearValue();
+    double *colorsToValue();
+    double *valueToLine();
     unsigned long getID() override;
     void deleteNeuron() override;
     void addClass(ClassModel model) override;
     void onInputSignalChanged() override;
     void onDeltaValueChanged() override;
     void setView(DataPresentorListener *listener) override;
-    void setSize(unsigned long row, unsigned long column) override;
     void clean() override;
     void clearClassList() override;
     ClassModel getClass(unsigned long id) override;
@@ -44,8 +42,8 @@ private:
 private:
     DataPresentorListener *view;
     RepositoryInterface *repository;
-    double *value, **colorValue;
-    unsigned int row, column;
+    std::vector<std::vector<double>> value;
+    std::vector<std::vector<std::vector<double>>> colorValue;
     unsigned long currentClass;
     double currentDelta;
     //Need to save

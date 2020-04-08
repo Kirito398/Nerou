@@ -7,6 +7,7 @@
 #include "views/dataview.h"
 #include "views/arrowview.h"
 #include "views/perceptronview.h"
+#include "views/convolutionview.h"
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
@@ -91,7 +92,20 @@ void PaintScene::onNewDataAdded(DataInteractorListener *data) {
     addItem(view);
 }
 
+void PaintScene::onNewConvolutionAdded(ConvolutionInteractorListener *convolution) {
+    ConvolutionView *view = new ConvolutionView(convolution);
+
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
+}
+
 void PaintScene::onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) {
+    addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
+}
+
+void PaintScene::onNewCoreAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) {
     addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
 }
 
@@ -248,6 +262,9 @@ void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
 
         if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Convolution)
             listener = interactor->createNewCore(startView->getID(), endView->getID());
+
+        if (startView->getType() == MovingView::Convolution && endView->getType() == MovingView::Perceptron)
+            listener = interactor->createNewWeight(startView->getID(), endView->getID());
     }
 
     if (listener != nullptr)
@@ -271,7 +288,7 @@ void PaintScene::addMovingView(QPointF position) {
         break;
     }
     case MovingView::Convolution : {
-        //interactor->
+        interactor->createNewConvolution(position.x(), position.y());
         break;
     }
     case MovingView::Data : {
@@ -349,6 +366,10 @@ QPixmap PaintScene::getPerceptronIcon() const {
 
 QPixmap PaintScene::getDataIcon() const {
     return DataView().getItemIcon();
+}
+
+QPixmap PaintScene::getConvolutionIcon() const {
+    return ConvolutionView().getItemIcon();
 }
 
 void PaintScene::onDeleteBtnClicked() {

@@ -13,7 +13,6 @@ public:
     virtual void deleteNeuron() = 0;
     virtual void addClass(ClassModel model) = 0;
     virtual unsigned long getID() = 0;
-    virtual void setSize(unsigned long row, unsigned long column) = 0;
     virtual void clearClassList() = 0;
     virtual unsigned long getClassNumber() = 0;
     virtual ClassModel getClass(unsigned long id) = 0;

@@ -31,8 +31,8 @@ protected:
     void activateFunction(double** value, unsigned int row, unsigned int column);
     double reActivateFunction(double value);
     double normalization(double value, double max, double min);
-    void normalization(double* value, unsigned int size);
-    void normalization(double** value, unsigned int row, unsigned int column);
+    std::vector<std::vector<double>> normalization(std::vector<std::vector<double>> value);
+    std::vector<std::vector<std::vector<double>>> normalization(std::vector<std::vector<std::vector<double>>> value);
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID);
     void removeNeuron();
     void isOutputNeuronEnable(bool enable);

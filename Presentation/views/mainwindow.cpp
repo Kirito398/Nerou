@@ -93,11 +93,9 @@ void MainWindow::initToolBox() {
 
     QToolButton *tbConvolution = new QToolButton;
     tbConvolution->setCheckable(true);
-    //tbConvolution->setIcon(QIcon(item->getItemIcon()));
+    tbConvolution->setIcon(scene->getConvolutionIcon());
     tbConvolution->setToolTip(tr("Convolution"));
     tbConvolution->setStatusTip(tr("Add convolution"));
-    //delete item;
-    //item = 0;
 
     QToolButton *tbData = new QToolButton;
     tbData->setCheckable(true);

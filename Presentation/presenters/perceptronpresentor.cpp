@@ -9,6 +9,7 @@
 PerceptronPresentor::PerceptronPresentor()
 {
     interactor = nullptr;
+    view = nullptr;
 }
 
 void PerceptronPresentor::setView(PerceptronViewListener *listener) {
