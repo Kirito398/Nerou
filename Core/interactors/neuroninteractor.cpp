@@ -18,6 +18,9 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
 double NeuronInteractor::activateFunction(double value) {
     double result = value;
 
+    if (isOutput)
+        return result;
+
     switch(interactor->getActivateFunctionType()) {
         case Sigmoid: { result = sigmoidFunction(value); break; }
         case Tanh: { result = tanhFunction(value); break; }
@@ -40,7 +43,19 @@ void NeuronInteractor::activateFunction(double** value, unsigned int row, unsign
 }
 
 double NeuronInteractor::reActivateFunction(double value) {
-    return (1.0 - value) * value;
+    double result = value;
+
+    if (isOutput)
+        return reSoftmaxFunction(value);
+
+    switch(interactor->getActivateFunctionType()) {
+        case Sigmoid: { result = reSigmoidFunction(value); break; }
+        case Tanh: { result = reTanhFunction(value); break; }
+        case ReLU: { result = reReluFunction(value); break; }
+        case Linear: { result = value; break; }
+    }
+
+    return result;
 }
 
 double NeuronInteractor::normalization(double value, double max, double min) {
@@ -85,6 +100,22 @@ double NeuronInteractor::tanhFunction(double value) {
 
 double NeuronInteractor::reluFunction(double value) {
     return value <= 0 ? 0 : value;
+}
+
+double NeuronInteractor::reSigmoidFunction(double value) {
+    return (1.0 - value) * value;
+}
+
+double NeuronInteractor::reTanhFunction(double value) {
+    return 1.0 - pow(value, 2);
+}
+
+double NeuronInteractor::reReluFunction(double value) {
+    return value;
+}
+
+double NeuronInteractor::reSoftmaxFunction(double value) {
+    return (1.0 - value) * value;
 }
 
 void NeuronInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {

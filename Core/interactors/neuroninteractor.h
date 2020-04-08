@@ -43,6 +43,10 @@ private:
     double sigmoidFunction(double value);
     double tanhFunction(double value);
     double reluFunction(double value);
+    double reSigmoidFunction(double value);
+    double reTanhFunction(double value);
+    double reReluFunction(double value);
+    double reSoftmaxFunction(double value);
 
 protected:
     unsigned long inputSignalCount;

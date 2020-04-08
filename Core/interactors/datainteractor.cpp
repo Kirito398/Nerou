@@ -286,7 +286,7 @@ void DataInteractor::sendDelta() {
             else
                 delta = 0.0 - weight->getValue();
 
-            weight->sendDelta(delta * reActivateFunction(weight->getValue()));
+            weight->sendDelta(delta);
         }
     }
 }
