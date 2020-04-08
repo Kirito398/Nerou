@@ -45,7 +45,7 @@ void MainInteractor::run() {
     unsigned long classNumber = dataList.at(0)->getClassNumber();
     unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long neuronNumber = dataList.size();
-    unsigned long epohNumber = 5;
+    unsigned long epohNumber = 15;
 
     view->onTrainingStarted(iterationNumber, epohNumber);
 

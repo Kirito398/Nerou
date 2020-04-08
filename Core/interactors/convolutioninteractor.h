@@ -23,6 +23,7 @@ private:
     void deleteNeuron() override;
     void clean() override;
     void activate();
+    void reActivateDelta();
     void getInputSignal();
     void sendSignal();
     void makeInputDelta();

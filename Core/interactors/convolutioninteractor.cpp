@@ -31,6 +31,12 @@ void ConvolutionInteractor::activate() {
             value[i][j] = activateFunction(value[i][j]);
 }
 
+void ConvolutionInteractor::reActivateDelta() {
+    for (unsigned int i = 0; i < value.size(); i++)
+        for (unsigned int j = 0; j < value.size(); j++)
+            inputDelta[i][j] = inputDelta[i][j] * reActivateFunction(value[i][j]);
+}
+
 void ConvolutionInteractor::setPosition(double x, double y) {
     posX = x;
     posY = y;
@@ -70,6 +76,7 @@ void ConvolutionInteractor::onDeltaValueChanged() {
         return;
 
     makeInputDelta();
+    if (isActivateFunctionEnabled) reActivateDelta();
     sendDelta();
     inputDeltaCount = 0;
 }

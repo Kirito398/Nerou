@@ -259,6 +259,22 @@ double DataInteractor::getDelta() {
     return currentDelta;
 }
 
+//void DataInteractor::sendDelta() {
+//    for (auto sinaps : inputsSinaps) {
+//        if (sinaps->getType() == sinaps->Weigth) {
+//            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
+
+//            double delta = 0;
+//            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
+//                delta = 1.0 - weight->getValue();
+//            else
+//                delta = 0.0;
+
+//            weight->sendDelta(delta * reActivateFunction(weight->getValue()));
+//        }
+//    }
+//}
+
 void DataInteractor::sendDelta() {
     for (auto sinaps : inputsSinaps) {
         if (sinaps->getType() == sinaps->Weigth) {
