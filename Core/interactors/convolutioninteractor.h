@@ -22,6 +22,7 @@ private:
     unsigned long getID() override;
     void deleteNeuron() override;
     void clean() override;
+    void onNeuronValueChanged(double newValue) override;
     void activate();
     void reActivateDelta();
     void getInputSignal();

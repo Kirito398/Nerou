@@ -15,6 +15,7 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     inputDeltaCount = 0;
     currentClass = 0;
     isColorMode = false;
+    currentCorrectSinaps = 0;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
@@ -202,30 +203,73 @@ void DataInteractor::onInputSignalChanged() {
     if (inputSignalCount != inputsSinaps.size())
         return;
 
+    calculateInputSignal();
+    //updateValuesInOutputsNeurons();
     calculateDelta();
     sendDelta();
     inputSignalCount = 0;
 }
 
-void DataInteractor::calculateDelta() {
-    double mse = 0;
+void DataInteractor::calculateInputSignal() {
+    inputSignal.clear();
+    currentCorrectSinaps = inputsSinaps.size() + 1;
 
-    for (auto sinaps : inputsSinaps) {
-        if (sinaps->getType() == sinaps->Weigth) {
-            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
+    for (unsigned int i = 0; i < inputsSinaps.size(); i++) {
+        if (inputsSinaps[i]->getType() != inputsSinaps[i]->Weigth)
+            continue;
 
-            double delta = 0;
-            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
-                delta = 1.0 - weight->getValue();
-            else
-                delta = 0.0 - weight->getValue();
+        WeightInterface *weight = static_cast<WeightInterface *>(inputsSinaps[i]);
+        inputSignal.push_back(weight->getValue());
 
-            mse += (delta * delta);
-        }
+        if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
+            currentCorrectSinaps = i;
     }
 
-    currentDelta = mse / classList.size();
+    //inputSignal = softmaxFunction(inputSignal);
 }
+
+void DataInteractor::updateValuesInOutputsNeurons() {
+    for (unsigned int i = 0; i < inputSignal.size(); i++)
+        inputsSinaps[i]->getInputNeuron()->onNeuronValueChanged(inputSignal[i]);
+}
+
+void DataInteractor::calculateDelta() {
+    currentDelta.clear();
+    double loss = 0;
+    double idealAnswer = 0.0;
+
+    for (unsigned int i = 0; i < inputSignal.size(); i++) {
+        double delta = 0;
+
+        idealAnswer = currentCorrectSinaps == i ? 1.0 : 0.0;
+        delta = idealAnswer - inputSignal[i];
+        currentDelta.push_back(delta);
+
+        loss += lossFunction(inputSignal[i], idealAnswer);
+    }
+
+    currentLoss = loss / classList.size();
+}
+
+//void DataInteractor::calculateDelta() {
+//    currentDelta.clear();
+//    double mse = 0;
+
+//    for (unsigned int i = 0; i < inputSignal.size(); i++) {
+//        double delta = 0;
+
+//        if (currentCorrectSinaps == i)
+//            delta = inputSignal[i] - 1.0;
+//        else
+//            delta = inputSignal[i] - 0.0;
+
+//        currentDelta.push_back(delta);
+
+//        mse += (delta * delta);
+//    }
+
+//    currentAccuracy = mse / classList.size();
+//}
 
 DataModel DataInteractor::getModel() {
     DataModel model;
@@ -255,8 +299,8 @@ void DataInteractor::updateFromModel(DataModel model) {
         addClass(list.at(i));
 }
 
-double DataInteractor::getDelta() {
-    return currentDelta;
+double DataInteractor::getLoss() {
+    return currentLoss;
 }
 
 //void DataInteractor::sendDelta() {
@@ -276,17 +320,10 @@ double DataInteractor::getDelta() {
 //}
 
 void DataInteractor::sendDelta() {
-    for (auto sinaps : inputsSinaps) {
-        if (sinaps->getType() == sinaps->Weigth) {
-            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
-
-            double delta = 0;
-            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
-                delta = 1.0 - weight->getValue();
-            else
-                delta = 0.0 - weight->getValue();
-
-            weight->sendDelta(delta);
+    for (unsigned int i = 0; i < inputsSinaps.size(); i++) {
+        if (inputsSinaps[i]->getType() == inputsSinaps[i]->Weigth) {
+            WeightInterface *weight = static_cast<WeightInterface *>(inputsSinaps[i]);
+            weight->sendDelta(currentDelta[i]);
         }
     }
 }
@@ -302,4 +339,7 @@ void DataInteractor::sendDelta() {
 
 void DataInteractor::onDeltaValueChanged() {
 
+}
+
+void DataInteractor::onNeuronValueChanged(double newValue) {
 }

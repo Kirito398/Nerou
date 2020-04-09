@@ -17,7 +17,7 @@ public:
     unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber();
     void setPosition(double x, double y) override;
-    double getDelta();
+    double getLoss();
     DataModel getModel();
     void updateFromModel(DataModel model);
 
@@ -36,16 +36,22 @@ private:
     ClassModel getClass(unsigned long id) override;
     RepositoryInterface *getRepository() override;
     void removeSinaps(unsigned long sinapsID) override;
+    void onNeuronValueChanged(double newValue) override;
     void sendDelta();
     void calculateDelta();
+    void calculateInputSignal();
+    void updateValuesInOutputsNeurons();
 
 private:
     DataPresentorListener *view;
     RepositoryInterface *repository;
     std::vector<std::vector<double>> value;
     std::vector<std::vector<std::vector<double>>> colorValue;
+    std::vector<double> inputSignal;
+    std::vector<double> currentDelta;
     unsigned long currentClass;
-    double currentDelta;
+    double currentLoss;
+    unsigned int currentCorrectSinaps;
     //Need to save
     bool isColorMode;
     std::vector<ClassModel> classList;

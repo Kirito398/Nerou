@@ -119,7 +119,7 @@ void ConvolutionInteractor::makeInputDelta() {
             if (i * value[i].size() >= inputDeltaCount)
                 inputDelta[i].push_back(0);
             else
-                inputDelta[i].push_back(temp[i * value[i].size()]);
+                inputDelta[i].push_back(temp[i * value[i].size() + j]);
         }
     }
 }
@@ -157,4 +157,8 @@ void ConvolutionInteractor::clean() {
     value.clear();
     inputDelta.clear();
     view->setOutValue(value);
+}
+
+void ConvolutionInteractor::onNeuronValueChanged(double newValue) {
+
 }

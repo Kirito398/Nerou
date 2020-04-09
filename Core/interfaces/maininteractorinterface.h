@@ -9,6 +9,7 @@ class ConvolutionModel;
 class CoreModel;
 
 enum ActivateFunctionType {Linear, Sigmoid, Tanh, ReLU};
+enum LossFunctionType {MSE, CrossEntropy};
 
 class MainInteractorInterface
 {
@@ -22,6 +23,7 @@ public:
     virtual void onWeightModelLoaded(WeightModel model) = 0;
     virtual void onCoreModelLoaded(CoreModel model) = 0;
     virtual ActivateFunctionType getActivateFunctionType() = 0;
+    virtual LossFunctionType getLossFunctionType() = 0;
 };
 
 #endif // MAININTERACTORINTERFACE_H

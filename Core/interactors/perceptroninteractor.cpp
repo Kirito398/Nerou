@@ -88,11 +88,12 @@ void PerceptronInteractor::calculateOut() {
 
     outValue = activateFunction(sum);
 
-    view->setOutValue(outValue);
+    //if (!isOutput)
+        view->setOutValue(outValue);
 }
 
 void PerceptronInteractor::calculateDelta() {
-//    if (inputsSinaps.size() == 1 && inputsSinaps[0]->getOutputNeuron()->getType() == Data) {
+//    if (outputsSinaps.size() == 1 && outputsSinaps[0]->getOutputNeuron()->getType() == Data) {
 //        deltaValue = inputDelta[0];
 //        return;
 //    }
@@ -102,6 +103,11 @@ void PerceptronInteractor::calculateDelta() {
         sum += inputDelta[i];
 
     deltaValue = sum * reActivateFunction(outValue);
+}
+
+void PerceptronInteractor::onNeuronValueChanged(double newValue) {
+    outValue = newValue;
+    view->setOutValue(outValue);
 }
 
 void PerceptronInteractor::sendSignal() {

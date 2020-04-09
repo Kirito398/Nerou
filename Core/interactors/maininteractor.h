@@ -56,10 +56,12 @@ private:
     void onWeightModelLoaded(WeightModel model) override;
     void onCoreModelLoaded(CoreModel model) override;
     ActivateFunctionType getActivateFunctionType() override;
+    LossFunctionType getLossFunctionType() override;
 
 private:
     static MainInteractor *instance;
     ActivateFunctionType activateFunctionType;
+    LossFunctionType lossFunctionType;
     MainPresentorListener *view;
     RepositoryInterface *repository;
     std::vector<NeuronInteractor *> neuronsList;

@@ -22,6 +22,7 @@ MainInteractor::MainInteractor(RepositoryInterface *repository)
     repository->setInteractor(this);
     createdItemsCounter = 0;
     activateFunctionType = Sigmoid;
+    lossFunctionType = MSE;
 
     clearProcessParameters();
 }
@@ -69,7 +70,7 @@ void MainInteractor::run() {
                     }
 
                     dataList.at(k)->start(i, j);
-                    view->onErrorValueChanged(dataList.at(k)->getDelta());
+                    view->onErrorValueChanged(dataList.at(k)->getLoss());
                 }
 
                 updateSinaps();
@@ -84,7 +85,7 @@ void MainInteractor::run() {
 
 void MainInteractor::updateSinaps() {
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps(0.7, 0.2);
+        sinaps->updateSinaps(0.5, 0);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
@@ -366,6 +367,10 @@ void MainInteractor::onProcessStopped() {
 
 ActivateFunctionType MainInteractor::getActivateFunctionType() {
     return activateFunctionType;
+}
+
+LossFunctionType MainInteractor::getLossFunctionType() {
+    return lossFunctionType;
 }
 
 void MainInteractor::onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber) {

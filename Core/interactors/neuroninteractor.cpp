@@ -18,8 +18,8 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
 double NeuronInteractor::activateFunction(double value) {
     double result = value;
 
-    if (isOutput)
-        return result;
+//    if (isOutput)
+//        return result;
 
     switch(interactor->getActivateFunctionType()) {
         case Sigmoid: { result = sigmoidFunction(value); break; }
@@ -45,8 +45,8 @@ void NeuronInteractor::activateFunction(double** value, unsigned int row, unsign
 double NeuronInteractor::reActivateFunction(double value) {
     double result = value;
 
-    if (isOutput)
-        return reSoftmaxFunction(value);
+//    if (isOutput)
+//        return reSoftmaxFunction(value);
 
     switch(interactor->getActivateFunctionType()) {
         case Sigmoid: { result = reSigmoidFunction(value); break; }
@@ -90,6 +90,25 @@ std::vector<std::vector<std::vector<double> > > NeuronInteractor::normalization(
     return value;
 }
 
+double NeuronInteractor::lossFunction(double answer, double idealAnswer) {
+    double result = answer;
+
+    switch(interactor->getLossFunctionType()) {
+        case MSE: { result = mseFunction(answer, idealAnswer); break; }
+        case CrossEntropy: { result = crossEntropyFunction(answer, idealAnswer); break; }
+    }
+
+    return result;
+}
+
+double NeuronInteractor::mseFunction(double answer, double idealAnswer) {
+    return pow(answer - idealAnswer, 2.0);
+}
+
+double NeuronInteractor::crossEntropyFunction(double answer, double idealAnswer) {
+    return -(idealAnswer * log(answer));
+}
+
 double NeuronInteractor::sigmoidFunction(double value) {
     return 1.0 / (1.0 + exp(-value));
 }
@@ -100,6 +119,19 @@ double NeuronInteractor::tanhFunction(double value) {
 
 double NeuronInteractor::reluFunction(double value) {
     return value <= 0 ? 0 : value;
+}
+
+std::vector<double> NeuronInteractor::softmaxFunction(std::vector<double> values) {
+    std::vector<double> temp;
+    double sum = 0;
+
+    for (auto value : values)
+        sum += exp(value);
+
+    for (auto value : values)
+        temp.push_back(exp(value) / sum);
+
+    return temp;
 }
 
 double NeuronInteractor::reSigmoidFunction(double value) {
