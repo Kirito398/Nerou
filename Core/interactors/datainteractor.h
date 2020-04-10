@@ -24,6 +24,7 @@ public:
     double getAccuracy();
     DataModel getModel();
     void updateFromModel(DataModel model);
+    unsigned int getAnswer();
 
 private:
     void sendData();
@@ -44,7 +45,6 @@ private:
     void calculateDelta();
     void calculateInputSignal();
     void calculateLoss();
-    void calculateAccuracy();
     unsigned int getMaxIndex(std::vector<double> value);
     double mseFunction(std::vector<double> answer, std::vector<double> mark);
     double crossEntropyFunction(std::vector<double> answer, std::vector<double> mark);
@@ -59,7 +59,6 @@ private:
     std::vector<double> currentMark;
     unsigned long currentClass;
     double currentLoss;
-    double currentAccuracy;
     //Need to save
     bool isColorMode;
     std::vector<ClassModel> classList;

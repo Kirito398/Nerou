@@ -48,3 +48,11 @@ int PerceptronModel::getType() {
 void PerceptronModel::setType(int type) {
     this->type = type;
 }
+
+int PerceptronModel::getActivateFunctionType() {
+    return activateFunctionType;
+}
+
+void PerceptronModel::setActivateFunctionType(int type) {
+    activateFunctionType = type;
+}

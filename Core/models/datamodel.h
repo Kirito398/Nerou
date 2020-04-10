@@ -23,6 +23,10 @@ public:
     void setIsColorMode(bool enable);
     std::vector<ClassModel> getClassList();
     void setClassList(std::vector<ClassModel> list);
+    int getActivateFunctionType();
+    void setActivateFunctionType(int type);
+    int getLossFunctionType();
+    void setLossFunctionType(int type);
 
 private:
     double posX, posY;
@@ -31,6 +35,8 @@ private:
     int type;
     bool isColorMode;
     std::vector<ClassModel> classList;
+    int activateFunctionType;
+    int lossFunctionType;
 };
 
 #endif // DATAMODEL_H

@@ -278,8 +278,12 @@ double DataInteractor::crossEntropyFunction(std::vector<double> answer, std::vec
     return sum / size;
 }
 
-void DataInteractor::calculateAccuracy() {
+unsigned int DataInteractor::getAnswer() {
+    unsigned int answerNeuronID = inputsSinaps[getMaxIndex(inputSignal)]->getInputNeuron()->getID();
 
+    for (unsigned int i = 0; i < classList.size(); i++)
+        if (classList[i].getNeuronID() == answerNeuronID)
+            return i;
 }
 
 unsigned int DataInteractor::getMaxIndex(std::vector<double> value) {
@@ -307,6 +311,8 @@ DataModel DataInteractor::getModel() {
     model.setIsOutput(isOutput);
     model.setClassList(classList);
     model.setIsColorMode(isColorMode);
+    model.setActivateFunctionType(activateFunctionType);
+    model.setLossFunctionType(lossFunctionType);
 
     return model;
 }
@@ -318,6 +324,8 @@ void DataInteractor::updateFromModel(DataModel model) {
     type = NeuronType(model.getType());
     isOutput = model.getIsOutput();
     isColorMode = model.getIsColorMode();
+    activateFunctionType = ActivateFunctionType (model.getActivateFunctionType());
+    lossFunctionType = LossFunctionType (model.getLossFunctionType());
 
     std::vector<ClassModel> list = model.getClassList();
 

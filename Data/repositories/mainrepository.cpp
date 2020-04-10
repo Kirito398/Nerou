@@ -36,7 +36,8 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
             << model.getY()
             << QString::number(model.getID())
             << model.getType()
-            << model.getIsOutput();
+            << model.getIsOutput()
+            << model.getActivateFunctionType();
     }
 
     for (size_t i = 0; i < convolutionSize; i++) {
@@ -45,7 +46,8 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
             << model.getY()
             << QString::number(model.getID())
             << model.getType()
-            << model.getIsActivateFunctionEnabled();
+            << model.getIsActivateFunctionEnabled()
+            << model.getActivateFunctionType();
     }
 
     for (size_t i = 0; i < dataSize; i++) {
@@ -55,7 +57,9 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
             << QString::number(model.getID())
             << model.getType()
             << model.getIsOutput()
-            << model.getIsColorMode();
+            << model.getIsColorMode()
+            << model.getActivateFunctionType()
+            << model.getLossFunctionType();
 
         std::vector<ClassModel> classList = model.getClassList();
         size_t classSize = classList.size();
@@ -120,14 +124,15 @@ void MainRepository::load(std::string path) {
     for (size_t i = 0; i < perceptronSize; i++) {
         double posX, posY;
         QString neuronID;
-        int type;
+        int type, activateFunctionType;
         bool isOutput;
 
         in >> posX
                 >> posY
                 >> neuronID
                 >> type
-                >> isOutput;
+                >> isOutput
+                >> activateFunctionType;
 
         PerceptronModel model;
         model.setX(posX);
@@ -135,6 +140,7 @@ void MainRepository::load(std::string path) {
         model.setID(neuronID.toULong());
         model.setType(type);
         model.setIsOutput(isOutput);
+        model.setActivateFunctionType(activateFunctionType);
 
         interactor->onPerceptronModelLoaded(model);
     }
@@ -142,20 +148,22 @@ void MainRepository::load(std::string path) {
     for (size_t i = 0; i < convolutionSize; i++) {
         double posX, posY;
         QString neuronID;
-        int type;
+        int type, activateFunctionType;
         bool isActivateFunctionEnabled;
 
         in >> posX
                 >> posY
                 >> neuronID
                 >> type
-                >> isActivateFunctionEnabled;
+                >> isActivateFunctionEnabled
+                >> activateFunctionType;
 
         ConvolutionModel model(neuronID.toULong());
         model.setX(posX);
         model.setY(posY);
         model.setType(type);
         model.setIsActivateFunctionEnabled(isActivateFunctionEnabled);
+        model.setActivateFunctionType(activateFunctionType);
 
         interactor->onConvolutionModelLoaded(model);
     }
@@ -163,14 +171,16 @@ void MainRepository::load(std::string path) {
     for (size_t i = 0; i < dataSize; i++) {
         double posX, posY;
         QString neuronID;
-        int type;
+        int type, activateFunctionType, lossFunctionType;
         bool isOutput, isColorMode;
 
         in >> posX >> posY
                 >> neuronID
                 >> type
                 >> isOutput
-                >> isColorMode;
+                >> isColorMode
+                >> activateFunctionType
+                >> lossFunctionType;
 
         std::vector<ClassModel> classList;
         QString size;
@@ -201,6 +211,8 @@ void MainRepository::load(std::string path) {
         model.setIsOutput(isOutput);
         model.setClassList(classList);
         model.setIsColorMode(isColorMode);
+        model.setActivateFunctionType(activateFunctionType);
+        model.setLossFunctionType(lossFunctionType);
 
         interactor->onDataModelLoaded(model);
     }

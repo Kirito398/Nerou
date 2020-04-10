@@ -46,7 +46,7 @@ double NeuronInteractor::reActivateFunction(double value) {
             case Sigmoid: { result = reSigmoidFunction(value); break; }
             case Tanh: { result = reTanhFunction(value); break; }
             case ReLU: { result = reReluFunction(value); break; }
-            case Softmax: { result = value; break; }
+            case Softmax: { result = 1; break; }
         }
 
         return result;

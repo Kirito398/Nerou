@@ -146,6 +146,7 @@ PerceptronModel PerceptronInteractor::getModel() {
     model.setID(id);
     model.setType(type);
     model.setIsOutput(isOutput);
+    model.setActivateFunctionType(activateFunctionType);
 
     return model;
 }
@@ -154,8 +155,9 @@ void PerceptronInteractor::updateFromModel(PerceptronModel model) {
     posX = model.getX();
     posY = model.getY();
     id = model.getID();
-    //type = NeuronType(model.getType());
+    type = NeuronType(model.getType());
     isOutput =  model.getIsOutput();
+    activateFunctionType = ActivateFunctionType (model.getActivateFunctionType());
 }
 
 void PerceptronInteractor::clean() {
