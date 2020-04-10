@@ -7,6 +7,8 @@
 #include "models/classmodel.h"
 #include "models/datamodel.h"
 
+#include <math.h>
+
 DataInteractor::DataInteractor() : NeuronInteractor(Data)
 {
     view = nullptr;
@@ -14,7 +16,11 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     inputSignalCount = 0;
     inputDeltaCount = 0;
     currentClass = 0;
+    currentLoss = 0.0;
+    currentAccuracy = 0.0;
     isColorMode = false;
+    activateFunctionType = Softmax;
+    lossFunctionType = CrossEntropy;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
@@ -202,29 +208,93 @@ void DataInteractor::onInputSignalChanged() {
     if (inputSignalCount != inputsSinaps.size())
         return;
 
+    calculateInputSignal();
     calculateDelta();
+    calculateLoss();
     sendDelta();
     inputSignalCount = 0;
 }
 
-void DataInteractor::calculateDelta() {
-    double mse = 0;
+void DataInteractor::calculateInputSignal() {
+    inputSignal.clear();
+    currentMark.clear();
 
-    for (auto sinaps : inputsSinaps) {
-        if (sinaps->getType() == sinaps->Weigth) {
-            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
+    for (unsigned int i = 0; i < inputsSinaps.size(); i++) {
+        if (inputsSinaps[i]->getType() != inputsSinaps[i]->Weigth)
+            continue;
 
-            double delta = 0;
-            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
-                delta = 1.0 - weight->getValue();
-            else
-                delta = 0.0 - weight->getValue();
+        WeightInterface *weight = static_cast<WeightInterface *>(inputsSinaps[i]);
+        inputSignal.push_back(weight->getValue());
 
-            mse += (delta * delta);
-        }
+        if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
+            currentMark.push_back(1.0);
+        else
+            currentMark.push_back(0.0);
     }
 
-    currentDelta = mse / classList.size();
+    if (activateFunctionType == Softmax)
+        inputSignal = softmaxFunction(inputSignal);
+}
+
+void DataInteractor::calculateDelta()  {
+    currentDelta.clear();
+
+    for (unsigned int i = 0; i < inputSignal.size(); i++) {
+        double delta = 0;
+
+        delta = currentMark[i] - inputSignal[i];
+
+        if (activateFunctionType == Softmax)
+            delta *= reSoftmaxFunction(inputSignal[i]);
+
+        currentDelta.push_back(delta);
+    }
+}
+
+void DataInteractor::calculateLoss() {
+    switch (lossFunctionType) {
+    case MSE: {currentLoss = mseFunction(inputSignal, currentMark); break;}
+    case CrossEntropy: {currentLoss = crossEntropyFunction(inputSignal, currentMark); break;}
+    }
+}
+
+double DataInteractor::mseFunction(std::vector<double> answer, std::vector<double> mark) {
+    unsigned int size = answer.size();
+    double sum = 0;
+
+    for (unsigned int i = 0; i < size; i++)
+        sum += pow(answer[i] - mark[i], 2.0);
+
+    return sum / size;
+}
+
+double DataInteractor::crossEntropyFunction(std::vector<double> answer, std::vector<double> mark) {
+    unsigned int size = answer.size();
+    double sum = 0;
+
+    for (unsigned int i = 0; i < size; i++)
+        sum += -(mark[i] * log(answer[i]));
+
+    return sum / size;
+}
+
+void DataInteractor::calculateAccuracy() {
+
+}
+
+unsigned int DataInteractor::getMaxIndex(std::vector<double> value) {
+    unsigned int index = 0;
+    double max = value[0];
+
+    for (unsigned int i = 0; i < value.size(); i++) {
+        if (max >= value[i])
+            continue;
+
+        max = value[i];
+        index = i;
+    }
+
+    return index;
 }
 
 DataModel DataInteractor::getModel() {
@@ -255,50 +325,22 @@ void DataInteractor::updateFromModel(DataModel model) {
         addClass(list.at(i));
 }
 
-double DataInteractor::getDelta() {
-    return currentDelta;
+double DataInteractor::getLoss() {
+    return currentLoss;
 }
 
-//void DataInteractor::sendDelta() {
-//    for (auto sinaps : inputsSinaps) {
-//        if (sinaps->getType() == sinaps->Weigth) {
-//            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
-
-//            double delta = 0;
-//            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
-//                delta = 1.0 - weight->getValue();
-//            else
-//                delta = 0.0;
-
-//            weight->sendDelta(delta * reActivateFunction(weight->getValue()));
-//        }
-//    }
-//}
+double DataInteractor::getAccuracy() {
+    return currentAccuracy;
+}
 
 void DataInteractor::sendDelta() {
-    for (auto sinaps : inputsSinaps) {
-        if (sinaps->getType() == sinaps->Weigth) {
-            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
-
-            double delta = 0;
-            if (weight->getInputNeuron()->getID() == classList[currentClass].getNeuronID())
-                delta = 1.0 - weight->getValue();
-            else
-                delta = 0.0 - weight->getValue();
-
-            weight->sendDelta(delta * reActivateFunction(weight->getValue()));
+    for (unsigned int i = 0; i < inputsSinaps.size(); i++) {
+        if (inputsSinaps[i]->getType() == inputsSinaps[i]->Weigth) {
+            WeightInterface *weight = static_cast<WeightInterface *>(inputsSinaps[i]);
+            weight->sendDelta(currentDelta[i]);
         }
     }
 }
-
-//void DataInteractor::sendDelta() {
-//    for (auto sinaps : inputsSinaps) {
-//        if (sinaps->getType() == sinaps->Weigth) {
-//            WeightInterface *weight = static_cast<WeightInterface *>(sinaps);
-//            weight->sendDelta(currentDelta * reActivateFunction(weight->getValue()));
-//        }
-//    }
-//}
 
 void DataInteractor::onDeltaValueChanged() {
 

@@ -68,7 +68,7 @@ void MainInteractor::run() {
                     }
 
                     dataList.at(k)->start(i, j);
-                    view->onErrorValueChanged(dataList.at(k)->getDelta());
+                    view->onErrorValueChanged(dataList.at(k)->getLoss());
                 }
 
                 updateSinaps();
