@@ -6,6 +6,8 @@
 class QBoxLayout;
 class QLabel;
 class QProgressBar;
+class QToolButton;
+class ProgressTrainingPlotsDialog;
 
 class ProgressTrainingDialog : public QDialog
 {
@@ -35,11 +37,14 @@ private:
     QTimer *timer;
     QBoxLayout *layout;
     QLabel *lTime, *lEpoh, *lIteration, *lError, *lAccuracy;
+    QToolButton *tbPlots;
+    ProgressTrainingPlotsDialog *plotsDialog;
     unsigned long seconds;
     unsigned int maxEpoh, maxIteration, currentEpoh, currentIteration;
 
 private slots:
     void onTimeout();
+    void onShowPlotBtnClicked();
 };
 
 #endif // PROGRESSTRAININGDIALOG_H

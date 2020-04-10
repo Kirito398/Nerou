@@ -4,6 +4,9 @@
 #include <QProgressBar>
 #include <QTimer>
 #include <QLabel>
+#include <QToolButton>
+
+#include "dialogs/progresstrainingplotsdialog.h"
 
 ProgressTrainingDialog::ProgressTrainingDialog()
 {
@@ -18,6 +21,14 @@ ProgressTrainingDialog::ProgressTrainingDialog()
     initIterationLayer();
     initErrorLayer();
     initAccuracyLayer();
+
+    plotsDialog = new ProgressTrainingPlotsDialog();
+
+    tbPlots = new QToolButton();
+    tbPlots->setText(tr("Show plots"));
+    connect(tbPlots, SIGNAL(clicked()), this, SLOT(onShowPlotBtnClicked()));
+
+    layout->addWidget(tbPlots);
 
     totalProgressBar = new QProgressBar();
     totalProgressBar->setMinimum(0);
@@ -57,10 +68,12 @@ void ProgressTrainingDialog::setCurrentIteration(unsigned int currentIteration) 
 
 void ProgressTrainingDialog::setCurrentError(double value) {
     lError->setText(QString::number(value));
+    plotsDialog->addNewLoss(value);
 }
 
 void ProgressTrainingDialog::setCurrentAccuracy(double value) {
     lAccuracy->setText(QString::number(value));
+    plotsDialog->addNewAccuracy(value);
 }
 
 void ProgressTrainingDialog::onTrainingFinished() {
@@ -149,6 +162,10 @@ void ProgressTrainingDialog::onTimeout() {
         second.push_front("0");
 
     lTime->setText(hours + ":" + minuts + ":" + second);
+}
+
+void ProgressTrainingDialog::onShowPlotBtnClicked() {
+    plotsDialog->show();
 }
 
 ProgressTrainingDialog::~ProgressTrainingDialog() {
