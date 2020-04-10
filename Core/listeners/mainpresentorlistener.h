@@ -19,6 +19,7 @@ public:
     virtual void onIterationChanged(unsigned int currentIteration) = 0;
     virtual void onTrainingFinished() = 0;
     virtual void onErrorValueChanged(double value) = 0;
+    virtual void onAccuracyChanged(double value) = 0;;
 };
 
 #endif // MAINPRESENTORLISTENER_H

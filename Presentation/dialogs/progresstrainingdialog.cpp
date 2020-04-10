@@ -17,6 +17,7 @@ ProgressTrainingDialog::ProgressTrainingDialog()
     initEpohLayer();
     initIterationLayer();
     initErrorLayer();
+    initAccuracyLayer();
 
     totalProgressBar = new QProgressBar();
     totalProgressBar->setMinimum(0);
@@ -58,6 +59,10 @@ void ProgressTrainingDialog::setCurrentError(double value) {
     lError->setText(QString::number(value));
 }
 
+void ProgressTrainingDialog::setCurrentAccuracy(double value) {
+    lAccuracy->setText(QString::number(value));
+}
+
 void ProgressTrainingDialog::onTrainingFinished() {
     timer->stop();
     seconds = 0;
@@ -72,6 +77,17 @@ void ProgressTrainingDialog::initErrorLayer() {
     errorLayout->addWidget(title);
     errorLayout->addWidget(lError);
     layout->addLayout(errorLayout);
+}
+
+void ProgressTrainingDialog::initAccuracyLayer() {
+    QBoxLayout *accuracyLayout = new QHBoxLayout();
+
+    lAccuracy = new QLabel("0.0");
+    QLabel *title = new QLabel(tr("Accuracy: "));
+
+    accuracyLayout->addWidget(title);
+    accuracyLayout->addWidget(lAccuracy);
+    layout->addLayout(accuracyLayout);
 }
 
 void ProgressTrainingDialog::initEpohLayer() {

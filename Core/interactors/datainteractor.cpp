@@ -17,7 +17,6 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     inputDeltaCount = 0;
     currentClass = 0;
     currentLoss = 0.0;
-    currentAccuracy = 0.0;
     isColorMode = false;
     activateFunctionType = Softmax;
     lossFunctionType = CrossEntropy;
@@ -335,10 +334,6 @@ void DataInteractor::updateFromModel(DataModel model) {
 
 double DataInteractor::getLoss() {
     return currentLoss;
-}
-
-double DataInteractor::getAccuracy() {
-    return currentAccuracy;
 }
 
 void DataInteractor::sendDelta() {

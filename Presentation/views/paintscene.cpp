@@ -51,6 +51,10 @@ void PaintScene::onErrorValueChanged(double value) {
     progressDialog->setCurrentError(value);
 }
 
+void PaintScene::onAccuracyChanged(double value) {
+    progressDialog->setCurrentAccuracy(value);
+}
+
 void PaintScene::onTrainingFinished() {
     progressDialog->onTrainingFinished();
 }

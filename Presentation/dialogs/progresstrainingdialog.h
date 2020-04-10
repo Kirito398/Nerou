@@ -19,6 +19,7 @@ public:
     void setCurrentEpoh(unsigned int currentEpoh);
     void setCurrentIteration(unsigned int currentIteration);
     void setCurrentError(double value);
+    void setCurrentAccuracy(double value);
     void onTrainingFinished();
 
 private:
@@ -26,13 +27,14 @@ private:
     void initEpohLayer();
     void initIterationLayer();
     void initErrorLayer();
+    void initAccuracyLayer();
     void updateTotalProgressBar();
 
 private:
     QProgressBar *totalProgressBar;
     QTimer *timer;
     QBoxLayout *layout;
-    QLabel *lTime, *lEpoh, *lIteration, *lError;
+    QLabel *lTime, *lEpoh, *lIteration, *lError, *lAccuracy;
     unsigned long seconds;
     unsigned int maxEpoh, maxIteration, currentEpoh, currentIteration;
 
