@@ -55,6 +55,7 @@ void MainInteractor::run() {
         for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
             view->onIterationChanged(j + 1);
             double correctAnswerSumm = 0.0;
+            double lossSum = 0;
 
             for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
                 for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
@@ -69,7 +70,8 @@ void MainInteractor::run() {
                     }
 
                     dataList.at(k)->start(i, j);
-                    view->onErrorValueChanged(dataList.at(k)->getLoss());
+                    lossSum += dataList.at(k)->getLoss();
+                    //view->onErrorValueChanged(dataList.at(k)->getLoss());
 
                     if (dataList.at(k)->getAnswer() == i)
                         correctAnswerSumm++;
@@ -79,6 +81,7 @@ void MainInteractor::run() {
             }
 
             view->onAccuracyChanged(correctAnswerSumm / classNumber);
+            view->onErrorValueChanged(lossSum / classNumber);
         }
     }
 

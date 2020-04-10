@@ -11,7 +11,7 @@
 ProgressTrainingDialog::ProgressTrainingDialog()
 {
     setWindowTitle(tr("Training progress"));
-    setFixedSize(QSize(200, 150));
+    setFixedSize(QSize(250, 200));
 
     layout = new QVBoxLayout();
 
@@ -85,7 +85,7 @@ void ProgressTrainingDialog::initErrorLayer() {
     QBoxLayout *errorLayout = new QHBoxLayout();
 
     lError = new QLabel("0.0");
-    QLabel *title = new QLabel(tr("Error: "));
+    QLabel *title = new QLabel(tr("Loss: "));
 
     errorLayout->addWidget(title);
     errorLayout->addWidget(lError);

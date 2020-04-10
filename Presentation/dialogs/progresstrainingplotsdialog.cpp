@@ -9,7 +9,7 @@ ProgressTrainingPlotsDialog::ProgressTrainingPlotsDialog()
     setWindowTitle(tr("Training progress plots"));
     setFixedSize(QSize(640, 480));
 
-    xStep = 250;
+    xStep = 25;
     yStep = 0.25;
 
     layout = new QVBoxLayout();
