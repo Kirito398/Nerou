@@ -11,7 +11,7 @@ class MainInteractorInterface;
 class NeuronInteractor : public SinapsListener
 {
 public:
-    enum FunctionType {Sin};
+    enum ActivateFunctionType {Sigmoid, Tanh, ReLU, Softmax};
 
 public:
     NeuronInteractor(NeuronType type);
@@ -36,10 +36,18 @@ protected:
     void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID);
     void removeNeuron();
     void isOutputNeuronEnable(bool enable);
+    std::vector<double> softmaxFunction(std::vector<double> values);
+    double reSoftmaxFunction(double value);
 
 private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);
     void removeSinapses();
+    double sigmoidFunction(double value);
+    double tanhFunction(double value);
+    double reluFunction(double value);
+    double reSigmoidFunction(double value);
+    double reTanhFunction(double value);
+    double reReluFunction(double value);
 
 protected:
     unsigned long inputSignalCount;
@@ -50,6 +58,7 @@ protected:
     unsigned long id;
     bool isOutput;
     NeuronType type;
+    ActivateFunctionType activateFunctionType;
 
 private:
     MainInteractorInterface *interactor;

@@ -57,6 +57,12 @@ void PerceptronInteractor::onDeltaValueChanged() {
 
 void PerceptronInteractor::setOutputNeuron(bool enable) {
     isOutputNeuronEnable(enable);
+
+    ///For time TODO
+    if (enable)
+        activateFunctionType = Softmax;
+    else
+        activateFunctionType = Sigmoid;
 }
 
 bool PerceptronInteractor::getIsOutputNeuron() {

@@ -12,10 +12,20 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     posX = 0;
     posY = 0;
     isOutput = false;
+    activateFunctionType = Sigmoid;
 }
 
 double NeuronInteractor::activateFunction(double value) {
-    return 1.0 / (1.0 + exp(-value));
+    double result = value;
+
+        switch(activateFunctionType) {
+            case Sigmoid: { result = sigmoidFunction(value); break; }
+            case Tanh: { result = tanhFunction(value); break; }
+            case ReLU: { result = reluFunction(value); break; }
+            case Softmax: { result = value; break; }
+        }
+
+        return result;
 }
 
 void NeuronInteractor::activateFunction(double* value, unsigned int size) {
@@ -30,6 +40,56 @@ void NeuronInteractor::activateFunction(double** value, unsigned int row, unsign
 }
 
 double NeuronInteractor::reActivateFunction(double value) {
+    double result = value;
+
+        switch(activateFunctionType) {
+            case Sigmoid: { result = reSigmoidFunction(value); break; }
+            case Tanh: { result = reTanhFunction(value); break; }
+            case ReLU: { result = reReluFunction(value); break; }
+            case Softmax: { result = value; break; }
+        }
+
+        return result;
+}
+
+double NeuronInteractor::sigmoidFunction(double value) {
+    return 1.0 / (1.0 + exp(-value));
+}
+
+double NeuronInteractor::tanhFunction(double value) {
+    return (exp(2 * value) - 1) / (exp(2 * value) + 1);
+}
+
+double NeuronInteractor::reluFunction(double value) {
+    return value <= 0 ? 0 : value;
+}
+
+std::vector<double> NeuronInteractor::softmaxFunction(std::vector<double> values) {
+    std::vector<double> temp;
+    double sum = 0;
+
+    for (auto value : values)
+        sum += exp(value);
+
+    for (auto value : values)
+        temp.push_back(exp(value) / sum);
+
+    return temp;
+}
+
+double NeuronInteractor::reSigmoidFunction(double value) {
+    return (1.0 - value) * value;
+}
+
+double NeuronInteractor::reTanhFunction(double value) {
+    return 1.0 - pow(value, 2);
+}
+
+double NeuronInteractor::reReluFunction(double value) {
+    return value;
+}
+
+double NeuronInteractor::reSoftmaxFunction(double value) {
     return (1.0 - value) * value;
 }
 
@@ -50,10 +110,6 @@ std::vector<std::vector<double>> NeuronInteractor::normalization(std::vector<std
     for (unsigned int i = 0; i < value.size(); i++)
         for (unsigned int j = 0; j < value[i].size(); j++)
             value[i][j] = normalization(value[i][j], max, min);
-
-//    for (auto row : value)
-//        for (auto item : row)
-//            item = normalization(item, max, min);
 
     return value;
 }
