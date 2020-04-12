@@ -241,7 +241,7 @@ void DataInteractor::calculateDelta()  {
     for (unsigned int i = 0; i < inputSignal.size(); i++) {
         double delta = 0;
 
-        delta = currentMark[i] - inputSignal[i];
+        delta = inputSignal[i] - currentMark[i];
 
         if (activateFunctionType == Softmax)
             delta *= reSoftmaxFunction(inputSignal[i]);
@@ -273,6 +273,9 @@ double DataInteractor::crossEntropyFunction(std::vector<double> answer, std::vec
 
     for (unsigned int i = 0; i < size; i++)
         sum += -(mark[i] * log(answer[i]));
+
+//    for (unsigned int i = 0; i < size; i++)
+//        sum += -(mark[i] * log(answer[i]) + (1 - mark[i] * log(1 - answer[i])));
 
     return sum / size;
 }

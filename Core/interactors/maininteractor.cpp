@@ -92,7 +92,7 @@ void MainInteractor::run() {
 
 void MainInteractor::updateSinaps() {
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps(0.7, 0.2);
+        sinaps->updateSinaps(0.05, 0);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
