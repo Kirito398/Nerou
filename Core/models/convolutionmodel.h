@@ -16,12 +16,15 @@ public:
     void setIsActivateFunctionEnabled(bool enable);
     int getType();
     void setType(int type);
+    int getActivateFunctionType();
+    void setActivateFunctionType(int type);
 
 private:
     unsigned long id;
     double posX, posY;
     bool isActivateFunctionEnabled;
     int type;
+    int activateFunctionType;
 };
 
 #endif // CONVOLUTIONMODEL_H

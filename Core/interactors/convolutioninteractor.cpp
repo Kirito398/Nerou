@@ -52,6 +52,7 @@ ConvolutionModel ConvolutionInteractor::getModel() {
     model.setY(posY);
     model.setType(type);
     model.setIsActivateFunctionEnabled(isActivateFunctionEnabled);
+    model.setActivateFunctionType(activateFunctionType);
 
     return model;
 }
@@ -60,8 +61,9 @@ void ConvolutionInteractor::updateFromModel(ConvolutionModel model) {
     id = model.getID();
     posX = model.getX();
     posY = model.getY();
-    //type = NeuronType(model.getType());
+    type = NeuronType(model.getType());
     isActivateFunctionEnabled = model.getIsActivateFunctionEnabled();
+    activateFunctionType = ActivateFunctionType(model.getActivateFunctionType());
 }
 
 void ConvolutionInteractor::setView(ConvolutionPresentorListener *listener) {

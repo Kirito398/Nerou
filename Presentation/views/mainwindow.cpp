@@ -347,10 +347,12 @@ void MainWindow::onMakeForwardNeuronActionClicked() {
 
 void MainWindow::zoomIn() {
     zoomSlider->setValue(zoomSlider->value() + 6);
+    view->update();
 }
 
 void MainWindow::zoomOut() {
     zoomSlider->setValue(zoomSlider->value() - 6);
+    view->update();
 }
 
 void MainWindow::onZoomSliderValueChanged() {

@@ -57,6 +57,12 @@ void PerceptronInteractor::onDeltaValueChanged() {
 
 void PerceptronInteractor::setOutputNeuron(bool enable) {
     isOutputNeuronEnable(enable);
+
+    ///For time TODO
+    if (enable)
+        activateFunctionType = Softmax;
+    else
+        activateFunctionType = Sigmoid;
 }
 
 bool PerceptronInteractor::getIsOutputNeuron() {
@@ -92,10 +98,10 @@ void PerceptronInteractor::calculateOut() {
 }
 
 void PerceptronInteractor::calculateDelta() {
-    if (inputsSinaps.size() == 1 && inputsSinaps[0]->getOutputNeuron()->getType() == Data) {
-        deltaValue = inputDelta[0];
-        return;
-    }
+//    if (inputsSinaps.size() == 1 && inputsSinaps[0]->getOutputNeuron()->getType() == Data) {
+//        deltaValue = inputDelta[0];
+//        return;
+//    }
 
     double sum  = 0;
     for (unsigned long i = 0; i < inputDeltaCount; i++)
@@ -140,6 +146,7 @@ PerceptronModel PerceptronInteractor::getModel() {
     model.setID(id);
     model.setType(type);
     model.setIsOutput(isOutput);
+    model.setActivateFunctionType(activateFunctionType);
 
     return model;
 }
@@ -148,8 +155,9 @@ void PerceptronInteractor::updateFromModel(PerceptronModel model) {
     posX = model.getX();
     posY = model.getY();
     id = model.getID();
-    //type = NeuronType(model.getType());
+    type = NeuronType(model.getType());
     isOutput =  model.getIsOutput();
+    activateFunctionType = ActivateFunctionType (model.getActivateFunctionType());
 }
 
 void PerceptronInteractor::clean() {

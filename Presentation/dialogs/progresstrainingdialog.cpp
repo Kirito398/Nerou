@@ -4,11 +4,14 @@
 #include <QProgressBar>
 #include <QTimer>
 #include <QLabel>
+#include <QToolButton>
+
+#include "dialogs/progresstrainingplotsdialog.h"
 
 ProgressTrainingDialog::ProgressTrainingDialog()
 {
     setWindowTitle(tr("Training progress"));
-    setFixedSize(QSize(200, 150));
+    setFixedSize(QSize(250, 200));
 
     layout = new QVBoxLayout();
 
@@ -17,6 +20,15 @@ ProgressTrainingDialog::ProgressTrainingDialog()
     initEpohLayer();
     initIterationLayer();
     initErrorLayer();
+    initAccuracyLayer();
+
+    plotsDialog = new ProgressTrainingPlotsDialog();
+
+    tbPlots = new QToolButton();
+    tbPlots->setText(tr("Show plots"));
+    connect(tbPlots, SIGNAL(clicked()), this, SLOT(onShowPlotBtnClicked()));
+
+    layout->addWidget(tbPlots);
 
     totalProgressBar = new QProgressBar();
     totalProgressBar->setMinimum(0);
@@ -56,6 +68,12 @@ void ProgressTrainingDialog::setCurrentIteration(unsigned int currentIteration) 
 
 void ProgressTrainingDialog::setCurrentError(double value) {
     lError->setText(QString::number(value));
+    plotsDialog->addNewLoss(value);
+}
+
+void ProgressTrainingDialog::setCurrentAccuracy(double value) {
+    lAccuracy->setText(QString::number(value));
+    plotsDialog->addNewAccuracy(value);
 }
 
 void ProgressTrainingDialog::onTrainingFinished() {
@@ -67,11 +85,22 @@ void ProgressTrainingDialog::initErrorLayer() {
     QBoxLayout *errorLayout = new QHBoxLayout();
 
     lError = new QLabel("0.0");
-    QLabel *title = new QLabel(tr("Error: "));
+    QLabel *title = new QLabel(tr("Loss: "));
 
     errorLayout->addWidget(title);
     errorLayout->addWidget(lError);
     layout->addLayout(errorLayout);
+}
+
+void ProgressTrainingDialog::initAccuracyLayer() {
+    QBoxLayout *accuracyLayout = new QHBoxLayout();
+
+    lAccuracy = new QLabel("0.0");
+    QLabel *title = new QLabel(tr("Accuracy: "));
+
+    accuracyLayout->addWidget(title);
+    accuracyLayout->addWidget(lAccuracy);
+    layout->addLayout(accuracyLayout);
 }
 
 void ProgressTrainingDialog::initEpohLayer() {
@@ -133,6 +162,10 @@ void ProgressTrainingDialog::onTimeout() {
         second.push_front("0");
 
     lTime->setText(hours + ":" + minuts + ":" + second);
+}
+
+void ProgressTrainingDialog::onShowPlotBtnClicked() {
+    plotsDialog->show();
 }
 
 ProgressTrainingDialog::~ProgressTrainingDialog() {

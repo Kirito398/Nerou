@@ -2,6 +2,7 @@
 
 qtHaveModule(opengl): QT += opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += charts
 
 CONFIG += c++11
 
@@ -21,6 +22,7 @@ SOURCES += \
     dialogs/dataaddtableitemdialog.cpp \
     dialogs/dataparametersdialog.cpp \
     dialogs/progresstrainingdialog.cpp \
+    dialogs/progresstrainingplotsdialog.cpp \
     main.cpp \
     models/selectoritem.cpp \
     presenters/arrowpresentor.cpp \
@@ -41,6 +43,7 @@ HEADERS += \
     dialogs/dataaddtableitemdialog.h \
     dialogs/dataparametersdialog.h \
     dialogs/progresstrainingdialog.h \
+    dialogs/progresstrainingplotsdialog.h \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
     interfaces/mainwindowinterface.h \

@@ -11,15 +11,20 @@ class DataModel;
 class DataInteractor : public NeuronInteractor, public DataInteractorListener
 {
 public:
+    enum LossFunctionType {MSE, CrossEntropy};
+
+public:
     DataInteractor();
     void start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
     unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber();
     void setPosition(double x, double y) override;
-    double getDelta();
+    double getLoss();
+    double getAccuracy();
     DataModel getModel();
     void updateFromModel(DataModel model);
+    unsigned int getAnswer();
 
 private:
     void sendData();
@@ -38,17 +43,26 @@ private:
     void removeSinaps(unsigned long sinapsID) override;
     void sendDelta();
     void calculateDelta();
+    void calculateInputSignal();
+    void calculateLoss();
+    unsigned int getMaxIndex(std::vector<double> value);
+    double mseFunction(std::vector<double> answer, std::vector<double> mark);
+    double crossEntropyFunction(std::vector<double> answer, std::vector<double> mark);
 
 private:
     DataPresentorListener *view;
     RepositoryInterface *repository;
     std::vector<std::vector<double>> value;
     std::vector<std::vector<std::vector<double>>> colorValue;
+    std::vector<double> inputSignal;
+    std::vector<double> currentDelta;
+    std::vector<double> currentMark;
     unsigned long currentClass;
-    double currentDelta;
+    double currentLoss;
     //Need to save
     bool isColorMode;
     std::vector<ClassModel> classList;
+    LossFunctionType lossFunctionType;
 };
 
 #endif // DATAINTERACTOR_H

@@ -50,6 +50,7 @@ private:
     void onEpohChanged(unsigned int currentEpoh) override;
     void onIterationChanged(unsigned int currentIteration) override;
     void onErrorValueChanged(double value) override;
+    void onAccuracyChanged(double value) override;
     void onTrainingFinished() override;
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
     void onNewDataAdded(DataInteractorListener *data) override;

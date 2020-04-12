@@ -54,6 +54,8 @@ void MainInteractor::run() {
 
         for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
             view->onIterationChanged(j + 1);
+            double correctAnswerSumm = 0.0;
+            double lossSum = 0;
 
             for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
                 for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
@@ -68,11 +70,18 @@ void MainInteractor::run() {
                     }
 
                     dataList.at(k)->start(i, j);
-                    view->onErrorValueChanged(dataList.at(k)->getDelta());
+                    lossSum += dataList.at(k)->getLoss();
+                    //view->onErrorValueChanged(dataList.at(k)->getLoss());
+
+                    if (dataList.at(k)->getAnswer() == i)
+                        correctAnswerSumm++;
                 }
 
                 updateSinaps();
             }
+
+            view->onAccuracyChanged(correctAnswerSumm / classNumber);
+            view->onErrorValueChanged(lossSum / classNumber);
         }
     }
 
@@ -83,7 +92,7 @@ void MainInteractor::run() {
 
 void MainInteractor::updateSinaps() {
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps(0.7, 0.2);
+        sinaps->updateSinaps(0.05, 0);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {

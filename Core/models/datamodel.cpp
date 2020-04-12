@@ -67,3 +67,19 @@ std::vector<ClassModel> DataModel::getClassList() {
 void DataModel::setClassList(std::vector<ClassModel> list) {
     classList.swap(list);
 }
+
+int DataModel::getActivateFunctionType() {
+    return activateFunctionType;
+}
+
+void DataModel::setActivateFunctionType(int type) {
+    activateFunctionType = type;
+}
+
+int DataModel::getLossFunctionType() {
+    return lossFunctionType;
+}
+
+void DataModel::setLossFunctionType(int type) {
+    lossFunctionType = type;
+}

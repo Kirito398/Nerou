@@ -44,3 +44,11 @@ int ConvolutionModel::getType() {
 void ConvolutionModel::setType(int type) {
     this->type = type;
 }
+
+int ConvolutionModel::getActivateFunctionType() {
+    return activateFunctionType;
+}
+
+void ConvolutionModel::setActivateFunctionType(int type) {
+    activateFunctionType = type;
+}
