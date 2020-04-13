@@ -27,6 +27,7 @@ private:
 private:
     SinapsPresentorListener *view;
     double value;
+    double input;
     double weight;
     double delta;
     double grad;

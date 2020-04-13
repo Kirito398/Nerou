@@ -34,7 +34,7 @@ void CoreInteractor::init() {
 void CoreInteractor::updateSinaps(double learningRange, double alpha) {
     for (unsigned int i = 0; i < coreSize; i++)
         for (unsigned int j = 0; j < coreSize; j++)
-            weight[i][j] += grad[i][j] * learningRange;
+            weight[i][j] += -grad[i][j] * learningRange;
 
     grad.clear();
     for (unsigned int i = 0; i < coreSize; i++)

@@ -243,8 +243,8 @@ void DataInteractor::calculateDelta()  {
 
         delta = inputSignal[i] - currentMark[i];
 
-        if (activateFunctionType == Softmax)
-            delta *= reSoftmaxFunction(inputSignal[i]);
+//        if (activateFunctionType == Softmax)
+//            delta *= reSoftmaxFunction(inputSignal[i]);
 
         currentDelta.push_back(delta);
     }
