@@ -12,7 +12,7 @@ WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener
 }
 
 void WeightInteractor::init() {
-    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
         weight = 1.0;
     else
         weight = random();
@@ -40,7 +40,7 @@ void WeightInteractor::setWeight(double weight) {
 
 void WeightInteractor::updateSinaps(double learningRange, double alpha) {
     //weight += deltaWeight;
-    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
         return;
 
     double deltaWeight = -grad * learningRange + alpha * prevDeltaWeight;
