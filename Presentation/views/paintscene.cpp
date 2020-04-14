@@ -532,7 +532,7 @@ void PaintScene::setPropertiesLayout(QBoxLayout *layout) {
 
 void PaintScene::updatePropertiesBox() {
     if (parametersDialog == nullptr)
-        parametersDialog = new ParametersDialog();
+        parametersDialog = new ParametersDialog(interactor);
 
     properties->setLayout(parametersDialog->getMainLayout());
 }
