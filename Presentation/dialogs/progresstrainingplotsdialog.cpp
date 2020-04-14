@@ -64,7 +64,7 @@ void ProgressTrainingPlotsDialog::initAccuracyChart() {
 
     accuracyAxisY = new QValueAxis();
     accuracyAxisY->setTitleText(tr("Accuracy"));
-    accuracyAxisY->setRange(0, yStep);
+    accuracyAxisY->setRange(0, 1.0);
 
     accuracySeries = new QLineSeries(this);
     accuracySeries->setName(tr("Accuracy"));

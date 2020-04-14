@@ -12,10 +12,12 @@ WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener
 }
 
 void WeightInteractor::init() {
-    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
         weight = 1.0;
     else
         weight = random();
+
+    input = 0;
     value = 0;
     delta = 0;
     grad = 0;
@@ -38,10 +40,10 @@ void WeightInteractor::setWeight(double weight) {
 
 void WeightInteractor::updateSinaps(double learningRange, double alpha) {
     //weight += deltaWeight;
-    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
         return;
 
-    double deltaWeight = grad * learningRange + alpha * prevDeltaWeight;
+    double deltaWeight = -grad * learningRange + alpha * prevDeltaWeight;
     weight += deltaWeight;
     prevDeltaWeight = deltaWeight;
     grad = 0;
@@ -51,7 +53,8 @@ void WeightInteractor::sendSignal(double signal) {
     if (view != nullptr)
         view->setActive(true);
 
-    value = signal * weight;
+    input = signal;
+    value = input * weight;
     outputListener->onInputSignalChanged();
 
     if (view != nullptr)
@@ -63,7 +66,7 @@ void WeightInteractor::sendDelta(double delta) {
     //double a = 0;
     //deltaWeight += learningRange * grad + a * this->delta;
 
-    double grad = value * delta;
+    double grad = input * delta;
     this->grad += grad;
     this->delta = delta;
 

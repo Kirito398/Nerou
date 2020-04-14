@@ -45,7 +45,7 @@ void MainInteractor::run() {
     unsigned long classNumber = dataList.at(0)->getClassNumber();
     unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long neuronNumber = dataList.size();
-    unsigned long epohNumber = 15;
+    unsigned long epohNumber = 30;
 
     view->onTrainingStarted(iterationNumber, epohNumber);
 
@@ -71,7 +71,6 @@ void MainInteractor::run() {
 
                     dataList.at(k)->start(i, j);
                     lossSum += dataList.at(k)->getLoss();
-                    //view->onErrorValueChanged(dataList.at(k)->getLoss());
 
                     if (dataList.at(k)->getAnswer() == i)
                         correctAnswerSumm++;
@@ -92,7 +91,7 @@ void MainInteractor::run() {
 
 void MainInteractor::updateSinaps() {
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps(0.05, 0);
+        sinaps->updateSinaps(0.005, 0);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
