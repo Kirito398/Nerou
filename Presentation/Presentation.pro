@@ -21,6 +21,7 @@ SOURCES += \
     dialogs/addoutputneuronsdialog.cpp \
     dialogs/dataaddtableitemdialog.cpp \
     dialogs/dataparametersdialog.cpp \
+    dialogs/parametersdialog.cpp \
     dialogs/progresstrainingdialog.cpp \
     dialogs/progresstrainingplotsdialog.cpp \
     main.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     dialogs/addoutputneuronsdialog.h \
     dialogs/dataaddtableitemdialog.h \
     dialogs/dataparametersdialog.h \
+    dialogs/parametersdialog.h \
     dialogs/progresstrainingdialog.h \
     dialogs/progresstrainingplotsdialog.h \
     interfaces/PaintSceneInterface.h \

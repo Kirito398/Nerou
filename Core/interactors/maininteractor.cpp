@@ -21,6 +21,9 @@ MainInteractor::MainInteractor(RepositoryInterface *repository)
     this->repository = repository;
     repository->setInteractor(this);
     createdItemsCounter = 0;
+    epohNumber = 30;
+    learningRange = 0.3;
+    alpha = 0.0;
 
     clearProcessParameters();
 }
@@ -45,7 +48,6 @@ void MainInteractor::run() {
     unsigned long classNumber = dataList.at(0)->getClassNumber();
     unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long neuronNumber = dataList.size();
-    unsigned long epohNumber = 50;
 
     view->onTrainingStarted(iterationNumber, epohNumber);
 
@@ -54,7 +56,7 @@ void MainInteractor::run() {
 
         for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
             view->onIterationChanged(j + 1);
-            double correctAnswerSumm = 0.0;
+            double correctAnswerSum = 0.0;
             double lossSum = 0;
 
             for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
@@ -73,13 +75,13 @@ void MainInteractor::run() {
                     lossSum += dataList.at(k)->getLoss();
 
                     if (dataList.at(k)->getAnswer() == i)
-                        correctAnswerSumm++;
+                        correctAnswerSum++;
                 }
 
                 updateSinaps();
             }
 
-            view->onAccuracyChanged(correctAnswerSumm / classNumber);
+            view->onAccuracyChanged(correctAnswerSum / classNumber);
             view->onErrorValueChanged(lossSum / classNumber);
         }
     }
@@ -91,7 +93,7 @@ void MainInteractor::run() {
 
 void MainInteractor::updateSinaps() {
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps(0.009, 0);
+        sinaps->updateSinaps(learningRange, alpha);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
@@ -317,6 +319,30 @@ std::vector<unsigned long> MainInteractor::getOutputsNeuronsList() {
             outputsNeuronsList.push_back(neuron->getID());
 
     return outputsNeuronsList;
+}
+
+unsigned long MainInteractor::getEpohNumber() {
+    return epohNumber;
+}
+
+void MainInteractor::setEpohNumber(unsigned long value) {
+    epohNumber = value;
+}
+
+double MainInteractor::getLearningRange() {
+    return learningRange;
+}
+
+void MainInteractor::setLearningRange(double value) {
+    learningRange = value;
+}
+
+double MainInteractor::getAlpha() {
+    return alpha;
+}
+
+void MainInteractor::setAlpha(double value) {
+    alpha = value;
 }
 
 void MainInteractor::stop() {

@@ -12,6 +12,7 @@ class SelectorItem;
 class MainInteractor;
 class QAction;
 class ProgressTrainingDialog;
+class ParametersDialog;
 class ArrowInteractorListener;
 class QBoxLayout;
 class QGroupBox;
@@ -48,6 +49,7 @@ private:
     MovingView::ViewType viewType;
     ProgressTrainingDialog *progressDialog;
     QGroupBox *properties;
+    ParametersDialog *parametersDialog;
 
 private:
     void onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) override;
@@ -85,6 +87,7 @@ private:
     void onViewsModeRelease(QGraphicsSceneMouseEvent *event);
     void onArrowsModeRelease(QGraphicsSceneMouseEvent *event);
     void onSelectorModeRelease(QGraphicsSceneMouseEvent *event);
+    void updatePropertiesBox();
 };
 
 #endif // PAINTSCENE_H

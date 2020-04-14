@@ -4,7 +4,6 @@
 #include <QCoreApplication>
 #include <QFileDialog>
 #include <QBoxLayout>
-#include <QComboBox>
 #include <QGroupBox>
 
 #include "views/dataview.h"
@@ -17,14 +16,18 @@
 #include "interfaces/mainwindowinterface.h"
 #include "dialogs/addoutputneuronsdialog.h"
 #include "dialogs/progresstrainingdialog.h"
+#include "dialogs/parametersdialog.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance(new MainRepository());
     interactor->setView(this);
+
     line = nullptr;
     selector = nullptr;
     progressDialog = nullptr;
+    parametersDialog = nullptr;
+
     mode = PaintScene::Selector;
     viewType = MovingView::Perceptron;
 }
@@ -363,6 +366,8 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         break;
     }
 
+    updatePropertiesBox();
+
     selector = nullptr;
     line = nullptr;
 }
@@ -521,6 +526,15 @@ void PaintScene::setPropertiesLayout(QBoxLayout *layout) {
 
     layout->setStretch(0, 1);
     layout->setStretch(1, 3);
+
+    updatePropertiesBox();
+}
+
+void PaintScene::updatePropertiesBox() {
+    if (parametersDialog == nullptr)
+        parametersDialog = new ParametersDialog();
+
+    properties->setLayout(parametersDialog->getMainLayout());
 }
 
 QStringList PaintScene::getOutputsNeuronsList() {

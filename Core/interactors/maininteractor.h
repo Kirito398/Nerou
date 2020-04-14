@@ -32,6 +32,13 @@ public:
     void removeNeuron(unsigned long neuronID) override;
     void removeSinaps(unsigned long sinapsID) override;
     std::vector<unsigned long> getOutputsNeuronsList();
+    unsigned long getEpohNumber();
+    void setEpohNumber(unsigned long value);
+    double getLearningRange();
+    void setLearningRange(double value);
+    double getAlpha();
+    void setAlpha(double value);
+
     void save(std::string path);
     void load(std::string path);
     void run();
@@ -66,6 +73,8 @@ private:
     unsigned long createdItemsCounter;
     bool isStopped, isPaused, isDebug;
     unsigned long pausedClassNumber, pausedIterationNumber, pausedNeuronNumber;
+    unsigned long epohNumber;
+    double learningRange, alpha;
 };
 
 #endif // MAININTERACTOR_H
