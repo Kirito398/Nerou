@@ -13,6 +13,8 @@ class MainInteractor;
 class QAction;
 class ProgressTrainingDialog;
 class ArrowInteractorListener;
+class QBoxLayout;
+class QGroupBox;
 
 class PaintScene : public QGraphicsScene, public PaintSceneInterface, public MainPresentorListener
 {
@@ -35,6 +37,7 @@ public:
     void onLoadingActionClicked();
     void onSavingActionClicked();
     void setSelectedItemOutputsEnable(bool enable);
+    void setPropertiesLayout(QBoxLayout *layout);
 
 private:
     MainWindowInterface *view;
@@ -44,6 +47,7 @@ private:
     SelectorItem *selector;
     MovingView::ViewType viewType;
     ProgressTrainingDialog *progressDialog;
+    QGroupBox *properties;
 
 private:
     void onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) override;

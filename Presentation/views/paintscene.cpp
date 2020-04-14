@@ -3,6 +3,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QCoreApplication>
 #include <QFileDialog>
+#include <QBoxLayout>
+#include <QComboBox>
+#include <QGroupBox>
 
 #include "views/dataview.h"
 #include "views/arrowview.h"
@@ -36,7 +39,7 @@ void PaintScene::onTrainingStarted(unsigned int iterationCount, unsigned int epo
 
     QPointF position = view->getSceneTop();
     progressDialog->setGeometry(position.x() + 50, position.y() + 95, progressDialog->width(), progressDialog->height());
-    progressDialog->show();
+    progressDialog->onTrainingStarted();
 }
 
 void PaintScene::onEpohChanged(unsigned int currentEpoh) {
@@ -502,6 +505,22 @@ void PaintScene::setSelectedItemOutputsEnable(bool enable) {
 
 void PaintScene::setView(MainWindowInterface *interfaces) {
     view = interfaces;
+}
+
+void PaintScene::setPropertiesLayout(QBoxLayout *layout) {
+    if (progressDialog == nullptr)
+        progressDialog = new ProgressTrainingDialog();
+
+    QGroupBox *progress = new QGroupBox(tr("Progress"));
+    progress->setLayout(progressDialog->getMainLayout());
+
+    properties = new QGroupBox(tr("Properties"));
+
+    layout->addWidget(progress);
+    layout->addWidget(properties);
+
+    layout->setStretch(0, 1);
+    layout->setStretch(1, 3);
 }
 
 QStringList PaintScene::getOutputsNeuronsList() {

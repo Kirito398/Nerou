@@ -4,6 +4,7 @@
 #include <QDialog>
 
 class QBoxLayout;
+class QVBoxLayout;
 class QLabel;
 class QProgressBar;
 class QToolButton;
@@ -23,6 +24,8 @@ public:
     void setCurrentError(double value);
     void setCurrentAccuracy(double value);
     void onTrainingFinished();
+    QVBoxLayout *getMainLayout();
+    void onTrainingStarted();
 
 private:
     void initTimer();
@@ -35,7 +38,7 @@ private:
 private:
     QProgressBar *totalProgressBar;
     QTimer *timer;
-    QBoxLayout *layout;
+    QVBoxLayout *layout;
     QLabel *lTime, *lEpoh, *lIteration, *lError, *lAccuracy;
     QToolButton *tbPlots;
     ProgressTrainingPlotsDialog *plotsDialog;
