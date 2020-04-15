@@ -286,6 +286,8 @@ unsigned int DataInteractor::getAnswer() {
     for (unsigned int i = 0; i < classList.size(); i++)
         if (classList[i].getNeuronID() == answerNeuronID)
             return i;
+
+    return classList.size();
 }
 
 unsigned int DataInteractor::getMaxIndex(std::vector<double> value) {
@@ -346,6 +348,30 @@ void DataInteractor::sendDelta() {
             weight->sendDelta(currentDelta[i]);
         }
     }
+}
+
+void DataInteractor::setColorModeEnable(bool enable) {
+    isColorMode = enable;
+}
+
+bool DataInteractor::getColorModeEnable() {
+    return isColorMode;
+}
+
+void DataInteractor::setActivateFunctionType(int type) {
+    activateFunctionType = ActivateFunctionType(type);
+}
+
+int DataInteractor::getActivateFunctiontype() {
+    return activateFunctionType;
+}
+
+void DataInteractor::setLossFunctionType(LossFunctionType type) {
+    lossFunctionType = type;
+}
+
+LossFunctionType DataInteractor::getLossFunctionType() {
+    return lossFunctionType;
 }
 
 void DataInteractor::onDeltaValueChanged() {

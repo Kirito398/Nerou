@@ -19,6 +19,8 @@ ParametersDialog::ParametersDialog(MainInteractor* interactor)
     initEnableMomentLayer();
     initAlphaLayer();
     updateParameters();
+
+    setLayout(layout);
 }
 
 void ParametersDialog::updateParameters() {
