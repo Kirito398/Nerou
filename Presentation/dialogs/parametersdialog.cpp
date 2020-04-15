@@ -41,7 +41,7 @@ void ParametersDialog::initEpohLayer() {
     QLabel *lEpohNumberTitle = new QLabel(tr("Epoh number: "));
 
     leEpohNumber = new QLineEdit();
-    connect(leEpohNumber, SIGNAL(editingFinished()), this, SLOT(onEpohNumberChanged()));
+    connect(leEpohNumber, &QLineEdit::editingFinished, this, &ParametersDialog::onEpohNumberChanged);
 
     epohLayout->addWidget(lEpohNumberTitle);
     epohLayout->addWidget(leEpohNumber);
@@ -57,7 +57,7 @@ void ParametersDialog::initLearningRangeLayer() {
     QLabel *lLearningRangeTitle = new QLabel(tr("Learning range: "));
 
     leLearningRange = new QLineEdit();
-    connect(leLearningRange, SIGNAL(editingFinished()), this, SLOT(onLearningRangeChanged()));
+    connect(leLearningRange, &QLineEdit::editingFinished, this, &ParametersDialog::onLearningRangeChanged);
 
     learningRangeLayout->addWidget(lLearningRangeTitle);
     learningRangeLayout->addWidget(leLearningRange);
@@ -74,7 +74,8 @@ void ParametersDialog::initAlphaLayer() {
 
     leAlpha = new QLineEdit();
     leAlpha->setEnabled(false);
-    connect(leAlpha, SIGNAL(editingFinished()), this, SLOT(onAlphaChanged()));
+    connect(leAlpha, &QLineEdit::editingFinished, this, &ParametersDialog::onAlphaChanged);
+
 
     alphaLayout->addWidget(lAlphaTitle);
     alphaLayout->addWidget(leAlpha);
@@ -90,7 +91,7 @@ void ParametersDialog::initEnableMomentLayer() {
     QLabel *lMomentTitle = new QLabel(tr("Use moment: "));
 
     cbMoment = new QCheckBox();
-    connect(cbMoment, SIGNAL(stateChanged(int)), this, SLOT(onMomentEnableChanged()));
+    connect(cbMoment, &QCheckBox::stateChanged, this, &ParametersDialog::onMomentEnableChanged);
 
     momentLayout->addWidget(lMomentTitle);
     momentLayout->addWidget(cbMoment);
@@ -116,7 +117,7 @@ void ParametersDialog::onLearningRangeChanged() {
     if (value.isEmpty())
         return;
 
-    interactor->setLearningRange(value.toULong());
+    interactor->setLearningRange(value.toDouble());
 }
 
 void ParametersDialog::onAlphaChanged() {
@@ -125,9 +126,16 @@ void ParametersDialog::onAlphaChanged() {
     if (value.isEmpty())
         return;
 
-    interactor->setAlpha(value.toULong());
+    interactor->setAlpha(value.toDouble());
 }
 
 void ParametersDialog::onMomentEnableChanged() {
-    leAlpha->setEnabled(cbMoment->isEnabled());
+    bool isChecked = cbMoment->isChecked();
+
+    leAlpha->setEnabled(isChecked);
+
+    if (!isChecked) {
+        leAlpha->setText(QString::number(0.0));
+        onAlphaChanged();
+    }
 }
