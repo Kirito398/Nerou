@@ -5,7 +5,7 @@
 #include <QDialog>
 
 #include "presenters/datapresentor.h"
-#include "dialogs/dataparametersdialog.h"
+#include "dialogs/datasetsdialog.h"
 
 DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingView(Data, parent)
 {
@@ -24,7 +24,7 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
 
     brushColor = QColor(115, 255, 227);
 
-    parametersDialog = nullptr;
+    setsDialog = nullptr;
 }
 
 void DataView::updatePosition(double x, double y) {
@@ -86,24 +86,24 @@ void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event)
 
-    if (parametersDialog == nullptr) {
-        parametersDialog = new DataParametersDialog(this, presentor);
-        connect(parametersDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
-        connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
+    if (setsDialog == nullptr) {
+        setsDialog = new DataSetsDialog(this, presentor);
+        connect(setsDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
+        connect(setsDialog, &DataSetsDialog::onApplied, this, &DataView::onParametersUpdated);
     }
 
 
     QStringList trainingList, testingList, neuronsIDs;
     presentor->getParameters(&trainingList, &testingList, &neuronsIDs);
 
-    parametersDialog->updateParameters(trainingList, testingList, neuronsIDs);
-    parametersDialog->show();
+    setsDialog->updateParameters(trainingList, testingList, neuronsIDs);
+    setsDialog->show();
 }
 
 void DataView::onParametersUpdated() {
     QStringList trainingList, testingList, neuronsIDs;
 
-    parametersDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
+    setsDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
     presentor->updateParameters(trainingList, testingList, neuronsIDs);
 }
 

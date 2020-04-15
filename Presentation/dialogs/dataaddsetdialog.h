@@ -1,5 +1,5 @@
-#ifndef DATAADDTABLEITEMDIALOG_H
-#define DATAADDTABLEITEMDIALOG_H
+#ifndef DATAADDSETDIALOG_H
+#define DATAADDSETDIALOG_H
 
 #include <QDialog>
 
@@ -10,11 +10,11 @@ class QBoxLayout;
 class QComboBox;
 class RepositoryInterface;
 
-class DataAddTableItemDialog : public QDialog
+class DataAddSetDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DataAddTableItemDialog(RepositoryInterface *repository, QWidget *parent = nullptr);
+    DataAddSetDialog(RepositoryInterface *repository, QWidget *parent = nullptr);
     QString getTrainingSetPath();
     QString getTestingSetPath();
     QString getNeuronID();
@@ -54,4 +54,4 @@ signals:
     void onApplied();
 };
 
-#endif // DATAADDTABLEITEMDIALOG_H
+#endif // DATAADDSETDIALOG_H

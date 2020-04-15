@@ -1,4 +1,4 @@
-#include "dataaddtableitemdialog.h"
+#include "dataaddsetdialog.h"
 
 #include <QLabel>
 #include <QLineEdit>
@@ -10,7 +10,7 @@
 
 #include "interfaces/repositoryinterface.h"
 
-DataAddTableItemDialog::DataAddTableItemDialog(RepositoryInterface *repository, QWidget *parent) : QDialog(parent)
+DataAddSetDialog::DataAddSetDialog(RepositoryInterface *repository, QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Add new set"));
     setFixedSize(QSize(350, 250));
@@ -33,12 +33,12 @@ DataAddTableItemDialog::DataAddTableItemDialog(RepositoryInterface *repository, 
     setLayout(layout);
 }
 
-void DataAddTableItemDialog::onAccept() {
+void DataAddSetDialog::onAccept() {
     if (onAddButtonClicked())
         emit QDialog::accept();
 }
 
-bool DataAddTableItemDialog::onAddButtonClicked() {
+bool DataAddSetDialog::onAddButtonClicked() {
     QString trainingPath = trainingSetPath->text();
     QString testingPath = testingSetPath->text();
 
@@ -83,7 +83,7 @@ bool DataAddTableItemDialog::onAddButtonClicked() {
     return true;
 }
 
-QStringList DataAddTableItemDialog::getPaths(QString mainPath) {
+QStringList DataAddSetDialog::getPaths(QString mainPath) {
     QStringList list;
 
     if (mainPath.isEmpty())
@@ -97,7 +97,7 @@ QStringList DataAddTableItemDialog::getPaths(QString mainPath) {
     return list;
 }
 
-bool DataAddTableItemDialog::testImageSize(QStringList listPath) {
+bool DataAddSetDialog::testImageSize(QStringList listPath) {
     if (listPath.isEmpty())
         return true;
 
@@ -120,7 +120,7 @@ bool DataAddTableItemDialog::testImageSize(QStringList listPath) {
     return true;
 }
 
-void DataAddTableItemDialog::onTrainingSetBrowseClicked() {
+void DataAddSetDialog::onTrainingSetBrowseClicked() {
     QFileDialog dialog(this);
     dialog.setOptions(QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog);
     QString path = dialog.getExistingDirectory(this, tr("Set folder"), QDir::currentPath());
@@ -136,7 +136,7 @@ void DataAddTableItemDialog::onTrainingSetBrowseClicked() {
     trainingSetPath->setText(path);
 }
 
-void DataAddTableItemDialog::onTestingSetBrowseClicked() {
+void DataAddSetDialog::onTestingSetBrowseClicked() {
     QString path = QFileDialog::getExistingDirectory(this, tr("Set folder"), QDir::currentPath());
 
     if (defaultImageSize != nullptr) {
@@ -150,15 +150,15 @@ void DataAddTableItemDialog::onTestingSetBrowseClicked() {
     testingSetPath->setText(path);
 }
 
-void DataAddTableItemDialog::initControllButtons() {
+void DataAddSetDialog::initControllButtons() {
     QBoxLayout *buttonsLayout = new QHBoxLayout();
 
     QPushButton *pbOk = new QPushButton(tr("OK"));
-    connect(pbOk, &QPushButton::clicked, this, &DataAddTableItemDialog::onAccept);
+    connect(pbOk, &QPushButton::clicked, this, &DataAddSetDialog::onAccept);
     buttonsLayout->addWidget(pbOk);
 
     QPushButton *pbApply = new QPushButton(tr("Add"));
-    connect(pbApply, &QPushButton::clicked, this, &DataAddTableItemDialog::onAddButtonClicked);
+    connect(pbApply, &QPushButton::clicked, this, &DataAddSetDialog::onAddButtonClicked);
     buttonsLayout->addWidget(pbApply);
 
     QPushButton *pbCancel = new QPushButton(tr("Cancel"));
@@ -168,13 +168,13 @@ void DataAddTableItemDialog::initControllButtons() {
     layout->addLayout(buttonsLayout);
 }
 
-void DataAddTableItemDialog::initTrainingLayout() {
+void DataAddSetDialog::initTrainingLayout() {
     trainingSetTitle = new QLabel(tr("Training class set:"));
     trainingSetPath = new QLineEdit("");
     trainingSetPathErrors = new QLabel();
     trainingSetPathErrors->setStyleSheet("QLabel {color : red;}");
     pbBrowseTrainingPath = new QPushButton(tr("Browse"));
-    connect(pbBrowseTrainingPath, &QPushButton::clicked, this, &DataAddTableItemDialog::onTrainingSetBrowseClicked);
+    connect(pbBrowseTrainingPath, &QPushButton::clicked, this, &DataAddSetDialog::onTrainingSetBrowseClicked);
 
     QBoxLayout *trainingLayout = new QVBoxLayout();
     trainingLayout->addWidget(trainingSetTitle);
@@ -188,13 +188,13 @@ void DataAddTableItemDialog::initTrainingLayout() {
     layout->addLayout(trainingLayout);
 }
 
-void DataAddTableItemDialog::initTestingLayout() {
+void DataAddSetDialog::initTestingLayout() {
     testingSetTitle = new QLabel(tr("Testing class set:"));
     testingSetPath = new QLineEdit("");
     testingSetPathErrors = new QLabel();
     testingSetPathErrors->setStyleSheet("QLabel {color : red;}");
     pbBrowseTestingPath = new QPushButton(tr("Browse"));
-    connect(pbBrowseTestingPath, &QPushButton::clicked, this, &DataAddTableItemDialog::onTestingSetBrowseClicked);
+    connect(pbBrowseTestingPath, &QPushButton::clicked, this, &DataAddSetDialog::onTestingSetBrowseClicked);
 
     QBoxLayout *testingLayout = new QVBoxLayout();
     testingLayout->addWidget(testingSetTitle);
@@ -208,7 +208,7 @@ void DataAddTableItemDialog::initTestingLayout() {
     layout->addLayout(testingLayout);
 }
 
-void DataAddTableItemDialog::setOutputsNeuronsList(QStringList list) {
+void DataAddSetDialog::setOutputsNeuronsList(QStringList list) {
     QString currentItem = neuronsComboBox->itemText(neuronsComboBox->currentIndex());
 
     neuronsList.clear();
@@ -221,18 +221,18 @@ void DataAddTableItemDialog::setOutputsNeuronsList(QStringList list) {
         neuronsComboBox->setCurrentIndex(neuronsComboBox->findText(currentItem));
 }
 
-QSize *DataAddTableItemDialog::getDefaultImageSize() {
+QSize *DataAddSetDialog::getDefaultImageSize() {
     return defaultImageSize;
 }
 
-QString DataAddTableItemDialog::getTrainingSetPath() {
+QString DataAddSetDialog::getTrainingSetPath() {
     return trainingSetPath->text();
 }
 
-QString DataAddTableItemDialog::getTestingSetPath() {
+QString DataAddSetDialog::getTestingSetPath() {
     return testingSetPath->text();
 }
 
-QString DataAddTableItemDialog::getNeuronID() {
+QString DataAddSetDialog::getNeuronID() {
     return neuronsComboBox->itemText(neuronsComboBox->currentIndex());
 }

@@ -1,4 +1,4 @@
-#include "dataparametersdialog.h"
+#include "datasetsdialog.h"
 
 #include <QBoxLayout>
 #include <QPushButton>
@@ -7,12 +7,12 @@
 #include <QApplication>
 #include <QDir>
 
-#include "dialogs/dataaddtableitemdialog.h"
+#include "dialogs/dataaddsetdialog.h"
 #include "listeners/dataviewlistener.h"
 #include "presenters/datapresentor.h"
 #include "interfaces/repositoryinterface.h"
 
-DataParametersDialog::DataParametersDialog(DataViewListener *view, DataPresentor *presentor, QWidget *parent) : QDialog(parent)
+DataSetsDialog::DataSetsDialog(DataViewListener *view, DataPresentor *presentor, QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Data block parameters"));
     resize(QSize(600, 350));
@@ -30,14 +30,14 @@ DataParametersDialog::DataParametersDialog(DataViewListener *view, DataPresentor
     setLayout(layout);
 }
 
-void DataParametersDialog::enterEvent(QEvent *event) {
+void DataSetsDialog::enterEvent(QEvent *event) {
     QDialog::enterEvent(event);
     updateOutputsNeuronsList();
 }
 
-void DataParametersDialog::add() {
+void DataSetsDialog::add() {
     if (dialog == nullptr) {
-        dialog = new DataAddTableItemDialog(presentor->getRepository(), this);
+        dialog = new DataAddSetDialog(presentor->getRepository(), this);
         connect(dialog, SIGNAL(onApplied()), this, SLOT(addNewSet()));
     }
 
@@ -45,7 +45,7 @@ void DataParametersDialog::add() {
     dialog->show();
 }
 
-void DataParametersDialog::updateOutputsNeuronsList() {
+void DataSetsDialog::updateOutputsNeuronsList() {
     if (dialog == nullptr)
         return;
 
@@ -60,7 +60,7 @@ void DataParametersDialog::updateOutputsNeuronsList() {
     dialog->setOutputsNeuronsList(list);
 }
 
-void DataParametersDialog::addNewSet() {
+void DataSetsDialog::addNewSet() {
     QString trainingSetPath = dialog->getTrainingSetPath();
     QString testingSetPath = dialog->getTestingSetPath();
     QString neuronID = dialog->getNeuronID();
@@ -74,7 +74,7 @@ void DataParametersDialog::addNewSet() {
     addNewSet(trainingSetPath, testingSetPath, neuronID);
 }
 
-void DataParametersDialog::addNewSet(QString trainingSetPath, QString testingSetPath, QString neuronID) {
+void DataSetsDialog::addNewSet(QString trainingSetPath, QString testingSetPath, QString neuronID) {
     int i = table->rowCount();
     table->insertRow(i);
 
@@ -90,19 +90,19 @@ void DataParametersDialog::addNewSet(QString trainingSetPath, QString testingSet
     updateOutputsNeuronsList();
 }
 
-void DataParametersDialog::accept() {
+void DataSetsDialog::accept() {
     if (checkImageSize()) {
         emit onApplied();
         QDialog::accept();
     }
 }
 
-void DataParametersDialog::applied() {
+void DataSetsDialog::applied() {
     if (checkImageSize())
         emit onApplied();
 }
 
-bool DataParametersDialog::checkImageSize() {
+bool DataSetsDialog::checkImageSize() {
     int n = table->rowCount();
     defaultSize = nullptr;
 
@@ -123,7 +123,7 @@ bool DataParametersDialog::checkImageSize() {
     return true;
 }
 
-QStringList DataParametersDialog::getPaths(QString mainPath) {
+QStringList DataSetsDialog::getPaths(QString mainPath) {
     QStringList list;
 
     if (mainPath.isEmpty())
@@ -137,18 +137,18 @@ QStringList DataParametersDialog::getPaths(QString mainPath) {
     return list;
 }
 
-void DataParametersDialog::remove() {
+void DataSetsDialog::remove() {
     table->model()->removeRow(table->selectionModel()->currentIndex().row());
     updateOutputsNeuronsList();
 }
 
-QSize DataParametersDialog::getImageSize() {
+QSize DataSetsDialog::getImageSize() {
     if (defaultSize != nullptr)
         return QSize(*defaultSize);
     else return QSize(0, 0);
 }
 
-void DataParametersDialog::getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs) {
+void DataSetsDialog::getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs) {
     int n = table->rowCount();
 
     for (int i = 0; i < n; i++) {
@@ -158,7 +158,7 @@ void DataParametersDialog::getParameters(QStringList *trainingList, QStringList 
     }
 }
 
-void DataParametersDialog::updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronIDs) {
+void DataSetsDialog::updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronIDs) {
     if (table == nullptr)
         return;
 
@@ -169,21 +169,21 @@ void DataParametersDialog::updateParameters(QStringList trainingList, QStringLis
         addNewSet(trainingList[i], testingList[i], neuronIDs[i]);
 }
 
-void DataParametersDialog::initControllButtons() {
+void DataSetsDialog::initControllButtons() {
     QBoxLayout *tableControllButtonsLayout = new QHBoxLayout();
 
     QPushButton *pbAdd = new QPushButton(tr("Add"));
-    connect(pbAdd, &QPushButton::clicked, this, &DataParametersDialog::add);
+    connect(pbAdd, &QPushButton::clicked, this, &DataSetsDialog::add);
     tableControllButtonsLayout->addWidget(pbAdd);
 
     QPushButton *pbRemove = new QPushButton(tr("Remove"));
-    connect(pbRemove, &QPushButton::clicked, this, &DataParametersDialog::remove);
+    connect(pbRemove, &QPushButton::clicked, this, &DataSetsDialog::remove);
     tableControllButtonsLayout->addWidget(pbRemove);
 
     layout->addLayout(tableControllButtonsLayout);
 }
 
-void DataParametersDialog::initTable() {
+void DataSetsDialog::initTable() {
     table = new QTableWidget();
     table->setColumnCount(3);
 
@@ -198,15 +198,15 @@ void DataParametersDialog::initTable() {
     layout->addWidget(table);
 }
 
-void DataParametersDialog::initButtons() {
+void DataSetsDialog::initButtons() {
     QBoxLayout *buttonsLayout = new QHBoxLayout();
 
     QPushButton *pbOk = new QPushButton(tr("OK"));
-    connect(pbOk, &QPushButton::clicked, this, &DataParametersDialog::accept);
+    connect(pbOk, &QPushButton::clicked, this, &DataSetsDialog::accept);
     buttonsLayout->addWidget(pbOk);
 
     QPushButton *pbApply = new QPushButton(tr("Apply"));
-    connect(pbApply, &QPushButton::clicked, this, &DataParametersDialog::applied);
+    connect(pbApply, &QPushButton::clicked, this, &DataSetsDialog::applied);
     buttonsLayout->addWidget(pbApply);
 
     QPushButton *pbCancel = new QPushButton(tr("Cancel"));

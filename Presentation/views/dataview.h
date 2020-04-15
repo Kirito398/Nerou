@@ -6,7 +6,7 @@
 
 class DataPresentor;
 class DataInteractorListener;
-class DataParametersDialog;
+class DataSetsDialog;
 
 class DataView : public MovingView, public DataViewListener
 {
@@ -32,7 +32,7 @@ private:
     DataPresentor *presentor;
     QImage image;
     QRectF bounding, imageBounding;
-    DataParametersDialog *parametersDialog;
+    DataSetsDialog *setsDialog;
     QColor brushColor;
 
 private slots:

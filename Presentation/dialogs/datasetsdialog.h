@@ -1,20 +1,20 @@
-#ifndef DATAPARAMETERSDIALOG_H
-#define DATAPARAMETERSDIALOG_H
+#ifndef DATASETSDIALOG_H
+#define DATASETSDIALOG_H
 
 #include <QDialog>
 
 class QBoxLayout;
 class QTableWidget;
-class DataAddTableItemDialog;
+class DataAddSetDialog;
 class DataViewListener;
 class QSize;
 class DataPresentor;
 
-class DataParametersDialog : public QDialog
+class DataSetsDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DataParametersDialog(DataViewListener *view, DataPresentor *presentor, QWidget *parent = nullptr);
+    DataSetsDialog(DataViewListener *view, DataPresentor *presentor, QWidget *parent = nullptr);
     void initControllButtons();
     void initTable();
     void initButtons();
@@ -33,7 +33,7 @@ private:
     QSize *defaultSize;
     DataViewListener *view;
     DataPresentor *presentor;
-    DataAddTableItemDialog *dialog;
+    DataAddSetDialog *dialog;
     QBoxLayout *layout;
     QTableWidget *table;
 
@@ -48,4 +48,4 @@ signals:
     void onApplied();
 };
 
-#endif // DATAPARAMETERSDIALOG_H
+#endif // DATASETSDIALOG_H

@@ -19,8 +19,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     dialogs/addoutputneuronsdialog.cpp \
-    dialogs/dataaddtableitemdialog.cpp \
-    dialogs/dataparametersdialog.cpp \
+    dialogs/dataaddsetdialog.cpp \
+    dialogs/datasetsdialog.cpp \
     dialogs/parametersdialog.cpp \
     dialogs/progresstrainingdialog.cpp \
     dialogs/progresstrainingplotsdialog.cpp \
@@ -41,8 +41,8 @@ SOURCES += \
 
 HEADERS += \
     dialogs/addoutputneuronsdialog.h \
-    dialogs/dataaddtableitemdialog.h \
-    dialogs/dataparametersdialog.h \
+    dialogs/dataaddsetdialog.h \
+    dialogs/datasetsdialog.h \
     dialogs/parametersdialog.h \
     dialogs/progresstrainingdialog.h \
     dialogs/progresstrainingplotsdialog.h \
