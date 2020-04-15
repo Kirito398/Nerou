@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QGroupBox>
 
 #include "interactors/maininteractor.h"
 
@@ -11,6 +12,14 @@ ParametersDialog::ParametersDialog(MainInteractor* interactor)
 {
     this->interactor = interactor;
 
+    layout = nullptr;
+
+    initLayout();
+
+    setLayout(layout);
+}
+
+void ParametersDialog::initLayout() {
     layout = new QVBoxLayout();
     layout->setAlignment(Qt::AlignTop);
 
@@ -19,8 +28,6 @@ ParametersDialog::ParametersDialog(MainInteractor* interactor)
     initEnableMomentLayer();
     initAlphaLayer();
     updateParameters();
-
-    setLayout(layout);
 }
 
 void ParametersDialog::updateParameters() {
@@ -29,12 +36,13 @@ void ParametersDialog::updateParameters() {
 
     double alpha = interactor->getAlpha();
     if (alpha > 0.0)
-        cbMoment->setEnabled(true);
+        cbMoment->setChecked(true);
 
     leAlpha->setText(QString::number(alpha));
 }
 
 QBoxLayout *ParametersDialog::getMainLayout() {
+    initLayout();
     return layout;
 }
 

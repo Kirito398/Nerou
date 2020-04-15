@@ -11,6 +11,11 @@ DataParametersDialog::DataParametersDialog(DataPresentor *presenter)
 {
     this->presenter = presenter;
 
+    layout = nullptr;
+    initLayer();
+}
+
+void DataParametersDialog::initLayer() {
     layout = new QVBoxLayout();
     layout->setAlignment(Qt::AlignTop);
 
@@ -18,12 +23,15 @@ DataParametersDialog::DataParametersDialog(DataPresentor *presenter)
     initLossFunctionTypeLayer();
     initUseColorLayer();
     updateParameters();
+}
 
-    setLayout(layout);
+QBoxLayout *DataParametersDialog::getMainLayout() {
+    initLayer();
+    return layout;
 }
 
 void DataParametersDialog::updateParameters() {
-    cbUseColor->setCheckable(presenter->getUseColorModeEnable());
+    cbUseColor->setChecked(presenter->getUseColorModeEnable());
 }
 
 void DataParametersDialog::initUseColorLayer() {
@@ -50,7 +58,7 @@ void DataParametersDialog::initActivateFunctionTypeLayer() {
     connect(cbActivateFunctionType, SIGNAL(currentIndexChanged(int)), this, SLOT(onActivateFunctionTypeChanged()));
 
     layout->addWidget(lTitle);
-    layout->addWidget(cbUseColor);
+    layout->addWidget(cbActivateFunctionType);
 
     layout->setStretch(0, 2);
     layout->setStretch(1, 1);
@@ -66,7 +74,7 @@ void DataParametersDialog::initLossFunctionTypeLayer() {
     connect(cbLossFunctionType, SIGNAL(currentIndexChanged(int)), this, SLOT(onLossFunctionTypeChanged()));
 
     layout->addWidget(lTitle);
-    layout->addWidget(cbUseColor);
+    layout->addWidget(cbLossFunctionType);
 
     layout->setStretch(0, 2);
     layout->setStretch(1, 1);

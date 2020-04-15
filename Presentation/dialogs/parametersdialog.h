@@ -17,6 +17,7 @@ public:
     void updateParameters();
 
 private:
+    void initLayout();
     void initEpohLayer();
     void initLearningRangeLayer();
     void initAlphaLayer();

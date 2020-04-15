@@ -7,6 +7,7 @@
 class DataPresentor;
 class DataInteractorListener;
 class DataSetsDialog;
+class DataParametersDialog;
 
 class DataView : public MovingView, public DataViewListener
 {
@@ -16,6 +17,7 @@ public:
     QPixmap getItemIcon() const override;
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;
+    QBoxLayout *getPropertiesLayout() override;
 
 private:
     QRectF boundingRect() const override;
@@ -33,7 +35,9 @@ private:
     QImage image;
     QRectF bounding, imageBounding;
     DataSetsDialog *setsDialog;
+    DataParametersDialog *parametersDialog;
     QColor brushColor;
+    QBoxLayout *propertiesBox;
 
 private slots:
     void onParametersUpdated();

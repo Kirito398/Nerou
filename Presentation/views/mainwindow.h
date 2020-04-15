@@ -70,6 +70,7 @@ private:
     void initToolBox();
     void initControlToolBar();
     QWidget *initPropertiesToolBar();
+    void updateWindow() override;
     //QWidget *createToolBoxItem(const QString &name,  MoveItem::ItemType type);
 
 private slots:

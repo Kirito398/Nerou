@@ -11,6 +11,7 @@ public:
     virtual void zoomIn() = 0;
     virtual void zoomOut() = 0;
     virtual QPointF getSceneTop() = 0;
+    virtual void updateWindow() = 0;
 };
 
 #endif // MAINWINDOWINTERFACE_H

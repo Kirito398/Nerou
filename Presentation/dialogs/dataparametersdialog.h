@@ -13,8 +13,10 @@ class DataParametersDialog : public QDialog
     Q_OBJECT
 public:
     DataParametersDialog(DataPresentor *presenter);
+    QBoxLayout *getMainLayout();
 
 private:
+    void initLayer();
     void updateParameters();
     void initUseColorLayer();
     void initActivateFunctionTypeLayer();

@@ -48,7 +48,8 @@ private:
     SelectorItem *selector;
     MovingView::ViewType viewType;
     ProgressTrainingDialog *progressDialog;
-    QGroupBox *properties;
+    QBoxLayout *propertiesLayout;
+    QGroupBox *propertiesBox;
     ParametersDialog *parametersDialog;
 
 private:

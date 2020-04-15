@@ -3,13 +3,18 @@
 #include <QPainter>
 #include <QThread>
 #include <QDialog>
+#include <QGroupBox>
+#include <QBoxLayout>
 
 #include "presenters/datapresentor.h"
 #include "dialogs/datasetsdialog.h"
+#include "dialogs/dataparametersdialog.h"
 
 DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingView(Data, parent)
 {
     makePolygon();
+
+    propertiesBox = nullptr;
 
     presentor = new DataPresentor();
     presentor->setView(this);
@@ -25,6 +30,7 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
     brushColor = QColor(115, 255, 227);
 
     setsDialog = nullptr;
+    parametersDialog = nullptr;
 }
 
 void DataView::updatePosition(double x, double y) {
@@ -98,6 +104,13 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
     setsDialog->updateParameters(trainingList, testingList, neuronsIDs);
     setsDialog->show();
+}
+
+QBoxLayout *DataView::getPropertiesLayout() {
+    if (parametersDialog == nullptr)
+        parametersDialog = new DataParametersDialog(presentor);
+
+    return parametersDialog->getMainLayout();
 }
 
 void DataView::onParametersUpdated() {

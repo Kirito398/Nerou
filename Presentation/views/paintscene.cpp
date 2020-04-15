@@ -27,6 +27,7 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     selector = nullptr;
     progressDialog = nullptr;
     parametersDialog = nullptr;
+    propertiesBox = nullptr;
 
     mode = PaintScene::Selector;
     viewType = MovingView::Perceptron;
@@ -513,28 +514,59 @@ void PaintScene::setView(MainWindowInterface *interfaces) {
 }
 
 void PaintScene::setPropertiesLayout(QBoxLayout *layout) {
+    propertiesLayout = layout;
+
     if (progressDialog == nullptr)
         progressDialog = new ProgressTrainingDialog();
 
     QGroupBox *progress = new QGroupBox(tr("Progress"));
     progress->setLayout(progressDialog->getMainLayout());
 
-    properties = new QGroupBox(tr("Properties"));
+    if (parametersDialog == nullptr)
+        parametersDialog = new ParametersDialog(interactor);
 
-    layout->addWidget(progress);
-    layout->addWidget(properties);
+    propertiesBox = new QGroupBox(tr("Properties"));
+    propertiesBox->setLayout(parametersDialog->getMainLayout());
 
-    layout->setStretch(0, 1);
-    layout->setStretch(1, 3);
+    propertiesLayout->insertWidget(0, progress);
+    propertiesLayout->insertWidget(1, propertiesBox);
 
     updatePropertiesBox();
 }
 
 void PaintScene::updatePropertiesBox() {
-    if (parametersDialog == nullptr)
-        parametersDialog = new ParametersDialog(interactor);
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    QList<MovingView *> inputsView;
+    QBoxLayout *layout = nullptr;
 
-    properties->setLayout(parametersDialog->getMainLayout());
+    for (auto item : selectedItems) {
+        MovingView *view = dynamic_cast<MovingView*>(item);
+        if (view == nullptr)
+            continue;
+
+        inputsView.append(view);
+    }
+
+    if (inputsView.isEmpty()) {
+        layout = parametersDialog->getMainLayout();
+    } else {
+        layout = dynamic_cast<DataView*>(inputsView.at(0))->getPropertiesLayout();
+    }
+
+    propertiesBox->hide();
+    delete propertiesBox->layout();
+    delete propertiesBox;
+
+    propertiesBox = new QGroupBox(tr("Properties"));
+    propertiesBox->setLayout(layout);
+
+    propertiesLayout->addWidget(propertiesBox);
+
+    propertiesLayout->setStretch(0, 1);
+    propertiesLayout->setStretch(1, 3);
+
+    propertiesLayout->update();
+    view->updateWindow();
 }
 
 QStringList PaintScene::getOutputsNeuronsList() {

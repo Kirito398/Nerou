@@ -363,6 +363,10 @@ void MainWindow::zoomOut() {
     view->update();
 }
 
+void MainWindow::updateWindow() {
+    update();
+}
+
 void MainWindow::onZoomSliderValueChanged() {
     qreal scale = qPow(qreal(2), (zoomSlider->value() - 250) / qreal(50));
 

@@ -8,6 +8,7 @@
 
 class PaintSceneInterface;
 class ArrowInterface;
+class QBoxLayout;
 
 class MovingView : public QObject, public QGraphicsItem, public MovingViewInterface
 {
@@ -26,6 +27,7 @@ public:
     virtual void setPosition(QPointF position) = 0;
     virtual QPixmap getItemIcon() const = 0;
     virtual bool isOutputNeuron() = 0;
+    virtual QBoxLayout *getPropertiesLayout();
 
 private:
     virtual void makePolygon() = 0;
