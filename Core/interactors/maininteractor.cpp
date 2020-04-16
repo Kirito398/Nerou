@@ -24,6 +24,7 @@ MainInteractor::MainInteractor(RepositoryInterface *repository)
     epohNumber = 30;
     learningRange = 0.3;
     alpha = 0.0;
+    currentProjectName = "Untitled";
 
     clearProcessParameters();
 }
@@ -384,10 +385,16 @@ void MainInteractor::save(std::string path) {
     }
 
     repository->save(path, dataModelList, perceptronModelList, convolutionModelList, weightModelList, coreModelList);
+
+    currentProjectName = path;
+    view->onProjectNameChanged(currentProjectName);
 }
 
 void MainInteractor::load(std::string path) {
     repository->load(path);
+
+    currentProjectName = path;
+    view->onProjectNameChanged(currentProjectName);
 }
 
 void MainInteractor::onProcessStopped() {
@@ -411,6 +418,10 @@ void MainInteractor::clearProcessParameters() {
     pausedClassNumber = 0;
     pausedIterationNumber = 0;
     pausedNeuronNumber = 0;
+}
+
+std::string MainInteractor::getCurrentProjectName() {
+    return currentProjectName;
 }
 
 NeuronInteractor *MainInteractor::findNeuron(unsigned long id) {

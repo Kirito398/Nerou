@@ -39,6 +39,7 @@ public:
     void onSavingActionClicked();
     void setSelectedItemOutputsEnable(bool enable);
     void setPropertiesLayout(QBoxLayout *layout);
+    QString getProjectName();
 
 private:
     MainWindowInterface *view;
@@ -75,6 +76,7 @@ private:
     void clearSelectedItem() override;
     QStringList getOutputsNeuronsList() override;
     QList<QGraphicsItem *> getSelectedMovingView() override;
+    void onProjectNameChanged(std::string name) override;
     void addArrow();
     void addArrow(MovingView *startView, MovingView *endView);
     void addArrow(ArrowInteractorListener *listener, MovingView *startView, MovingView *endView);

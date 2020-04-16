@@ -76,6 +76,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->resize(800, 600);
     this->showMaximized();
+    setProjectName(scene->getProjectName());
+}
+
+void MainWindow::setProjectName(QString name) {
+    this->setWindowTitle("Nerou - " + name);
 }
 
 QPointF MainWindow::getSceneTop() {

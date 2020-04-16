@@ -64,6 +64,7 @@ private:
     QPointF getSceneTop() override;
     void zoomIn() override;
     void zoomOut() override;
+    void setProjectName(QString name) override;
     void initActions();
     void initMenu();
     void initToolBars();

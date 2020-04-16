@@ -67,22 +67,27 @@ void PaintScene::onTrainingFinished() {
 }
 
 void PaintScene::onLoadingActionClicked() {
-    QFileDialog dialog(nullptr, tr("Open project"));
-
-    dialog.setMimeTypeFilters(QStringList("*.nro"));
-
-    if (dialog.exec() == QDialog::Accepted)
-        interactor->load(dialog.selectedFiles().first().toStdString());
+    QString file = QFileDialog::getOpenFileName(nullptr, "", "/home", "*.nro");
+    if (file != "")
+        interactor->load(file.toStdString());
 }
 
 void PaintScene::onSavingActionClicked() {
-    QFileDialog dialog(nullptr, tr("Save project"));
+    QString file = QString::fromStdString(interactor->getCurrentProjectName());
 
-    dialog.setMimeTypeFilters(QStringList("*.nro"));
-    dialog.setDefaultSuffix("nro");
+    if (file == "Untitled")
+        file = QFileDialog::getSaveFileName(nullptr, tr("Save project"), "/home", "*.nro");
 
-    if (dialog.exec() == QDialog::Accepted)
-        interactor->save(dialog.selectedFiles().first().toStdString());
+    if (file != "")
+        interactor->save(file.toStdString());
+}
+
+void PaintScene::onProjectNameChanged(std::string name) {
+    view->setProjectName(QString::fromStdString(name));
+}
+
+QString PaintScene::getProjectName() {
+    return QString::fromStdString(interactor->getCurrentProjectName());
 }
 
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {

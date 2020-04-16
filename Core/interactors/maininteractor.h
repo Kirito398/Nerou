@@ -38,6 +38,7 @@ public:
     void setLearningRange(double value);
     double getAlpha();
     void setAlpha(double value);
+    std::string getCurrentProjectName();
 
     void save(std::string path);
     void load(std::string path);
@@ -75,6 +76,7 @@ private:
     unsigned long pausedClassNumber, pausedIterationNumber, pausedNeuronNumber;
     unsigned long epohNumber;
     double learningRange, alpha;
+    std::string currentProjectName;
 };
 
 #endif // MAININTERACTOR_H

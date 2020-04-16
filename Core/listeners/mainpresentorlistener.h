@@ -1,6 +1,8 @@
 #ifndef MAINPRESENTORLISTENER_H
 #define MAINPRESENTORLISTENER_H
 
+#include <string>
+
 class PerceptronInteractorListener;
 class DataInteractorListener;
 class ArrowInteractorListener;
@@ -19,7 +21,8 @@ public:
     virtual void onIterationChanged(unsigned int currentIteration) = 0;
     virtual void onTrainingFinished() = 0;
     virtual void onErrorValueChanged(double value) = 0;
-    virtual void onAccuracyChanged(double value) = 0;;
+    virtual void onAccuracyChanged(double value) = 0;
+    virtual void onProjectNameChanged(std::string name) = 0;
 };
 
 #endif // MAINPRESENTORLISTENER_H
