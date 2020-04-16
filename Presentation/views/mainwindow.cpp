@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
     vSplitter->addWidget(widget);
     vSplitter->addWidget(initPropertiesToolBar());
 
-    vSplitter->setStretchFactor(0, 20);
+    vSplitter->setStretchFactor(0, 15);
     vSplitter->setStretchFactor(1, 1);
 
     setCentralWidget(vSplitter);

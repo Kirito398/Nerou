@@ -74,6 +74,7 @@ private:
     QAction *getAction(int type) override;
     void clearSelectedItem() override;
     QStringList getOutputsNeuronsList() override;
+    QList<QGraphicsItem *> getSelectedMovingView() override;
     void addArrow();
     void addArrow(MovingView *startView, MovingView *endView);
     void addArrow(ArrowInteractorListener *listener, MovingView *startView, MovingView *endView);

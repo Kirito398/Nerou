@@ -48,6 +48,7 @@ protected:
     void updateScene();
     void updateItem(QGraphicsItem *item);
     QStringList outputsNeuronsList();
+    QList <QGraphicsItem *> getSelectedItems();
 
 protected:
     PaintSceneInterface *view;

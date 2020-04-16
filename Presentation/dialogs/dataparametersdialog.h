@@ -6,13 +6,13 @@
 class QBoxLayout;
 class QCheckBox;
 class QComboBox;
-class DataPresentor;
+class DataViewListener;
 
 class DataParametersDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DataParametersDialog(DataPresentor *presenter);
+    DataParametersDialog(DataViewListener *view);
     QBoxLayout *getMainLayout();
 
 private:
@@ -23,7 +23,7 @@ private:
     void initLossFunctionTypeLayer();
 
 private:
-    DataPresentor *presenter;
+    DataViewListener *view;
     QBoxLayout *layout;
     QCheckBox *cbUseColor;
     QComboBox *cbActivateFunctionType;

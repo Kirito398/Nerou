@@ -402,6 +402,8 @@ void PaintScene::onDeleteBtnClicked() {
             continue;
         delete item;
     }
+
+    updatePropertiesBox();
 }
 
 void PaintScene::onAddOutputNeuronsActionClicked() {
@@ -550,7 +552,7 @@ void PaintScene::updatePropertiesBox() {
     if (inputsView.isEmpty()) {
         layout = parametersDialog->getMainLayout();
     } else {
-        layout = dynamic_cast<DataView*>(inputsView.at(0))->getPropertiesLayout();
+        layout = inputsView.at(0)->getPropertiesLayout();
     }
 
     propertiesBox->hide();
@@ -577,6 +579,10 @@ QStringList PaintScene::getOutputsNeuronsList() {
         neuronsList << "Neuron_" + QString::number(neuron);
 
     return neuronsList;
+}
+
+QList<QGraphicsItem *> PaintScene::getSelectedMovingView() {
+    return this->selectedItems();
 }
 
 QAction *PaintScene::getAction(int type) {

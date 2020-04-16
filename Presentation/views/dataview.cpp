@@ -108,7 +108,7 @@ void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
 QBoxLayout *DataView::getPropertiesLayout() {
     if (parametersDialog == nullptr)
-        parametersDialog = new DataParametersDialog(presentor);
+        parametersDialog = new DataParametersDialog(this);
 
     return parametersDialog->getMainLayout();
 }
@@ -130,6 +130,69 @@ QStringList DataView::getOutputsNeuronsList() {
 
 void DataView::makePolygon() {
     polygon << bounding.topLeft() << bounding.topRight() << bounding.bottomRight() << bounding.bottomLeft() << bounding.topLeft();
+}
+
+void DataView::setLossFunctionType(int type) {
+    presentor->setLossFunctionType(LossFunctionType (type));
+}
+
+void DataView::setActivateFunctionType(int type) {
+    presentor->setActivateFunctionType(type);
+}
+
+void DataView::setUseColorModeEnable(bool enable) {
+    presentor->setUseColorModeEnable(enable);
+}
+
+void DataView::onLossFunctionTypeChanged(int type) {
+    QList<QGraphicsItem *> selectedItems = getSelectedItems();
+
+    for (auto item : selectedItems) {
+        DataView *data = dynamic_cast<DataView *>(item);
+
+        if (data == nullptr)
+            continue;
+
+        data->setLossFunctionType(type);
+    }
+}
+
+void DataView::onActivateFunctionTypeChanged(int type) {
+    QList<QGraphicsItem *> selectedItems = getSelectedItems();
+
+    for (auto item : selectedItems) {
+        DataView *data = dynamic_cast<DataView *>(item);
+
+        if (data == nullptr)
+            continue;
+
+        data->setActivateFunctionType(type);
+    }
+}
+
+void DataView::onUseColorModeEnableChanged(bool enable) {
+    QList<QGraphicsItem *> selectedItems = getSelectedItems();
+
+    for (auto item : selectedItems) {
+        DataView *data = dynamic_cast<DataView *>(item);
+
+        if (data == nullptr)
+            continue;
+
+        data->setUseColorModeEnable(enable);
+    }
+}
+
+bool DataView::getUseColorModeEnable() {
+    return presentor->getUseColorModeEnable();
+}
+
+int DataView::getLossFunctionType() {
+    return presentor->getLossFunctionType();
+}
+
+int DataView::getActivateFunctionType() {
+    return presentor->getActivateFunctionType();
 }
 
 DataView::~DataView() {

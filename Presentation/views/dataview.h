@@ -18,6 +18,9 @@ public:
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;
     QBoxLayout *getPropertiesLayout() override;
+    void setLossFunctionType(int type);
+    void setActivateFunctionType(int type);
+    void setUseColorModeEnable(bool enable);
 
 private:
     QRectF boundingRect() const override;
@@ -29,6 +32,12 @@ private:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     QStringList getOutputsNeuronsList() override;
     bool isOutputNeuron() override;
+    bool getUseColorModeEnable() override;
+    int getLossFunctionType() override;
+    int getActivateFunctionType() override;
+    void onLossFunctionTypeChanged(int type) override;
+    void onActivateFunctionTypeChanged(int type) override;
+    void onUseColorModeEnableChanged(bool enable) override;
 
 private:
     DataPresentor *presentor;

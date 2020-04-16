@@ -176,6 +176,10 @@ void MovingView::initMenu() {
     }
 }
 
+QList <QGraphicsItem *> MovingView::getSelectedItems() {
+    return view->getSelectedMovingView();
+}
+
 QBoxLayout *MovingView::getPropertiesLayout() {
     return nullptr;
 }

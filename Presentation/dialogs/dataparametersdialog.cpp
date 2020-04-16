@@ -5,11 +5,11 @@
 #include <QCheckBox>
 #include <QComboBox>
 
-#include "presenters/datapresentor.h"
+#include "listeners/dataviewlistener.h"
 
-DataParametersDialog::DataParametersDialog(DataPresentor *presenter)
+DataParametersDialog::DataParametersDialog(DataViewListener *view)
 {
-    this->presenter = presenter;
+    this->view = view;
 
     layout = nullptr;
     initLayer();
@@ -31,7 +31,9 @@ QBoxLayout *DataParametersDialog::getMainLayout() {
 }
 
 void DataParametersDialog::updateParameters() {
-    cbUseColor->setChecked(presenter->getUseColorModeEnable());
+    cbUseColor->setChecked(view->getUseColorModeEnable());
+    cbLossFunctionType->setCurrentIndex(view->getLossFunctionType());
+    cbActivateFunctionType->setCurrentIndex(view->getActivateFunctionType());
 }
 
 void DataParametersDialog::initUseColorLayer() {
@@ -55,15 +57,19 @@ void DataParametersDialog::initActivateFunctionTypeLayer() {
     QLabel *lTitle = new QLabel(tr("Activate Function: "));
 
     cbActivateFunctionType = new QComboBox();
+    cbActivateFunctionType->addItem(tr("Sigmoid"));
+    cbActivateFunctionType->addItem(tr("Tanh"));
+    cbActivateFunctionType->addItem(tr("ReLU"));
+    cbActivateFunctionType->addItem(tr("SoftMax"));
     connect(cbActivateFunctionType, SIGNAL(currentIndexChanged(int)), this, SLOT(onActivateFunctionTypeChanged()));
 
     layout->addWidget(lTitle);
     layout->addWidget(cbActivateFunctionType);
 
-    layout->setStretch(0, 2);
+    layout->setStretch(0, 1);
     layout->setStretch(1, 1);
 
-    layout->addLayout(layout);
+    this->layout->addLayout(layout);
 }
 
 void DataParametersDialog::initLossFunctionTypeLayer() {
@@ -71,25 +77,27 @@ void DataParametersDialog::initLossFunctionTypeLayer() {
     QLabel *lTitle = new QLabel(tr("Loss Function: "));
 
     cbLossFunctionType = new QComboBox();
+    cbLossFunctionType->addItem(tr("MSE"));
+    cbLossFunctionType->addItem(tr("Cross Entropy"));
     connect(cbLossFunctionType, SIGNAL(currentIndexChanged(int)), this, SLOT(onLossFunctionTypeChanged()));
 
     layout->addWidget(lTitle);
     layout->addWidget(cbLossFunctionType);
 
-    layout->setStretch(0, 2);
+    layout->setStretch(0, 1);
     layout->setStretch(1, 1);
 
-    layout->addLayout(layout);
+    this->layout->addLayout(layout);
 }
 
 void DataParametersDialog::onUseColorEnableChanged() {
-    presenter->setUseColorModeEnable(cbUseColor->isChecked());
+    view->onUseColorModeEnableChanged(cbUseColor->isChecked());
 }
 
 void DataParametersDialog::onActivateFunctionTypeChanged() {
-    presenter->setActivateFunctionType(cbActivateFunctionType->currentIndex());
+    view->onActivateFunctionTypeChanged(cbActivateFunctionType->currentIndex());
 }
 
 void DataParametersDialog::onLossFunctionTypeChanged() {
-    presenter->setLossFunctionType(LossFunctionType (cbLossFunctionType->currentIndex()));
+    view->onLossFunctionTypeChanged(cbLossFunctionType->currentIndex());
 }
