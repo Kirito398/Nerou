@@ -6,6 +6,7 @@
 
 class PerceptronPresentor;
 class PerceptronInteractorListener;
+class PerceptronParametersDialog;
 
 class PerceptronView : public MovingView, public PerceptronViewListener
 {
@@ -16,6 +17,8 @@ public:
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;
     void setOutputNeuron(bool enable);
+    QBoxLayout * getPropertiesLayout() override;
+    void setActivateFunctionType(int type);
 
 private:
     QPainterPath shape() const override;
@@ -28,9 +31,12 @@ private:
     void setOutValue(QString value) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     bool isOutputNeuron() override;
+    void onActivateFunctionTypeChanged(int type) override;
+    int getActivateFunctionType() override;
 
 private:
     PerceptronPresentor *presentor;
+    PerceptronParametersDialog *parametersDialog;
     QColor neuronColor, forwardNeuronBrush, outputNeuronBrush;
     QString value;
 };

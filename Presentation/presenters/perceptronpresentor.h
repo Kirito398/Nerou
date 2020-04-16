@@ -17,6 +17,8 @@ public:
     unsigned long getID();
     void setOutputNeuron(bool enable);
     bool isOutputNeuron();
+    void setActivateFunctionType(int type);
+    int getActivateFunctionType();
 
 private:
     void updatePosition(double x, double y) override;

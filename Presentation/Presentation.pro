@@ -24,6 +24,7 @@ SOURCES += \
     dialogs/dataparametersdialog.cpp \
     dialogs/datasetsdialog.cpp \
     dialogs/parametersdialog.cpp \
+    dialogs/perceptronparametersdialog.cpp \
     dialogs/progresstrainingdialog.cpp \
     dialogs/progresstrainingplotsdialog.cpp \
     main.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     dialogs/dataparametersdialog.h \
     dialogs/datasetsdialog.h \
     dialogs/parametersdialog.h \
+    dialogs/perceptronparametersdialog.h \
     dialogs/progresstrainingdialog.h \
     dialogs/progresstrainingplotsdialog.h \
     interfaces/PaintSceneInterface.h \

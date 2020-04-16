@@ -22,7 +22,7 @@ void DataParametersDialog::initLayer() {
 
     initActivateFunctionTypeLayer();
     initLossFunctionTypeLayer();
-    initUseColorLayer();
+    //initUseColorLayer();
     updateParameters();
 
     QToolButton *tbOpenSets = new QToolButton();
@@ -38,7 +38,7 @@ QBoxLayout *DataParametersDialog::getMainLayout() {
 }
 
 void DataParametersDialog::updateParameters() {
-    cbUseColor->setChecked(view->getUseColorModeEnable());
+    //cbUseColor->setChecked(view->getUseColorModeEnable());
     cbLossFunctionType->setCurrentIndex(view->getLossFunctionType());
     cbActivateFunctionType->setCurrentIndex(view->getActivateFunctionType());
 }
