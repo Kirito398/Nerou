@@ -22,6 +22,8 @@ private:
     unsigned long getID() override;
     void deleteNeuron() override;
     void clean() override;
+    void setActivateFunctionType(int type) override;
+    int getActivateFunctionType() override;
     void activate();
     void reActivateDelta();
     void getInputSignal();

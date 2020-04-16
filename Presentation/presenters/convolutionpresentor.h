@@ -15,6 +15,8 @@ public:
     void setInteractor(ConvolutionInteractorListener *listener);
     void setPosition(double x, double y);
     unsigned long getID();
+    int getActivateFunctionType();
+    void setActivateFunctionType(int type);
 
 private:
     void updatePosition(double x, double y) override;

@@ -3,6 +3,7 @@
 #include <QPainter>
 
 #include "presenters/convolutionpresentor.h"
+#include "dialogs/convolutionparametersdialog.h"
 
 ConvolutionView::ConvolutionView(ConvolutionInteractorListener *listener, QObject *parent) : MovingView(Convolution, parent)
 {
@@ -20,6 +21,8 @@ ConvolutionView::ConvolutionView(ConvolutionInteractorListener *listener, QObjec
     forwardColor = Qt::white;
 
     imageBounding = QRectF(-30, -30, 30, 30);
+
+    parametersDialog = nullptr;
 }
 
 QPixmap ConvolutionView::getItemIcon() const {
@@ -93,6 +96,34 @@ void ConvolutionView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
 bool ConvolutionView::isOutputNeuron() {
     return false;
+}
+
+void ConvolutionView::onActivateFunctionTypeChanged(int type) {
+    QList <QGraphicsItem *> selectedList = getSelectedItems();
+
+    for (auto item : selectedList) {
+        ConvolutionView *view = dynamic_cast<ConvolutionView *>(item);
+
+        if (view == nullptr)
+            continue;
+
+        view->setActivateFunctionType(type);
+    }
+}
+
+QBoxLayout * ConvolutionView::getPropertiesLayout() {
+    if (parametersDialog == nullptr)
+        parametersDialog = new ConvolutionParametersDialog(this);
+
+    return parametersDialog->getMainLayout();
+}
+
+int ConvolutionView::getActivateFunctionType() {
+    return presentor->getActivateFunctionType();
+}
+
+void ConvolutionView::setActivateFunctionType(int type) {
+    presentor->setActivateFunctionType(type);
 }
 
 ConvolutionView::~ConvolutionView() {

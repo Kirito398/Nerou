@@ -57,6 +57,14 @@ void ConvolutionPresentor::setActive(bool enable) {
     view->setActive(enable);
 }
 
+int ConvolutionPresentor::getActivateFunctionType() {
+    return  interactor->getActivateFunctionType();
+}
+
+void ConvolutionPresentor::setActivateFunctionType(int type) {
+    interactor->setActivateFunctionType(type);
+}
+
 ConvolutionPresentor::~ConvolutionPresentor() {
     if (interactor != nullptr)
         interactor->deleteNeuron();
