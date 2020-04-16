@@ -38,6 +38,7 @@ private:
     void onLossFunctionTypeChanged(int type) override;
     void onActivateFunctionTypeChanged(int type) override;
     void onUseColorModeEnableChanged(bool enable) override;
+    void openSetsDialog() override;
 
 private:
     DataPresentor *presentor;

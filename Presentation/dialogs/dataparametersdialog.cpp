@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QToolButton>
 
 #include "listeners/dataviewlistener.h"
 
@@ -23,6 +24,12 @@ void DataParametersDialog::initLayer() {
     initLossFunctionTypeLayer();
     initUseColorLayer();
     updateParameters();
+
+    QToolButton *tbOpenSets = new QToolButton();
+    tbOpenSets->setText(tr("Training sets"));
+    connect(tbOpenSets, SIGNAL(clicked()), this, SLOT(onOpenSetsButtonClicked()));
+
+    layout->addWidget(tbOpenSets);
 }
 
 QBoxLayout *DataParametersDialog::getMainLayout() {
@@ -100,4 +107,8 @@ void DataParametersDialog::onActivateFunctionTypeChanged() {
 
 void DataParametersDialog::onLossFunctionTypeChanged() {
     view->onLossFunctionTypeChanged(cbLossFunctionType->currentIndex());
+}
+
+void DataParametersDialog::onOpenSetsButtonClicked() {
+    view->openSetsDialog();
 }

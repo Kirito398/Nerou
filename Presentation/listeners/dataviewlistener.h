@@ -16,6 +16,7 @@ public:
     virtual void onActivateFunctionTypeChanged(int type) = 0;
     virtual int getLossFunctionType() = 0;
     virtual void onLossFunctionTypeChanged(int type) = 0;
+    virtual void openSetsDialog() = 0;
 };
 
 #endif // DATAVIEWLISTENER_H

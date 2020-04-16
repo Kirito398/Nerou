@@ -92,18 +92,7 @@ void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event)
 
-    if (setsDialog == nullptr) {
-        setsDialog = new DataSetsDialog(this, presentor);
-        connect(setsDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
-        connect(setsDialog, &DataSetsDialog::onApplied, this, &DataView::onParametersUpdated);
-    }
-
-
-    QStringList trainingList, testingList, neuronsIDs;
-    presentor->getParameters(&trainingList, &testingList, &neuronsIDs);
-
-    setsDialog->updateParameters(trainingList, testingList, neuronsIDs);
-    setsDialog->show();
+    openSetsDialog();
 }
 
 QBoxLayout *DataView::getPropertiesLayout() {
@@ -193,6 +182,21 @@ int DataView::getLossFunctionType() {
 
 int DataView::getActivateFunctionType() {
     return presentor->getActivateFunctionType();
+}
+
+void DataView::openSetsDialog() {
+    if (setsDialog == nullptr) {
+        setsDialog = new DataSetsDialog(this, presentor);
+        connect(setsDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
+        connect(setsDialog, &DataSetsDialog::onApplied, this, &DataView::onParametersUpdated);
+    }
+
+
+    QStringList trainingList, testingList, neuronsIDs;
+    presentor->getParameters(&trainingList, &testingList, &neuronsIDs);
+
+    setsDialog->updateParameters(trainingList, testingList, neuronsIDs);
+    setsDialog->show();
 }
 
 DataView::~DataView() {

@@ -33,6 +33,7 @@ private slots:
     void onUseColorEnableChanged();
     void onActivateFunctionTypeChanged();
     void onLossFunctionTypeChanged();
+    void onOpenSetsButtonClicked();
 };
 
 #endif // DATAPARAMETERSDIALOG_H
