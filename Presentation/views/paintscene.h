@@ -28,6 +28,7 @@ public:
     MovingView::ViewType getViewType();
     QPixmap getPerceptronIcon() const;
     QPixmap getDataIcon() const;
+    QPixmap getTableDataIcon() const;
     QPixmap getConvolutionIcon() const;
     void onDeleteBtnClicked();
     void onRunBtnClicked();

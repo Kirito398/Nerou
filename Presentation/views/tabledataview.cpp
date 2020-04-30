@@ -21,7 +21,7 @@ TableDataView::TableDataView(TableDataInteractorListener *listener, QObject *par
     bounding = QRectF (-30, -30, 60, 60);
     imageBounding = QRectF(-30, -30, 30, 30);
 
-    brushColor = QColor(115, 255, 227);
+    brushColor = QColor(115, 255, 100);
 
     parametersDialog = nullptr;
 }

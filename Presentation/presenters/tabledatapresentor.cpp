@@ -14,6 +14,7 @@ void TableDataPresentor::setView(TableDataViewListener *listener) {
 
 void TableDataPresentor::setInteractor(TableDataInteractorListener *listener) {
     interactor = listener;
+    interactor->setView(this);
 }
 
 void TableDataPresentor::setPosition(double x, double y) {

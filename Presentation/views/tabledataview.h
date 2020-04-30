@@ -16,12 +16,12 @@ public:
     void setLossFunctionType(int type);
     void setActivateFunctionType(int type);
     QPolygonF getPolygon() override;
+    QPixmap getItemIcon() const override;
 
 private:
     QRectF boundingRect() const override;
     unsigned long getID() override;
     void setPosition(QPointF position) override;
-    QPixmap getItemIcon() const override;
     bool isOutputNeuron() override;
     QBoxLayout *getPropertiesLayout() override;
     void makePolygon() override;

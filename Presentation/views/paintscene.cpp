@@ -291,6 +291,9 @@ void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
 
         if (startView->getType() == MovingView::Convolution && endView->getType() == MovingView::Perceptron)
             listener = interactor->createNewWeight(startView->getID(), endView->getID());
+
+        if (startView->getType() == MovingView::TableData && endView->getType() == MovingView::Perceptron)
+            listener = interactor->createNewWeight(startView->getID(), endView->getID());
     }
 
     if (listener != nullptr)
@@ -398,6 +401,10 @@ QPixmap PaintScene::getPerceptronIcon() const {
 
 QPixmap PaintScene::getDataIcon() const {
     return DataView().getItemIcon();
+}
+
+QPixmap PaintScene::getTableDataIcon() const {
+    return TableDataView().getItemIcon();
 }
 
 QPixmap PaintScene::getConvolutionIcon() const {
