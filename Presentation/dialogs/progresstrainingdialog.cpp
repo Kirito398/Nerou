@@ -42,6 +42,10 @@ ProgressTrainingDialog::ProgressTrainingDialog()
     setLayout(layout);
 }
 
+QVBoxLayout *ProgressTrainingDialog::getMainLayout() {
+    return layout;
+}
+
 void ProgressTrainingDialog::setMaxEpoh(unsigned int maxEpoh) {
     this->maxEpoh = maxEpoh;
 }
@@ -76,9 +80,13 @@ void ProgressTrainingDialog::setCurrentAccuracy(double value) {
     plotsDialog->addNewAccuracy(value);
 }
 
+void ProgressTrainingDialog::onTrainingStarted() {
+    seconds = 0;
+    timer->start(1000);
+}
+
 void ProgressTrainingDialog::onTrainingFinished() {
     timer->stop();
-    seconds = 0;
 }
 
 void ProgressTrainingDialog::initErrorLayer() {
@@ -132,8 +140,6 @@ void ProgressTrainingDialog::setTotalProcess(unsigned int total) {
 void ProgressTrainingDialog::initTimer() {
     timer = new QTimer();
     connect(timer, &QTimer::timeout, this, &ProgressTrainingDialog::onTimeout);
-    timer->start(1000);
-    seconds = 0;
 
     QHBoxLayout *timerLayout = new QHBoxLayout;
     QLabel *timerLabel = new QLabel(tr("Time: "));

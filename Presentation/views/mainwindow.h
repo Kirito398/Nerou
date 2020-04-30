@@ -64,11 +64,14 @@ private:
     QPointF getSceneTop() override;
     void zoomIn() override;
     void zoomOut() override;
+    void setProjectName(QString name) override;
     void initActions();
     void initMenu();
     void initToolBars();
     void initToolBox();
     void initControlToolBar();
+    QWidget *initPropertiesToolBar();
+    void updateWindow() override;
     //QWidget *createToolBoxItem(const QString &name,  MoveItem::ItemType type);
 
 private slots:

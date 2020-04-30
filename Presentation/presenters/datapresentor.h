@@ -4,10 +4,10 @@
 #include <vector>
 
 #include "listeners/datapresentorlistener.h"
+#include "listeners/datainteractorlistener.h"
 
 class QPointF;
 class DataViewListener;
-class DataInteractorListener;
 class RepositoryInterface;
 class QStringList;
 class QSize;
@@ -25,6 +25,12 @@ public:
     void updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronsIDs);
     void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronsIDs);
     RepositoryInterface *getRepository();
+    void setUseColorModeEnable(bool enable);
+    bool getUseColorModeEnable();
+    void setActivateFunctionType(int type);
+    int getActivateFunctionType();
+    void setLossFunctionType(LossFunctionType type);
+    LossFunctionType getLossFunctionType();
 
 private:
     void updatePosition(double x, double y) override;

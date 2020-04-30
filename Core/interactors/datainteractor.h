@@ -11,9 +11,6 @@ class DataModel;
 class DataInteractor : public NeuronInteractor, public DataInteractorListener
 {
 public:
-    enum LossFunctionType {MSE, CrossEntropy};
-
-public:
     DataInteractor();
     void start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
@@ -41,6 +38,12 @@ private:
     ClassModel getClass(unsigned long id) override;
     RepositoryInterface *getRepository() override;
     void removeSinaps(unsigned long sinapsID) override;
+    void setLossFunctionType(LossFunctionType type) override;
+    void setColorModeEnable(bool enable) override;
+    void setActivateFunctionType(int type) override;
+    LossFunctionType getLossFunctionType() override;
+    bool getColorModeEnable() override;
+    int getActivateFunctiontype() override;
     void sendDelta();
     void calculateDelta();
     void calculateInputSignal();

@@ -12,6 +12,7 @@
 #include <QtMath>
 #include <QSlider>
 #include <QStatusBar>
+#include <QSplitter>
 
 #ifndef QT_NO_OPEN_GL
 #include <QGLWidget>
@@ -46,9 +47,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     #ifndef QT_NO_OPEN_GL
     QGLFormat format(QGL::SampleBuffers);
-//    format.setDoubleBuffer(true);
-//    format.setDirectRendering(true);
-//    format.setAccum(true);
     QGLWidget *openGL = new QGLWidget(format);
     view->setViewport(openGL);
     #endif
@@ -59,7 +57,16 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *widget = new QWidget;
     widget->setLayout(mainLayout);
 
-    setCentralWidget(widget);
+    QSplitter *vSplitter = new QSplitter;
+    vSplitter->setOrientation(Qt::Horizontal);
+
+    vSplitter->addWidget(widget);
+    vSplitter->addWidget(initPropertiesToolBar());
+
+    vSplitter->setStretchFactor(0, 15);
+    vSplitter->setStretchFactor(1, 1);
+
+    setCentralWidget(vSplitter);
     setWindowTitle("Nerou");
     setUnifiedTitleAndToolBarOnMac(true);
 
@@ -68,6 +75,12 @@ MainWindow::MainWindow(QWidget *parent)
     setStatusBar(statusBar);
 
     this->resize(800, 600);
+    this->showMaximized();
+    setProjectName(scene->getProjectName());
+}
+
+void MainWindow::setProjectName(QString name) {
+    this->setWindowTitle("Nerou - " + name);
 }
 
 QPointF MainWindow::getSceneTop() {
@@ -110,7 +123,7 @@ void MainWindow::initToolBox() {
     bgToolBox->addButton(tbData, MovingView::Data);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
-    toolBoxToolBar = new QToolBar;
+    toolBoxToolBar = new QToolBar(tr("Blocks"));
     toolBoxToolBar->addWidget(tbData);
     toolBoxToolBar->addWidget(tbPerceptron);
     toolBoxToolBar->addWidget(tbConvolution);
@@ -355,6 +368,10 @@ void MainWindow::zoomOut() {
     view->update();
 }
 
+void MainWindow::updateWindow() {
+    update();
+}
+
 void MainWindow::onZoomSliderValueChanged() {
     qreal scale = qPow(qreal(2), (zoomSlider->value() - 250) / qreal(50));
 
@@ -381,6 +398,17 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 MainWindow::~MainWindow()
 {
     delete scene;
+}
+
+QWidget *MainWindow::initPropertiesToolBar() {
+    QBoxLayout *propertiesLayout = new QVBoxLayout();
+
+    QWidget *widget = new QWidget;
+    widget->setLayout(propertiesLayout);
+
+    scene->setPropertiesLayout(propertiesLayout);
+
+    return widget;
 }
 
 //QWidget *MainWindow::createToolBoxItem(const QString &name,  MoveItem::ItemType type) {

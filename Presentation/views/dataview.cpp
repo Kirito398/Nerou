@@ -3,13 +3,18 @@
 #include <QPainter>
 #include <QThread>
 #include <QDialog>
+#include <QGroupBox>
+#include <QBoxLayout>
 
 #include "presenters/datapresentor.h"
+#include "dialogs/datasetsdialog.h"
 #include "dialogs/dataparametersdialog.h"
 
 DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingView(Data, parent)
 {
     makePolygon();
+
+    propertiesBox = nullptr;
 
     presentor = new DataPresentor();
     presentor->setView(this);
@@ -24,6 +29,7 @@ DataView::DataView(DataInteractorListener *listener, QObject *parent) : MovingVi
 
     brushColor = QColor(115, 255, 227);
 
+    setsDialog = nullptr;
     parametersDialog = nullptr;
 }
 
@@ -86,24 +92,20 @@ void DataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 void DataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     Q_UNUSED(event)
 
-    if (parametersDialog == nullptr) {
-        parametersDialog = new DataParametersDialog(this, presentor);
-        connect(parametersDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
-        connect(parametersDialog, &DataParametersDialog::onApplied, this, &DataView::onParametersUpdated);
-    }
+    openSetsDialog();
+}
 
+QBoxLayout *DataView::getPropertiesLayout() {
+    if (parametersDialog == nullptr)
+        parametersDialog = new DataParametersDialog(this);
 
-    QStringList trainingList, testingList, neuronsIDs;
-    presentor->getParameters(&trainingList, &testingList, &neuronsIDs);
-
-    parametersDialog->updateParameters(trainingList, testingList, neuronsIDs);
-    parametersDialog->show();
+    return parametersDialog->getMainLayout();
 }
 
 void DataView::onParametersUpdated() {
     QStringList trainingList, testingList, neuronsIDs;
 
-    parametersDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
+    setsDialog->getParameters(&trainingList, &testingList, &neuronsIDs);
     presentor->updateParameters(trainingList, testingList, neuronsIDs);
 }
 
@@ -117,6 +119,84 @@ QStringList DataView::getOutputsNeuronsList() {
 
 void DataView::makePolygon() {
     polygon << bounding.topLeft() << bounding.topRight() << bounding.bottomRight() << bounding.bottomLeft() << bounding.topLeft();
+}
+
+void DataView::setLossFunctionType(int type) {
+    presentor->setLossFunctionType(LossFunctionType (type));
+}
+
+void DataView::setActivateFunctionType(int type) {
+    presentor->setActivateFunctionType(type);
+}
+
+void DataView::setUseColorModeEnable(bool enable) {
+    presentor->setUseColorModeEnable(enable);
+}
+
+void DataView::onLossFunctionTypeChanged(int type) {
+    QList<QGraphicsItem *> selectedItems = getSelectedItems();
+
+    for (auto item : selectedItems) {
+        DataView *data = dynamic_cast<DataView *>(item);
+
+        if (data == nullptr)
+            continue;
+
+        data->setLossFunctionType(type);
+    }
+}
+
+void DataView::onActivateFunctionTypeChanged(int type) {
+    QList<QGraphicsItem *> selectedItems = getSelectedItems();
+
+    for (auto item : selectedItems) {
+        DataView *data = dynamic_cast<DataView *>(item);
+
+        if (data == nullptr)
+            continue;
+
+        data->setActivateFunctionType(type);
+    }
+}
+
+void DataView::onUseColorModeEnableChanged(bool enable) {
+    QList<QGraphicsItem *> selectedItems = getSelectedItems();
+
+    for (auto item : selectedItems) {
+        DataView *data = dynamic_cast<DataView *>(item);
+
+        if (data == nullptr)
+            continue;
+
+        data->setUseColorModeEnable(enable);
+    }
+}
+
+bool DataView::getUseColorModeEnable() {
+    return presentor->getUseColorModeEnable();
+}
+
+int DataView::getLossFunctionType() {
+    return presentor->getLossFunctionType();
+}
+
+int DataView::getActivateFunctionType() {
+    return presentor->getActivateFunctionType();
+}
+
+void DataView::openSetsDialog() {
+    if (setsDialog == nullptr) {
+        setsDialog = new DataSetsDialog(this, presentor);
+        connect(setsDialog, &QDialog::accept, this, &DataView::onParametersUpdated);
+        connect(setsDialog, &DataSetsDialog::onApplied, this, &DataView::onParametersUpdated);
+    }
+
+
+    QStringList trainingList, testingList, neuronsIDs;
+    presentor->getParameters(&trainingList, &testingList, &neuronsIDs);
+
+    setsDialog->updateParameters(trainingList, testingList, neuronsIDs);
+    setsDialog->show();
 }
 
 DataView::~DataView() {

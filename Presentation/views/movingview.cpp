@@ -4,6 +4,7 @@
 #include <QCursor>
 #include <QVector>
 #include <QMenu>
+#include <QBoxLayout>
 
 #include "interfaces/arrowinterface.h"
 #include "interfaces/PaintSceneInterface.h"
@@ -173,6 +174,14 @@ void MovingView::initMenu() {
         else
             menu->addAction(view->getAction(MakeOutputNeuron));
     }
+}
+
+QList <QGraphicsItem *> MovingView::getSelectedItems() {
+    return view->getSelectedMovingView();
+}
+
+QBoxLayout *MovingView::getPropertiesLayout() {
+    return nullptr;
 }
 
 MovingView::~MovingView() {

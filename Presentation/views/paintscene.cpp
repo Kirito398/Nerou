@@ -3,6 +3,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QCoreApplication>
 #include <QFileDialog>
+#include <QBoxLayout>
+#include <QGroupBox>
 
 #include "views/dataview.h"
 #include "views/arrowview.h"
@@ -14,14 +16,19 @@
 #include "interfaces/mainwindowinterface.h"
 #include "dialogs/addoutputneuronsdialog.h"
 #include "dialogs/progresstrainingdialog.h"
+#include "dialogs/parametersdialog.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance(new MainRepository());
     interactor->setView(this);
+
     line = nullptr;
     selector = nullptr;
     progressDialog = nullptr;
+    parametersDialog = nullptr;
+    propertiesBox = nullptr;
+
     mode = PaintScene::Selector;
     viewType = MovingView::Perceptron;
 }
@@ -36,7 +43,7 @@ void PaintScene::onTrainingStarted(unsigned int iterationCount, unsigned int epo
 
     QPointF position = view->getSceneTop();
     progressDialog->setGeometry(position.x() + 50, position.y() + 95, progressDialog->width(), progressDialog->height());
-    progressDialog->show();
+    progressDialog->onTrainingStarted();
 }
 
 void PaintScene::onEpohChanged(unsigned int currentEpoh) {
@@ -60,22 +67,27 @@ void PaintScene::onTrainingFinished() {
 }
 
 void PaintScene::onLoadingActionClicked() {
-    QFileDialog dialog(nullptr, tr("Open project"));
-
-    dialog.setMimeTypeFilters(QStringList("*.nro"));
-
-    if (dialog.exec() == QDialog::Accepted)
-        interactor->load(dialog.selectedFiles().first().toStdString());
+    QString file = QFileDialog::getOpenFileName(nullptr, "", "/home", "*.nro");
+    if (file != "")
+        interactor->load(file.toStdString());
 }
 
 void PaintScene::onSavingActionClicked() {
-    QFileDialog dialog(nullptr, tr("Save project"));
+    QString file = QString::fromStdString(interactor->getCurrentProjectName());
 
-    dialog.setMimeTypeFilters(QStringList("*.nro"));
-    dialog.setDefaultSuffix("nro");
+    if (file == "Untitled")
+        file = QFileDialog::getSaveFileName(nullptr, tr("Save project"), "/home", "*.nro");
 
-    if (dialog.exec() == QDialog::Accepted)
-        interactor->save(dialog.selectedFiles().first().toStdString());
+    if (file != "")
+        interactor->save(file.toStdString());
+}
+
+void PaintScene::onProjectNameChanged(std::string name) {
+    view->setProjectName(QString::fromStdString(name));
+}
+
+QString PaintScene::getProjectName() {
+    return QString::fromStdString(interactor->getCurrentProjectName());
 }
 
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
@@ -360,6 +372,8 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         break;
     }
 
+    updatePropertiesBox();
+
     selector = nullptr;
     line = nullptr;
 }
@@ -393,6 +407,8 @@ void PaintScene::onDeleteBtnClicked() {
             continue;
         delete item;
     }
+
+    updatePropertiesBox();
 }
 
 void PaintScene::onAddOutputNeuronsActionClicked() {
@@ -504,6 +520,62 @@ void PaintScene::setView(MainWindowInterface *interfaces) {
     view = interfaces;
 }
 
+void PaintScene::setPropertiesLayout(QBoxLayout *layout) {
+    propertiesLayout = layout;
+
+    if (progressDialog == nullptr)
+        progressDialog = new ProgressTrainingDialog();
+
+    QGroupBox *progress = new QGroupBox(tr("Progress"));
+    progress->setLayout(progressDialog->getMainLayout());
+
+    if (parametersDialog == nullptr)
+        parametersDialog = new ParametersDialog(interactor);
+
+    propertiesBox = new QGroupBox(tr("Properties"));
+    propertiesBox->setLayout(parametersDialog->getMainLayout());
+
+    propertiesLayout->insertWidget(0, progress);
+    propertiesLayout->insertWidget(1, propertiesBox);
+
+    updatePropertiesBox();
+}
+
+void PaintScene::updatePropertiesBox() {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    QList<MovingView *> inputsView;
+    QBoxLayout *layout = nullptr;
+
+    for (auto item : selectedItems) {
+        MovingView *view = dynamic_cast<MovingView*>(item);
+        if (view == nullptr)
+            continue;
+
+        inputsView.append(view);
+    }
+
+    if (inputsView.isEmpty()) {
+        layout = parametersDialog->getMainLayout();
+    } else {
+        layout = inputsView.at(0)->getPropertiesLayout();
+    }
+
+    propertiesBox->hide();
+    delete propertiesBox->layout();
+    delete propertiesBox;
+
+    propertiesBox = new QGroupBox(tr("Properties"));
+    propertiesBox->setLayout(layout);
+
+    propertiesLayout->addWidget(propertiesBox);
+
+    propertiesLayout->setStretch(0, 1);
+    propertiesLayout->setStretch(1, 3);
+
+    propertiesLayout->update();
+    view->updateWindow();
+}
+
 QStringList PaintScene::getOutputsNeuronsList() {
     std::vector<unsigned long> list = interactor->getOutputsNeuronsList();
     QStringList neuronsList;
@@ -512,6 +584,10 @@ QStringList PaintScene::getOutputsNeuronsList() {
         neuronsList << "Neuron_" + QString::number(neuron);
 
     return neuronsList;
+}
+
+QList<QGraphicsItem *> PaintScene::getSelectedMovingView() {
+    return this->selectedItems();
 }
 
 QAction *PaintScene::getAction(int type) {

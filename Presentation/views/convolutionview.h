@@ -6,6 +6,7 @@
 
 class ConvolutionPresentor;
 class ConvolutionInteractorListener;
+class ConvolutionParametersDialog;
 
 class ConvolutionView : public MovingView, public ConvolutionViewListener
 {
@@ -15,6 +16,8 @@ public:
     QPixmap getItemIcon() const override;
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;
+    void setActivateFunctionType(int type);
+    QBoxLayout * getPropertiesLayout() override;
 
 private:
     QRectF boundingRect() const override;
@@ -26,9 +29,12 @@ private:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     bool isOutputNeuron() override;
     void setOutValue(QImage img) override;
+    void onActivateFunctionTypeChanged(int type) override;
+    int getActivateFunctionType() override;
 
 private:
     ConvolutionPresentor *presentor;
+    ConvolutionParametersDialog *parametersDialog;
     QColor neuronColor, forwardColor;
     QImage image;
     QRectF bounding, imageBounding;

@@ -24,6 +24,8 @@ private:
     void clean() override;
     void setOutputNeuron(bool enable) override;
     bool getIsOutputNeuron() override;
+    void setActivateFunctionType(int type) override;
+    int getActivateFunctionType() override;
     void makeInputSignal();
     void makeInputDelta();
     void calculateOut();

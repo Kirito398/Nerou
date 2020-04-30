@@ -72,6 +72,30 @@ RepositoryInterface *DataPresentor::getRepository() {
     return repository;
 }
 
+void DataPresentor::setUseColorModeEnable(bool enable) {
+    interactor->setColorModeEnable(enable);
+}
+
+bool DataPresentor::getUseColorModeEnable() {
+    return interactor->getColorModeEnable();
+}
+
+void DataPresentor::setActivateFunctionType(int type) {
+    interactor->setActivateFunctionType(type);
+}
+
+int DataPresentor::getActivateFunctionType() {
+    return interactor->getActivateFunctiontype();
+}
+
+void DataPresentor::setLossFunctionType(LossFunctionType type) {
+    interactor->setLossFunctionType(type);
+}
+
+LossFunctionType DataPresentor::getLossFunctionType() {
+    return interactor->getLossFunctionType();
+}
+
 DataPresentor::~DataPresentor() {
     if (interactor != nullptr)
         interactor->deleteNeuron();

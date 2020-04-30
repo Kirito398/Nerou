@@ -151,6 +151,14 @@ void ConvolutionInteractor::sendDelta() {
         static_cast<CoreInterface *>(sinaps)->sendDelta(inputDelta);
 }
 
+void ConvolutionInteractor::setActivateFunctionType(int type) {
+    activateFunctionType = ActivateFunctionType(type);
+}
+
+int ConvolutionInteractor::getActivateFunctionType() {
+    return activateFunctionType;
+}
+
 void ConvolutionInteractor::deleteNeuron() {
     removeNeuron();
 }

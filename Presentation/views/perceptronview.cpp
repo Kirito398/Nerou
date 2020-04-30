@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "presenters/perceptronpresentor.h"
+#include "dialogs/perceptronparametersdialog.h"
 
 PerceptronView::PerceptronView(PerceptronInteractorListener *listener, QObject *parent) : MovingView(Perceptron, parent)
 {
@@ -21,6 +22,8 @@ PerceptronView::PerceptronView(PerceptronInteractorListener *listener, QObject *
     forwardNeuronBrush = QColor(255, 223, 143);
     outputNeuronBrush = QColor(255, 92, 106);
     value = "";
+
+    parametersDialog = nullptr;
 }
 
 QPixmap PerceptronView::getItemIcon() const {
@@ -118,7 +121,35 @@ void PerceptronView::setOutValue(QString value) {
 
 unsigned long PerceptronView::getID() {
     return presentor->getID();
-};
+}
+
+void PerceptronView::setActivateFunctionType(int type) {
+    presentor->setActivateFunctionType(type);
+}
+
+void PerceptronView::onActivateFunctionTypeChanged(int type) {
+    QList<QGraphicsItem *> selectedItem = getSelectedItems();
+
+    for (auto item : selectedItem) {
+        PerceptronView *view = dynamic_cast<PerceptronView *>(item);
+
+        if (view == nullptr)
+            continue;
+
+        view->setActivateFunctionType(type);
+    }
+}
+
+int PerceptronView::getActivateFunctionType() {
+    return presentor->getActivateFunctionType();
+}
+
+QBoxLayout * PerceptronView::getPropertiesLayout() {
+    if (parametersDialog == nullptr)
+        parametersDialog = new PerceptronParametersDialog(this);
+
+    return parametersDialog->getMainLayout();
+}
 
 PerceptronView::~PerceptronView() {
     removeArrows();

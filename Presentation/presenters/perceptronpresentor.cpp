@@ -49,6 +49,14 @@ void PerceptronPresentor::setOutValue(double value) {
     view->setOutValue(QString::fromStdString(std::to_string(value)));
 }
 
+void PerceptronPresentor::setActivateFunctionType(int type) {
+    interactor->setActivateFunctionType(type);
+}
+
+int PerceptronPresentor::getActivateFunctionType() {
+    return interactor->getActivateFunctionType();
+}
+
 PerceptronPresentor::~PerceptronPresentor() {
     if (interactor != nullptr)
         interactor->deleteNeuron();

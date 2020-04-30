@@ -4,48 +4,36 @@
 #include <QDialog>
 
 class QBoxLayout;
-class QTableWidget;
-class DataAddTableItemDialog;
+class QCheckBox;
+class QComboBox;
 class DataViewListener;
-class QSize;
-class DataPresentor;
 
 class DataParametersDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DataParametersDialog(DataViewListener *view, DataPresentor *presentor, QWidget *parent = nullptr);
-    void initControllButtons();
-    void initTable();
-    void initButtons();
-    void getParameters(QStringList *trainingList, QStringList *testingList, QStringList *neuronIDs);
-    QSize getImageSize();
-    void updateParameters(QStringList trainingList, QStringList testingList, QStringList neuronIDs);
+    DataParametersDialog(DataViewListener *view);
+    QBoxLayout *getMainLayout();
 
 private:
-    void updateOutputsNeuronsList();
-    bool checkImageSize();
-    void addNewSet(QString trainingSetPath, QString testingSetPath, QString neuronID);
-    void enterEvent(QEvent *event) override;
-    QStringList getPaths(QString mainPath);
+    void initLayer();
+    void updateParameters();
+    void initUseColorLayer();
+    void initActivateFunctionTypeLayer();
+    void initLossFunctionTypeLayer();
 
 private:
-    QSize *defaultSize;
     DataViewListener *view;
-    DataPresentor *presentor;
-    DataAddTableItemDialog *dialog;
     QBoxLayout *layout;
-    QTableWidget *table;
+    QCheckBox *cbUseColor;
+    QComboBox *cbActivateFunctionType;
+    QComboBox *cbLossFunctionType;
 
 private slots:
-    void add();
-    void remove();
-    void addNewSet();
-    void accept() override;
-    void applied();
-
-signals:
-    void onApplied();
+    void onUseColorEnableChanged();
+    void onActivateFunctionTypeChanged();
+    void onLossFunctionTypeChanged();
+    void onOpenSetsButtonClicked();
 };
 
 #endif // DATAPARAMETERSDIALOG_H

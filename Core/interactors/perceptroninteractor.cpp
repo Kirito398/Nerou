@@ -160,6 +160,14 @@ void PerceptronInteractor::updateFromModel(PerceptronModel model) {
     activateFunctionType = ActivateFunctionType (model.getActivateFunctionType());
 }
 
+void PerceptronInteractor::setActivateFunctionType(int type) {
+    activateFunctionType = ActivateFunctionType(type);
+}
+
+int PerceptronInteractor::getActivateFunctionType() {
+    return activateFunctionType;
+}
+
 void PerceptronInteractor::clean() {
     clearInputSignal();
     view->setOutValue(0);
