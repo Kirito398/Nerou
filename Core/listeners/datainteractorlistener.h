@@ -1,11 +1,11 @@
 #ifndef DATAINTERACTORLISTENER_H
 #define DATAINTERACTORLISTENER_H
 
+#include "enums/lossfunctiontypeenum.h"
+
 class ClassModel;
 class DataPresentorListener;
 class RepositoryInterface;
-
-enum LossFunctionType {MSE, CrossEntropy};
 
 class DataInteractorListener
 {

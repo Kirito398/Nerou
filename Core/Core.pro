@@ -24,6 +24,7 @@ SOURCES += \
     interactors/neuroninteractor.cpp \
     interactors/perceptroninteractor.cpp \
     interactors/sinapsinteractor.cpp \
+    interactors/tabledatainteractor.cpp \
     interactors/weightinteractor.cpp \
     models/classmodel.cpp \
     models/convolutionmodel.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 
 HEADERS += \
     Core_global.h \
+    enums/lossfunctiontypeenum.h \
     interactors/convolutioninteractor.h \
     interactors/coreinteractor.h \
     interactors/datainteractor.h \
@@ -41,6 +43,7 @@ HEADERS += \
     interactors/neuroninteractor.h \
     interactors/perceptroninteractor.h \
     interactors/sinapsinteractor.h \
+    interactors/tabledatainteractor.h \
     interactors/weightinteractor.h \
     interfaces/coreinterface.h \
     interfaces/maininteractorinterface.h \
@@ -56,6 +59,8 @@ HEADERS += \
     listeners/perceptroninteractorlistener.h \
     listeners/perceptronpresentorlistener.h \
     listeners/sinapspresentorlistener.h \
+    listeners/tabledatainteractorlistener.h \
+    listeners/tabledatapresentorlistener.h \
     models/classmodel.h \
     models/convolutionmodel.h \
     models/coremodel.h \

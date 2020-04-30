@@ -13,7 +13,7 @@ class QBoxLayout;
 class MovingView : public QObject, public QGraphicsItem, public MovingViewInterface
 {
 public:
-    enum ViewType {Data, Perceptron, Convolution};
+    enum ViewType {Data, Perceptron, Convolution, TableData};
     MovingView(ViewType type, QObject *parent = nullptr);
     ~MovingView() override;
     void setView(PaintSceneInterface *view);
