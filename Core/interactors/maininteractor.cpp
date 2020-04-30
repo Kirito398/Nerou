@@ -7,6 +7,7 @@
 #include "interactors/weightinteractor.h"
 #include "interactors/coreinteractor.h"
 #include "interactors/convolutioninteractor.h"
+#include "interactors/tabledatainteractor.h"
 #include "listeners/mainpresentorlistener.h"
 #include "interfaces/repositoryinterface.h"
 #include "models/datamodel.h"
@@ -130,6 +131,17 @@ void MainInteractor::createNewConvolution(double x, double y) {
 
     neuronsList.push_back(newConvolution);
     view->onNewConvolutionAdded(newConvolution);
+}
+
+void MainInteractor::createNewTableData(double x, double y) {
+    TableDataInteractor *newData = new TableDataInteractor();
+
+    newData->setID(++createdItemsCounter);
+    newData->setInteractor(this);
+    newData->setPosition(x, y);
+
+    neuronsList.push_back(newData);
+    view->onNewTableDataAdded(newData);
 }
 
 void MainInteractor::createNewPerceptron(PerceptronModel model) {

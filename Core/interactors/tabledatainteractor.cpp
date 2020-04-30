@@ -53,3 +53,11 @@ void TableDataInteractor::setActivateFunctionType(int type) {
 int TableDataInteractor::getActivateFunctiontype() {
     return activateFunctionType;
 }
+
+void TableDataInteractor::onInputSignalChanged() {
+
+}
+
+void TableDataInteractor::onDeltaValueChanged() {
+
+}

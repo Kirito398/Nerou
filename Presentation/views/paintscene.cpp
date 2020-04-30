@@ -10,6 +10,7 @@
 #include "views/arrowview.h"
 #include "views/perceptronview.h"
 #include "views/convolutionview.h"
+#include "views/tabledataview.h"
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
@@ -110,6 +111,15 @@ void PaintScene::onNewDataAdded(DataInteractorListener *data) {
 
 void PaintScene::onNewConvolutionAdded(ConvolutionInteractorListener *convolution) {
     ConvolutionView *view = new ConvolutionView(convolution);
+
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
+}
+
+void PaintScene::onNewTableDataAdded(TableDataInteractorListener *tableData) {
+    TableDataView *view = new TableDataView(tableData);
 
     view->setView(this);
     view->setSelected(true);
@@ -309,6 +319,10 @@ void PaintScene::addMovingView(QPointF position) {
     }
     case MovingView::Data : {
         interactor->createNewData(position.x(), position.y());
+        break;
+    }
+    case MovingView::TableData : {
+        interactor->createNewTableData(position.x(), position.y());
         break;
     }
     }

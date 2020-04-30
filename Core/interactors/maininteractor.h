@@ -27,6 +27,7 @@ public:
     void createNewPerceptron(double x, double y);
     void createNewData(double x, double y);
     void createNewConvolution(double x, double y);
+    void createNewTableData(double x, double y);
     ArrowInteractorListener *createNewWeight(unsigned long inputID, unsigned long outputID);
     ArrowInteractorListener *createNewCore(unsigned long inputID, unsigned long outputID);
     void removeNeuron(unsigned long neuronID) override;

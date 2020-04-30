@@ -47,6 +47,14 @@ QPixmap TableDataView::getItemIcon() const {
     return pixmap;
 }
 
+QPolygonF TableDataView::getPolygon() {
+    return polygon;
+}
+
+QRectF TableDataView::boundingRect() const {
+    return bounding;
+}
+
 bool TableDataView::isOutputNeuron() {
     return false;
 }
@@ -74,6 +82,12 @@ void TableDataView::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
     Q_UNUSED(option)
     Q_UNUSED(widget)
+}
+
+void TableDataView::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    Q_UNUSED(event)
+
+    openSetsDialog();
 }
 
 void TableDataView::updatePosition(double x, double y) {

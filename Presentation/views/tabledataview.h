@@ -15,8 +15,10 @@ public:
     ~TableDataView() override;
     void setLossFunctionType(int type);
     void setActivateFunctionType(int type);
+    QPolygonF getPolygon() override;
 
 private:
+    QRectF boundingRect() const override;
     unsigned long getID() override;
     void setPosition(QPointF position) override;
     QPixmap getItemIcon() const override;
@@ -30,6 +32,8 @@ private:
     int getLossFunctionType() override;
     void onLossFunctionTypeChanged(int type) override;
     void openSetsDialog() override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+
 
 private:
     TableDataPresentor *presentor;

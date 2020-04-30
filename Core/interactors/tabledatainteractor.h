@@ -8,18 +8,20 @@ class TableDataInteractor : public NeuronInteractor, public TableDataInteractorL
 {
 public:
     TableDataInteractor();
+    void setPosition(double x, double y) override;
 
 private:
     void removeSinaps(unsigned long sinapsID) override;
     void clean() override;
     void setView(TableDataPresentorListener *listener) override;
-    void setPosition(double x, double y) override;
     void deleteNeuron() override;
     unsigned long getID() override;
     void setLossFunctionType(LossFunctionType type) override;
     LossFunctionType getLossFunctionType() override;
     void setActivateFunctionType(int type) override;
     int getActivateFunctiontype() override;
+    void onInputSignalChanged() override;
+    void onDeltaValueChanged() override;
 
     TableDataPresentorListener *view;
     RepositoryInterface *repository;
