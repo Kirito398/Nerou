@@ -29,6 +29,7 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     parametersDialog = nullptr;
     propertiesBox = nullptr;
 
+    //asdfasdf
     mode = PaintScene::Selector;
     viewType = MovingView::Perceptron;
 }
