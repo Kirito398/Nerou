@@ -3,6 +3,7 @@
 #include <QPainter>
 
 #include "presenters/tabledatapresentor.h"
+#include "dialogs/tabledataparametersdialog.h"
 
 TableDataView::TableDataView(TableDataInteractorListener *listener, QObject *parent) : MovingView(TableData ,parent)
 {
@@ -60,7 +61,10 @@ bool TableDataView::isOutputNeuron() {
 }
 
 QBoxLayout *TableDataView::getPropertiesLayout() {
-    return nullptr;
+    if (parametersDialog == nullptr)
+        parametersDialog = new TableDataParametersDialog(this);
+
+    return parametersDialog->getMainLayout();
 }
 
 void TableDataView::makePolygon() {

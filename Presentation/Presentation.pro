@@ -27,6 +27,7 @@ SOURCES += \
     dialogs/perceptronparametersdialog.cpp \
     dialogs/progresstrainingdialog.cpp \
     dialogs/progresstrainingplotsdialog.cpp \
+    dialogs/tabledataparametersdialog.cpp \
     main.cpp \
     models/selectoritem.cpp \
     presenters/arrowpresentor.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     dialogs/perceptronparametersdialog.h \
     dialogs/progresstrainingdialog.h \
     dialogs/progresstrainingplotsdialog.h \
+    dialogs/tabledataparametersdialog.h \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
     interfaces/mainwindowinterface.h \
