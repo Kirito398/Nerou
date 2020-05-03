@@ -9,6 +9,7 @@ class TableDataInteractor : public NeuronInteractor, public TableDataInteractorL
 public:
     TableDataInteractor();
     void setPosition(double x, double y) override;
+    void setRepository(RepositoryInterface *repository);
 
 private:
     void removeSinaps(unsigned long sinapsID) override;
@@ -22,6 +23,7 @@ private:
     int getActivateFunctiontype() override;
     void onInputSignalChanged() override;
     void onDeltaValueChanged() override;
+    std::vector<std::vector<std::string> > loadTableValue(std::string path) override;
 
     TableDataPresentorListener *view;
     RepositoryInterface *repository;

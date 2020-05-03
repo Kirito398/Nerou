@@ -7,6 +7,7 @@
 class TableDataInteractorListener;
 class TableDataPresentor;
 class TableDataParametersDialog;
+class TableDataSetsDialog;
 
 class TableDataView : public MovingView, public TableDataViewListener
 {
@@ -42,6 +43,7 @@ private:
     QColor brushColor;
     QBoxLayout *propertiesBox;
     TableDataParametersDialog *parametersDialog;
+    TableDataSetsDialog *setsDialog;
 };
 
 #endif // TABLEDATAVIEW_H

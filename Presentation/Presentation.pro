@@ -28,6 +28,7 @@ SOURCES += \
     dialogs/progresstrainingdialog.cpp \
     dialogs/progresstrainingplotsdialog.cpp \
     dialogs/tabledataparametersdialog.cpp \
+    dialogs/tabledatasetsdialog.cpp \
     main.cpp \
     models/selectoritem.cpp \
     presenters/arrowpresentor.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
     dialogs/progresstrainingdialog.h \
     dialogs/progresstrainingplotsdialog.h \
     dialogs/tabledataparametersdialog.h \
+    dialogs/tabledatasetsdialog.h \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
     interfaces/mainwindowinterface.h \

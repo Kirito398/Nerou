@@ -17,6 +17,7 @@ private:
     void save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList, std::vector<CoreModel> coreModelList) override;
     void load(std::string path) override;
     void setInteractor(MainInteractorInterface *interactor) override;
+    std::vector<std::vector<std::string> > loadTableValue(std::string path) override;
 
 private: MainInteractorInterface *interactor;
 };

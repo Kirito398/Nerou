@@ -1,6 +1,9 @@
 #ifndef TABLEDATAINTERACTORLISTENER_H
 #define TABLEDATAINTERACTORLISTENER_H
 
+#include <vector>
+#include <string>
+
 #include "enums/lossfunctiontypeenum.h"
 
 class TableDataModel;
@@ -18,6 +21,7 @@ public:
     virtual LossFunctionType getLossFunctionType() = 0;
     virtual void setActivateFunctionType(int type) = 0;
     virtual int getActivateFunctiontype() = 0;
+    virtual std::vector<std::vector<std::string>> loadTableValue(std::string path) = 0;
 };
 
 #endif // TABLEDATAINTERACTORLISTENER_H

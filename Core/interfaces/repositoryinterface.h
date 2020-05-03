@@ -20,6 +20,7 @@ public:
     virtual void save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList, std::vector<CoreModel> coreModelList) = 0;
     virtual void load(std::string path) = 0;
     virtual void setInteractor(MainInteractorInterface* interactor) = 0;
+    virtual std::vector<std::vector<std::string>> loadTableValue(std::string path) = 0;
 };
 
 #endif // REPOSITORYINTERFACE_H

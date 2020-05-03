@@ -138,6 +138,7 @@ void MainInteractor::createNewTableData(double x, double y) {
 
     newData->setID(++createdItemsCounter);
     newData->setInteractor(this);
+    newData->setRepository(repository);
     newData->setPosition(x, y);
 
     neuronsList.push_back(newData);

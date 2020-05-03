@@ -4,12 +4,14 @@
 
 #include "presenters/tabledatapresentor.h"
 #include "dialogs/tabledataparametersdialog.h"
+#include "dialogs/tabledatasetsdialog.h"
 
 TableDataView::TableDataView(TableDataInteractorListener *listener, QObject *parent) : MovingView(TableData ,parent)
 {
     makePolygon();
 
     propertiesBox = nullptr;
+    setsDialog = nullptr;
 
     presentor = new TableDataPresentor();
     presentor->setView(this);
@@ -142,7 +144,10 @@ void TableDataView::setActivateFunctionType(int type) {
 }
 
 void TableDataView::openSetsDialog() {
+    if (setsDialog == nullptr)
+        setsDialog = new TableDataSetsDialog(this, presentor);
 
+    setsDialog->show();
 }
 
 TableDataView::~TableDataView() {

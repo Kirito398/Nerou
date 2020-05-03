@@ -1,12 +1,18 @@
 #include "tabledatainteractor.h"
 
 #include "listeners/tabledatapresentorlistener.h"
+#include "interfaces/repositoryinterface.h"
 
 TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
 {
     view = nullptr;
     repository = nullptr;
+    activateFunctionType = Sigmoid;
     lossFunctionType = CrossEntropy;
+}
+
+std::vector<std::vector<std::string>> TableDataInteractor::loadTableValue(std::string path) {
+    return repository->loadTableValue(path);
 }
 
 void TableDataInteractor::removeSinaps(unsigned long sinapsID) {
@@ -20,6 +26,10 @@ void TableDataInteractor::clean() {
 void TableDataInteractor::setView(TableDataPresentorListener *listener) {
     view = listener;
     view->updatePosition(posX, posY);
+}
+
+void TableDataInteractor::setRepository(RepositoryInterface *repository) {
+    this->repository = repository;
 }
 
 void TableDataInteractor::setPosition(double x, double y) {

@@ -3,6 +3,7 @@
 #include <QImage>
 #include <QColor>
 #include <QDir>
+#include <QTextStream>
 
 #include "models/datamodel.h"
 #include "models/classmodel.h"
@@ -15,6 +16,29 @@
 MainRepository::MainRepository()
 {
 
+}
+
+std::vector<std::vector<std::string>> MainRepository::loadTableValue(std::string path) {
+    QFile *file = new QFile(QString::fromStdString(path));
+    file->open(QIODevice::ReadOnly);
+    QTextStream in(file);
+
+    std::vector<std::vector<std::string>> vector;
+
+    while(!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList list = line.split(",");
+
+        std::vector<std::string> newSet;
+        for (QString item : list)
+            newSet.push_back(item.toStdString());
+
+        vector.push_back(newSet);
+    }
+
+    file->close();
+
+    return vector;
 }
 
 void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList, std::vector<CoreModel> coreModelList) {
