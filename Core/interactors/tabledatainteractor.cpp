@@ -2,6 +2,7 @@
 
 #include "listeners/tabledatapresentorlistener.h"
 #include "interfaces/repositoryinterface.h"
+#include "models/tabledatasetmodel.h"
 
 TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
 {
@@ -9,6 +10,7 @@ TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
     repository = nullptr;
     activateFunctionType = Sigmoid;
     lossFunctionType = CrossEntropy;
+    dataSet = new TableDataSetModel();
 }
 
 std::vector<std::vector<std::string>> TableDataInteractor::loadTableValue(std::string path) {

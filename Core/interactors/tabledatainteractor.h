@@ -4,6 +4,8 @@
 #include "interactors/neuroninteractor.h"
 #include "listeners/tabledatainteractorlistener.h"
 
+class TableDataSetModel;
+
 class TableDataInteractor : public NeuronInteractor, public TableDataInteractorListener
 {
 public:
@@ -25,9 +27,11 @@ private:
     void onDeltaValueChanged() override;
     std::vector<std::vector<std::string> > loadTableValue(std::string path) override;
 
+private:
     TableDataPresentorListener *view;
     RepositoryInterface *repository;
     LossFunctionType lossFunctionType;
+    TableDataSetModel *dataSet;
 };
 
 #endif // TABLEDATAINTERACTOR_H

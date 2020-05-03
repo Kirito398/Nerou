@@ -31,6 +31,7 @@ SOURCES += \
     models/coremodel.cpp \
     models/datamodel.cpp \
     models/perceptronmodel.cpp \
+    models/tabledatasetmodel.cpp \
     models/weightmodel.cpp
 
 HEADERS += \
@@ -66,6 +67,7 @@ HEADERS += \
     models/coremodel.h \
     models/datamodel.h \
     models/perceptronmodel.h \
+    models/tabledatasetmodel.h \
     models/weightmodel.h
 
 # Default rules for deployment.

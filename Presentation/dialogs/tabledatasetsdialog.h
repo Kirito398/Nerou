@@ -35,6 +35,8 @@ private:
 
 private slots:
     void onDataSetBrowseClicked();
+    void accept();
+    void applied();
 };
 
 #endif // TABLEDATASETSDIALOG_H

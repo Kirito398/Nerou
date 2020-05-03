@@ -16,7 +16,7 @@
 
 #include "presenters/tabledatapresentor.h"
 
-TableDataSetsDialog::TableDataSetsDialog(TableDataViewListener *view, TableDataPresentor *presentor, QWidget *parent)
+TableDataSetsDialog::TableDataSetsDialog(TableDataViewListener *view, TableDataPresentor *presentor, QWidget *parent) : QDialog(parent)
 {
     setWindowTitle(tr("Data block parameters"));
     resize(QSize(1024, 720));
@@ -80,7 +80,6 @@ void TableDataSetsDialog::onDataSetBrowseClicked() {
     csvModel->setColumnCount(dataList[0].size());
     csvModel->setHorizontalHeaderLabels(tableHeaders);
 
-
     for (int i = 1; i < dataList.size(); i++) {
         QList<QStandardItem *> list;
 
@@ -123,11 +122,11 @@ void TableDataSetsDialog::initControllButtons() {
     QBoxLayout *buttonsLayout = new QHBoxLayout();
 
     QPushButton *pbOk = new QPushButton(tr("OK"));
-    //connect(pbOk, &QPushButton::clicked, this, &DataSetsDialog::accept);
+    connect(pbOk, &QPushButton::clicked, this, &TableDataSetsDialog::accept);
     buttonsLayout->addWidget(pbOk);
 
     QPushButton *pbApply = new QPushButton(tr("Apply"));
-    //connect(pbApply, &QPushButton::clicked, this, &DataSetsDialog::applied);
+    connect(pbApply, &QPushButton::clicked, this, &TableDataSetsDialog::applied);
     buttonsLayout->addWidget(pbApply);
 
     QPushButton *pbCancel = new QPushButton(tr("Cancel"));
@@ -135,6 +134,14 @@ void TableDataSetsDialog::initControllButtons() {
     buttonsLayout->addWidget(pbCancel);
 
     mainLayout->addLayout(buttonsLayout);
+}
+
+void TableDataSetsDialog::accept() {
+
+}
+
+void TableDataSetsDialog::applied() {
+
 }
 
 void TableDataSetsDialog::initInputAndTargetLayout() {
