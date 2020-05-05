@@ -63,6 +63,10 @@ std::vector<std::string> TableDataSetModel::getInputTitles() {
     return inputTitles;
 }
 
+unsigned long TableDataSetModel::getTrainingIterationNumber() {
+    return trainingInputSet.size();
+}
+
 void TableDataSetModel::clear() {
     mainPath = "";
     trainingInputSet.clear();

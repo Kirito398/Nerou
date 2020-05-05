@@ -47,6 +47,7 @@ HEADERS += \
     interactors/tabledatainteractor.h \
     interactors/weightinteractor.h \
     interfaces/coreinterface.h \
+    interfaces/datainteractorinterface.h \
     interfaces/maininteractorinterface.h \
     interfaces/repositoryinterface.h \
     interfaces/weightinterface.h \

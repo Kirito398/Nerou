@@ -3,6 +3,7 @@
 #include "listeners/tabledatapresentorlistener.h"
 #include "interfaces/repositoryinterface.h"
 #include "models/tabledatasetmodel.h"
+#include "interfaces/weightinterface.h"
 
 TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
 {
@@ -11,6 +12,34 @@ TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
     activateFunctionType = Sigmoid;
     lossFunctionType = CrossEntropy;
     dataSet = new TableDataSetModel();
+}
+
+void TableDataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
+    std::vector<std::string> value = dataSet->getTrainingInputSet(iterationNumber);
+
+    for (size_t i = 0; i < outputsSinaps.size(); i++) {
+        WeightInterface *weight = dynamic_cast<WeightInterface *>(outputsSinaps.at(i));
+        if (weight == nullptr)
+            continue;
+
+        weight->sendSignal(std::stod(value[i]));
+    }
+}
+
+void TableDataInteractor::onInputSignalChanged() {
+
+}
+
+void TableDataInteractor::onDeltaValueChanged() {
+
+}
+
+double TableDataInteractor::getLoss() {
+
+}
+
+unsigned int TableDataInteractor::getAnswer() {
+
 }
 
 std::vector<std::vector<std::string>> TableDataInteractor::loadTableValue(std::string path) {
@@ -66,12 +95,12 @@ int TableDataInteractor::getActivateFunctiontype() {
     return activateFunctionType;
 }
 
-void TableDataInteractor::onInputSignalChanged() {
-
+unsigned long TableDataInteractor::getClassNumber() {
+    return 1;
 }
 
-void TableDataInteractor::onDeltaValueChanged() {
-
+unsigned long TableDataInteractor::getTrainingIterationNumber() {
+    return dataSet->getTrainingIterationNumber();
 }
 
 std::string TableDataInteractor::getDataSetMainPath() {

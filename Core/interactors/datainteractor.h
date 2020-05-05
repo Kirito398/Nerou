@@ -3,25 +3,26 @@
 
 #include "interactors/neuroninteractor.h"
 #include "listeners/datainteractorlistener.h"
+#include "interfaces/datainteractorinterface.h"
 
 class DataPresentorListener;
 class RepositoryInterface;
 class DataModel;
 
-class DataInteractor : public NeuronInteractor, public DataInteractorListener
+class DataInteractor : public NeuronInteractor, public DataInteractorListener, public DataInteractorInterface
 {
 public:
     DataInteractor();
     void start(unsigned long classNumber, unsigned long iterationNumber);
     void setRepository(RepositoryInterface *repository);
     unsigned long getClassNumber() override;
-    unsigned long getTrainingIterationNumber();
+    unsigned long getTrainingIterationNumber() override;
     void setPosition(double x, double y) override;
-    double getLoss();
+    double getLoss() override;
     double getAccuracy();
     DataModel getModel();
     void updateFromModel(DataModel model);
-    unsigned int getAnswer();
+    unsigned int getAnswer() override;
 
 private:
     void sendData();

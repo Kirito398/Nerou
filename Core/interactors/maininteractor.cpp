@@ -142,6 +142,7 @@ void MainInteractor::createNewTableData(double x, double y) {
     newData->setPosition(x, y);
 
     neuronsList.push_back(newData);
+    dataList.push_back(newData);
     view->onNewTableDataAdded(newData);
 }
 
@@ -283,16 +284,16 @@ void MainInteractor::onCoreModelLoaded(CoreModel model) {
 void MainInteractor::removeNeuron(unsigned long neuronID) {
     NeuronInteractor *neuron = nullptr;
 
-    for (unsigned long i = 0; i < dataList.size(); i++) {
-        neuron = dataList.at(i);
+//    for (unsigned long i = 0; i < dataList.size(); i++) {
+//        neuron = dataList.at(i);
 
-        if (neuron->getID() == neuronID) {
-            dataList.erase(dataList.begin() + i);
-            std::vector<DataInteractor *>(dataList).swap(dataList);
-            neuron = nullptr;
-            break;
-        }
-    }
+//        if (neuron->getID() == neuronID) {
+//            dataList.erase(dataList.begin() + i);
+//            std::vector<DataInteractor *>(dataList).swap(dataList);
+//            neuron = nullptr;
+//            break;
+//        }
+//    }
 
     for (unsigned long i = 0; i < neuronsList.size(); i++) {
         neuron = neuronsList.at(i);

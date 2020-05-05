@@ -23,6 +23,7 @@ public:
     std::vector<std::string> getTargetTitles();
     std::vector<std::string> getInputTitles();
     void clear();
+    unsigned long getTrainingIterationNumber();
 
 private:
     std::string mainPath;

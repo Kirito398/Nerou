@@ -9,6 +9,7 @@
 class NeuronInteractor;
 class SinapsInteractor;
 class DataInteractor;
+class DataInteractorInterface;
 class PerceptronInteractor;
 class CoreInteractor;
 class WeightInteractor;
@@ -71,7 +72,7 @@ private:
     RepositoryInterface *repository;
     std::vector<NeuronInteractor *> neuronsList;
     std::vector<SinapsInteractor *> sinapsList;
-    std::vector<DataInteractor *> dataList;
+    std::vector<DataInteractorInterface *> dataList;
     unsigned long createdItemsCounter;
     bool isStopped, isPaused, isDebug;
     unsigned long pausedClassNumber, pausedIterationNumber, pausedNeuronNumber;

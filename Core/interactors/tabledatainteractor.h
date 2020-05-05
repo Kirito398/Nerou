@@ -3,10 +3,11 @@
 
 #include "interactors/neuroninteractor.h"
 #include "listeners/tabledatainteractorlistener.h"
+#include "interfaces/datainteractorinterface.h"
 
 class TableDataSetModel;
 
-class TableDataInteractor : public NeuronInteractor, public TableDataInteractorListener
+class TableDataInteractor : public NeuronInteractor, public TableDataInteractorListener, public DataInteractorInterface
 {
 public:
     TableDataInteractor();
@@ -37,6 +38,11 @@ private:
     std::vector<std::string> getInputsTitles() override;
     std::vector<std::string> getTargetTitles() override;
     void clearDataSet() override;
+    unsigned long getClassNumber() override;
+    unsigned long getTrainingIterationNumber() override;
+    void start(unsigned long classNumber, unsigned long iterationNumber) override;
+    double getLoss() override;
+    unsigned int getAnswer() override;
 
 private:
     TableDataPresentorListener *view;
