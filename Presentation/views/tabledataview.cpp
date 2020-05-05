@@ -11,7 +11,6 @@ TableDataView::TableDataView(TableDataInteractorListener *listener, QObject *par
     makePolygon();
 
     propertiesBox = nullptr;
-    setsDialog = nullptr;
 
     presentor = new TableDataPresentor();
     presentor->setView(this);
@@ -144,10 +143,7 @@ void TableDataView::setActivateFunctionType(int type) {
 }
 
 void TableDataView::openSetsDialog() {
-    if (setsDialog == nullptr)
-        setsDialog = new TableDataSetsDialog(this, presentor);
-
-    setsDialog->show();
+    TableDataSetsDialog(this, presentor).exec();
 }
 
 TableDataView::~TableDataView() {

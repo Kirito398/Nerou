@@ -17,6 +17,10 @@ class TableDataSetsDialog : public QDialog
     Q_OBJECT
 public:
     TableDataSetsDialog(TableDataViewListener *view, TableDataPresentor *presentor, QWidget *parent = nullptr);
+    void loadDataSet(QString file);
+    ~TableDataSetsDialog();
+
+private:
     void initTable();
     void initBrowseLayout();
     void initInputAndTargetLayout();
@@ -32,6 +36,7 @@ private:
     QStandardItemModel *csvModel;
     QLineEdit *dataPath;
     QListWidget *targetsList, *inputsList;
+    QVector<QStringList> dataList;
 
 private slots:
     void onDataSetBrowseClicked();

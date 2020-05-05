@@ -67,6 +67,94 @@ void TableDataPresentor::updatePosition(double x, double y) {
     view->updatePosition(x, y);
 }
 
+QString TableDataPresentor::getDataSetMainPath() {
+    return QString::fromStdString(interactor->getDataSetMainPath());
+}
+
+void TableDataPresentor::setDataSetMainPath(QString path) {
+    interactor->setDataSetMainPath(path.toStdString());
+}
+
+void TableDataPresentor::addTrainingInputSet(QStringList set) {
+    std::vector<std::string> stdSet;
+
+    for (auto item : set)
+        stdSet.push_back(item.toStdString());
+
+    interactor->addTrainingInputSet(stdSet);
+}
+
+void TableDataPresentor::addTestingInputSet(QStringList set) {
+    std::vector<std::string> stdSet;
+
+    for (auto item : set)
+        stdSet.push_back(item.toStdString());
+
+    interactor->addTestingInputSet(stdSet);
+}
+
+void TableDataPresentor::addTrainingTargetSet(QStringList set) {
+    std::vector<std::string> stdSet;
+
+    for (auto item : set)
+        stdSet.push_back(item.toStdString());
+
+    interactor->addTrainingTargetSet(stdSet);
+}
+
+void TableDataPresentor::addTestingTargetSet(QStringList set) {
+    std::vector<std::string> stdSet;
+
+    for (auto item : set)
+        stdSet.push_back(item.toStdString());
+
+    interactor->addTestingTargetSet(stdSet);
+}
+
+void TableDataPresentor::setTargetTitles(QStringList titles) {
+    std::vector<std::string> stdTitles;
+
+    for (auto item : titles)
+        stdTitles.push_back(item.toStdString());
+
+    interactor->setTargetTitles(stdTitles);
+}
+
+void TableDataPresentor::setInputsTitles(QStringList titles) {
+    std::vector<std::string> stdTitles;
+
+    for (auto item : titles)
+        stdTitles.push_back(item.toStdString());
+
+    interactor->setInputsTitles(stdTitles);
+}
+
+QStringList TableDataPresentor::getInputsTitles() {
+    QStringList titles;
+
+    std::vector<std::string> stdTitles = interactor->getInputsTitles();
+
+    for (auto title : stdTitles)
+        titles.append(QString::fromStdString(title));
+
+    return titles;
+}
+
+QStringList TableDataPresentor::getTargetTitles() {
+    QStringList titles;
+
+    std::vector<std::string> stdTitles = interactor->getTargetTitles();
+
+    for (auto title : stdTitles)
+        titles.append(QString::fromStdString(title));
+
+    return titles;
+}
+
+void TableDataPresentor::clearDataSet() {
+    interactor->clearDataSet();
+}
+
 TableDataPresentor::~TableDataPresentor() {
     if (interactor != nullptr)
         interactor->deleteNeuron();;

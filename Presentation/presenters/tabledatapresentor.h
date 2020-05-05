@@ -27,6 +27,17 @@ public:
     void setLossFunctionType(LossFunctionType type);
     LossFunctionType getLossFunctionType();
     QVector<QStringList> loadTableValue(QString path);
+    QString getDataSetMainPath();
+    void setDataSetMainPath(QString path);
+    void addTrainingInputSet(QStringList set);
+    void addTestingInputSet(QStringList set);
+    void addTrainingTargetSet(QStringList set);
+    void addTestingTargetSet(QStringList set);
+    void setTargetTitles(QStringList titles);
+    void setInputsTitles(QStringList titles);
+    QStringList getTargetTitles();
+    QStringList getInputsTitles();
+    void clearDataSet();
 
 private:
     void updatePosition(double x, double y) override;

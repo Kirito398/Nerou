@@ -26,6 +26,17 @@ private:
     void onInputSignalChanged() override;
     void onDeltaValueChanged() override;
     std::vector<std::vector<std::string> > loadTableValue(std::string path) override;
+    std::string getDataSetMainPath() override;
+    void setDataSetMainPath(std::string path) override;
+    void addTestingInputSet(std::vector<std::string> set) override;
+    void addTestingTargetSet(std::vector<std::string> set) override;
+    void addTrainingInputSet(std::vector<std::string> set) override;
+    void addTrainingTargetSet(std::vector<std::string> set) override;
+    void setInputsTitles(std::vector<std::string> titles) override;
+    void setTargetTitles(std::vector<std::string> titles) override;
+    std::vector<std::string> getInputsTitles() override;
+    std::vector<std::string> getTargetTitles() override;
+    void clearDataSet() override;
 
 private:
     TableDataPresentorListener *view;

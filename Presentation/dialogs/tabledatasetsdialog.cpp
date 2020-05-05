@@ -41,6 +41,8 @@ TableDataSetsDialog::TableDataSetsDialog(TableDataViewListener *view, TableDataP
     initControllButtons();
 
     setLayout(mainLayout);
+
+    loadDataSet(presentor->getDataSetMainPath());
 }
 
 void TableDataSetsDialog::initBrowseLayout() {
@@ -63,12 +65,17 @@ void TableDataSetsDialog::initBrowseLayout() {
 void TableDataSetsDialog::onDataSetBrowseClicked() {
     QString file = QFileDialog::getOpenFileName(nullptr, "", "/home", "*.csv");
     dataPath->setText(file);
+    loadDataSet(file);
+}
 
+void TableDataSetsDialog::loadDataSet(QString file) {
     if (file == "")
         return;
 
+    dataPath->setText(file);
 
-    QVector<QStringList> dataList = presentor->loadTableValue(file);
+    dataList.clear();
+    dataList = presentor->loadTableValue(file);
 
     QStringList tableHeaders;
     for (int i = 0; i < dataList[0].size(); i++)
@@ -110,6 +117,25 @@ void TableDataSetsDialog::updateInputsAndTargetsCheckBoxes(QStringList titles) {
         addWidget(inputsList, newInput);
         addWidget(targetsList, newTarget);
     }
+
+    QStringList headers = presentor->getInputsTitles();
+
+    for (auto header : headers)
+        for (auto item : inputsCheckBoxes)
+            if (header.contains(item->text())) {
+                item->setChecked(true);
+                break;
+            }
+
+    headers.clear();
+    headers = presentor->getTargetTitles();
+
+    for (auto header : headers)
+        for (auto item : targetsCheckBoxes)
+            if (header.contains(item->text())) {
+                item->setChecked(true);
+                break;
+            }
 }
 
 void TableDataSetsDialog::addWidget(QListWidget *list, QWidget *widget) {
@@ -137,11 +163,48 @@ void TableDataSetsDialog::initControllButtons() {
 }
 
 void TableDataSetsDialog::accept() {
+    applied();
 
+    emit QDialog::accept();
 }
 
 void TableDataSetsDialog::applied() {
+    presentor->clearDataSet();
+    presentor->setDataSetMainPath(dataPath->text());
 
+    QStringList tableHeaders;
+    for (auto item : inputsCheckBoxes)
+        if (item->isChecked())
+            tableHeaders.append(item->text());
+
+    presentor->setInputsTitles(tableHeaders);
+
+    for (int i = 1; i < dataList.size(); i++) {
+        QStringList list;
+
+        for (int j = 0; j < dataList[i].size(); j++)
+            if (tableHeaders.contains(dataList[0][j]))
+                list.append(dataList[i][j]);
+
+        presentor->addTrainingInputSet(list);
+    }
+
+    tableHeaders.clear();
+    for (auto item : targetsCheckBoxes)
+        if (item->isChecked())
+            tableHeaders.append(item->text());
+
+    presentor->setTargetTitles(tableHeaders);
+
+    for (int i = 1; i < dataList.size(); i++) {
+        QStringList list;
+
+        for (int j = 0; j < dataList[i].size(); j++)
+            if (tableHeaders.contains(dataList[0][j]))
+                list.append(dataList[i][j]);
+
+        presentor->addTrainingTargetSet(list);
+    }
 }
 
 void TableDataSetsDialog::initInputAndTargetLayout() {
@@ -176,4 +239,18 @@ void TableDataSetsDialog::initTable() {
     table->setModel(csvModel);
 
     leftLayout->addWidget(table);
+}
+
+TableDataSetsDialog::~TableDataSetsDialog() {
+    targetsCheckBoxes.clear();
+    inputsCheckBoxes.clear();
+    csvModel->clear();
+    targetsList->clear();
+    inputsList->clear();
+    dataList.clear();
+
+    delete dataPath;
+    delete rightLayout;
+    delete leftLayout;
+    delete mainLayout;
 }

@@ -73,3 +73,48 @@ void TableDataInteractor::onInputSignalChanged() {
 void TableDataInteractor::onDeltaValueChanged() {
 
 }
+
+std::string TableDataInteractor::getDataSetMainPath() {
+    return dataSet->getMainPath();
+}
+
+void TableDataInteractor::setDataSetMainPath(std::string path) {
+    dataSet->setMainPath(path);
+}
+
+void TableDataInteractor::addTestingInputSet(std::vector<std::string> set) {
+    dataSet->addTestingInputSet(set);
+}
+
+void TableDataInteractor::addTestingTargetSet(std::vector<std::string> set) {
+    dataSet->addTestingTargetSet(set);
+}
+
+void TableDataInteractor::addTrainingInputSet(std::vector<std::string> set) {
+    dataSet->addTrainingInputSet(set);
+}
+
+void TableDataInteractor::addTrainingTargetSet(std::vector<std::string> set) {
+    dataSet->addTrainingTargetSet(set);
+}
+
+void TableDataInteractor::setInputsTitles(std::vector<std::string> titles) {
+    dataSet->setInputsTitles(titles);
+}
+
+void TableDataInteractor::setTargetTitles(std::vector<std::string> titles) {
+    dataSet->setTargetsTitles(titles);
+}
+
+std::vector<std::string> TableDataInteractor::getInputsTitles() {
+    return dataSet->getInputTitles();
+}
+
+std::vector<std::string> TableDataInteractor::getTargetTitles() {
+    return dataSet->getTargetTitles();
+}
+
+void TableDataInteractor::clearDataSet() {
+    dataSet->clear();
+}
+

@@ -43,7 +43,6 @@ private:
     QColor brushColor;
     QBoxLayout *propertiesBox;
     TableDataParametersDialog *parametersDialog;
-    TableDataSetsDialog *setsDialog;
 };
 
 #endif // TABLEDATAVIEW_H
