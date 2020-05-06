@@ -34,7 +34,7 @@ private:
     void addTrainingInputSet(std::vector<std::string> set) override;
     void addTrainingTargetSet(std::vector<std::string> set) override;
     void setInputsTitles(std::vector<std::string> titles) override;
-    void setTargetTitles(std::vector<std::string> titles) override;
+    void setTargetTitles(std::vector<std::string> titles, std::vector<unsigned long> outputsNeuronsID) override;
     std::vector<std::string> getInputsTitles() override;
     std::vector<std::string> getTargetTitles() override;
     void clearDataSet() override;
@@ -43,6 +43,7 @@ private:
     void start(unsigned long classNumber, unsigned long iterationNumber) override;
     double getLoss() override;
     unsigned int getAnswer() override;
+    size_t getOutputNeuronsNumber() override;
 
 private:
     TableDataPresentorListener *view;

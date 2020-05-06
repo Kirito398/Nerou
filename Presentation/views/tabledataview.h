@@ -34,6 +34,7 @@ private:
     void onLossFunctionTypeChanged(int type) override;
     void openSetsDialog() override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    QStringList getOutputsNeuronsList() override;
 
 
 private:

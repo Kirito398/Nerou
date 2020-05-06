@@ -28,11 +28,12 @@ public:
     virtual void addTrainingTargetSet(std::vector<std::string> set) = 0;
     virtual void addTestingInputSet(std::vector<std::string> set) = 0;
     virtual void addTestingTargetSet(std::vector<std::string> set) = 0;
-    virtual void setTargetTitles(std::vector<std::string> titles) = 0;
+    virtual void setTargetTitles(std::vector<std::string> titles, std::vector<unsigned long> outputsNeuronsID) = 0;
     virtual void setInputsTitles(std::vector<std::string> titles) = 0;
     virtual std::vector<std::string> getTargetTitles() = 0;
     virtual std::vector<std::string> getInputsTitles() = 0;
     virtual void clearDataSet() = 0;
+    virtual size_t getOutputNeuronsNumber() = 0;
 };
 
 #endif // TABLEDATAINTERACTORLISTENER_H

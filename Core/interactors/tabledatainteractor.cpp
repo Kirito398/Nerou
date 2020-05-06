@@ -131,8 +131,11 @@ void TableDataInteractor::setInputsTitles(std::vector<std::string> titles) {
     dataSet->setInputsTitles(titles);
 }
 
-void TableDataInteractor::setTargetTitles(std::vector<std::string> titles) {
+void TableDataInteractor::setTargetTitles(std::vector<std::string> titles, std::vector<unsigned long> outputsNeuronsID) {
     dataSet->setTargetsTitles(titles);
+
+    for (size_t i = 0; i < titles.size(); i++)
+        makeLearningSinaps(outputsNeuronsID[i], id);
 }
 
 std::vector<std::string> TableDataInteractor::getInputsTitles() {
@@ -145,5 +148,13 @@ std::vector<std::string> TableDataInteractor::getTargetTitles() {
 
 void TableDataInteractor::clearDataSet() {
     dataSet->clear();
+
+    std::vector<SinapsInteractor *> sinaps(inputsSinaps);
+    for(unsigned long i = 0; i < sinaps.size(); i++)
+        sinaps.at(i)->removeSinaps();
+}
+
+size_t TableDataInteractor::getOutputNeuronsNumber() {
+    return outputsSinaps.size();
 }
 

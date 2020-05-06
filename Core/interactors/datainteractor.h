@@ -13,7 +13,7 @@ class DataInteractor : public NeuronInteractor, public DataInteractorListener, p
 {
 public:
     DataInteractor();
-    void start(unsigned long classNumber, unsigned long iterationNumber);
+    void start(unsigned long classNumber, unsigned long iterationNumber) override;
     void setRepository(RepositoryInterface *repository);
     unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber() override;

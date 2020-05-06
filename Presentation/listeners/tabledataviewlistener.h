@@ -1,6 +1,8 @@
 #ifndef TABLEDATAVIEWLISTENER_H
 #define TABLEDATAVIEWLISTENER_H
 
+class QStringList;
+
 class TableDataViewListener
 {
 public:
@@ -10,6 +12,7 @@ public:
     virtual int getLossFunctionType() = 0;
     virtual void onLossFunctionTypeChanged(int type) = 0;
     virtual void openSetsDialog() = 0;
+    virtual QStringList getOutputsNeuronsList() = 0;
 };
 
 #endif // TABLEDATAVIEWLISTENER_H

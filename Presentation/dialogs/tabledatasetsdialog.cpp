@@ -15,6 +15,7 @@
 #include <QListWidget>
 
 #include "presenters/tabledatapresentor.h"
+#include "listeners/tabledataviewlistener.h"
 
 TableDataSetsDialog::TableDataSetsDialog(TableDataViewListener *view, TableDataPresentor *presentor, QWidget *parent) : QDialog(parent)
 {
@@ -27,6 +28,9 @@ TableDataSetsDialog::TableDataSetsDialog(TableDataViewListener *view, TableDataP
     mainLayout = new QVBoxLayout();
     leftLayout = new QVBoxLayout();
     rightLayout = new QVBoxLayout();
+
+    targetNeuronNumber = view->getOutputsNeuronsList().size();
+    inputNeuronNumber = presentor->getOutputsNeuronNumber();
 
     QBoxLayout *centerLayout = new QHBoxLayout();
     centerLayout->addLayout(leftLayout, 2);
@@ -112,11 +116,18 @@ void TableDataSetsDialog::updateInputsAndTargetsCheckBoxes(QStringList titles) {
     for (auto title : titles) {
         QCheckBox *newTarget = new QCheckBox(title);
         QCheckBox *newInput = new QCheckBox(title);
+
+        connect(newTarget, &QCheckBox::stateChanged, this, &TableDataSetsDialog::onTargetCheckBoxStateChanged);
+        connect(newInput, &QCheckBox::stateChanged, this, &TableDataSetsDialog::onInputCheckBoxStateChanged);
+
         targetsCheckBoxes.append(newTarget);
         inputsCheckBoxes.append(newInput);
         addWidget(inputsList, newInput);
         addWidget(targetsList, newTarget);
     }
+
+    updateTargetCheckBoxesEnabled();
+    updateInputCheckBoxesEnabled();
 
     QStringList headers = presentor->getInputsTitles();
 
@@ -194,7 +205,7 @@ void TableDataSetsDialog::applied() {
         if (item->isChecked())
             tableHeaders.append(item->text());
 
-    presentor->setTargetTitles(tableHeaders);
+    presentor->setTargetTitles(tableHeaders, view->getOutputsNeuronsList());
 
     for (int i = 1; i < dataList.size(); i++) {
         QStringList list;
@@ -207,6 +218,50 @@ void TableDataSetsDialog::applied() {
     }
 }
 
+void TableDataSetsDialog::onTargetCheckBoxStateChanged(int state) {
+    if (state)
+        targetNeuronNumber--;
+    else
+        targetNeuronNumber++;
+
+    updateTargetCheckBoxesEnabled();
+}
+
+void TableDataSetsDialog::onInputCheckBoxStateChanged(int state) {
+    if (state)
+        inputNeuronNumber--;
+    else
+        inputNeuronNumber++;
+
+    updateInputCheckBoxesEnabled();
+}
+
+void TableDataSetsDialog::updateTargetCheckBoxesEnabled() {
+    bool enable = true;
+
+    if (targetNeuronNumber <= 0)
+        enable = false;
+
+    for (auto box : targetsCheckBoxes)
+        if (!box->isChecked())
+            box->setEnabled(enable);
+
+    targetNeuronNumberLabel->setText(tr("You have output neurons: ") + QString::number(targetNeuronNumber));
+}
+
+void TableDataSetsDialog::updateInputCheckBoxesEnabled() {
+    bool enable = true;
+
+    if (inputNeuronNumber <= 0)
+        enable = false;
+
+    for (auto box : inputsCheckBoxes)
+        if (!box->isChecked())
+            box->setEnabled(enable);
+
+    inputNeuronNumberLabel->setText(tr("You have input neurons: ") + QString::number(inputNeuronNumber));
+}
+
 void TableDataSetsDialog::initInputAndTargetLayout() {
     QGroupBox *inputsBox = new QGroupBox(tr("Inputs"));
     QGroupBox *targetsBox = new QGroupBox(tr("Targets"));
@@ -214,8 +269,14 @@ void TableDataSetsDialog::initInputAndTargetLayout() {
     targetsList = new QListWidget();
     inputsList = new QListWidget();
 
+    targetNeuronNumberLabel = new QLabel(tr("You have output neurons: ") + QString::number(targetNeuronNumber));
+    inputNeuronNumberLabel = new QLabel(tr("You have input neurons: ") + QString::number(inputNeuronNumber));
+
     QBoxLayout *targetsBoxLayout = new QVBoxLayout();
     QBoxLayout *inputsBoxLayout = new QVBoxLayout();
+
+    inputsBoxLayout->addWidget(inputNeuronNumberLabel);
+    targetsBoxLayout->addWidget(targetNeuronNumberLabel);
 
     inputsBoxLayout->addWidget(inputsList);
     targetsBoxLayout->addWidget(targetsList);

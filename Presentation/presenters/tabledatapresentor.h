@@ -33,11 +33,12 @@ public:
     void addTestingInputSet(QStringList set);
     void addTrainingTargetSet(QStringList set);
     void addTestingTargetSet(QStringList set);
-    void setTargetTitles(QStringList titles);
+    void setTargetTitles(QStringList titles, QStringList outputsNeuronsId);
     void setInputsTitles(QStringList titles);
     QStringList getTargetTitles();
     QStringList getInputsTitles();
     void clearDataSet();
+    size_t getOutputsNeuronNumber();
 
 private:
     void updatePosition(double x, double y) override;

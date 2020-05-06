@@ -142,6 +142,10 @@ void TableDataView::setActivateFunctionType(int type) {
     presentor->setActivateFunctionType(type);
 }
 
+QStringList TableDataView::getOutputsNeuronsList() {
+    return outputsNeuronsList();
+}
+
 void TableDataView::openSetsDialog() {
     TableDataSetsDialog(this, presentor).exec();
 }

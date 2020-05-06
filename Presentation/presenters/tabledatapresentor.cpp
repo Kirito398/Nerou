@@ -111,13 +111,17 @@ void TableDataPresentor::addTestingTargetSet(QStringList set) {
     interactor->addTestingTargetSet(stdSet);
 }
 
-void TableDataPresentor::setTargetTitles(QStringList titles) {
+void TableDataPresentor::setTargetTitles(QStringList titles, QStringList outputsNeuronsId) {
     std::vector<std::string> stdTitles;
+    std::vector<unsigned long> stdIds;
 
     for (auto item : titles)
         stdTitles.push_back(item.toStdString());
 
-    interactor->setTargetTitles(stdTitles);
+    for (auto id : outputsNeuronsId)
+        stdIds.push_back(id.split("_")[1].toDouble());
+
+    interactor->setTargetTitles(stdTitles, stdIds);
 }
 
 void TableDataPresentor::setInputsTitles(QStringList titles) {
@@ -153,6 +157,10 @@ QStringList TableDataPresentor::getTargetTitles() {
 
 void TableDataPresentor::clearDataSet() {
     interactor->clearDataSet();
+}
+
+size_t TableDataPresentor::getOutputsNeuronNumber() {
+    return interactor->getOutputNeuronsNumber();
 }
 
 TableDataPresentor::~TableDataPresentor() {
