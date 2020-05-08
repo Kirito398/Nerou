@@ -5,29 +5,88 @@
 #include "models/tabledatasetmodel.h"
 #include "interfaces/weightinterface.h"
 
+#include <math.h>
+
 TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
 {
     view = nullptr;
     repository = nullptr;
     activateFunctionType = Sigmoid;
-    lossFunctionType = CrossEntropy;
+    lossFunctionType = MSE;
     dataSet = new TableDataSetModel();
+    currentAnswer = 0;
+    currentLoss = 0;
+    epsilon = 0.001;
 }
 
 void TableDataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
-    std::vector<std::string> value = dataSet->getTrainingInputSet(iterationNumber);
+    std::vector<double> value = makeNormalize(dataSet->getTrainingInputSet(iterationNumber), dataSet->getTrainingInputsMax(), dataSet->getTrainingInputsMin());
+    currentMark = makeNormalize(dataSet->getTrainingTargetSet(iterationNumber), dataSet->getTrainingTargetsMax(), dataSet->getTrainingTargetsMin());
+    currentAnswer = classNumber;
 
     for (size_t i = 0; i < outputsSinaps.size(); i++) {
         WeightInterface *weight = dynamic_cast<WeightInterface *>(outputsSinaps.at(i));
         if (weight == nullptr)
             continue;
 
-        weight->sendSignal(std::stod(value[i]));
+        weight->sendSignal(value[i]);
     }
 }
 
-void TableDataInteractor::onInputSignalChanged() {
+std::vector<double> TableDataInteractor::makeNormalize(std::vector<double> value, std::vector<double> max, std::vector<double> min) {
+    std::vector<double> normalizeValue;
+    size_t size = value.size();
 
+    for (size_t i = 0; i < size; i++)
+        normalizeValue.push_back(normalization(value[i], max[i], min[i]));
+
+    return normalizeValue;
+}
+
+void TableDataInteractor::onInputSignalChanged() {
+    inputSignalCount++;
+
+    if (inputSignalCount != inputsSinaps.size())
+        return;
+
+    calculateInputSignal();
+    calculateLoss();
+    calculateDelta();
+    inputSignalCount = 0;
+}
+
+void TableDataInteractor::calculateInputSignal() {
+    inputSignal.clear();
+
+    for (auto sinaps : inputsSinaps) {
+        if (sinaps->getType() != sinaps->Weigth)
+            continue;
+
+        inputSignal.push_back(static_cast<WeightInterface *>(sinaps)->getValue());
+    }
+}
+
+void TableDataInteractor::calculateLoss() {
+    switch (lossFunctionType) {
+    case MSE: {currentLoss = mseFunction(inputSignal, currentMark); break;}
+    case CrossEntropy: {currentLoss = crossEntropyFunction(inputSignal, currentMark); break;}
+    }
+}
+
+void TableDataInteractor::calculateDelta() {
+    currentDelta.clear();
+
+    for (unsigned int i = 0; i < inputSignal.size(); i++)
+        currentDelta.push_back(inputSignal[i] - currentMark[i]);
+}
+
+void TableDataInteractor::sendDelta() {
+    for (unsigned int i = 0; i < inputsSinaps.size(); i++) {
+        if (inputsSinaps[i]->getType() == inputsSinaps[i]->Weigth) {
+            WeightInterface *weight = static_cast<WeightInterface *>(inputsSinaps[i]);
+            weight->sendDelta(currentDelta[i]);
+        }
+    }
 }
 
 void TableDataInteractor::onDeltaValueChanged() {
@@ -35,11 +94,15 @@ void TableDataInteractor::onDeltaValueChanged() {
 }
 
 double TableDataInteractor::getLoss() {
-
+    return currentLoss;
 }
 
 unsigned int TableDataInteractor::getAnswer() {
+    for (auto delta : currentDelta)
+        if (fabs(delta) > epsilon)
+            currentAnswer++;
 
+    return currentAnswer;
 }
 
 std::vector<std::vector<std::string>> TableDataInteractor::loadTableValue(std::string path) {
@@ -111,19 +174,19 @@ void TableDataInteractor::setDataSetMainPath(std::string path) {
     dataSet->setMainPath(path);
 }
 
-void TableDataInteractor::addTestingInputSet(std::vector<std::string> set) {
+void TableDataInteractor::addTestingInputSet(std::vector<double> set) {
     dataSet->addTestingInputSet(set);
 }
 
-void TableDataInteractor::addTestingTargetSet(std::vector<std::string> set) {
+void TableDataInteractor::addTestingTargetSet(std::vector<double> set) {
     dataSet->addTestingTargetSet(set);
 }
 
-void TableDataInteractor::addTrainingInputSet(std::vector<std::string> set) {
+void TableDataInteractor::addTrainingInputSet(std::vector<double> set) {
     dataSet->addTrainingInputSet(set);
 }
 
-void TableDataInteractor::addTrainingTargetSet(std::vector<std::string> set) {
+void TableDataInteractor::addTrainingTargetSet(std::vector<double> set) {
     dataSet->addTrainingTargetSet(set);
 }
 

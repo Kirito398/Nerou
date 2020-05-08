@@ -10,29 +10,45 @@ public:
     TableDataSetModel();
     std::string getMainPath();
     void setMainPath(std::string path);
-    void addTrainingInputSet(std::vector<std::string> set);
-    void addTestingInputSet(std::vector<std::string> set);
-    void addTrainingTargetSet(std::vector<std::string> set);
-    void addTestingTargetSet(std::vector<std::string> set);
-    std::vector<std::string> getTrainingInputSet(size_t number);
-    std::vector<std::string> getTestingInputSet(size_t number);
-    std::vector<std::string> getTrainingTargetSet(size_t number);
-    std::vector<std::string> getTestingTargetSet(size_t number);
+    void addTrainingInputSet(std::vector<double> set);
+    void addTestingInputSet(std::vector<double> set);
+    void addTrainingTargetSet(std::vector<double> set);
+    void addTestingTargetSet(std::vector<double> set);
+    std::vector<double> getTrainingInputSet(size_t number);
+    std::vector<double> getTestingInputSet(size_t number);
+    std::vector<double> getTrainingTargetSet(size_t number);
+    std::vector<double> getTestingTargetSet(size_t number);
     void setInputsTitles(std::vector<std::string> titles);
     void setTargetsTitles(std::vector<std::string> titles);
     std::vector<std::string> getTargetTitles();
     std::vector<std::string> getInputTitles();
     void clear();
     unsigned long getTrainingIterationNumber();
+    std::vector<double> getTrainingInputsMax();
+    std::vector<double> getTestingInputsMax();
+    std::vector<double> getTrainingTargetsMax();
+    std::vector<double> getTestingTargetsMax();
+    std::vector<double> getTrainingInputsMin();
+    std::vector<double> getTestingInputsMin();
+    std::vector<double> getTrainingTargetsMin();
+    std::vector<double> getTestingTargetsMin();
 
 private:
     std::string mainPath;
-    std::vector<std::vector<std::string>> trainingInputSet;
-    std::vector<std::vector<std::string>> testingInputSet;
-    std::vector<std::vector<std::string>> trainingTargetSet;
-    std::vector<std::vector<std::string>> testingTargetSet;
+    std::vector<std::vector<double>> trainingInputSet;
+    std::vector<std::vector<double>> testingInputSet;
+    std::vector<std::vector<double>> trainingTargetSet;
+    std::vector<std::vector<double>> testingTargetSet;
     std::vector<std::string> targetTitles;
     std::vector<std::string> inputTitles;
+    std::vector<double> trainingInputsMax;
+    std::vector<double> testingInputsMax;
+    std::vector<double> trainingTargetsMax;
+    std::vector<double> testingTargetsMax;
+    std::vector<double> trainingInputsMin;
+    std::vector<double> testingInputsMin;
+    std::vector<double> trainingTargetsMin;
+    std::vector<double> testingTargetsMin;
 };
 
 #endif // TABLEDATASETMODEL_H

@@ -76,37 +76,37 @@ void TableDataPresentor::setDataSetMainPath(QString path) {
 }
 
 void TableDataPresentor::addTrainingInputSet(QStringList set) {
-    std::vector<std::string> stdSet;
+    std::vector<double> stdSet;
 
     for (auto item : set)
-        stdSet.push_back(item.toStdString());
+        stdSet.push_back(item.toDouble());
 
     interactor->addTrainingInputSet(stdSet);
 }
 
 void TableDataPresentor::addTestingInputSet(QStringList set) {
-    std::vector<std::string> stdSet;
+    std::vector<double> stdSet;
 
     for (auto item : set)
-        stdSet.push_back(item.toStdString());
+        stdSet.push_back(item.toDouble());
 
     interactor->addTestingInputSet(stdSet);
 }
 
 void TableDataPresentor::addTrainingTargetSet(QStringList set) {
-    std::vector<std::string> stdSet;
+    std::vector<double> stdSet;
 
     for (auto item : set)
-        stdSet.push_back(item.toStdString());
+        stdSet.push_back(item.toDouble());
 
     interactor->addTrainingTargetSet(stdSet);
 }
 
 void TableDataPresentor::addTestingTargetSet(QStringList set) {
-    std::vector<std::string> stdSet;
+    std::vector<double> stdSet;
 
     for (auto item : set)
-        stdSet.push_back(item.toStdString());
+        stdSet.push_back(item.toDouble());
 
     interactor->addTestingTargetSet(stdSet);
 }

@@ -24,10 +24,10 @@ public:
     virtual std::vector<std::vector<std::string>> loadTableValue(std::string path) = 0;
     virtual std::string getDataSetMainPath() = 0;
     virtual void setDataSetMainPath(std::string path) = 0;
-    virtual void addTrainingInputSet(std::vector<std::string> set) = 0;
-    virtual void addTrainingTargetSet(std::vector<std::string> set) = 0;
-    virtual void addTestingInputSet(std::vector<std::string> set) = 0;
-    virtual void addTestingTargetSet(std::vector<std::string> set) = 0;
+    virtual void addTrainingInputSet(std::vector<double> set) = 0;
+    virtual void addTrainingTargetSet(std::vector<double> set) = 0;
+    virtual void addTestingInputSet(std::vector<double> set) = 0;
+    virtual void addTestingTargetSet(std::vector<double> set) = 0;
     virtual void setTargetTitles(std::vector<std::string> titles, std::vector<unsigned long> outputsNeuronsID) = 0;
     virtual void setInputsTitles(std::vector<std::string> titles) = 0;
     virtual std::vector<std::string> getTargetTitles() = 0;

@@ -29,10 +29,10 @@ private:
     std::vector<std::vector<std::string> > loadTableValue(std::string path) override;
     std::string getDataSetMainPath() override;
     void setDataSetMainPath(std::string path) override;
-    void addTestingInputSet(std::vector<std::string> set) override;
-    void addTestingTargetSet(std::vector<std::string> set) override;
-    void addTrainingInputSet(std::vector<std::string> set) override;
-    void addTrainingTargetSet(std::vector<std::string> set) override;
+    void addTestingInputSet(std::vector<double> set) override;
+    void addTestingTargetSet(std::vector<double> set) override;
+    void addTrainingInputSet(std::vector<double> set) override;
+    void addTrainingTargetSet(std::vector<double> set) override;
     void setInputsTitles(std::vector<std::string> titles) override;
     void setTargetTitles(std::vector<std::string> titles, std::vector<unsigned long> outputsNeuronsID) override;
     std::vector<std::string> getInputsTitles() override;
@@ -44,12 +44,25 @@ private:
     double getLoss() override;
     unsigned int getAnswer() override;
     size_t getOutputNeuronsNumber() override;
+    std::vector<double> makeNormalize(std::vector<double> value, std::vector<double> max, std::vector<double> min);
+
+private:
+    void calculateInputSignal();
+    void calculateLoss();
+    void calculateDelta();
+    void sendDelta();
 
 private:
     TableDataPresentorListener *view;
     RepositoryInterface *repository;
     LossFunctionType lossFunctionType;
     TableDataSetModel *dataSet;
+    unsigned long currentAnswer;
+    std::vector<double> inputSignal;
+    std::vector<double> currentMark;
+    std::vector<double> currentDelta;
+    double currentLoss;
+    double epsilon;
 };
 
 #endif // TABLEDATAINTERACTOR_H

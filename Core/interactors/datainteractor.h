@@ -50,8 +50,6 @@ private:
     void calculateInputSignal();
     void calculateLoss();
     unsigned int getMaxIndex(std::vector<double> value);
-    double mseFunction(std::vector<double> answer, std::vector<double> mark);
-    double crossEntropyFunction(std::vector<double> answer, std::vector<double> mark);
 
 private:
     DataPresentorListener *view;
