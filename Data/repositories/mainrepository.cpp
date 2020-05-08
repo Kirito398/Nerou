@@ -27,7 +27,7 @@ std::vector<std::vector<std::string>> MainRepository::loadTableValue(std::string
 
     while(!in.atEnd()) {
         QString line = in.readLine();
-        QStringList list = line.split(",");
+        QStringList list = line.split(";");
 
         std::vector<std::string> newSet;
         for (QString item : list)
