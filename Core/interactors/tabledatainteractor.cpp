@@ -16,7 +16,7 @@ TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
     dataSet = new TableDataSetModel();
     currentAnswer = 0;
     currentLoss = 0;
-    epsilon = 0.01;
+    epsilon = 0.4;
 }
 
 void TableDataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
@@ -52,6 +52,7 @@ void TableDataInteractor::onInputSignalChanged() {
     calculateInputSignal();
     calculateLoss();
     calculateDelta();
+    sendDelta();
     inputSignalCount = 0;
 }
 

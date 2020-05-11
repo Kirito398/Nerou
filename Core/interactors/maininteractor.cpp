@@ -57,8 +57,6 @@ void MainInteractor::run() {
         view->onEpohChanged(e + 1);
         double correctAnswerSum = 0.0;
         double answerCounter = 0.0;
-        double totalLossSum = 0.0;
-        double lossSumCounter = 0.0;
 
         for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
             view->onIterationChanged(j + 1);
@@ -87,10 +85,8 @@ void MainInteractor::run() {
                 updateSinaps();
             }
 
-            totalLossSum += lossSum / classNumber;
-            lossSumCounter++;
             view->onAccuracyChanged(correctAnswerSum / answerCounter);
-            view->onErrorValueChanged(totalLossSum / lossSumCounter);
+            view->onErrorValueChanged(lossSum / classNumber);
         }
     }
 
