@@ -30,8 +30,10 @@ std::vector<std::vector<std::string>> MainRepository::loadTableValue(std::string
         QStringList list = line.split(";");
 
         std::vector<std::string> newSet;
-        for (QString item : list)
+        for (QString item : list) {
+            item.replace(',', '.');
             newSet.push_back(item.toStdString());
+        }
 
         vector.push_back(newSet);
     }

@@ -55,10 +55,13 @@ void MainInteractor::run() {
 
     for (unsigned long e = 0; e < epohNumber; e++) {
         view->onEpohChanged(e + 1);
+        double correctAnswerSum = 0.0;
+        double answerCounter = 0.0;
+        double totalLossSum = 0.0;
+        double lossSumCounter = 0.0;
 
         for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
             view->onIterationChanged(j + 1);
-            double correctAnswerSum = 0.0;
             double lossSum = 0;
 
             for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
@@ -78,13 +81,16 @@ void MainInteractor::run() {
 
                     if (dataList.at(k)->getAnswer() == i)
                         correctAnswerSum++;
+                    answerCounter++;
                 }
 
                 updateSinaps();
             }
 
-            view->onAccuracyChanged(correctAnswerSum / classNumber);
-            view->onErrorValueChanged(lossSum / classNumber);
+            totalLossSum += lossSum / classNumber;
+            lossSumCounter++;
+            view->onAccuracyChanged(correctAnswerSum / answerCounter);
+            view->onErrorValueChanged(totalLossSum / lossSumCounter);
         }
     }
 
