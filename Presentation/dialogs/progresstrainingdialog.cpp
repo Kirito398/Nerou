@@ -42,6 +42,14 @@ ProgressTrainingDialog::ProgressTrainingDialog()
     setLayout(layout);
 }
 
+void ProgressTrainingDialog::resetData() {
+    totalProgressBar->setValue(0);
+    maxEpoh = 1;
+    maxIteration = 1;
+
+    plotsDialog->resetData();
+}
+
 QVBoxLayout *ProgressTrainingDialog::getMainLayout() {
     return layout;
 }

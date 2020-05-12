@@ -451,6 +451,7 @@ void MainInteractor::onProcessStopped() {
         neuron->clean();
 
     clearProcessParameters();
+    view->onTrainingFinished();
 }
 
 void MainInteractor::onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber) {

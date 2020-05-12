@@ -38,6 +38,7 @@ void PaintScene::onTrainingStarted(unsigned int iterationCount, unsigned int epo
     if (progressDialog == nullptr)
         progressDialog = new ProgressTrainingDialog();
 
+    progressDialog->resetData();
     progressDialog->setMaxIteration(iterationCount);
     progressDialog->setMaxEpoh(epohCount);
     progressDialog->setTotalProcess(iterationCount * epohCount);
