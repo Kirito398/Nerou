@@ -163,6 +163,14 @@ std::vector<double> TableDataSetModel::getTestingTargetsMin() {
     return testingTargetsMin;
 }
 
+std::vector<unsigned long> TableDataSetModel::getOutputsNeuronsID() {
+    return outputsNeuronsID;
+}
+
+void TableDataSetModel::setOutputsNeuronsID(std::vector<unsigned long> outputsNeuronsID) {
+    this->outputsNeuronsID = outputsNeuronsID;
+}
+
 void TableDataSetModel::clear() {
     mainPath = "";
     trainingInputSet.clear();
@@ -171,4 +179,13 @@ void TableDataSetModel::clear() {
     testingTargetSet.clear();
     targetTitles.clear();
     inputTitles.clear();
+    trainingInputsMax.clear();
+    testingInputsMax.clear();
+    trainingTargetsMax.clear();
+    testingTargetsMax.clear();
+    trainingInputsMin.clear();
+    testingInputsMin.clear();
+    trainingTargetsMin.clear();
+    testingTargetsMin.clear();
+    outputsNeuronsID.clear();
 }

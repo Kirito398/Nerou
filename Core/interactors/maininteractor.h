@@ -53,6 +53,7 @@ private:
     MainInteractor(RepositoryInterface *repository);
     void createNewPerceptron(PerceptronModel model);
     void createNewData(DataModel model);
+    void createNewTableData(TableDataModel model);
     void createNewConvolution(ConvolutionModel model);
     NeuronInteractor *findNeuron(unsigned long id);
     void onProcessStopped();
@@ -65,6 +66,7 @@ private:
     void onConvolutionModelLoaded(ConvolutionModel model) override;
     void onWeightModelLoaded(WeightModel model) override;
     void onCoreModelLoaded(CoreModel model) override;
+    void onTableDataModelLoaded(TableDataModel model) override;
 
 private:
     static MainInteractor *instance;

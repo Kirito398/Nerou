@@ -4,6 +4,7 @@
 #include "interfaces/repositoryinterface.h"
 #include "models/tabledatasetmodel.h"
 #include "interfaces/weightinterface.h"
+#include "models/tabledatamodel.h"
 
 #include <math.h>
 
@@ -89,6 +90,46 @@ void TableDataInteractor::sendDelta() {
         }
     }
 }
+
+TableDataModel TableDataInteractor::getModel() {
+    TableDataModel model;
+
+    model.setX(posX);
+    model.setY(posY);
+    model.setID(id);
+    model.setType(type);
+    model.setIsOutput(isOutput);
+    model.setDataSet(dataSet);
+    model.setActivateFunctionType(activateFunctionType);
+    model.setLossFunctionType(lossFunctionType);
+
+    return model;
+}
+
+void TableDataInteractor::updateFromModel(TableDataModel model) {
+    posX = model.getX();
+    posY = model.getY();
+    id = model.getID();
+    type = NeuronType(model.getType());
+    isOutput = model.getIsOutput();
+    activateFunctionType = ActivateFunctionType (model.getActivateFunctionType());
+    lossFunctionType = LossFunctionType (model.getLossFunctionType());
+
+
+    TableDataSetModel *data = model.getDataSet();
+    clearDataSet();
+    setDataSetMainPath(data->getMainPath());
+
+    setInputsTitles(data->getInputTitles());
+    unsigned long size = data->getTrainingIterationNumber();
+    for (unsigned long i = 0; i < size; i++)
+        addTrainingInputSet(data->getTrainingInputSet(i));
+
+    setTargetTitles(data->getTargetTitles(), data->getOutputsNeuronsID());
+    for (unsigned long i = 0; i < size; i++)
+        addTrainingTargetSet(data->getTrainingTargetSet(i));
+}
+
 
 void TableDataInteractor::onDeltaValueChanged() {
 
@@ -197,6 +238,7 @@ void TableDataInteractor::setInputsTitles(std::vector<std::string> titles) {
 
 void TableDataInteractor::setTargetTitles(std::vector<std::string> titles, std::vector<unsigned long> outputsNeuronsID) {
     dataSet->setTargetsTitles(titles);
+    dataSet->setOutputsNeuronsID(outputsNeuronsID);
 
     for (size_t i = 0; i < titles.size(); i++)
         makeLearningSinaps(outputsNeuronsID[i], id);

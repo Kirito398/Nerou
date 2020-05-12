@@ -31,6 +31,7 @@ SOURCES += \
     models/coremodel.cpp \
     models/datamodel.cpp \
     models/perceptronmodel.cpp \
+    models/tabledatamodel.cpp \
     models/tabledatasetmodel.cpp \
     models/weightmodel.cpp
 
@@ -68,6 +69,7 @@ HEADERS += \
     models/coremodel.h \
     models/datamodel.h \
     models/perceptronmodel.h \
+    models/tabledatamodel.h \
     models/tabledatasetmodel.h \
     models/weightmodel.h
 

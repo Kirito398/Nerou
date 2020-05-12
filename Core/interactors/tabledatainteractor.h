@@ -6,6 +6,7 @@
 #include "interfaces/datainteractorinterface.h"
 
 class TableDataSetModel;
+class TableDataModel;
 
 class TableDataInteractor : public NeuronInteractor, public TableDataInteractorListener, public DataInteractorInterface
 {
@@ -13,6 +14,8 @@ public:
     TableDataInteractor();
     void setPosition(double x, double y) override;
     void setRepository(RepositoryInterface *repository);
+    TableDataModel getModel();
+    void updateFromModel(TableDataModel model);
 
 private:
     void removeSinaps(unsigned long sinapsID) override;
@@ -45,8 +48,6 @@ private:
     unsigned int getAnswer() override;
     size_t getOutputNeuronsNumber() override;
     std::vector<double> makeNormalize(std::vector<double> value, std::vector<double> max, std::vector<double> min);
-
-private:
     void calculateInputSignal();
     void calculateLoss();
     void calculateDelta();

@@ -11,6 +11,8 @@
 #include "models/convolutionmodel.h"
 #include "models/weightmodel.h"
 #include "models/coremodel.h"
+#include "models/tabledatamodel.h"
+#include "models/tabledatasetmodel.h"
 #include "interfaces/maininteractorinterface.h"
 
 MainRepository::MainRepository()
@@ -43,7 +45,7 @@ std::vector<std::vector<std::string>> MainRepository::loadTableValue(std::string
     return vector;
 }
 
-void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList, std::vector<CoreModel> coreModelList) {
+void MainRepository::save(std::string path, std::vector<DataModel> dataModelList, std::vector<PerceptronModel> perceptronModelList, std::vector<ConvolutionModel> convolutionModelList, std::vector<WeightModel> weightModelList, std::vector<CoreModel> coreModelList, std::vector<TableDataModel> tableDataModelList) {
     QFile *file = new QFile(QString::fromStdString(path));
     file->open(QIODevice::WriteOnly);
     QDataStream out(file);
@@ -53,8 +55,9 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
     size_t convolutionSize = convolutionModelList.size();
     size_t weightSize = weightModelList.size();
     size_t coreSize = coreModelList.size();
+    size_t tableDataSize = tableDataModelList.size();
 
-    out << QString::number(dataSize) << QString::number(perceptronSize) << QString::number(convolutionSize) << QString::number(weightSize) << QString::number(coreSize);
+    out << QString::number(dataSize) << QString::number(perceptronSize) << QString::number(convolutionSize) << QString::number(weightSize) << QString::number(coreSize) << QString::number(tableDataSize);
 
     for (size_t i = 0; i < perceptronSize; i++) {
         PerceptronModel model = perceptronModelList.at(i);
@@ -99,6 +102,58 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
         }
     }
 
+    //Сохранение данных типа таблица
+    for (size_t i = 0; i < tableDataSize; i++) {
+        TableDataModel model = tableDataModelList.at(i);
+        out << model.getX()
+            << model.getY()
+            << QString::number(model.getID())
+            << model.getType()
+            << model.getIsOutput()
+            << model.getActivateFunctionType()
+            << model.getLossFunctionType();
+
+        TableDataSetModel *dataSet = model.getDataSet();
+        out << QString::fromStdString(dataSet->getMainPath());
+
+        std::vector<std::string> inputsTitles = dataSet->getInputTitles();
+        out << QString::number(inputsTitles.size());
+
+        for (auto title : inputsTitles)
+            out << QString::fromStdString(title);
+
+        unsigned long size = dataSet->getTrainingIterationNumber();
+        out << QString::number(size);
+
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set = dataSet->getTrainingInputSet(i);
+
+            out << QString::number(set.size());
+            for (auto item : set)
+                out << item;
+        }
+
+        std::vector<std::string> targetsTitles = dataSet->getTargetTitles();
+        out << QString::number(targetsTitles.size());
+
+        for (auto title : targetsTitles)
+            out << QString::fromStdString(title);
+
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set = dataSet->getTrainingTargetSet(i);
+
+            out << QString::number(set.size());
+            for (auto item : set)
+                out << item;
+        }
+
+        std::vector<unsigned long> outputsNeuronsID = dataSet->getOutputsNeuronsID();
+        out << QString::number(outputsNeuronsID.size());
+
+        for (auto id : outputsNeuronsID)
+            out << QString::number(id);
+    }
+
     for (size_t i = 0; i < weightSize; i++) {
         WeightModel model = weightModelList.at(i);
         out << QString::number(model.getID())
@@ -138,14 +193,15 @@ void MainRepository::load(std::string path) {
     file->open(QIODevice::ReadOnly);
     QDataStream in(file);
 
-    QString data, perceptron, convolution, weight, core;
-    in >> data >> perceptron >> convolution >> weight >> core;
+    QString data, perceptron, convolution, weight, core, tableData;
+    in >> data >> perceptron >> convolution >> weight >> core >> tableData;
 
     size_t dataSize = data.toULong();
     size_t perceptronSize = perceptron.toULong();
     size_t convolutionSize = convolution.toULong();
     size_t weightSize = weight.toULong();
     size_t coreSize = core.toULong();
+    size_t tableDataSize = tableData.toULong();
 
     for (size_t i = 0; i < perceptronSize; i++) {
         double posX, posY;
@@ -241,6 +297,112 @@ void MainRepository::load(std::string path) {
         model.setLossFunctionType(lossFunctionType);
 
         interactor->onDataModelLoaded(model);
+    }
+
+    //Загрузка данных типа таблица
+    for (size_t i = 0; i < tableDataSize; i++) {
+        double posX, posY;
+        QString neuronID;
+        int type, activateFunctionType, lossFunctionType;
+        bool isOutput;
+
+        in >> posX >> posY
+                >> neuronID
+                >> type
+                >> isOutput
+                >> activateFunctionType
+                >> lossFunctionType;
+
+        TableDataSetModel *dataSet = new TableDataSetModel();
+        QString mainPath, trainingIterationNumber;
+        in >> mainPath;
+
+        dataSet->setMainPath(mainPath.toStdString());
+
+        std::vector<std::string> inputsTitles;
+
+        QString inputsTitlesSizeString;
+        in >> inputsTitlesSizeString;
+        size_t inputTitlesSize = inputsTitlesSizeString.toULong();
+
+        for (size_t i = 0; i < inputTitlesSize; i++) {
+            QString title;
+            in >> title;
+            inputsTitles.push_back(title.toStdString());
+        }
+
+        dataSet->setInputsTitles(inputsTitles);
+
+        in >> trainingIterationNumber;
+        unsigned long size = trainingIterationNumber.toULong();
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set;
+            QString setSizeString;
+            in >> setSizeString;
+
+            size_t setSize = setSizeString.toULong();
+            for (size_t j = 0; j < setSize; j++) {
+                double value;
+                in >> value;
+                set.push_back(value);
+            }
+
+            dataSet->addTrainingInputSet(set);
+        }
+
+        std::vector<std::string> targetsTitles;
+
+        QString targetsTitlesSizeString;
+        in >> targetsTitlesSizeString;
+        size_t targetTitlesSize = targetsTitlesSizeString.toULong();
+
+        for (size_t i = 0; i < targetTitlesSize; i++) {
+            QString title;
+            in >> title;
+            targetsTitles.push_back(title.toStdString());
+        }
+
+        dataSet->setTargetsTitles(targetsTitles);
+
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set;
+            QString setSizeString;
+            in >> setSizeString;
+
+            size_t setSize = setSizeString.toULong();
+            for (size_t j = 0; j < setSize; j++) {
+                double value;
+                in >> value;
+                set.push_back(value);
+            }
+
+            dataSet->addTrainingTargetSet(set);
+        }
+
+        std::vector<unsigned long> outputsNeuronsID;
+        QString idSize;
+        in >> idSize;
+        size_t outputsNeuronsIdSize = idSize.toULong();
+
+        for (size_t i = 0; i < outputsNeuronsIdSize; i++) {
+            QString idString;
+            in >> idString;
+            outputsNeuronsID.push_back(idString.toULong());
+        }
+
+        dataSet->setOutputsNeuronsID(outputsNeuronsID);
+
+        TableDataModel model;
+        model.setX(posX);
+        model.setY(posY);
+        model.setID(neuronID.toULong());
+        model.setType(type);
+        model.setIsOutput(isOutput);
+        model.setActivateFunctionType(activateFunctionType);
+        model.setLossFunctionType(lossFunctionType);
+        model.setDataSet(dataSet);
+
+        interactor->onTableDataModelLoaded(model);
     }
 
     for (size_t i = 0; i < weightSize; i++) {

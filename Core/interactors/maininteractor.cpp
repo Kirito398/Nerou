@@ -16,6 +16,7 @@
 #include "models/weightmodel.h"
 #include "models/convolutionmodel.h"
 #include "models/coremodel.h"
+#include "models/tabledatamodel.h"
 
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
@@ -178,6 +179,22 @@ void MainInteractor::createNewData(DataModel model) {
     view->onNewDataAdded(newData);
 }
 
+void MainInteractor::createNewTableData(TableDataModel model) {
+    TableDataInteractor *newData = new TableDataInteractor();
+
+    newData->setInteractor(this);
+    newData->setRepository(repository);
+
+    if (model.getID() > createdItemsCounter)
+        createdItemsCounter = model.getID();
+
+    neuronsList.push_back(newData);
+    dataList.push_back(newData);
+
+    newData->updateFromModel(model);
+    view->onNewTableDataAdded(newData);
+}
+
 void MainInteractor::createNewConvolution(ConvolutionModel model) {
     ConvolutionInteractor *newConvolution = new ConvolutionInteractor();
 
@@ -194,6 +211,10 @@ void MainInteractor::createNewConvolution(ConvolutionModel model) {
 
 void MainInteractor::onDataModelLoaded(DataModel model) {
     createNewData(model);
+}
+
+void MainInteractor::onTableDataModelLoaded(TableDataModel model){
+    createNewTableData(model);
 }
 
 void MainInteractor::onPerceptronModelLoaded(PerceptronModel model) {
@@ -380,16 +401,28 @@ void MainInteractor::save(std::string path) {
     std::vector<ConvolutionModel> convolutionModelList;
     std::vector<WeightModel> weightModelList;
     std::vector<CoreModel> coreModelList;
+    std::vector<TableDataModel> tableDataModelList;
 
     for (auto neuron : neuronsList) {
         if (neuron->getType() == Perceptron)
             perceptronModelList.push_back(static_cast<PerceptronInteractor *>(neuron)->getModel());
 
-        if (neuron->getType() == Data)
-            dataModelList.push_back(static_cast<DataInteractor *>(neuron)->getModel());
-
         if (neuron->getType() == Convolution)
             convolutionModelList.push_back(static_cast<ConvolutionInteractor *>(neuron)->getModel());
+
+        if (neuron->getType() == Data) {
+            DataInteractor *data = dynamic_cast<DataInteractor *>(neuron);
+            if (data != nullptr) {
+                dataModelList.push_back(data->getModel());
+                continue;
+            }
+
+            TableDataInteractor *tableData = dynamic_cast<TableDataInteractor *>(neuron);
+            if (tableData != nullptr) {
+                tableDataModelList.push_back(tableData->getModel());
+                continue;
+            }
+        }
     }
 
     for (auto sinaps : sinapsList) {
@@ -400,7 +433,7 @@ void MainInteractor::save(std::string path) {
             coreModelList.push_back(static_cast<CoreInteractor *>(sinaps)->getModel());
     }
 
-    repository->save(path, dataModelList, perceptronModelList, convolutionModelList, weightModelList, coreModelList);
+    repository->save(path, dataModelList, perceptronModelList, convolutionModelList, weightModelList, coreModelList, tableDataModelList);
 
     currentProjectName = path;
     view->onProjectNameChanged(currentProjectName);

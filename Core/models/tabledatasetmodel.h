@@ -32,6 +32,8 @@ public:
     std::vector<double> getTestingInputsMin();
     std::vector<double> getTrainingTargetsMin();
     std::vector<double> getTestingTargetsMin();
+    std::vector<unsigned long> getOutputsNeuronsID();
+    void setOutputsNeuronsID(std::vector<unsigned long> outputsNeuronsID);
 
 private:
     std::string mainPath;
@@ -49,6 +51,7 @@ private:
     std::vector<double> testingInputsMin;
     std::vector<double> trainingTargetsMin;
     std::vector<double> testingTargetsMin;
+    std::vector<unsigned long> outputsNeuronsID;
 };
 
 #endif // TABLEDATASETMODEL_H
