@@ -62,7 +62,7 @@ double NeuronInteractor::tanhFunction(double value) {
 }
 
 double NeuronInteractor::reluFunction(double value) {
-    return value <= 0 ? 0 : value;
+    return value < 0 ? 0 : value;
 }
 
 std::vector<double> NeuronInteractor::softmaxFunction(std::vector<double> values) {
@@ -87,7 +87,7 @@ double NeuronInteractor::reTanhFunction(double value) {
 }
 
 double NeuronInteractor::reReluFunction(double value) {
-    return value;
+    return value < 0 ? 0 : 1;
 }
 
 double NeuronInteractor::reSoftmaxFunction(double value) {
