@@ -116,14 +116,22 @@ void MainWindow::initToolBox() {
     tbData->setToolTip(tr("Data"));
     tbData->setStatusTip(tr("Add data"));
 
+    QToolButton *tbTableData = new QToolButton;
+    tbTableData->setCheckable(true);
+    tbTableData->setIcon(QIcon(scene->getTableDataIcon()));
+    tbTableData->setToolTip(tr("Table Data"));
+    tbTableData->setStatusTip(tr("Add table data"));
+
     bgToolBox = new QButtonGroup(this);
     bgToolBox->setExclusive(false);
     bgToolBox->addButton(tbPerceptron, MovingView::Perceptron);
     bgToolBox->addButton(tbConvolution, MovingView::Convolution);
     bgToolBox->addButton(tbData, MovingView::Data);
+    bgToolBox->addButton(tbTableData, MovingView::TableData);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
     toolBoxToolBar = new QToolBar(tr("Blocks"));
+    toolBoxToolBar->addWidget(tbTableData);
     toolBoxToolBar->addWidget(tbData);
     toolBoxToolBar->addWidget(tbPerceptron);
     toolBoxToolBar->addWidget(tbConvolution);

@@ -257,29 +257,6 @@ void DataInteractor::calculateLoss() {
     }
 }
 
-double DataInteractor::mseFunction(std::vector<double> answer, std::vector<double> mark) {
-    unsigned int size = answer.size();
-    double sum = 0;
-
-    for (unsigned int i = 0; i < size; i++)
-        sum += pow(answer[i] - mark[i], 2.0);
-
-    return sum / size;
-}
-
-double DataInteractor::crossEntropyFunction(std::vector<double> answer, std::vector<double> mark) {
-    unsigned int size = answer.size();
-    double sum = 0;
-
-    for (unsigned int i = 0; i < size; i++)
-        sum += -(mark[i] * log(answer[i]));
-
-//    for (unsigned int i = 0; i < size; i++)
-//        sum += -(mark[i] * log(answer[i]) + (1 - mark[i] * log(1 - answer[i])));
-
-    return sum / size;
-}
-
 unsigned int DataInteractor::getAnswer() {
     unsigned int answerNeuronID = inputsSinaps[getMaxIndex(inputSignal)]->getInputNeuron()->getID();
 

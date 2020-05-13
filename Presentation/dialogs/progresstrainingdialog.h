@@ -26,6 +26,7 @@ public:
     void onTrainingFinished();
     QVBoxLayout *getMainLayout();
     void onTrainingStarted();
+    void resetData();
 
 private:
     void initTimer();

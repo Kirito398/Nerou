@@ -27,12 +27,15 @@ SOURCES += \
     dialogs/perceptronparametersdialog.cpp \
     dialogs/progresstrainingdialog.cpp \
     dialogs/progresstrainingplotsdialog.cpp \
+    dialogs/tabledataparametersdialog.cpp \
+    dialogs/tabledatasetsdialog.cpp \
     main.cpp \
     models/selectoritem.cpp \
     presenters/arrowpresentor.cpp \
     presenters/convolutionpresentor.cpp \
     presenters/datapresentor.cpp \
     presenters/perceptronpresentor.cpp \
+    presenters/tabledatapresentor.cpp \
     views/arrowview.cpp \
     views/convolutionview.cpp \
     views/dataview.cpp \
@@ -40,7 +43,8 @@ SOURCES += \
     views/mainwindow.cpp \
     views/movingview.cpp \
     views/paintscene.cpp \
-    views/perceptronview.cpp
+    views/perceptronview.cpp \
+    views/tabledataview.cpp
 
 HEADERS += \
     dialogs/addoutputneuronsdialog.h \
@@ -52,6 +56,8 @@ HEADERS += \
     dialogs/perceptronparametersdialog.h \
     dialogs/progresstrainingdialog.h \
     dialogs/progresstrainingplotsdialog.h \
+    dialogs/tabledataparametersdialog.h \
+    dialogs/tabledatasetsdialog.h \
     interfaces/PaintSceneInterface.h \
     interfaces/arrowinterface.h \
     interfaces/mainwindowinterface.h \
@@ -60,11 +66,13 @@ HEADERS += \
     listeners/convolutionviewlistener.h \
     listeners/dataviewlistener.h \
     listeners/perceptronviewlistener.h \
+    listeners/tabledataviewlistener.h \
     models/selectoritem.h \
     presenters/arrowpresentor.h \
     presenters/convolutionpresentor.h \
     presenters/datapresentor.h \
     presenters/perceptronpresentor.h \
+    presenters/tabledatapresentor.h \
     views/arrowview.h \
     views/convolutionview.h \
     views/dataview.h \
@@ -72,7 +80,8 @@ HEADERS += \
     views/mainwindow.h \
     views/movingview.h \
     views/paintscene.h \
-    views/perceptronview.h
+    views/perceptronview.h \
+    views/tabledataview.h
 
 RESOURCES += res.qrc
 

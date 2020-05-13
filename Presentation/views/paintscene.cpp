@@ -10,6 +10,7 @@
 #include "views/arrowview.h"
 #include "views/perceptronview.h"
 #include "views/convolutionview.h"
+#include "views/tabledataview.h"
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
@@ -37,6 +38,7 @@ void PaintScene::onTrainingStarted(unsigned int iterationCount, unsigned int epo
     if (progressDialog == nullptr)
         progressDialog = new ProgressTrainingDialog();
 
+    progressDialog->resetData();
     progressDialog->setMaxIteration(iterationCount);
     progressDialog->setMaxEpoh(epohCount);
     progressDialog->setTotalProcess(iterationCount * epohCount);
@@ -110,6 +112,15 @@ void PaintScene::onNewDataAdded(DataInteractorListener *data) {
 
 void PaintScene::onNewConvolutionAdded(ConvolutionInteractorListener *convolution) {
     ConvolutionView *view = new ConvolutionView(convolution);
+
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
+}
+
+void PaintScene::onNewTableDataAdded(TableDataInteractorListener *tableData) {
+    TableDataView *view = new TableDataView(tableData);
 
     view->setView(this);
     view->setSelected(true);
@@ -281,6 +292,9 @@ void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
 
         if (startView->getType() == MovingView::Convolution && endView->getType() == MovingView::Perceptron)
             listener = interactor->createNewWeight(startView->getID(), endView->getID());
+
+        if (startView->getType() == MovingView::TableData && endView->getType() == MovingView::Perceptron)
+            listener = interactor->createNewWeight(startView->getID(), endView->getID());
     }
 
     if (listener != nullptr)
@@ -309,6 +323,10 @@ void PaintScene::addMovingView(QPointF position) {
     }
     case MovingView::Data : {
         interactor->createNewData(position.x(), position.y());
+        break;
+    }
+    case MovingView::TableData : {
+        interactor->createNewTableData(position.x(), position.y());
         break;
     }
     }
@@ -384,6 +402,10 @@ QPixmap PaintScene::getPerceptronIcon() const {
 
 QPixmap PaintScene::getDataIcon() const {
     return DataView().getItemIcon();
+}
+
+QPixmap PaintScene::getTableDataIcon() const {
+    return TableDataView().getItemIcon();
 }
 
 QPixmap PaintScene::getConvolutionIcon() const {

@@ -13,6 +13,7 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     posY = 0;
     isOutput = false;
     activateFunctionType = Sigmoid;
+    inputSignalCount = 0;
 }
 
 double NeuronInteractor::activateFunction(double value) {
@@ -61,7 +62,7 @@ double NeuronInteractor::tanhFunction(double value) {
 }
 
 double NeuronInteractor::reluFunction(double value) {
-    return value <= 0 ? 0 : value;
+    return value < 0 ? 0 : value;
 }
 
 std::vector<double> NeuronInteractor::softmaxFunction(std::vector<double> values) {
@@ -86,7 +87,7 @@ double NeuronInteractor::reTanhFunction(double value) {
 }
 
 double NeuronInteractor::reReluFunction(double value) {
-    return value;
+    return value < 0 ? 0 : 1;
 }
 
 double NeuronInteractor::reSoftmaxFunction(double value) {
@@ -119,6 +120,26 @@ std::vector<std::vector<std::vector<double> > > NeuronInteractor::normalization(
         normalization(color);
 
     return value;
+}
+
+double NeuronInteractor::mseFunction(std::vector<double> answer, std::vector<double> mark) {
+    unsigned int size = answer.size();
+    double sum = 0;
+
+    for (unsigned int i = 0; i < size; i++)
+        sum += pow(answer[i] - mark[i], 2.0);
+
+    return sum / size;
+}
+
+double NeuronInteractor::crossEntropyFunction(std::vector<double> answer, std::vector<double> mark) {
+    unsigned int size = answer.size();
+    double sum = 0;
+
+    for (unsigned int i = 0; i < size; i++)
+        sum += -(mark[i] * log(answer[i]));
+
+    return sum / size;
 }
 
 void NeuronInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {

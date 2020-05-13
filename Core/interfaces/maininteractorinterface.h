@@ -7,6 +7,7 @@ class PerceptronModel;
 class WeightModel;
 class ConvolutionModel;
 class CoreModel;
+class TableDataModel;
 
 class MainInteractorInterface
 {
@@ -19,6 +20,7 @@ public:
     virtual void onConvolutionModelLoaded(ConvolutionModel model) = 0;
     virtual void onWeightModelLoaded(WeightModel model) = 0;
     virtual void onCoreModelLoaded(CoreModel model) = 0;
+    virtual void onTableDataModelLoaded(TableDataModel model) = 0;
 };
 
 #endif // MAININTERACTORINTERFACE_H

@@ -16,6 +16,7 @@ public:
     ProgressTrainingPlotsDialog();
     void addNewLoss(double value);
     void addNewAccuracy(double value);
+    void resetData();
 
 private:
     void initLossChart();

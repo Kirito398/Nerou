@@ -24,16 +24,20 @@ SOURCES += \
     interactors/neuroninteractor.cpp \
     interactors/perceptroninteractor.cpp \
     interactors/sinapsinteractor.cpp \
+    interactors/tabledatainteractor.cpp \
     interactors/weightinteractor.cpp \
     models/classmodel.cpp \
     models/convolutionmodel.cpp \
     models/coremodel.cpp \
     models/datamodel.cpp \
     models/perceptronmodel.cpp \
+    models/tabledatamodel.cpp \
+    models/tabledatasetmodel.cpp \
     models/weightmodel.cpp
 
 HEADERS += \
     Core_global.h \
+    enums/lossfunctiontypeenum.h \
     interactors/convolutioninteractor.h \
     interactors/coreinteractor.h \
     interactors/datainteractor.h \
@@ -41,8 +45,10 @@ HEADERS += \
     interactors/neuroninteractor.h \
     interactors/perceptroninteractor.h \
     interactors/sinapsinteractor.h \
+    interactors/tabledatainteractor.h \
     interactors/weightinteractor.h \
     interfaces/coreinterface.h \
+    interfaces/datainteractorinterface.h \
     interfaces/maininteractorinterface.h \
     interfaces/repositoryinterface.h \
     interfaces/weightinterface.h \
@@ -56,11 +62,15 @@ HEADERS += \
     listeners/perceptroninteractorlistener.h \
     listeners/perceptronpresentorlistener.h \
     listeners/sinapspresentorlistener.h \
+    listeners/tabledatainteractorlistener.h \
+    listeners/tabledatapresentorlistener.h \
     models/classmodel.h \
     models/convolutionmodel.h \
     models/coremodel.h \
     models/datamodel.h \
     models/perceptronmodel.h \
+    models/tabledatamodel.h \
+    models/tabledatasetmodel.h \
     models/weightmodel.h
 
 # Default rules for deployment.

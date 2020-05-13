@@ -20,6 +20,11 @@ ProgressTrainingPlotsDialog::ProgressTrainingPlotsDialog()
     setLayout(layout);
 }
 
+void ProgressTrainingPlotsDialog::resetData() {
+    lossSeries->clear();
+    accuracySeries->clear();
+}
+
 void ProgressTrainingPlotsDialog::initLossChart() {
     QChart *lossChart = new QChart();
     lossChart->setAnimationOptions(QChart::NoAnimation);

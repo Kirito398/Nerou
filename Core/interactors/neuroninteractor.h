@@ -38,6 +38,8 @@ protected:
     void isOutputNeuronEnable(bool enable);
     std::vector<double> softmaxFunction(std::vector<double> values);
     double reSoftmaxFunction(double value);
+    double mseFunction(std::vector<double> answer, std::vector<double> mark);
+    double crossEntropyFunction(std::vector<double> answer, std::vector<double> mark);
 
 private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);

@@ -9,6 +9,7 @@
 class NeuronInteractor;
 class SinapsInteractor;
 class DataInteractor;
+class DataInteractorInterface;
 class PerceptronInteractor;
 class CoreInteractor;
 class WeightInteractor;
@@ -27,6 +28,7 @@ public:
     void createNewPerceptron(double x, double y);
     void createNewData(double x, double y);
     void createNewConvolution(double x, double y);
+    void createNewTableData(double x, double y);
     ArrowInteractorListener *createNewWeight(unsigned long inputID, unsigned long outputID);
     ArrowInteractorListener *createNewCore(unsigned long inputID, unsigned long outputID);
     void removeNeuron(unsigned long neuronID) override;
@@ -51,6 +53,7 @@ private:
     MainInteractor(RepositoryInterface *repository);
     void createNewPerceptron(PerceptronModel model);
     void createNewData(DataModel model);
+    void createNewTableData(TableDataModel model);
     void createNewConvolution(ConvolutionModel model);
     NeuronInteractor *findNeuron(unsigned long id);
     void onProcessStopped();
@@ -63,6 +66,7 @@ private:
     void onConvolutionModelLoaded(ConvolutionModel model) override;
     void onWeightModelLoaded(WeightModel model) override;
     void onCoreModelLoaded(CoreModel model) override;
+    void onTableDataModelLoaded(TableDataModel model) override;
 
 private:
     static MainInteractor *instance;
@@ -70,7 +74,7 @@ private:
     RepositoryInterface *repository;
     std::vector<NeuronInteractor *> neuronsList;
     std::vector<SinapsInteractor *> sinapsList;
-    std::vector<DataInteractor *> dataList;
+    std::vector<DataInteractorInterface *> dataList;
     unsigned long createdItemsCounter;
     bool isStopped, isPaused, isDebug;
     unsigned long pausedClassNumber, pausedIterationNumber, pausedNeuronNumber;
