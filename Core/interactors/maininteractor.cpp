@@ -27,6 +27,7 @@ MainInteractor::MainInteractor(RepositoryInterface *repository)
     learningRange = 0.3;
     alpha = 0.0;
     currentProjectName = "Untitled";
+    isTrainingProcessAnimated = true;
 
     clearProcessParameters();
 }
@@ -474,6 +475,17 @@ void MainInteractor::clearProcessParameters() {
     pausedClassNumber = 0;
     pausedIterationNumber = 0;
     pausedNeuronNumber = 0;
+}
+
+void MainInteractor::setAnimateTrainingProcessEnable(bool enable) {
+    isTrainingProcessAnimated = enable;
+
+    for (auto neuron : neuronsList)
+        neuron->setAnimateTrainingProcessEnable(enable);
+}
+
+bool MainInteractor::getAnimateTrainingProcessEnable() {
+    return isTrainingProcessAnimated;
 }
 
 std::string MainInteractor::getCurrentProjectName() {

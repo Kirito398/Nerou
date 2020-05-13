@@ -12,6 +12,7 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     posX = 0;
     posY = 0;
     isOutput = false;
+    isTrainingProcessEnabled = true;
     activateFunctionType = Sigmoid;
     inputSignalCount = 0;
 }
@@ -218,6 +219,10 @@ void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
             return;
         }
     }
+}
+
+void NeuronInteractor::setAnimateTrainingProcessEnable(bool enable) {
+    isTrainingProcessEnabled = enable;
 }
 
 void NeuronInteractor::removeSinapses() {

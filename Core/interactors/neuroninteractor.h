@@ -23,6 +23,7 @@ public:
     void setInteractor(MainInteractorInterface *interface);
     bool isOutputNeuron();
     NeuronType getType() override;
+    void setAnimateTrainingProcessEnable(bool enable);
 
 protected:
     virtual void removeSinaps(unsigned long sinapsID) override;
@@ -58,7 +59,7 @@ protected:
     std::vector<SinapsInteractor *> outputsSinaps;
     double posX, posY;
     unsigned long id;
-    bool isOutput;
+    bool isOutput, isTrainingProcessEnabled;
     NeuronType type;
     ActivateFunctionType activateFunctionType;
 

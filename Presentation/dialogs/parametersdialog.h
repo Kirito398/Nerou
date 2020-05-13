@@ -22,6 +22,7 @@ private:
     void initLearningRangeLayer();
     void initAlphaLayer();
     void initEnableMomentLayer();
+    void initEnableAnimateTrainingProcess();
 
 private:
     QBoxLayout *layout, *leftLayout, *rightLayout;
@@ -30,12 +31,14 @@ private:
     QLineEdit *leLearningRange;
     QLineEdit *leAlpha;
     QCheckBox *cbMoment;
+    QCheckBox *cbAnimateTrainingProcessEnable;
 
 private slots:
     void onEpohNumberChanged();
     void onLearningRangeChanged();
     void onAlphaChanged();
     void onMomentEnableChanged();
+    void onAnimateTrainingProcessEnableChanged();
 };
 
 #endif // PARAMETERSDIALOG_H

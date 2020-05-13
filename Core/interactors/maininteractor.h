@@ -41,6 +41,8 @@ public:
     double getAlpha();
     void setAlpha(double value);
     std::string getCurrentProjectName();
+    void setAnimateTrainingProcessEnable(bool enable);
+    bool getAnimateTrainingProcessEnable();
 
     void save(std::string path);
     void load(std::string path);
@@ -81,6 +83,7 @@ private:
     unsigned long epohNumber;
     double learningRange, alpha;
     std::string currentProjectName;
+    bool isTrainingProcessAnimated;
 };
 
 #endif // MAININTERACTOR_H

@@ -27,6 +27,7 @@ void ParametersDialog::initLayout() {
     initLearningRangeLayer();
     initEnableMomentLayer();
     initAlphaLayer();
+    initEnableAnimateTrainingProcess();
     updateParameters();
 }
 
@@ -39,6 +40,7 @@ void ParametersDialog::updateParameters() {
         cbMoment->setChecked(true);
 
     leAlpha->setText(QString::number(alpha));
+    cbAnimateTrainingProcessEnable->setChecked(interactor->getAnimateTrainingProcessEnable());
 }
 
 QBoxLayout *ParametersDialog::getMainLayout() {
@@ -112,6 +114,22 @@ void ParametersDialog::initEnableMomentLayer() {
     layout->addLayout(momentLayout);
 }
 
+void ParametersDialog::initEnableAnimateTrainingProcess() {
+    QBoxLayout *trainingAnimateLayout = new QHBoxLayout();
+    QLabel *lTrainingAnimateTitle = new QLabel(tr("Animate training process: "));
+
+    cbAnimateTrainingProcessEnable = new QCheckBox();
+    connect(cbAnimateTrainingProcessEnable, &QCheckBox::stateChanged, this, &ParametersDialog::onAnimateTrainingProcessEnableChanged);
+
+    trainingAnimateLayout->addWidget(lTrainingAnimateTitle);
+    trainingAnimateLayout->addWidget(cbAnimateTrainingProcessEnable);
+
+    trainingAnimateLayout->setStretch(0, 2);
+    trainingAnimateLayout->setStretch(1, 1);
+
+    layout->addLayout(trainingAnimateLayout);
+}
+
 void ParametersDialog::onEpohNumberChanged() {
     QString value = leEpohNumber->text();
 
@@ -137,6 +155,10 @@ void ParametersDialog::onAlphaChanged() {
         return;
 
     interactor->setAlpha(value.toDouble());
+}
+
+void ParametersDialog::onAnimateTrainingProcessEnableChanged() {
+    interactor->setAnimateTrainingProcessEnable(cbAnimateTrainingProcessEnable->isChecked());
 }
 
 void ParametersDialog::onMomentEnableChanged() {

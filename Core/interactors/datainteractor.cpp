@@ -31,7 +31,8 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
     currentClass = classNumber;
 
-    view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
+    //if (isTrainingProcessEnabled)
+        view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
 
     if (isColorMode) {
         colorValue = repository->loadColorValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);

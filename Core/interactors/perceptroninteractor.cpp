@@ -35,12 +35,16 @@ void PerceptronInteractor::onInputSignalChanged() {
     inputSignalCount++;
 
     if (inputSignalCount == inputsSinaps.size()) {
-        view->setActive(true);
+        if (isTrainingProcessEnabled)
+            view->setActive(true);
+
         makeInputSignal();
         calculateOut();
         sendSignal();
         clearInputSignal();
-        view->setActive(false);
+
+        if (isTrainingProcessEnabled)
+            view->setActive(false);
     }
 }
 
@@ -94,7 +98,8 @@ void PerceptronInteractor::calculateOut() {
 
     outValue = activateFunction(sum);
 
-    view->setOutValue(outValue);
+    if (isTrainingProcessEnabled)
+        view->setOutValue(outValue);
 }
 
 void PerceptronInteractor::calculateDelta() {
