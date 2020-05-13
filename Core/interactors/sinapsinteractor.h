@@ -12,6 +12,7 @@ public:
 public:
     SinapsInteractor(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type);
     virtual void init() = 0;
+    virtual void updateSinaps(double learningRange, double alpha) = 0;
     virtual ~SinapsInteractor();
     SinapsType getType();
     SinapsListener *getInputNeuron();
@@ -19,19 +20,19 @@ public:
     void setInteractor(MainInteractorInterface *interface);
     void setID(unsigned long id);
     unsigned long getID() const;
+    void removeSinaps();
 
 protected:
     double random();
-    void removeSinaps();
 
 protected:
     SinapsListener *inputListener;
     SinapsListener *outputListener;
+    unsigned long id;
+    SinapsType type;
 
 private:
-    SinapsType type;
     MainInteractorInterface *interactor;
-    unsigned long id;
 };
 
 #endif // SINAPSINTERACTOR_H

@@ -2,24 +2,92 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include <QCoreApplication>
+#include <QFileDialog>
+#include <QBoxLayout>
+#include <QGroupBox>
 
 #include "views/dataview.h"
 #include "views/arrowview.h"
 #include "views/perceptronview.h"
+#include "views/convolutionview.h"
 #include "models/selectoritem.h"
 #include "interactors/maininteractor.h"
 #include "repositories/mainrepository.h"
 #include "interfaces/mainwindowinterface.h"
 #include "dialogs/addoutputneuronsdialog.h"
+#include "dialogs/progresstrainingdialog.h"
+#include "dialogs/parametersdialog.h"
 
 PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
 {
     interactor = MainInteractor::getInstance(new MainRepository());
     interactor->setView(this);
+
     line = nullptr;
     selector = nullptr;
+    progressDialog = nullptr;
+    parametersDialog = nullptr;
+    propertiesBox = nullptr;
+
     mode = PaintScene::Selector;
     viewType = MovingView::Perceptron;
+}
+
+void PaintScene::onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) {
+    if (progressDialog == nullptr)
+        progressDialog = new ProgressTrainingDialog();
+
+    progressDialog->setMaxIteration(iterationCount);
+    progressDialog->setMaxEpoh(epohCount);
+    progressDialog->setTotalProcess(iterationCount * epohCount);
+
+    QPointF position = view->getSceneTop();
+    progressDialog->setGeometry(position.x() + 50, position.y() + 95, progressDialog->width(), progressDialog->height());
+    progressDialog->onTrainingStarted();
+}
+
+void PaintScene::onEpohChanged(unsigned int currentEpoh) {
+    progressDialog->setCurrentEpoh(currentEpoh);
+}
+
+void PaintScene::onIterationChanged(unsigned int currentIteration) {
+    progressDialog->setCurrentIteration(currentIteration);
+}
+
+void PaintScene::onErrorValueChanged(double value) {
+    progressDialog->setCurrentError(value);
+}
+
+void PaintScene::onAccuracyChanged(double value) {
+    progressDialog->setCurrentAccuracy(value);
+}
+
+void PaintScene::onTrainingFinished() {
+    progressDialog->onTrainingFinished();
+}
+
+void PaintScene::onLoadingActionClicked() {
+    QString file = QFileDialog::getOpenFileName(nullptr, "", "/home", "*.nro");
+    if (file != "")
+        interactor->load(file.toStdString());
+}
+
+void PaintScene::onSavingActionClicked() {
+    QString file = QString::fromStdString(interactor->getCurrentProjectName());
+
+    if (file == "Untitled")
+        file = QFileDialog::getSaveFileName(nullptr, tr("Save project"), "/home", "*.nro");
+
+    if (file != "")
+        interactor->save(file.toStdString());
+}
+
+void PaintScene::onProjectNameChanged(std::string name) {
+    view->setProjectName(QString::fromStdString(name));
+}
+
+QString PaintScene::getProjectName() {
+    return QString::fromStdString(interactor->getCurrentProjectName());
 }
 
 void PaintScene::onNewPerceptronAdded(PerceptronInteractorListener *perceptron) {
@@ -38,6 +106,40 @@ void PaintScene::onNewDataAdded(DataInteractorListener *data) {
     view->setSelected(true);
 
     addItem(view);
+}
+
+void PaintScene::onNewConvolutionAdded(ConvolutionInteractorListener *convolution) {
+    ConvolutionView *view = new ConvolutionView(convolution);
+
+    view->setView(this);
+    view->setSelected(true);
+
+    addItem(view);
+}
+
+void PaintScene::onNewWeightAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) {
+    addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
+}
+
+void PaintScene::onNewCoreAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) {
+    addArrow(arrow, findView(startNeuronID), findView(endNeuronID));
+}
+
+MovingView *PaintScene::findView(unsigned long neuronID) {
+    MovingView *view = nullptr;
+
+    QList<QGraphicsItem *> items = this->items();
+    for (auto item : items) {
+        view = dynamic_cast<MovingView *>(item);
+
+        if (view == nullptr)
+            continue;
+
+        if (view->getID() == neuronID)
+            break;
+    }
+
+    return view;
 }
 
 void PaintScene::moveSelectedItem(QPointF delta) {
@@ -148,40 +250,51 @@ void PaintScene::addArrow() {
     if (startItems.count() && endItems.count() && startItems.first() != endItems.first()) {
         MovingView *startView = qgraphicsitem_cast<MovingView *>(startItems.first());
         MovingView *endView = qgraphicsitem_cast<MovingView *>(endItems.first());
-        ArrowInteractorListener *listener = nullptr;
-
-        if (startView->getType() == endView->getType()) {
-            if (startView->getType() == MovingView::Perceptron)
-                listener = interactor->createNewWeight(startView->getID(), endView->getID());
-
-            if (startView->getType() == MovingView::Convolution)
-                listener = interactor->createNewCore(startView->getID(), endView->getID());
-        }
-
-        if (startView->getType() != endView->getType()) {
-            if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Perceptron)
-                listener = interactor->createNewWeight(startView->getID(), endView->getID());
-
-            if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Convolution)
-                listener = interactor->createNewCore(startView->getID(), endView->getID());
-        }
-
-        if (listener != nullptr) {
-            this->clearSelection();
-            ArrowView *arrow = new ArrowView(listener, startView, endView);
-            startView->addArrow(arrow);
-            endView->addArrow(arrow);
-            arrow->setSelected(true);
-            arrow->setZValue(-1000.0);
-            arrow->updatePosition();
-            arrow->setView(this);
-            addItem(arrow);
-        }
+        addArrow(startView, endView);
     }
 
     removeItem(line);
     delete line;
     line = nullptr;
+}
+
+void PaintScene::addArrow(MovingView *startView, MovingView *endView) {
+    ArrowInteractorListener *listener = nullptr;
+
+    if (startView->isOutputNeuron())
+        return;
+
+    if (startView->getType() == endView->getType()) {
+        if (startView->getType() == MovingView::Perceptron)
+            listener = interactor->createNewWeight(startView->getID(), endView->getID());
+
+        if (startView->getType() == MovingView::Convolution)
+            listener = interactor->createNewCore(startView->getID(), endView->getID());
+    }
+
+    if (startView->getType() != endView->getType()) {
+        if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Perceptron)
+            listener = interactor->createNewWeight(startView->getID(), endView->getID());
+
+        if (startView->getType() == MovingView::Data && endView->getType() == MovingView::Convolution)
+            listener = interactor->createNewCore(startView->getID(), endView->getID());
+
+        if (startView->getType() == MovingView::Convolution && endView->getType() == MovingView::Perceptron)
+            listener = interactor->createNewWeight(startView->getID(), endView->getID());
+    }
+
+    if (listener != nullptr)
+        addArrow(listener, startView, endView);
+}
+
+void PaintScene::addArrow(ArrowInteractorListener *listener, MovingView *startView, MovingView *endView) {
+    ArrowView *arrow = new ArrowView(listener, startView, endView);
+    startView->addArrow(arrow);
+    endView->addArrow(arrow);
+    arrow->setZValue(-1000.0);
+    arrow->updatePosition();
+    arrow->setView(this);
+    addItem(arrow);
 }
 
 void PaintScene::addMovingView(QPointF position) {
@@ -191,7 +304,7 @@ void PaintScene::addMovingView(QPointF position) {
         break;
     }
     case MovingView::Convolution : {
-        //interactor->
+        interactor->createNewConvolution(position.x(), position.y());
         break;
     }
     case MovingView::Data : {
@@ -209,6 +322,9 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         this->clearSelection();
 
     switch (mode) {
+    case ScroolHandDrag:
+        onSelectorModePress(event);
+        break;
     case Selector:
         onSelectorModePress(event);
         break;
@@ -225,6 +341,9 @@ void PaintScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     switch (mode) {
+    case ScroolHandDrag:
+        onSelectorModeMove(event);
+        break;
     case Selector:
         onSelectorModeMove(event);
         break;
@@ -239,6 +358,9 @@ void PaintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     switch (mode) {
+    case ScroolHandDrag:
+        onSelectorModeRelease(event);
+        break;
     case Selector:
         onSelectorModeRelease(event);
         break;
@@ -250,6 +372,8 @@ void PaintScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         break;
     }
 
+    updatePropertiesBox();
+
     selector = nullptr;
     line = nullptr;
 }
@@ -260,6 +384,10 @@ QPixmap PaintScene::getPerceptronIcon() const {
 
 QPixmap PaintScene::getDataIcon() const {
     return DataView().getItemIcon();
+}
+
+QPixmap PaintScene::getConvolutionIcon() const {
+    return ConvolutionView().getItemIcon();
 }
 
 void PaintScene::onDeleteBtnClicked() {
@@ -279,20 +407,41 @@ void PaintScene::onDeleteBtnClicked() {
             continue;
         delete item;
     }
+
+    updatePropertiesBox();
 }
 
 void PaintScene::onAddOutputNeuronsActionClicked() {
     QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    QList<MovingView *> inputsView;
 
-    MovingView *inputView = nullptr;
     for (auto item : selectedItems) {
-        inputView = dynamic_cast<MovingView *>(item);
-        if (inputView != nullptr)
-            break;
+        MovingView *view = dynamic_cast<MovingView*>(item);
+        if (view == nullptr)
+            continue;
+        if (!view->isOutputNeuron())
+            inputsView.append(view);
     }
 
-    if (inputView == nullptr)
+    if (inputsView.empty())
         return;
+
+    QPointF position = inputsView[0]->pos();
+    double maxX = position.x();
+    double maxY = position.y();
+    double minY = maxY;
+    for (auto item : inputsView) {
+        QPointF position = item->pos();
+
+        if (position.x() > maxX)
+            maxX = position.x();
+
+        if (position.y() > maxY)
+            maxY = position.y();
+
+        if (position.y() < minY)
+            minY = position.y();
+    }
 
     AddOutputNeuronsDialog dlg;
     int result = dlg.exec();
@@ -307,20 +456,28 @@ void PaintScene::onAddOutputNeuronsActionClicked() {
 
     clearSelectedItem();
 
+    double deltaY = (maxY - minY) < 0.05 ? maxY : (maxY + minY) / 2.0;
     double delta = 120;
-    double posX = inputView->pos().x() + 600;
-    double posY = inputView->pos().y() - number / 2 * delta;
+    double posX = maxX + 60 * number;
+    double posY = deltaY - ((number - 1) * delta) / 2.0;
 
     for (int i = 0; i < number; i++)
         interactor->createNewPerceptron(posX, posY + delta * i);
 
     selectedItems.clear();
     selectedItems = this->selectedItems();
+    QList<MovingView *> outputsView;
 
     for (auto item : selectedItems) {
-        line = new QGraphicsLineItem(QLineF(inputView->pos(), item->pos()));
-        addItem(line);
-        addArrow();
+        MovingView *view = dynamic_cast<MovingView *>(item);
+        if (item != nullptr)
+            outputsView.append(view);
+    }
+
+    for (auto inputView : inputsView) {
+        for (auto outputView : outputsView) {
+            addArrow(inputView, outputView);
+        }
     }
 }
 
@@ -340,8 +497,97 @@ void PaintScene::onDebugActionClicked() {
     interactor->debugRun();
 }
 
-void PaintScene::setView(MainWindowInterface *interface) {
-    view = interface;
+void PaintScene::setSelectedItemOutputsEnable(bool enable) {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    QList<PerceptronView *> perceptronList;
+
+    for (auto item : selectedItems) {
+        PerceptronView *perceptron = dynamic_cast<PerceptronView *>(item);
+
+        if (perceptron == nullptr)
+            continue;
+
+        perceptronList.append(perceptron);
+    }
+
+    for (auto perceptron : perceptronList)
+        perceptron->setOutputNeuron(enable);
+
+    this->clearSelectedItem();
+}
+
+void PaintScene::setView(MainWindowInterface *interfaces) {
+    view = interfaces;
+}
+
+void PaintScene::setPropertiesLayout(QBoxLayout *layout) {
+    propertiesLayout = layout;
+
+    if (progressDialog == nullptr)
+        progressDialog = new ProgressTrainingDialog();
+
+    QGroupBox *progress = new QGroupBox(tr("Progress"));
+    progress->setLayout(progressDialog->getMainLayout());
+
+    if (parametersDialog == nullptr)
+        parametersDialog = new ParametersDialog(interactor);
+
+    propertiesBox = new QGroupBox(tr("Properties"));
+    propertiesBox->setLayout(parametersDialog->getMainLayout());
+
+    propertiesLayout->insertWidget(0, progress);
+    propertiesLayout->insertWidget(1, propertiesBox);
+
+    updatePropertiesBox();
+}
+
+void PaintScene::updatePropertiesBox() {
+    QList<QGraphicsItem *> selectedItems = this->selectedItems();
+    QList<MovingView *> inputsView;
+    QBoxLayout *layout = nullptr;
+
+    for (auto item : selectedItems) {
+        MovingView *view = dynamic_cast<MovingView*>(item);
+        if (view == nullptr)
+            continue;
+
+        inputsView.append(view);
+    }
+
+    if (inputsView.isEmpty()) {
+        layout = parametersDialog->getMainLayout();
+    } else {
+        layout = inputsView.at(0)->getPropertiesLayout();
+    }
+
+    propertiesBox->hide();
+    delete propertiesBox->layout();
+    delete propertiesBox;
+
+    propertiesBox = new QGroupBox(tr("Properties"));
+    propertiesBox->setLayout(layout);
+
+    propertiesLayout->addWidget(propertiesBox);
+
+    propertiesLayout->setStretch(0, 1);
+    propertiesLayout->setStretch(1, 3);
+
+    propertiesLayout->update();
+    view->updateWindow();
+}
+
+QStringList PaintScene::getOutputsNeuronsList() {
+    std::vector<unsigned long> list = interactor->getOutputsNeuronsList();
+    QStringList neuronsList;
+
+    for (auto neuron : list)
+        neuronsList << "Neuron_" + QString::number(neuron);
+
+    return neuronsList;
+}
+
+QList<QGraphicsItem *> PaintScene::getSelectedMovingView() {
+    return this->selectedItems();
 }
 
 QAction *PaintScene::getAction(int type) {

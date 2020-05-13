@@ -11,38 +11,54 @@ class MainInteractorInterface;
 class NeuronInteractor : public SinapsListener
 {
 public:
-    enum FunctionType {Sin};
+    enum ActivateFunctionType {Sigmoid, Tanh, ReLU, Softmax};
 
 public:
     NeuronInteractor(NeuronType type);
     virtual ~NeuronInteractor();
     virtual void clean() = 0;
     void setID(unsigned long id);
-    unsigned long getID();
+    unsigned long getID() override;
     bool addArrow(SinapsInteractor* arrow);
     void setInteractor(MainInteractorInterface *interface);
+    bool isOutputNeuron();
+    NeuronType getType() override;
 
 protected:
+    virtual void removeSinaps(unsigned long sinapsID) override;
     double activateFunction(double value);
     void activateFunction(double* value, unsigned int size);
     void activateFunction(double** value, unsigned int row, unsigned int column);
+    double reActivateFunction(double value);
     double normalization(double value, double max, double min);
-    void normalization(double* value, unsigned int size);
-    void normalization(double** value, unsigned int row, unsigned int column);
+    std::vector<std::vector<double>> normalization(std::vector<std::vector<double>> value);
+    std::vector<std::vector<std::vector<double>>> normalization(std::vector<std::vector<std::vector<double>>> value);
+    void makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID);
     void removeNeuron();
+    void isOutputNeuronEnable(bool enable);
+    std::vector<double> softmaxFunction(std::vector<double> values);
+    double reSoftmaxFunction(double value);
 
 private:
     bool isArrowAlreadyAdded(SinapsInteractor* arrow);
     void removeSinapses();
-    void removeSinaps(unsigned long sinapsID) override;
-    NeuronType getType() override;
+    double sigmoidFunction(double value);
+    double tanhFunction(double value);
+    double reluFunction(double value);
+    double reSigmoidFunction(double value);
+    double reTanhFunction(double value);
+    double reReluFunction(double value);
 
 protected:
+    unsigned long inputSignalCount;
+    unsigned long inputDeltaCount;
     std::vector<SinapsInteractor *> inputsSinaps;
     std::vector<SinapsInteractor *> outputsSinaps;
     double posX, posY;
     unsigned long id;
+    bool isOutput;
     NeuronType type;
+    ActivateFunctionType activateFunctionType;
 
 private:
     MainInteractorInterface *interactor;

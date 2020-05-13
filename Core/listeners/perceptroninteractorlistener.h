@@ -10,6 +10,10 @@ public:
     virtual void setPosition(double x, double y) = 0;
     virtual void deleteNeuron() = 0;
     virtual unsigned long getID() = 0;
+    virtual void setOutputNeuron(bool enable) = 0;
+    virtual bool getIsOutputNeuron() = 0;
+    virtual void setActivateFunctionType(int type) = 0;
+    virtual int getActivateFunctionType() = 0;
 };
 
 #endif // PERCEPTRONINTERACTORLISTENER_H

@@ -11,10 +11,21 @@ NeuronInteractor::NeuronInteractor(NeuronType type)
     id = 0;
     posX = 0;
     posY = 0;
+    isOutput = false;
+    activateFunctionType = Sigmoid;
 }
 
 double NeuronInteractor::activateFunction(double value) {
-    return 1.0 / (1.0 + exp(-value));
+    double result = value;
+
+        switch(activateFunctionType) {
+            case Sigmoid: { result = sigmoidFunction(value); break; }
+            case Tanh: { result = tanhFunction(value); break; }
+            case ReLU: { result = reluFunction(value); break; }
+            case Softmax: { result = value; break; }
+        }
+
+        return result;
 }
 
 void NeuronInteractor::activateFunction(double* value, unsigned int size) {
@@ -28,29 +39,94 @@ void NeuronInteractor::activateFunction(double** value, unsigned int row, unsign
             value[i][j] = activateFunction(value[i][j]);
 }
 
+double NeuronInteractor::reActivateFunction(double value) {
+    double result = value;
+
+        switch(activateFunctionType) {
+            case Sigmoid: { result = reSigmoidFunction(value); break; }
+            case Tanh: { result = reTanhFunction(value); break; }
+            case ReLU: { result = reReluFunction(value); break; }
+            case Softmax: { result = 1; break; }
+        }
+
+        return result;
+}
+
+double NeuronInteractor::sigmoidFunction(double value) {
+    return 1.0 / (1.0 + exp(-value));
+}
+
+double NeuronInteractor::tanhFunction(double value) {
+    return (exp(2 * value) - 1) / (exp(2 * value) + 1);
+}
+
+double NeuronInteractor::reluFunction(double value) {
+    return value <= 0 ? 0 : value;
+}
+
+std::vector<double> NeuronInteractor::softmaxFunction(std::vector<double> values) {
+    std::vector<double> temp;
+    double sum = 0;
+
+    for (auto value : values)
+        sum += exp(value);
+
+    for (auto value : values)
+        temp.push_back(exp(value) / sum);
+
+    return temp;
+}
+
+double NeuronInteractor::reSigmoidFunction(double value) {
+    return (1.0 - value) * value;
+}
+
+double NeuronInteractor::reTanhFunction(double value) {
+    return 1.0 - pow(value, 2);
+}
+
+double NeuronInteractor::reReluFunction(double value) {
+    return value;
+}
+
+double NeuronInteractor::reSoftmaxFunction(double value) {
+    return (1.0 - value) * value;
+}
+
 double NeuronInteractor::normalization(double value, double max, double min) {
     return (value - min) / (max - min);
 }
 
-void NeuronInteractor::normalization(double* value, unsigned int size) {
-    double max = value[0];
-    double min = value[0];
+std::vector<std::vector<double>> NeuronInteractor::normalization(std::vector<std::vector<double>> value) {
+    double max = value[0][0];
+    double min = value[0][0];
 
-    for (unsigned int i = 0; i < size; i++) {
-        if (max < value[i])
-            max = value[i];
+    for (auto row : value)
+        for (auto item : row) {
+            if (max < item) max = item;
+            if (min > item) min = item;
+        }
 
-        if (min > value[i])
-            min = value[i];
-    }
+    for (unsigned int i = 0; i < value.size(); i++)
+        for (unsigned int j = 0; j < value[i].size(); j++)
+            value[i][j] = normalization(value[i][j], max, min);
 
-    for (unsigned int i = 0; i < size; i++)
-        value[i] = normalization(value[i], max, min);
+    return value;
 }
 
-void NeuronInteractor::normalization(double** value, unsigned int row, unsigned int column) {
-    for (unsigned long i = 0; i < row; i++)
-        normalization(value[i], column);
+std::vector<std::vector<std::vector<double> > > NeuronInteractor::normalization(std::vector<std::vector<std::vector<double> > > value) {
+    for (auto color : value)
+        normalization(color);
+
+    return value;
+}
+
+void NeuronInteractor::makeLearningSinaps(unsigned long learningNeuronID, unsigned long dataNeuronID) {
+    for (auto sinaps : inputsSinaps)
+        if (sinaps->getOutputNeuron()->getID() == learningNeuronID)
+            return;
+
+    interactor->makeLearningSinaps(learningNeuronID, dataNeuronID);
 }
 
 void NeuronInteractor::setID(unsigned long id) {
@@ -97,6 +173,14 @@ NeuronType NeuronInteractor::getType() {
     return type;
 }
 
+bool NeuronInteractor::isOutputNeuron() {
+    return isOutput;
+}
+
+void NeuronInteractor::isOutputNeuronEnable(bool enable) {
+    isOutput = enable;
+}
+
 void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
     for (unsigned long i = 0; i < inputsSinaps.size(); i++) {
         if (inputsSinaps.at(i)->getID() == sinapsID) {
@@ -116,11 +200,14 @@ void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
 }
 
 void NeuronInteractor::removeSinapses() {
-    for (auto sinaps : inputsSinaps)
-        delete sinaps;
+    std::vector<SinapsInteractor *> input(inputsSinaps);
+    std::vector<SinapsInteractor *> output(outputsSinaps);
 
-    for (auto sinaps : outputsSinaps)
-        delete sinaps;
+    for (auto sinaps : input)
+        sinaps->removeSinaps();
+
+    for (auto sinaps : output)
+        sinaps->removeSinaps();
 }
 
 void NeuronInteractor::removeNeuron() {

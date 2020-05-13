@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
 #include <QScreen>
 #include <QToolButton>
@@ -8,18 +7,24 @@
 #include <QMessageBox>
 #include <QButtonGroup>
 #include <QHBoxLayout>
-#include <QGraphicsView>
 #include <QMenu>
 #include <QMenuBar>
+#include <QtMath>
+#include <QSlider>
+#include <QStatusBar>
+#include <QSplitter>
+
+#ifndef QT_NO_OPEN_GL
+#include <QGLWidget>
+#include <QGLFormat>
+#endif
 
 #include "views/paintscene.h"
+#include "views/graphicview.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-
     scene = new PaintScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     scene->setView(this);
@@ -31,10 +36,20 @@ MainWindow::MainWindow(QWidget *parent)
     initControlToolBar();
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    view = new QGraphicsView(scene);
+    view = new GraphicView(this, scene);
+
     view->setRenderHint(QPainter::Antialiasing);
+    view->setDragMode(QGraphicsView::NoDrag);
+    view->setOptimizationFlags(QGraphicsView::DontSavePainterState);
+    view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    #ifndef QT_NO_OPEN_GL
+    QGLFormat format(QGL::SampleBuffers);
+    QGLWidget *openGL = new QGLWidget(format);
+    view->setViewport(openGL);
+    #endif
 
     //mainLayout->addWidget(toolBox);
     mainLayout->addWidget(view);
@@ -42,9 +57,34 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *widget = new QWidget;
     widget->setLayout(mainLayout);
 
-    setCentralWidget(widget);
+    QSplitter *vSplitter = new QSplitter;
+    vSplitter->setOrientation(Qt::Horizontal);
+
+    vSplitter->addWidget(widget);
+    vSplitter->addWidget(initPropertiesToolBar());
+
+    vSplitter->setStretchFactor(0, 15);
+    vSplitter->setStretchFactor(1, 1);
+
+    setCentralWidget(vSplitter);
     setWindowTitle("Nerou");
     setUnifiedTitleAndToolBarOnMac(true);
+
+    QStatusBar *statusBar = new QStatusBar(this);
+    statusBar->setObjectName(QStringLiteral("statusbar"));
+    setStatusBar(statusBar);
+
+    this->resize(800, 600);
+    this->showMaximized();
+    setProjectName(scene->getProjectName());
+}
+
+void MainWindow::setProjectName(QString name) {
+    this->setWindowTitle("Nerou - " + name);
+}
+
+QPointF MainWindow::getSceneTop() {
+    return geometry().topLeft() + view->geometry().topLeft();
 }
 
 void MainWindow::initControlToolBar() {
@@ -53,6 +93,7 @@ void MainWindow::initControlToolBar() {
     controlToolBar->addAction(debugAction);
     controlToolBar->addAction(pauseAction);
     controlToolBar->addAction(stopAction);
+    controlToolBar->addAction(resetZoomAction);
 }
 
 void MainWindow::initToolBox() {
@@ -65,11 +106,9 @@ void MainWindow::initToolBox() {
 
     QToolButton *tbConvolution = new QToolButton;
     tbConvolution->setCheckable(true);
-    //tbConvolution->setIcon(QIcon(item->getItemIcon()));
+    tbConvolution->setIcon(scene->getConvolutionIcon());
     tbConvolution->setToolTip(tr("Convolution"));
     tbConvolution->setStatusTip(tr("Add convolution"));
-    //delete item;
-    //item = 0;
 
     QToolButton *tbData = new QToolButton;
     tbData->setCheckable(true);
@@ -84,7 +123,7 @@ void MainWindow::initToolBox() {
     bgToolBox->addButton(tbData, MovingView::Data);
     connect(bgToolBox, SIGNAL(buttonClicked(int)), this, SLOT(onToolsGroupClicked(int)));
 
-    toolBoxToolBar = new QToolBar;
+    toolBoxToolBar = new QToolBar(tr("Blocks"));
     toolBoxToolBar->addWidget(tbData);
     toolBoxToolBar->addWidget(tbPerceptron);
     toolBoxToolBar->addWidget(tbConvolution);
@@ -104,6 +143,8 @@ void MainWindow::onToolsGroupClicked(int id) {
 
     scene->setMode(PaintScene::Views);
     scene->setViewType(MovingView::ViewType(id));
+
+    view->setDragMode(QGraphicsView::NoDrag);
 }
 
 void MainWindow::initToolBars() {
@@ -129,40 +170,55 @@ void MainWindow::initToolBars() {
     tbAddArrowMode->setToolTip(tr("Add arrow"));
     tbAddArrowMode->setStatusTip(tr("Create items relations"));
 
+    QToolButton *tbScroolHandDragMode = new QToolButton;
+    tbScroolHandDragMode->setCheckable(true);
+    tbScroolHandDragMode->setIcon(QIcon(":/images/scrool_hand_drag_icon.png"));
+    tbScroolHandDragMode->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+    tbScroolHandDragMode->setToolTip(tr("Hand drag"));
+    tbScroolHandDragMode->setStatusTip(tr("Scrool hand drag mode"));
+
     bgItems = new QButtonGroup(this);
     bgItems->addButton(tbSelectorMode, PaintScene::Selector);
     bgItems->addButton(tbAddItemMode, PaintScene::Views);
     bgItems->addButton(tbAddArrowMode, PaintScene::Arrows);
+    bgItems->addButton(tbScroolHandDragMode, PaintScene::ScroolHandDrag);
     connect(bgItems, SIGNAL(buttonClicked(int)), this, SLOT(onItemsGroupClicked()));
 
     itemsToolBar = addToolBar(tr("Items"));
     itemsToolBar->addWidget(tbSelectorMode);
     itemsToolBar->addWidget(tbAddItemMode);
     itemsToolBar->addWidget(tbAddArrowMode);
-
-    cbScale = new QComboBox;
-    QStringList scales;
-    scales << tr("25%") << tr("50%") << tr("100%") << tr("150%") << tr("200%") << tr("250%");
-    cbScale->addItems(scales);
-    cbScale->setCurrentIndex(2);
-    cbScale->setToolTip(tr("Zoom"));
-    cbScale->setStatusTip(tr("Zoom scene"));
-    connect(cbScale, SIGNAL(currentTextChanged(const QString &)), this, SLOT(onScaleChanged(const QString &)));
+    itemsToolBar->addWidget(tbScroolHandDragMode);
 
     toolsToolBar = addToolBar("Tools");
     toolsToolBar->addAction(addOutputNeuronsAction);
+    toolsToolBar->addAction(makeOutputNeuronAction);
+    toolsToolBar->addAction(makeForwardNeuronAction);
     toolsToolBar->addAction(deleteAction);
-    toolsToolBar->addWidget(cbScale);
 
-    //addToolBar(Qt::TopToolBarArea, toolsToolBar);
+    zoomSlider = new QSlider();
+    zoomSlider->setMinimum(0);
+    zoomSlider->setMaximum(500);
+    zoomSlider->setValue(250);
+    zoomSlider->setTickPosition(QSlider::TicksBelow);
+    zoomSlider->setOrientation(Qt::Horizontal);
+    connect(zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(onZoomSliderValueChanged()));
+
+    QToolBar *zoomToolBar = new QToolBar(tr("Zoom"));
+    zoomToolBar->addWidget(zoomSlider);
+    addToolBar(Qt::BottomToolBarArea, zoomToolBar);
 }
 
 void MainWindow::initMenu() {
     fileMenu = menuBar()->addMenu(tr("File"));
+    fileMenu->addAction(loadingAction);
+    fileMenu->addAction(savingAction);
     fileMenu->addAction(exitAction);
 
     itemMenu = menuBar()->addMenu(tr("Item"));
     itemMenu->addAction(addOutputNeuronsAction);
+    itemMenu->addAction(makeOutputNeuronAction);
+    itemMenu->addAction(makeForwardNeuronAction);
     itemMenu->addAction(deleteAction);
     itemMenu->addSeparator();
 
@@ -208,6 +264,28 @@ void MainWindow::initActions() {
     debugAction = new QAction(QIcon(":/images/debug_icon.png"), tr("Debug"), this);
     debugAction->setStatusTip(tr("Start debug"));
     connect(debugAction, SIGNAL(triggered(bool)), this, SLOT(onDebugActionClicked()));
+
+    resetZoomAction = new QAction(QIcon(":/images/zoom_reset_icon.png"), tr("Reset zoom"), this);
+    resetZoomAction->setStatusTip(tr("Reset scene zoom"));
+    connect(resetZoomAction, SIGNAL(triggered(bool)), this, SLOT(onResetZoomActionClicked()));
+
+    makeOutputNeuronAction = new QAction(QIcon(":/images/output_neuron_icon.png"), tr("Make output neuron"));
+    makeOutputNeuronAction->setStatusTip(tr("Make selected neuron to the output neuron"));
+    connect(makeOutputNeuronAction, SIGNAL(triggered(bool)), this, SLOT(onMakeOutputNeuronActionClicked()));
+
+    makeForwardNeuronAction = new QAction(QIcon(":/images/forward_neuron_icon.png"), tr("Make forward neuron"));
+    makeForwardNeuronAction->setStatusTip(tr("Make selected neuron to the forward neuron"));
+    connect(makeForwardNeuronAction, SIGNAL(triggered(bool)), this, SLOT(onMakeForwardNeuronActionClicked()));
+
+    savingAction = new QAction(QIcon(":/images/save_icon.png"), tr("Save project"));
+    savingAction->setStatusTip(tr("Save project"));
+    savingAction->setShortcuts(QKeySequence::Save);
+    connect(savingAction, SIGNAL(triggered(bool)), this, SLOT(onSaveActionClicked()));
+
+    loadingAction = new QAction(QIcon(":/images/open_icon.png"), tr("Open project"));
+    loadingAction->setStatusTip(tr("Open project"));
+    loadingAction->setShortcuts(QKeySequence::Open);
+    connect(loadingAction, SIGNAL(triggered(bool)), this, SLOT(onOpenActionClicked()));
 }
 
 void MainWindow::onAddOutputNeuronsActionClicked() {
@@ -229,10 +307,27 @@ void MainWindow::onItemsGroupClicked() {
 
     if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::Views)
         bgToolBox->button(scene->getViewType())->setChecked(true);
+
+    if (PaintScene::Mode(bgItems->checkedId()) == PaintScene::ScroolHandDrag)
+        view->setDragMode(QGraphicsView::ScrollHandDrag);
+    else
+        view->setDragMode(QGraphicsView::NoDrag);
+}
+
+void MainWindow::onResetZoomActionClicked() {
+    zoomSlider->setValue(250);
 }
 
 void MainWindow::onExitActionClicked() {
     close();
+}
+
+void MainWindow::onSaveActionClicked() {
+    scene->onSavingActionClicked();
+}
+
+void MainWindow::onOpenActionClicked(){
+    scene->onLoadingActionClicked();
 }
 
 void MainWindow::onAboutActionClicked() {
@@ -255,18 +350,43 @@ void MainWindow::onDebugActionClicked() {
     scene->onDebugActionClicked();
 }
 
-void MainWindow::onScaleChanged(const QString &scale) {
-    double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
-    QMatrix oldMatrix = view->matrix();
-    view->resetMatrix();
-    view->translate(oldMatrix.dx(), oldMatrix.dy());
-    view->scale(newScale, newScale);
+void MainWindow::onMakeOutputNeuronActionClicked() {
+    scene->setSelectedItemOutputsEnable(true);
+}
+
+void MainWindow::onMakeForwardNeuronActionClicked() {
+    scene->setSelectedItemOutputsEnable(false);
+}
+
+void MainWindow::zoomIn() {
+    zoomSlider->setValue(zoomSlider->value() + 6);
+    view->update();
+}
+
+void MainWindow::zoomOut() {
+    zoomSlider->setValue(zoomSlider->value() - 6);
+    view->update();
+}
+
+void MainWindow::updateWindow() {
+    update();
+}
+
+void MainWindow::onZoomSliderValueChanged() {
+    qreal scale = qPow(qreal(2), (zoomSlider->value() - 250) / qreal(50));
+
+    QMatrix matrix;
+    matrix.scale(scale, scale);
+
+    view->setMatrix(matrix);
 }
 
 QAction *MainWindow::getAction(int type) {
     switch (type) {
         case AddOutputNeurons : return addOutputNeuronsAction;
         case Delete : return deleteAction;
+        case MakeOutputNeuron : return makeOutputNeuronAction;
+        case MakeForwardNeuron : return makeForwardNeuronAction;
         default: return nullptr;
     }
 }
@@ -278,7 +398,17 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
 MainWindow::~MainWindow()
 {
     delete scene;
-    delete ui;
+}
+
+QWidget *MainWindow::initPropertiesToolBar() {
+    QBoxLayout *propertiesLayout = new QVBoxLayout();
+
+    QWidget *widget = new QWidget;
+    widget->setLayout(propertiesLayout);
+
+    scene->setPropertiesLayout(propertiesLayout);
+
+    return widget;
 }
 
 //QWidget *MainWindow::createToolBoxItem(const QString &name,  MoveItem::ItemType type) {

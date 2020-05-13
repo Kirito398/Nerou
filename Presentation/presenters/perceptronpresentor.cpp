@@ -9,6 +9,7 @@
 PerceptronPresentor::PerceptronPresentor()
 {
     interactor = nullptr;
+    view = nullptr;
 }
 
 void PerceptronPresentor::setView(PerceptronViewListener *listener) {
@@ -18,6 +19,10 @@ void PerceptronPresentor::setView(PerceptronViewListener *listener) {
 void PerceptronPresentor::setInteractor(PerceptronInteractorListener *listener) {
     interactor = listener;
     interactor->setView(this);
+}
+
+bool PerceptronPresentor::isOutputNeuron() {
+    return interactor->getIsOutputNeuron();
 }
 
 void PerceptronPresentor::updatePosition(double x, double y) {
@@ -32,12 +37,24 @@ unsigned long PerceptronPresentor::getID() {
     return interactor->getID();
 }
 
+void PerceptronPresentor::setOutputNeuron(bool enable) {
+    interactor->setOutputNeuron(enable);
+}
+
 void PerceptronPresentor::setActive(bool enable) {
     view->setActive(enable);
 }
 
 void PerceptronPresentor::setOutValue(double value) {
     view->setOutValue(QString::fromStdString(std::to_string(value)));
+}
+
+void PerceptronPresentor::setActivateFunctionType(int type) {
+    interactor->setActivateFunctionType(type);
+}
+
+int PerceptronPresentor::getActivateFunctionType() {
+    return interactor->getActivateFunctionType();
 }
 
 PerceptronPresentor::~PerceptronPresentor() {

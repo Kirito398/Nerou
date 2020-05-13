@@ -4,6 +4,7 @@
 #include <QCursor>
 #include <QVector>
 #include <QMenu>
+#include <QBoxLayout>
 
 #include "interfaces/arrowinterface.h"
 #include "interfaces/PaintSceneInterface.h"
@@ -13,6 +14,7 @@ MovingView::MovingView(ViewType type, QObject *parent) : QObject(parent), QGraph
     this->type = type;
     setFlag(QGraphicsItem::ItemIsSelectable);
     view = nullptr;
+    menu = nullptr;
 }
 
 MovingView::ViewType MovingView::getType() {
@@ -94,19 +96,26 @@ void MovingView::removeArrow(ArrowInterface* arrow) {
 }
 
 void MovingView::removeArrows() {
+    removeInputArrows();
+    removeOutputArrows();
+}
+
+void MovingView::removeOutputArrows() {
+    QMutableVectorIterator<ArrowInterface *> output(outputArrows);
+
+    while(output.hasNext()) {
+        ArrowInterface *arrow = output.next();
+        output.remove();
+        delete arrow;
+    }
+}
+
+void MovingView::removeInputArrows() {
     QMutableVectorIterator<ArrowInterface *> input(inputArrows);
 
     while (input.hasNext()) {
         ArrowInterface *arrow = input.next();
         input.remove();
-        delete arrow;
-    }
-
-    QMutableVectorIterator<ArrowInterface *> output(inputArrows);
-
-    while(output.hasNext()) {
-        ArrowInterface *arrow = output.next();
-        output.remove();
         delete arrow;
     }
 }
@@ -123,6 +132,10 @@ bool MovingView::isArrowAlreadyAdded(ArrowInterface* arrow) {
     return false;
 }
 
+QStringList MovingView::outputsNeuronsList() {
+    return view->getOutputsNeuronsList();
+}
+
 void MovingView::updateArrowsPosition() {
     for(auto arrow : inputArrows)
         arrow->updatePosition();
@@ -136,10 +149,39 @@ void MovingView::updateItem(QGraphicsItem *item) {
     view->updateItem(item);
 }
 
+int MovingView::getInputArrowNumber() {
+    return inputArrows.size();
+}
+
+int MovingView::getOutputArrowNumber() {
+    return outputArrows.size();
+}
+
 void MovingView::initMenu() {
-    menu = new QMenu();
+    if (menu != nullptr)
+        menu->clear();
+    else
+        menu = new QMenu();
+
     menu->addAction(view->getAction(Delete));
-    menu->addAction(view->getAction(AddOutputNeurons));
+
+    if (!isOutputNeuron())
+        menu->addAction(view->getAction(AddOutputNeurons));
+
+    if (type == Perceptron) {
+        if (isOutputNeuron())
+            menu->addAction(view->getAction(MakeForwardNeuron));
+        else
+            menu->addAction(view->getAction(MakeOutputNeuron));
+    }
+}
+
+QList <QGraphicsItem *> MovingView::getSelectedItems() {
+    return view->getSelectedMovingView();
+}
+
+QBoxLayout *MovingView::getPropertiesLayout() {
+    return nullptr;
 }
 
 MovingView::~MovingView() {

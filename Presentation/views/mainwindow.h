@@ -6,13 +6,13 @@
 #include "interfaces/mainwindowinterface.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
 class QAction;
 class QMenu;
-class QGraphicsView;
 class PaintScene;
 class QButtonGroup;
 class QComboBox;
+class GraphicView;
+class QSlider;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow, public MainWindowInterface
@@ -24,9 +24,8 @@ public:
     ~MainWindow() override;
 
 private:
-    Ui::MainWindow *ui;
     PaintScene *scene;
-    QGraphicsView *view;
+    GraphicView *view;
 
     QAction *deleteAction;
     QAction *exitAction;
@@ -36,6 +35,11 @@ private:
     QAction *stopAction;
     QAction *pauseAction;
     QAction *debugAction;
+    QAction *resetZoomAction;
+    QAction *makeOutputNeuronAction;
+    QAction *makeForwardNeuronAction;
+    QAction *savingAction;
+    QAction *loadingAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -50,18 +54,24 @@ private:
     QButtonGroup *bgItems;
     QButtonGroup *bgToolBox;
 
-    QComboBox *cbScale;
+    QSlider *zoomSlider;
 
     //QToolBox *toolBox;
 
 private:
     QAction *getAction(int type) override;
     void resizeEvent(QResizeEvent * event) override;
+    QPointF getSceneTop() override;
+    void zoomIn() override;
+    void zoomOut() override;
+    void setProjectName(QString name) override;
     void initActions();
     void initMenu();
     void initToolBars();
     void initToolBox();
     void initControlToolBar();
+    QWidget *initPropertiesToolBar();
+    void updateWindow() override;
     //QWidget *createToolBoxItem(const QString &name,  MoveItem::ItemType type);
 
 private slots:
@@ -69,12 +79,17 @@ private slots:
     void onDeleteActionClicked();
     void onExitActionClicked();
     void onAboutActionClicked();
-    void onScaleChanged(const QString &scale);
     void onToolsGroupClicked(int id);
     void onRunActionClicked();
     void onAddOutputNeuronsActionClicked();
     void onStopActionClicked();
     void onPauseActionClicked();
     void onDebugActionClicked();
+    void onZoomSliderValueChanged();
+    void onResetZoomActionClicked();
+    void onMakeOutputNeuronActionClicked();
+    void onMakeForwardNeuronActionClicked();
+    void onSaveActionClicked();
+    void onOpenActionClicked();
 };
 #endif // MAINWINDOW_H

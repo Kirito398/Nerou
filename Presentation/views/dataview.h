@@ -6,6 +6,8 @@
 
 class DataPresentor;
 class DataInteractorListener;
+class DataSetsDialog;
+class DataParametersDialog;
 
 class DataView : public MovingView, public DataViewListener
 {
@@ -15,6 +17,10 @@ public:
     QPixmap getItemIcon() const override;
     QPolygonF getPolygon() override;
     void setPosition(QPointF position) override;
+    QBoxLayout *getPropertiesLayout() override;
+    void setLossFunctionType(int type);
+    void setActivateFunctionType(int type);
+    void setUseColorModeEnable(bool enable);
 
 private:
     QRectF boundingRect() const override;
@@ -23,11 +29,28 @@ private:
     void updatePosition(double x, double y) override;
     unsigned long getID() override;
     void setImage(QString path) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    QStringList getOutputsNeuronsList() override;
+    bool isOutputNeuron() override;
+    bool getUseColorModeEnable() override;
+    int getLossFunctionType() override;
+    int getActivateFunctionType() override;
+    void onLossFunctionTypeChanged(int type) override;
+    void onActivateFunctionTypeChanged(int type) override;
+    void onUseColorModeEnableChanged(bool enable) override;
+    void openSetsDialog() override;
 
 private:
     DataPresentor *presentor;
     QImage image;
     QRectF bounding, imageBounding;
+    DataSetsDialog *setsDialog;
+    DataParametersDialog *parametersDialog;
+    QColor brushColor;
+    QBoxLayout *propertiesBox;
+
+private slots:
+    void onParametersUpdated();
 };
 
 #endif // DATAVIEW_H
