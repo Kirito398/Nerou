@@ -16,20 +16,30 @@ public:
     ProgressTrainingPlotsDialog();
     void addNewLoss(double value);
     void addNewAccuracy(double value);
+    void addNewTotalLoss(double value);
     void resetData();
 
 private:
     void initLossChart();
     void initAccuracyChart();
+    void initTotalLossChart();
 
 private:
     QBoxLayout *layout;
+
     QLineSeries *lossSeries;
     QLineSeries *accuracySeries;
+    QLineSeries *totalLossSeries;
+
     QValueAxis *lossAxisX;
     QValueAxis *lossAxisY;
+
     QValueAxis *accuracyAxisX;
     QValueAxis *accuracyAxisY;
+
+    QValueAxis *totalLossAxisX;
+    QValueAxis *totalLossAxisY;
+
     qreal xStep, yStep;
 };
 

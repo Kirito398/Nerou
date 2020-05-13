@@ -58,6 +58,8 @@ void MainInteractor::run() {
         view->onEpohChanged(e + 1);
         double correctAnswerSum = 0.0;
         double answerCounter = 0.0;
+        double totalLossValue = 0.0;
+        int totalLossValueCounter = 0;
 
         for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
             view->onIterationChanged(j + 1);
@@ -88,7 +90,11 @@ void MainInteractor::run() {
 
             view->onAccuracyChanged(correctAnswerSum / answerCounter);
             view->onErrorValueChanged(lossSum / classNumber);
+            totalLossValue += (lossSum / classNumber);
+            totalLossValueCounter++;
         }
+
+        view->onTotalLossValueChanged(totalLossValue / totalLossValueCounter);
     }
 
     view->onTrainingFinished();

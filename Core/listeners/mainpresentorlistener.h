@@ -25,6 +25,7 @@ public:
     virtual void onErrorValueChanged(double value) = 0;
     virtual void onAccuracyChanged(double value) = 0;
     virtual void onProjectNameChanged(std::string name) = 0;
+    virtual void onTotalLossValueChanged(double value) = 0;
 };
 
 #endif // MAINPRESENTORLISTENER_H
