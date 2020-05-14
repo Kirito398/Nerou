@@ -180,6 +180,9 @@ void TableDataSetsDialog::accept() {
 }
 
 void TableDataSetsDialog::applied() {
+    double delimiter = 0.7;
+    int trainingSetSize = dataList.size() * delimiter;
+
     presentor->clearDataSet();
     presentor->setDataSetMainPath(dataPath->text());
 
@@ -190,7 +193,7 @@ void TableDataSetsDialog::applied() {
 
     presentor->setInputsTitles(tableHeaders);
 
-    for (int i = 1; i < dataList.size(); i++) {
+    for (int i = 1; i < trainingSetSize; i++) {
         QStringList list;
 
         for (int j = 0; j < dataList[i].size(); j++)
@@ -207,7 +210,7 @@ void TableDataSetsDialog::applied() {
 
     presentor->setTargetTitles(tableHeaders, view->getOutputsNeuronsList());
 
-    for (int i = 1; i < dataList.size(); i++) {
+    for (int i = 1; i < trainingSetSize; i++) {
         QStringList list;
 
         for (int j = 0; j < dataList[i].size(); j++)
@@ -215,6 +218,27 @@ void TableDataSetsDialog::applied() {
                 list.append(dataList[i][j]);
 
         presentor->addTrainingTargetSet(list);
+    }
+
+    //Testing sets
+    for (int i = trainingSetSize; i < dataList.size(); i++) {
+        QStringList list;
+
+        for (int j = 0; j < dataList[i].size(); j++)
+            if (tableHeaders.contains(dataList[0][j]))
+                list.append(dataList[i][j]);
+
+        presentor->addTestingInputSet(list);
+    }
+
+    for (int i = trainingSetSize; i < dataList.size(); i++) {
+        QStringList list;
+
+        for (int j = 0; j < dataList[i].size(); j++)
+            if (tableHeaders.contains(dataList[0][j]))
+                list.append(dataList[i][j]);
+
+        presentor->addTestingTargetSet(list);
     }
 }
 
