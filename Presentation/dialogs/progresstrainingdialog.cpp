@@ -83,6 +83,10 @@ void ProgressTrainingDialog::setCurrentError(double value) {
     plotsDialog->addNewLoss(value);
 }
 
+void ProgressTrainingDialog::setCurrentTotalLossValue(double value) {
+    plotsDialog->addNewTotalLoss(value);
+}
+
 void ProgressTrainingDialog::setCurrentAccuracy(double value) {
     lAccuracy->setText(QString::number(value));
     plotsDialog->addNewAccuracy(value);

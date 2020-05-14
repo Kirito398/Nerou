@@ -61,6 +61,7 @@ private:
     void onErrorValueChanged(double value) override;
     void onAccuracyChanged(double value) override;
     void onTrainingFinished() override;
+    void onTotalLossValueChanged(double value) override;
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
     void onNewDataAdded(DataInteractorListener *data) override;
     void onNewConvolutionAdded(ConvolutionInteractorListener *convolution) override;

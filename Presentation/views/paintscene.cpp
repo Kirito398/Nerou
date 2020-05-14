@@ -60,6 +60,10 @@ void PaintScene::onErrorValueChanged(double value) {
     progressDialog->setCurrentError(value);
 }
 
+void PaintScene::onTotalLossValueChanged(double value) {
+    progressDialog->setCurrentTotalLossValue(value);
+}
+
 void PaintScene::onAccuracyChanged(double value) {
     progressDialog->setCurrentAccuracy(value);
 }

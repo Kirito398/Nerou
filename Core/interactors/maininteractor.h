@@ -41,6 +41,8 @@ public:
     double getAlpha();
     void setAlpha(double value);
     std::string getCurrentProjectName();
+    void setAnimateTrainingProcessEnable(bool enable);
+    bool getAnimateTrainingProcessEnable();
 
     void save(std::string path);
     void load(std::string path);
@@ -67,6 +69,7 @@ private:
     void onWeightModelLoaded(WeightModel model) override;
     void onCoreModelLoaded(CoreModel model) override;
     void onTableDataModelLoaded(TableDataModel model) override;
+    void train(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber);
 
 private:
     static MainInteractor *instance;
@@ -81,6 +84,7 @@ private:
     unsigned long epohNumber;
     double learningRange, alpha;
     std::string currentProjectName;
+    bool isTrainingProcessAnimated;
 };
 
 #endif // MAININTERACTOR_H

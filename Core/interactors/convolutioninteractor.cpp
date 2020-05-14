@@ -88,14 +88,17 @@ unsigned long ConvolutionInteractor::getID() {
 }
 
 void ConvolutionInteractor::getInputSignal() {
-    view->setActive(true);
+    if (isTrainingProcessEnabled)
+        view->setActive(true);
 
     value.clear();
     CoreInterface *sinaps = static_cast<CoreInterface *>(inputsSinaps.at(0));
     value = sinaps->getValue();
 
-    view->setOutValue(value);
-    view->setActive(false);
+    if (isTrainingProcessEnabled) {
+        view->setOutValue(value);
+        view->setActive(false);
+    }
 }
 
 void ConvolutionInteractor::makeInputDelta() {

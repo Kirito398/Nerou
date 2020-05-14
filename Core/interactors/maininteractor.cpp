@@ -27,6 +27,7 @@ MainInteractor::MainInteractor(RepositoryInterface *repository)
     learningRange = 0.3;
     alpha = 0.0;
     currentProjectName = "Untitled";
+    isTrainingProcessAnimated = true;
 
     clearProcessParameters();
 }
@@ -56,44 +57,58 @@ void MainInteractor::run() {
 
     for (unsigned long e = 0; e < epohNumber; e++) {
         view->onEpohChanged(e + 1);
-        double correctAnswerSum = 0.0;
-        double answerCounter = 0.0;
 
-        for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
-            view->onIterationChanged(j + 1);
-            double lossSum = 0;
-
-            for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
-                for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
-                    if (isStopped) {
-                        onProcessStopped();
-                        return;
-                    }
-
-                    if (isPaused) {
-                        onProcessPaused(i, j, k);
-                        return;
-                    }
-
-                    dataList.at(k)->start(i, j);
-                    lossSum += dataList.at(k)->getLoss();
-
-                    if (dataList.at(k)->getAnswer() == i)
-                        correctAnswerSum++;
-                    answerCounter++;
-                }
-
-                updateSinaps();
-            }
-
-            view->onAccuracyChanged(correctAnswerSum / answerCounter);
-            view->onErrorValueChanged(lossSum / classNumber);
+        if (isStopped) {
+            onProcessStopped();
+            return;
         }
+
+        train(classNumber, iterationNumber, neuronNumber);
     }
 
     view->onTrainingFinished();
 
     clearProcessParameters();
+}
+
+void MainInteractor::train(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber) {
+    double correctAnswerSum = 0.0;
+    double answerCounter = 0.0;
+    double totalLossValue = 0.0;
+    int totalLossValueCounter = 0;
+
+    for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+        view->onIterationChanged(j + 1);
+        double lossSum = 0;
+
+        for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
+            for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
+                if (isStopped)
+                    return;
+
+                if (isPaused) {
+                    onProcessPaused(i, j, k);
+                    return;
+                }
+
+                dataList.at(k)->start(i, j);
+                lossSum += dataList.at(k)->getLoss();
+
+                if (dataList.at(k)->getAnswer() == i)
+                    correctAnswerSum++;
+                answerCounter++;
+            }
+
+            updateSinaps();
+        }
+
+        view->onAccuracyChanged(correctAnswerSum / answerCounter);
+        view->onErrorValueChanged(lossSum / classNumber);
+        totalLossValue += (lossSum / classNumber);
+        totalLossValueCounter++;
+    }
+
+    view->onTotalLossValueChanged(totalLossValue / totalLossValueCounter);
 }
 
 void MainInteractor::updateSinaps() {
@@ -468,6 +483,17 @@ void MainInteractor::clearProcessParameters() {
     pausedClassNumber = 0;
     pausedIterationNumber = 0;
     pausedNeuronNumber = 0;
+}
+
+void MainInteractor::setAnimateTrainingProcessEnable(bool enable) {
+    isTrainingProcessAnimated = enable;
+
+    for (auto neuron : neuronsList)
+        neuron->setAnimateTrainingProcessEnable(enable);
+}
+
+bool MainInteractor::getAnimateTrainingProcessEnable() {
+    return isTrainingProcessAnimated;
 }
 
 std::string MainInteractor::getCurrentProjectName() {

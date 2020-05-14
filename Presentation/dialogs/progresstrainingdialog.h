@@ -22,6 +22,7 @@ public:
     void setCurrentEpoh(unsigned int currentEpoh);
     void setCurrentIteration(unsigned int currentIteration);
     void setCurrentError(double value);
+    void setCurrentTotalLossValue(double value);
     void setCurrentAccuracy(double value);
     void onTrainingFinished();
     QVBoxLayout *getMainLayout();
