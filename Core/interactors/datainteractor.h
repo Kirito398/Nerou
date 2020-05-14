@@ -13,10 +13,11 @@ class DataInteractor : public NeuronInteractor, public DataInteractorListener, p
 {
 public:
     DataInteractor();
-    void start(unsigned long classNumber, unsigned long iterationNumber) override;
+    void start(unsigned long classNumber, unsigned long iterationNumber, bool isTraining) override;
     void setRepository(RepositoryInterface *repository);
     unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber() override;
+    unsigned long getTestingIterationNumber() override;
     void setPosition(double x, double y) override;
     double getLoss() override;
     double getAccuracy();

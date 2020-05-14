@@ -18,14 +18,17 @@ public:
     virtual void onNewCoreAdded(ArrowInteractorListener *arrow, unsigned long startNeuronID, unsigned long endNeuronID) = 0;
     virtual void onNewConvolutionAdded(ConvolutionInteractorListener *convolution) = 0;
     virtual void onNewTableDataAdded(TableDataInteractorListener *tableData) = 0;
-    virtual void onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) = 0;
+    virtual void onTrainingStarted(unsigned int iterationCount) = 0;
+    virtual void onTestingStarted(unsigned int iterationCount) = 0;
+    virtual void onProcessStarted(unsigned int iterationCount, unsigned int epohCount) = 0;
     virtual void onEpohChanged(unsigned int currentEpoh) = 0;
     virtual void onIterationChanged(unsigned int currentIteration) = 0;
-    virtual void onTrainingFinished() = 0;
+    virtual void onProcessFinished() = 0;
     virtual void onErrorValueChanged(double value) = 0;
     virtual void onAccuracyChanged(double value) = 0;
     virtual void onProjectNameChanged(std::string name) = 0;
-    virtual void onTotalLossValueChanged(double value) = 0;
+    virtual void onTrainingTotalLossValueChanged(double value) = 0;
+    virtual void onTestingTotalLossValueChanged(double value) = 0;
 };
 
 #endif // MAINPRESENTORLISTENER_H

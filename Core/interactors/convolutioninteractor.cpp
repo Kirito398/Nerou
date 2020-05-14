@@ -88,14 +88,14 @@ unsigned long ConvolutionInteractor::getID() {
 }
 
 void ConvolutionInteractor::getInputSignal() {
-    if (isTrainingProcessEnabled)
+    if (isAnimateTrainingProcessEnabled)
         view->setActive(true);
 
     value.clear();
     CoreInterface *sinaps = static_cast<CoreInterface *>(inputsSinaps.at(0));
     value = sinaps->getValue();
 
-    if (isTrainingProcessEnabled) {
+    if (isAnimateTrainingProcessEnabled) {
         view->setOutValue(value);
         view->setActive(false);
     }

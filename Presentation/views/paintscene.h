@@ -55,13 +55,16 @@ private:
     ParametersDialog *parametersDialog;
 
 private:
-    void onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) override;
+    void onTrainingStarted(unsigned int iterationCount) override;
+    void onTestingStarted(unsigned int iterationCount) override;
+    void onProcessStarted(unsigned int iterationCount, unsigned int epohCount) override;
     void onEpohChanged(unsigned int currentEpoh) override;
     void onIterationChanged(unsigned int currentIteration) override;
     void onErrorValueChanged(double value) override;
     void onAccuracyChanged(double value) override;
-    void onTrainingFinished() override;
-    void onTotalLossValueChanged(double value) override;
+    void onProcessFinished() override;
+    void onTrainingTotalLossValueChanged(double value) override;
+    void onTestingTotalLossValueChanged(double value) override;
     void onNewPerceptronAdded(PerceptronInteractorListener *perceptron) override;
     void onNewDataAdded(DataInteractorListener *data) override;
     void onNewConvolutionAdded(ConvolutionInteractorListener *convolution) override;

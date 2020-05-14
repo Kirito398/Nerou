@@ -50,6 +50,12 @@ void ProgressTrainingDialog::resetData() {
     plotsDialog->resetData();
 }
 
+void ProgressTrainingDialog::resetEpohData() {
+    maxIteration = 1;
+
+    plotsDialog->resetEpohData();
+}
+
 QVBoxLayout *ProgressTrainingDialog::getMainLayout() {
     return layout;
 }
@@ -83,8 +89,12 @@ void ProgressTrainingDialog::setCurrentError(double value) {
     plotsDialog->addNewLoss(value);
 }
 
-void ProgressTrainingDialog::setCurrentTotalLossValue(double value) {
-    plotsDialog->addNewTotalLoss(value);
+void ProgressTrainingDialog::setCurrentTrainingTotalLossValue(double value) {
+    plotsDialog->addNewTrainingTotalLoss(value);
+}
+
+void ProgressTrainingDialog::setCurrentTestingTotalLossValue(double value) {
+    plotsDialog->addNewTestingTotalLoss(value);
 }
 
 void ProgressTrainingDialog::setCurrentAccuracy(double value) {
@@ -92,12 +102,12 @@ void ProgressTrainingDialog::setCurrentAccuracy(double value) {
     plotsDialog->addNewAccuracy(value);
 }
 
-void ProgressTrainingDialog::onTrainingStarted() {
+void ProgressTrainingDialog::onProcessStarted() {
     seconds = 0;
     timer->start(1000);
 }
 
-void ProgressTrainingDialog::onTrainingFinished() {
+void ProgressTrainingDialog::onProcessFinished() {
     timer->stop();
 }
 

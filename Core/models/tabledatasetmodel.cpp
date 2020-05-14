@@ -131,6 +131,10 @@ unsigned long TableDataSetModel::getTrainingIterationNumber() {
     return trainingInputSet.size();
 }
 
+unsigned long TableDataSetModel::getTestingIterationNumber() {
+    return testingInputSet.size();
+}
+
 std::vector<double> TableDataSetModel::getTrainingInputsMax() {
     return trainingInputsMax;
 }

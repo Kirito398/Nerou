@@ -34,21 +34,29 @@ PaintScene::PaintScene(QObject *parent) : QGraphicsScene(parent)
     viewType = MovingView::Perceptron;
 }
 
-void PaintScene::onTrainingStarted(unsigned int iterationCount, unsigned int epohCount) {
+void PaintScene::onTrainingStarted(unsigned int iterationCount) {
+    progressDialog->setMaxIteration(iterationCount);
+}
+
+void PaintScene::onTestingStarted(unsigned int iterationCount) {
+    progressDialog->setMaxIteration(iterationCount);
+}
+
+void PaintScene::onProcessStarted(unsigned int iterationCount, unsigned int epohCount) {
     if (progressDialog == nullptr)
         progressDialog = new ProgressTrainingDialog();
 
     progressDialog->resetData();
-    progressDialog->setMaxIteration(iterationCount);
     progressDialog->setMaxEpoh(epohCount);
     progressDialog->setTotalProcess(iterationCount * epohCount);
 
-    QPointF position = view->getSceneTop();
-    progressDialog->setGeometry(position.x() + 50, position.y() + 95, progressDialog->width(), progressDialog->height());
-    progressDialog->onTrainingStarted();
+//    QPointF position = view->getSceneTop();
+//    progressDialog->setGeometry(position.x() + 50, position.y() + 95, progressDialog->width(), progressDialog->height());
+    progressDialog->onProcessStarted();
 }
 
 void PaintScene::onEpohChanged(unsigned int currentEpoh) {
+    progressDialog->resetEpohData();
     progressDialog->setCurrentEpoh(currentEpoh);
 }
 
@@ -60,16 +68,20 @@ void PaintScene::onErrorValueChanged(double value) {
     progressDialog->setCurrentError(value);
 }
 
-void PaintScene::onTotalLossValueChanged(double value) {
-    progressDialog->setCurrentTotalLossValue(value);
+void PaintScene::onTrainingTotalLossValueChanged(double value) {
+    progressDialog->setCurrentTrainingTotalLossValue(value);
+}
+
+void PaintScene::onTestingTotalLossValueChanged(double value) {
+    progressDialog->setCurrentTestingTotalLossValue(value);
 }
 
 void PaintScene::onAccuracyChanged(double value) {
     progressDialog->setCurrentAccuracy(value);
 }
 
-void PaintScene::onTrainingFinished() {
-    progressDialog->onTrainingFinished();
+void PaintScene::onProcessFinished() {
+    progressDialog->onProcessFinished();
 }
 
 void PaintScene::onLoadingActionClicked() {

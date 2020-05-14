@@ -22,16 +22,16 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     lossFunctionType = CrossEntropy;
 }
 
-void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
+void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber, bool isTraining) {
     if (classList.empty())
         return;
 
-    if (iterationNumber >= classList[classNumber].getTrainingPathsList().size())
+    if (iterationNumber >= (isTraining ? classList[classNumber].getTrainingPathsList().size() : classList[classNumber].getTestingPathsList().size()))
         return;
 
     currentClass = classNumber;
 
-    if (isTrainingProcessEnabled)
+    if (isAnimateTrainingProcessEnabled)
         view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
 
     if (isColorMode) {
@@ -141,6 +141,19 @@ unsigned long DataInteractor::getTrainingIterationNumber() {
 
     for (auto item : classList) {
         unsigned long size = item.getTrainingPathsList().size();
+
+        if (size > number)
+            number = size;
+    }
+
+    return number;
+}
+
+unsigned long DataInteractor::getTestingIterationNumber() {
+    unsigned long number = 0;
+
+    for (auto item : classList) {
+        unsigned long size = item.getTestingPathsList().size();
 
         if (size > number)
             number = size;
