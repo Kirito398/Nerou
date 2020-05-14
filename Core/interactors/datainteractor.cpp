@@ -31,7 +31,7 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
 
     currentClass = classNumber;
 
-    //if (isTrainingProcessEnabled)
+    if (isTrainingProcessEnabled)
         view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
 
     if (isColorMode) {

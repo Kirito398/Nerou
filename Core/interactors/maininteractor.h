@@ -69,6 +69,7 @@ private:
     void onWeightModelLoaded(WeightModel model) override;
     void onCoreModelLoaded(CoreModel model) override;
     void onTableDataModelLoaded(TableDataModel model) override;
+    void train(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber);
 
 private:
     static MainInteractor *instance;
