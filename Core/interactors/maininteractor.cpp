@@ -54,7 +54,7 @@ void MainInteractor::run() {
     unsigned long testingIterationNumber = dataList.at(0)->getTestingIterationNumber();
     unsigned long neuronNumber = dataList.size();
 
-    view->onProcessStarted(trainingIterationNumber, epohNumber);
+    view->onProcessStarted(trainingIterationNumber + testingIterationNumber, epohNumber);
 
     for (unsigned long e = 0; e < epohNumber; e++) {
         view->onEpohChanged(e + 1);
@@ -77,6 +77,8 @@ void MainInteractor::testing(unsigned long classNumber, unsigned long iterationN
     double answerCounter = 0.0;
     double totalLossValue = 0.0;
     int totalLossValueCounter = 0;
+
+    view->onTrainingStarted(iterationNumber); // TODO changed to testing
 
     for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
         view->onIterationChanged(j + 1);

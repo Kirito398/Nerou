@@ -46,6 +46,7 @@ void ProgressTrainingDialog::resetData() {
     totalProgressBar->setValue(0);
     maxEpoh = 1;
     maxIteration = 1;
+    currentIteration = 0;
 
     plotsDialog->resetData();
 }
@@ -69,7 +70,8 @@ void ProgressTrainingDialog::setMaxIteration(unsigned int maxIteration) {
 }
 
 void ProgressTrainingDialog::updateTotalProgressBar() {
-    totalProgressBar->setValue((currentEpoh - 1) * maxIteration + currentIteration);
+    //totalProgressBar->setValue((currentEpoh - 1) * maxIteration + currentIteration);
+    totalProgressBar->setValue(currentIteration);
 }
 
 void ProgressTrainingDialog::setCurrentEpoh(unsigned int currentEpoh) {
@@ -79,7 +81,7 @@ void ProgressTrainingDialog::setCurrentEpoh(unsigned int currentEpoh) {
 }
 
 void ProgressTrainingDialog::setCurrentIteration(unsigned int currentIteration) {
-    this->currentIteration = currentIteration;
+    this->currentIteration++;
     lIteration->setText(QString::number(currentIteration) + " / " + QString::number(maxIteration));
     updateTotalProgressBar();
 }
