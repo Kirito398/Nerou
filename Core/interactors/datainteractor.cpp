@@ -20,6 +20,7 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     isColorMode = false;
     activateFunctionType = Softmax;
     lossFunctionType = CrossEntropy;
+    isTraining = false;
 }
 
 void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber, bool isTraining) {
@@ -30,17 +31,18 @@ void DataInteractor::start(unsigned long classNumber, unsigned long iterationNum
         return;
 
     currentClass = classNumber;
+    this->isTraining = isTraining;
 
     if (isAnimateTrainingProcessEnabled)
-        view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
+        view->setImage(isTraining ? classList[classNumber].getTrainingPathsList()[iterationNumber] : classList[classNumber].getTestingPathsList()[iterationNumber]);
 
     if (isColorMode) {
-        colorValue = repository->loadColorValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
+        colorValue = repository->loadColorValue(isTraining ? classList[classNumber].getTrainingPathsList()[iterationNumber] : classList[classNumber].getTestingPathsList()[iterationNumber]);
         colorValue = normalization(colorValue);
         colorsToValue();
     } else {
         value.clear();
-        value = normalization(repository->loadValue(classList[classNumber].getTrainingPathsList()[iterationNumber]));
+        value = normalization(repository->loadValue(isTraining ? classList[classNumber].getTrainingPathsList()[iterationNumber] : classList[classNumber].getTestingPathsList()[iterationNumber]));
     }
 
     sendData();
@@ -224,7 +226,10 @@ void DataInteractor::onInputSignalChanged() {
     calculateInputSignal();
     calculateDelta();
     calculateLoss();
-    sendDelta();
+
+    if (isTraining)
+        sendDelta();
+
     inputSignalCount = 0;
 }
 

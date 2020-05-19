@@ -63,7 +63,7 @@ private:
     unsigned long currentClass;
     double currentLoss;
     //Need to save
-    bool isColorMode;
+    bool isColorMode, isTraining;
     std::vector<ClassModel> classList;
     LossFunctionType lossFunctionType;
 };
