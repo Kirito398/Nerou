@@ -11,7 +11,7 @@ CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *ou
     view = nullptr;
     isMaxPoolingEnabled = true;
     coreSize = 5;
-    maxPoolingCoreSize = 2;
+    maxPoolingCoreSize = 3;
 
     init();
 }
@@ -29,12 +29,28 @@ void CoreInteractor::init() {
     grad.clear();
     for (unsigned int i = 0; i < coreSize; i++)
         grad.push_back(std::vector<double>(coreSize, 0));
+
+    prevDeltaWeight.clear();
+    for (unsigned int i = 0; i < coreSize; i++)
+        prevDeltaWeight.push_back(std::vector<double>(coreSize, 0));
 }
 
 void CoreInteractor::updateSinaps(double learningRange, double alpha) {
+    std::vector<std::vector<double>> deltaWeight;
+
+    for (unsigned int i = 0; i < coreSize; i++)
+        deltaWeight.push_back(std::vector<double>(coreSize, 0));
+
     for (unsigned int i = 0; i < coreSize; i++)
         for (unsigned int j = 0; j < coreSize; j++)
-            weight[i][j] += -grad[i][j] * learningRange;
+            deltaWeight[i][j] += -grad[i][j] * learningRange + prevDeltaWeight[i][j] * alpha;
+
+    for (unsigned int i = 0; i < coreSize; i++)
+        for (unsigned int j = 0; j < coreSize; j++)
+            weight[i][j] += deltaWeight[i][j];
+
+    prevDeltaWeight.clear();
+    prevDeltaWeight = deltaWeight;
 
     grad.clear();
     for (unsigned int i = 0; i < coreSize; i++)
@@ -242,6 +258,22 @@ void CoreInteractor::sendDelta(std::vector<std::vector<double>> delta) {
 
 void CoreInteractor::setView(SinapsPresentorListener *listener) {
     view = listener;
+}
+
+void CoreInteractor::setCoreSize(int size) {
+    coreSize = size;
+}
+
+int CoreInteractor::getCoreSize() {
+    return coreSize;
+}
+
+void CoreInteractor::setPoolCoreSize(int size) {
+    maxPoolingCoreSize = size;
+}
+
+int CoreInteractor::getPoolCoreSize() {
+    return maxPoolingCoreSize;
 }
 
 void CoreInteractor::deleteSinaps() {

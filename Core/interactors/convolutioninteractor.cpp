@@ -21,6 +21,13 @@ void ConvolutionInteractor::onInputSignalChanged() {
 
     getInputSignal();
     if (isActivateFunctionEnabled) activate();
+
+    if (isAnimateTrainingProcessEnabled) {
+        //view->setOutValue(normalization(value));
+        view->setOutValue(value);
+        view->setActive(false);
+    }
+
     sendSignal();
     inputSignalCount = 0;
 }
@@ -94,11 +101,6 @@ void ConvolutionInteractor::getInputSignal() {
     value.clear();
     CoreInterface *sinaps = static_cast<CoreInterface *>(inputsSinaps.at(0));
     value = sinaps->getValue();
-
-    if (isAnimateTrainingProcessEnabled) {
-        view->setOutValue(normalization(value));
-        view->setActive(false);
-    }
 }
 
 void ConvolutionInteractor::makeInputDelta() {
@@ -172,6 +174,30 @@ void ConvolutionInteractor::setActivateFunctionType(int type) {
 
 int ConvolutionInteractor::getActivateFunctionType() {
     return activateFunctionType;
+}
+
+void ConvolutionInteractor::setCoreSize(int size) {
+    for (auto sinaps : inputsSinaps)
+        dynamic_cast<CoreInterface *>(sinaps)->setCoreSize(size);
+}
+
+int ConvolutionInteractor::getCoreSize() {
+    if (inputsSinaps.empty())
+        return 0;
+
+    return dynamic_cast<CoreInterface *>(inputsSinaps.at(0))->getCoreSize();
+}
+
+void ConvolutionInteractor::setPoolCoreSize(int size) {
+    for (auto sinaps : inputsSinaps)
+        dynamic_cast<CoreInterface *>(sinaps)->setPoolCoreSize(size);
+}
+
+int ConvolutionInteractor::getPoolCoreSize() {
+    if (inputsSinaps.empty())
+        return 0;
+
+    return dynamic_cast<CoreInterface *>(inputsSinaps.at(0))->getPoolCoreSize();
 }
 
 void ConvolutionInteractor::deleteNeuron() {

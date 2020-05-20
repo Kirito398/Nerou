@@ -31,6 +31,10 @@ private:
     void setOutValue(QImage img) override;
     void onActivateFunctionTypeChanged(int type) override;
     int getActivateFunctionType() override;
+    void onCoreSizeChanged(int size) override;
+    int getCoreSize() override;
+    void onPoolCoreSizeChanged(int size) override;
+    int getPoolCoreSize() override;
 
 private:
     ConvolutionPresentor *presentor;

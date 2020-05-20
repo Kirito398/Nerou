@@ -126,6 +126,22 @@ void ConvolutionView::setActivateFunctionType(int type) {
     presentor->setActivateFunctionType(type);
 }
 
+void ConvolutionView::onCoreSizeChanged(int size) {
+    presentor->setCoreSize(size);
+}
+
+int ConvolutionView::getCoreSize() {
+    return presentor->getCoreSize();
+}
+
+void ConvolutionView::onPoolCoreSizeChanged(int size) {
+    presentor->setPoolCoreSize(size);
+}
+
+int ConvolutionView::getPoolCoreSize() {
+    return presentor->getPoolCoreSize();
+}
+
 ConvolutionView::~ConvolutionView() {
     removeArrows();
 

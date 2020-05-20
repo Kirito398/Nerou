@@ -13,6 +13,10 @@ public:
     virtual void sendSignal(std::vector<std::vector<double>> value) = 0;
     virtual std::vector<std::vector<double>> getDelta() = 0;
     virtual void sendDelta(std::vector<std::vector<double>> delta) = 0;
+    virtual void setCoreSize(int size) = 0;
+    virtual int getCoreSize() = 0;
+    virtual void setPoolCoreSize(int size) = 0;
+    virtual int getPoolCoreSize() = 0;
 };
 
 #endif // COREINTERFACE_H

@@ -6,6 +6,7 @@
 class ConvolutionViewListener;
 class QBoxLayout;
 class QComboBox;
+class QLineEdit;
 
 class ConvolutionParametersDialog : public QDialog
 {
@@ -18,14 +19,19 @@ private:
     void initLayer();
     void updateParameters();
     void initActivateFunctionTypeLayer();
+    void initCoreSizeLayer();
+    void initPoolCoreSizeLayer();
 
 private:
     ConvolutionViewListener *view;
     QBoxLayout *layout;
     QComboBox *cbActivateFunctionType;
+    QLineEdit *leCoreSize, *lePoolCoreSize;
 
 private slots:
     void onActivateFunctionTypeChanged();
+    void onCoreSizeChanged();
+    void onPoolCoreSizeChanged();
 };
 
 #endif // CONVOLUTIONPARAMETERSDIALOG_H

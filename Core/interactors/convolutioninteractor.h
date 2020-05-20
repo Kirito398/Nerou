@@ -24,6 +24,10 @@ private:
     void clean() override;
     void setActivateFunctionType(int type) override;
     int getActivateFunctionType() override;
+    void setCoreSize(int size) override;
+    int getCoreSize() override;
+    void setPoolCoreSize(int size) override;
+    int getPoolCoreSize() override;
     void activate();
     void reActivateDelta();
     void getInputSignal();
