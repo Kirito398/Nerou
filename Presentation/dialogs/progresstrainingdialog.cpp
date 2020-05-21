@@ -46,8 +46,15 @@ void ProgressTrainingDialog::resetData() {
     totalProgressBar->setValue(0);
     maxEpoh = 1;
     maxIteration = 1;
+    currentIteration = 0;
 
     plotsDialog->resetData();
+}
+
+void ProgressTrainingDialog::resetEpohData() {
+    maxIteration = 1;
+
+    plotsDialog->resetEpohData();
 }
 
 QVBoxLayout *ProgressTrainingDialog::getMainLayout() {
@@ -63,7 +70,8 @@ void ProgressTrainingDialog::setMaxIteration(unsigned int maxIteration) {
 }
 
 void ProgressTrainingDialog::updateTotalProgressBar() {
-    totalProgressBar->setValue((currentEpoh - 1) * maxIteration + currentIteration);
+    //totalProgressBar->setValue((currentEpoh - 1) * maxIteration + currentIteration);
+    totalProgressBar->setValue(currentIteration);
 }
 
 void ProgressTrainingDialog::setCurrentEpoh(unsigned int currentEpoh) {
@@ -73,7 +81,7 @@ void ProgressTrainingDialog::setCurrentEpoh(unsigned int currentEpoh) {
 }
 
 void ProgressTrainingDialog::setCurrentIteration(unsigned int currentIteration) {
-    this->currentIteration = currentIteration;
+    this->currentIteration++;
     lIteration->setText(QString::number(currentIteration) + " / " + QString::number(maxIteration));
     updateTotalProgressBar();
 }
@@ -83,8 +91,12 @@ void ProgressTrainingDialog::setCurrentError(double value) {
     plotsDialog->addNewLoss(value);
 }
 
-void ProgressTrainingDialog::setCurrentTotalLossValue(double value) {
-    plotsDialog->addNewTotalLoss(value);
+void ProgressTrainingDialog::setCurrentTrainingTotalLossValue(double value) {
+    plotsDialog->addNewTrainingTotalLoss(value);
+}
+
+void ProgressTrainingDialog::setCurrentTestingTotalLossValue(double value) {
+    plotsDialog->addNewTestingTotalLoss(value);
 }
 
 void ProgressTrainingDialog::setCurrentAccuracy(double value) {
@@ -92,12 +104,12 @@ void ProgressTrainingDialog::setCurrentAccuracy(double value) {
     plotsDialog->addNewAccuracy(value);
 }
 
-void ProgressTrainingDialog::onTrainingStarted() {
+void ProgressTrainingDialog::onProcessStarted() {
     seconds = 0;
     timer->start(1000);
 }
 
-void ProgressTrainingDialog::onTrainingFinished() {
+void ProgressTrainingDialog::onProcessFinished() {
     timer->stop();
 }
 

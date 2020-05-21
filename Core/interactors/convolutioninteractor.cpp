@@ -21,6 +21,13 @@ void ConvolutionInteractor::onInputSignalChanged() {
 
     getInputSignal();
     if (isActivateFunctionEnabled) activate();
+
+    if (isAnimateTrainingProcessEnabled) {
+        //view->setOutValue(normalization(value));
+        view->setOutValue(value);
+        view->setActive(false);
+    }
+
     sendSignal();
     inputSignalCount = 0;
 }
@@ -88,28 +95,35 @@ unsigned long ConvolutionInteractor::getID() {
 }
 
 void ConvolutionInteractor::getInputSignal() {
-    if (isTrainingProcessEnabled)
+    if (isAnimateTrainingProcessEnabled)
         view->setActive(true);
 
     value.clear();
     CoreInterface *sinaps = static_cast<CoreInterface *>(inputsSinaps.at(0));
     value = sinaps->getValue();
-
-    if (isTrainingProcessEnabled) {
-        view->setOutValue(value);
-        view->setActive(false);
-    }
 }
 
 void ConvolutionInteractor::makeInputDelta() {
+    this->inputDelta.clear();
+
     if (outputsSinaps.at(0)->getType() == outputsSinaps.at(0)->Core) {
-        inputDelta = static_cast<CoreInterface *>(outputsSinaps.at(0))->getDelta();
+        std::vector<std::vector<double>> inputDelta = static_cast<CoreInterface *>(outputsSinaps.at(0))->getDelta();
+
+        for (auto deltas : inputDelta)
+            this->inputDelta.push_back(std::vector<double>(deltas.size()));
+
+        for (auto sinaps : outputsSinaps) {
+            inputDelta = static_cast<CoreInterface *>(sinaps)->getDelta();
+
+            for (unsigned int i = 0; i < inputDelta.size(); i++)
+                for (unsigned int j = 0; j < inputDelta[i].size(); j++)
+                    this->inputDelta[i][j] += inputDelta[i][j];
+        }
+
         return;
     }
 
-    inputDelta.clear();
     double temp[inputDeltaCount];
-
     for (unsigned int i = 0; i < inputDeltaCount; i++)
         temp[i] = 0;
 
@@ -119,12 +133,12 @@ void ConvolutionInteractor::makeInputDelta() {
     }
 
     for (unsigned int i = 0; i < value.size(); i++) {
-        inputDelta.push_back(std::vector<double>());
+        this->inputDelta.push_back(std::vector<double>());
         for (unsigned int j = 0; j < value[i].size(); j++) {
             if (i * value[i].size() >= inputDeltaCount)
-                inputDelta[i].push_back(0);
+                this->inputDelta[i].push_back(0);
             else
-                inputDelta[i].push_back(temp[i * value[i].size()]);
+                this->inputDelta[i].push_back(temp[i * value[i].size() + j]);
         }
     }
 }
@@ -160,6 +174,30 @@ void ConvolutionInteractor::setActivateFunctionType(int type) {
 
 int ConvolutionInteractor::getActivateFunctionType() {
     return activateFunctionType;
+}
+
+void ConvolutionInteractor::setCoreSize(int size) {
+    for (auto sinaps : inputsSinaps)
+        dynamic_cast<CoreInterface *>(sinaps)->setCoreSize(size);
+}
+
+int ConvolutionInteractor::getCoreSize() {
+    if (inputsSinaps.empty())
+        return 0;
+
+    return dynamic_cast<CoreInterface *>(inputsSinaps.at(0))->getCoreSize();
+}
+
+void ConvolutionInteractor::setPoolCoreSize(int size) {
+    for (auto sinaps : inputsSinaps)
+        dynamic_cast<CoreInterface *>(sinaps)->setPoolCoreSize(size);
+}
+
+int ConvolutionInteractor::getPoolCoreSize() {
+    if (inputsSinaps.empty())
+        return 0;
+
+    return dynamic_cast<CoreInterface *>(inputsSinaps.at(0))->getPoolCoreSize();
 }
 
 void ConvolutionInteractor::deleteNeuron() {

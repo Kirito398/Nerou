@@ -22,9 +22,14 @@ ProgressTrainingPlotsDialog::ProgressTrainingPlotsDialog()
 }
 
 void ProgressTrainingPlotsDialog::resetData() {
+    resetEpohData();
+    totalTrainingLossSeries->clear();
+    totalTestingLossSeries->clear();
+}
+
+void ProgressTrainingPlotsDialog::resetEpohData() {
     lossSeries->clear();
     accuracySeries->clear();
-    totalLossSeries->clear();
 }
 
 void ProgressTrainingPlotsDialog::initLossChart() {
@@ -103,25 +108,48 @@ void ProgressTrainingPlotsDialog::initTotalLossChart() {
     totalLossAxisY->setTitleText(tr("Loss"));
     totalLossAxisY->setRange(0, 0.5);
 
-    totalLossSeries = new QLineSeries(this);
-    totalLossSeries->setName(tr("Total Loss"));
-    totalLossSeries->setUseOpenGL(true);
+    totalTrainingLossSeries = new QLineSeries(this);
+    totalTrainingLossSeries->setName(tr("Total training Loss"));
+    totalTrainingLossSeries->setUseOpenGL(true);
 
-    totalLossChart->addSeries(totalLossSeries);
+    totalTestingLossSeries = new QLineSeries(this);
+    totalTestingLossSeries->setName(tr("Total testing loss"));
+    totalTestingLossSeries->setUseOpenGL(true);
+
+    totalLossChart->addSeries(totalTrainingLossSeries);
+    totalLossChart->addSeries(totalTestingLossSeries);
     totalLossChart->setTitle(tr("Total loss chart"));
     totalLossChart->addAxis(totalLossAxisX, Qt::AlignBottom);
     totalLossChart->addAxis(totalLossAxisY, Qt::AlignLeft);
-    totalLossSeries->attachAxis(totalLossAxisX);
-    totalLossSeries->attachAxis(totalLossAxisY);
+    totalTrainingLossSeries->attachAxis(totalLossAxisX);
+    totalTrainingLossSeries->attachAxis(totalLossAxisY);
+    totalTestingLossSeries->attachAxis(totalLossAxisX);
+    totalTestingLossSeries->attachAxis(totalLossAxisY);
 
     layout->addWidget(chartView);
 }
 
-void ProgressTrainingPlotsDialog::addNewTotalLoss(double value) {
-    totalLossSeries->append(totalLossSeries->points().size(), value);
+void ProgressTrainingPlotsDialog::addNewTrainingTotalLoss(double value) {
+    totalTrainingLossSeries->append(totalTrainingLossSeries->points().size(), value);
 
     qreal max = totalLossAxisX->max();
-    if (totalLossSeries->points().size() > max)
+    if (totalTrainingLossSeries->points().size() > max)
+        totalLossAxisX->setRange(0, max + 3);
+
+    max = totalLossAxisY->max();
+    if (value > max)
+        totalLossAxisY->setRange(totalLossAxisY->min(), value + yStep);
+
+    qreal min = totalLossAxisY->min();
+    if (value < min)
+        totalLossAxisY->setRange(value - yStep, totalLossAxisY->max());
+}
+
+void ProgressTrainingPlotsDialog::addNewTestingTotalLoss(double value) {
+    totalTestingLossSeries->append(totalTestingLossSeries->points().size(), value);
+
+    qreal max = totalLossAxisX->max();
+    if (totalTestingLossSeries->points().size() > max)
         totalLossAxisX->setRange(0, max + 3);
 
     max = totalLossAxisY->max();

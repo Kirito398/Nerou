@@ -16,8 +16,10 @@ public:
     ProgressTrainingPlotsDialog();
     void addNewLoss(double value);
     void addNewAccuracy(double value);
-    void addNewTotalLoss(double value);
+    void addNewTrainingTotalLoss(double value);
+    void addNewTestingTotalLoss(double value);
     void resetData();
+    void resetEpohData();
 
 private:
     void initLossChart();
@@ -29,7 +31,8 @@ private:
 
     QLineSeries *lossSeries;
     QLineSeries *accuracySeries;
-    QLineSeries *totalLossSeries;
+    QLineSeries *totalTrainingLossSeries;
+    QLineSeries *totalTestingLossSeries;
 
     QValueAxis *lossAxisX;
     QValueAxis *lossAxisY;

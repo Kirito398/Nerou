@@ -20,27 +20,29 @@ DataInteractor::DataInteractor() : NeuronInteractor(Data)
     isColorMode = false;
     activateFunctionType = Softmax;
     lossFunctionType = CrossEntropy;
+    isTraining = false;
 }
 
-void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
+void DataInteractor::start(unsigned long classNumber, unsigned long iterationNumber, bool isTraining) {
     if (classList.empty())
         return;
 
-    if (iterationNumber >= classList[classNumber].getTrainingPathsList().size())
+    if (iterationNumber >= (isTraining ? classList[classNumber].getTrainingPathsList().size() : classList[classNumber].getTestingPathsList().size()))
         return;
 
     currentClass = classNumber;
+    this->isTraining = isTraining;
 
-    if (isTrainingProcessEnabled)
-        view->setImage(classList[classNumber].getTrainingPathsList()[iterationNumber]);
+    if (isAnimateTrainingProcessEnabled)
+        view->setImage(isTraining ? classList[classNumber].getTrainingPathsList()[iterationNumber] : classList[classNumber].getTestingPathsList()[iterationNumber]);
 
     if (isColorMode) {
-        colorValue = repository->loadColorValue(classList[classNumber].getTrainingPathsList()[iterationNumber]);
+        colorValue = repository->loadColorValue(isTraining ? classList[classNumber].getTrainingPathsList()[iterationNumber] : classList[classNumber].getTestingPathsList()[iterationNumber]);
         colorValue = normalization(colorValue);
         colorsToValue();
     } else {
         value.clear();
-        value = normalization(repository->loadValue(classList[classNumber].getTrainingPathsList()[iterationNumber]));
+        value = normalization(repository->loadValue(isTraining ? classList[classNumber].getTrainingPathsList()[iterationNumber] : classList[classNumber].getTestingPathsList()[iterationNumber]));
     }
 
     sendData();
@@ -149,6 +151,19 @@ unsigned long DataInteractor::getTrainingIterationNumber() {
     return number;
 }
 
+unsigned long DataInteractor::getTestingIterationNumber() {
+    unsigned long number = 0;
+
+    for (auto item : classList) {
+        unsigned long size = item.getTestingPathsList().size();
+
+        if (size > number)
+            number = size;
+    }
+
+    return number;
+}
+
 void DataInteractor::setView(DataPresentorListener *listener) {
     view = listener;
 
@@ -211,7 +226,10 @@ void DataInteractor::onInputSignalChanged() {
     calculateInputSignal();
     calculateDelta();
     calculateLoss();
-    sendDelta();
+
+    if (isTraining)
+        sendDelta();
+
     inputSignalCount = 0;
 }
 

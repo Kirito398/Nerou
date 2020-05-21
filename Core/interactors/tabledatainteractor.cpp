@@ -18,12 +18,21 @@ TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
     currentAnswer = 0;
     currentLoss = 0;
     epsilon = 0.1;
+    isTraining = false;
 }
 
-void TableDataInteractor::start(unsigned long classNumber, unsigned long iterationNumber) {
-    std::vector<double> value = makeNormalize(dataSet->getTrainingInputSet(iterationNumber), dataSet->getTrainingInputsMax(), dataSet->getTrainingInputsMin());
-    currentMark = makeNormalize(dataSet->getTrainingTargetSet(iterationNumber), dataSet->getTrainingTargetsMax(), dataSet->getTrainingTargetsMin());
+void TableDataInteractor::start(unsigned long classNumber, unsigned long iterationNumber, bool isTraining) {
+    std::vector<double> value;
     currentAnswer = classNumber;
+    this->isTraining = isTraining;
+
+    if (isTraining) {
+        value = makeNormalize(dataSet->getTrainingInputSet(iterationNumber), dataSet->getTrainingInputsMax(), dataSet->getTrainingInputsMin());
+        currentMark = makeNormalize(dataSet->getTrainingTargetSet(iterationNumber), dataSet->getTrainingTargetsMax(), dataSet->getTrainingTargetsMin());
+    } else {
+        value = makeNormalize(dataSet->getTestingInputSet(iterationNumber), dataSet->getTestingInputsMax(), dataSet->getTestingInputsMin());
+        currentMark = makeNormalize(dataSet->getTestingTargetSet(iterationNumber), dataSet->getTestingTargetsMax(), dataSet->getTestingTargetsMin());
+    }
 
     for (size_t i = 0; i < outputsSinaps.size(); i++) {
         WeightInterface *weight = dynamic_cast<WeightInterface *>(outputsSinaps.at(i));
@@ -53,7 +62,10 @@ void TableDataInteractor::onInputSignalChanged() {
     calculateInputSignal();
     calculateLoss();
     calculateDelta();
-    sendDelta();
+
+    if (isTraining)
+        sendDelta();
+
     inputSignalCount = 0;
 }
 
@@ -206,6 +218,10 @@ unsigned long TableDataInteractor::getClassNumber() {
 
 unsigned long TableDataInteractor::getTrainingIterationNumber() {
     return dataSet->getTrainingIterationNumber();
+}
+
+unsigned long TableDataInteractor::getTestingIterationNumber() {
+    return dataSet->getTestingIterationNumber();
 }
 
 std::string TableDataInteractor::getDataSetMainPath() {

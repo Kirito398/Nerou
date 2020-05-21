@@ -12,6 +12,10 @@ public:
     virtual unsigned long getID() = 0;
     virtual int getActivateFunctionType() = 0;
     virtual void setActivateFunctionType(int type) = 0;
+    virtual void setCoreSize(int size) = 0;
+    virtual int getCoreSize() = 0;
+    virtual void setPoolCoreSize(int size) = 0;
+    virtual int getPoolCoreSize() = 0;
 };
 
 #endif // CONVOLUTIONINTERACTORLISTENER_H

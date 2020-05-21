@@ -59,7 +59,7 @@ protected:
     std::vector<SinapsInteractor *> outputsSinaps;
     double posX, posY;
     unsigned long id;
-    bool isOutput, isTrainingProcessEnabled;
+    bool isOutput, isAnimateTrainingProcessEnabled;
     NeuronType type;
     ActivateFunctionType activateFunctionType;
 

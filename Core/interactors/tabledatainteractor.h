@@ -43,7 +43,8 @@ private:
     void clearDataSet() override;
     unsigned long getClassNumber() override;
     unsigned long getTrainingIterationNumber() override;
-    void start(unsigned long classNumber, unsigned long iterationNumber) override;
+    unsigned long getTestingIterationNumber() override;
+    void start(unsigned long classNumber, unsigned long iterationNumber, bool isTraining) override;
     double getLoss() override;
     unsigned int getAnswer() override;
     size_t getOutputNeuronsNumber() override;
@@ -64,6 +65,7 @@ private:
     std::vector<double> currentDelta;
     double currentLoss;
     double epsilon;
+    bool isTraining;
 };
 
 #endif // TABLEDATAINTERACTOR_H

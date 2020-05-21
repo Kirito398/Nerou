@@ -11,7 +11,7 @@ CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *ou
     view = nullptr;
     isMaxPoolingEnabled = true;
     coreSize = 5;
-    maxPoolingCoreSize = 2;
+    maxPoolingCoreSize = 3;
 
     init();
 }
@@ -29,12 +29,28 @@ void CoreInteractor::init() {
     grad.clear();
     for (unsigned int i = 0; i < coreSize; i++)
         grad.push_back(std::vector<double>(coreSize, 0));
+
+    prevDeltaWeight.clear();
+    for (unsigned int i = 0; i < coreSize; i++)
+        prevDeltaWeight.push_back(std::vector<double>(coreSize, 0));
 }
 
 void CoreInteractor::updateSinaps(double learningRange, double alpha) {
+    std::vector<std::vector<double>> deltaWeight;
+
+    for (unsigned int i = 0; i < coreSize; i++)
+        deltaWeight.push_back(std::vector<double>(coreSize, 0));
+
     for (unsigned int i = 0; i < coreSize; i++)
         for (unsigned int j = 0; j < coreSize; j++)
-            weight[i][j] += -grad[i][j] * learningRange;
+            deltaWeight[i][j] += -grad[i][j] * learningRange + prevDeltaWeight[i][j] * alpha;
+
+    for (unsigned int i = 0; i < coreSize; i++)
+        for (unsigned int j = 0; j < coreSize; j++)
+            weight[i][j] += deltaWeight[i][j];
+
+    prevDeltaWeight.clear();
+    prevDeltaWeight = deltaWeight;
 
     grad.clear();
     for (unsigned int i = 0; i < coreSize; i++)
@@ -89,16 +105,20 @@ void CoreInteractor::maxPooling() {
     unsigned int newRow = currentRow + (currentRow % maxPoolingCoreSize);
     unsigned int newColumn = currentColumn + (currentColumn % maxPoolingCoreSize);
 
-    double *temp = new double[newRow * newColumn];
+    std::vector<std::vector<double>> temp;
     double min = - std::numeric_limits<double>::max();
 
-    for (unsigned int i = 0; i < currentRow; i++)
-        for (unsigned int j = 0; j < currentColumn; j++)
-            temp[i * currentColumn + j] = min;
+    for (unsigned int i = 0; i < newRow; i++) {
+        std::vector<double> row;
+        for (unsigned int j = 0; j < newRow; j++) {
+            row.push_back(min);
+        }
+        temp.push_back(row);
+    }
 
     for (unsigned int i = 0; i < currentRow; i++)
         for (unsigned int j = 0; j < currentColumn; j++)
-            temp[i * currentColumn + j] = value[i][j];
+            temp[i][j] = value[i][j];
 
     maxValue.clear();
     for (unsigned int i = 0; i < newRow; i++)
@@ -114,13 +134,13 @@ void CoreInteractor::maxPooling() {
     unsigned int l = 0, m = 0;
     for (unsigned int k = 0; k < newRow; k+=maxPoolingCoreSize) {
         for (unsigned int p = 0; p < newColumn; p+=maxPoolingCoreSize) {
-            double max = temp[k * newColumn + p];
+            double max = temp[k][p];
             int maxI = k, maxJ = p;
 
             for (unsigned int i = 0; i < maxPoolingCoreSize; i++)
                 for (unsigned int j = 0; j < maxPoolingCoreSize; j++)
-                    if (temp[(k + i) * newColumn + (p + j)] > max) {
-                        max = temp[(k + i) * newColumn + (p + j)];
+                    if (temp[(k + i)][(p + j)] > max) {
+                        max = temp[(k + i)][(p + j)];
                         maxI = k + i;
                         maxJ = p + j;
                     }
@@ -132,8 +152,6 @@ void CoreInteractor::maxPooling() {
         l = 0;
         m++;
     }
-
-    delete [] temp;
 }
 
 void CoreInteractor::revConvolution(std::vector<std::vector<double>> delta) {
@@ -242,6 +260,22 @@ void CoreInteractor::sendDelta(std::vector<std::vector<double>> delta) {
 
 void CoreInteractor::setView(SinapsPresentorListener *listener) {
     view = listener;
+}
+
+void CoreInteractor::setCoreSize(int size) {
+    coreSize = size;
+}
+
+int CoreInteractor::getCoreSize() {
+    return coreSize;
+}
+
+void CoreInteractor::setPoolCoreSize(int size) {
+    maxPoolingCoreSize = size;
+}
+
+int CoreInteractor::getPoolCoreSize() {
+    return maxPoolingCoreSize;
 }
 
 void CoreInteractor::deleteSinaps() {

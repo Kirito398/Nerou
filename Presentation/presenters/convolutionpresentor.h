@@ -17,6 +17,10 @@ public:
     unsigned long getID();
     int getActivateFunctionType();
     void setActivateFunctionType(int type);
+    void setCoreSize(int size);
+    int getCoreSize();
+    void setPoolCoreSize(int size);
+    int getPoolCoreSize();
 
 private:
     void updatePosition(double x, double y) override;

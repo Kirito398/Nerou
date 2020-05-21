@@ -24,6 +24,7 @@ public:
     std::vector<std::string> getInputTitles();
     void clear();
     unsigned long getTrainingIterationNumber();
+    unsigned long getTestingIterationNumber();
     std::vector<double> getTrainingInputsMax();
     std::vector<double> getTestingInputsMax();
     std::vector<double> getTrainingTargetsMax();

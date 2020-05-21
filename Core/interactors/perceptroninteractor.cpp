@@ -35,7 +35,7 @@ void PerceptronInteractor::onInputSignalChanged() {
     inputSignalCount++;
 
     if (inputSignalCount == inputsSinaps.size()) {
-        if (isTrainingProcessEnabled)
+        if (isAnimateTrainingProcessEnabled)
             view->setActive(true);
 
         makeInputSignal();
@@ -43,7 +43,7 @@ void PerceptronInteractor::onInputSignalChanged() {
         sendSignal();
         clearInputSignal();
 
-        if (isTrainingProcessEnabled)
+        if (isAnimateTrainingProcessEnabled)
             view->setActive(false);
     }
 }
@@ -98,7 +98,7 @@ void PerceptronInteractor::calculateOut() {
 
     outValue = activateFunction(sum);
 
-    if (isTrainingProcessEnabled)
+    if (isAnimateTrainingProcessEnabled)
         view->setOutValue(outValue);
 }
 

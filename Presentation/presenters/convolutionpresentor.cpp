@@ -65,6 +65,22 @@ void ConvolutionPresentor::setActivateFunctionType(int type) {
     interactor->setActivateFunctionType(type);
 }
 
+void ConvolutionPresentor::setCoreSize(int size) {
+    interactor->setCoreSize(size);
+}
+
+int ConvolutionPresentor::getCoreSize() {
+    return interactor->getCoreSize();
+}
+
+void ConvolutionPresentor::setPoolCoreSize(int size) {
+    interactor->setPoolCoreSize(size);
+}
+
+int ConvolutionPresentor::getPoolCoreSize() {
+    return interactor->getPoolCoreSize();
+}
+
 ConvolutionPresentor::~ConvolutionPresentor() {
     if (interactor != nullptr)
         interactor->deleteNeuron();

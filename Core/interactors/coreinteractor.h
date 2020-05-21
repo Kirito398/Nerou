@@ -23,6 +23,10 @@ private:
     void setView(SinapsPresentorListener *listener) override;
     std::vector<std::vector<double>> getDelta() override;
     void sendDelta(std::vector<std::vector<double>> delta) override;
+    void setCoreSize(int size) override;
+    int getCoreSize() override;
+    void setPoolCoreSize(int size) override;
+    int getPoolCoreSize() override;
     void validConvolution(std::vector<std::vector<double>> signal);
     void revConvolution(std::vector<std::vector<double>> delta);
     void maxPooling();
@@ -39,6 +43,7 @@ private:
     std::vector<std::vector<bool>> maxValue;
     std::vector<std::vector<double>> inputSignal;
     std::vector<std::vector<double>> grad;
+    std::vector<std::vector<double>> prevDeltaWeight;
     bool isMaxPoolingEnabled;
 };
 

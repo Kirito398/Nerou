@@ -22,13 +22,14 @@ public:
     void setCurrentEpoh(unsigned int currentEpoh);
     void setCurrentIteration(unsigned int currentIteration);
     void setCurrentError(double value);
-    void setCurrentTotalLossValue(double value);
+    void setCurrentTrainingTotalLossValue(double value);
+    void setCurrentTestingTotalLossValue(double value);
     void setCurrentAccuracy(double value);
-    void onTrainingFinished();
     QVBoxLayout *getMainLayout();
-    void onTrainingStarted();
+    void onProcessStarted();
+    void onProcessFinished();
     void resetData();
-
+    void resetEpohData();
 private:
     void initTimer();
     void initEpohLayer();

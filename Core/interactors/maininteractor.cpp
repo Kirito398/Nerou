@@ -50,10 +50,11 @@ void MainInteractor::run() {
         sinaps->init();
 
     unsigned long classNumber = dataList.at(0)->getClassNumber();
-    unsigned long iterationNumber = dataList.at(0)->getTrainingIterationNumber();
+    unsigned long trainingIterationNumber = dataList.at(0)->getTrainingIterationNumber();
+    unsigned long testingIterationNumber = dataList.at(0)->getTestingIterationNumber();
     unsigned long neuronNumber = dataList.size();
 
-    view->onTrainingStarted(iterationNumber, epohNumber);
+    view->onProcessStarted(trainingIterationNumber + testingIterationNumber, epohNumber);
 
     for (unsigned long e = 0; e < epohNumber; e++) {
         view->onEpohChanged(e + 1);
@@ -63,19 +64,21 @@ void MainInteractor::run() {
             return;
         }
 
-        train(classNumber, iterationNumber, neuronNumber);
+        train(classNumber, trainingIterationNumber, neuronNumber);
+        testing(classNumber, testingIterationNumber, neuronNumber);
     }
 
-    view->onTrainingFinished();
-
+    view->onProcessFinished();
     clearProcessParameters();
 }
 
-void MainInteractor::train(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber) {
+void MainInteractor::testing(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber) {
     double correctAnswerSum = 0.0;
     double answerCounter = 0.0;
     double totalLossValue = 0.0;
     int totalLossValueCounter = 0;
+
+    view->onTrainingStarted(iterationNumber); // TODO changed to testing
 
     for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
         view->onIterationChanged(j + 1);
@@ -91,7 +94,47 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
                     return;
                 }
 
-                dataList.at(k)->start(i, j);
+                dataList.at(k)->start(i, j, false);
+                lossSum += dataList.at(k)->getLoss();
+
+                if (dataList.at(k)->getAnswer() == i)
+                    correctAnswerSum++;
+                answerCounter++;
+            }
+        }
+
+        view->onAccuracyChanged(correctAnswerSum / answerCounter);
+        view->onErrorValueChanged(lossSum / classNumber);
+        totalLossValue += (lossSum / classNumber);
+        totalLossValueCounter++;
+    }
+
+    view->onTestingTotalLossValueChanged(totalLossValue / totalLossValueCounter);
+}
+
+void MainInteractor::train(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber) {
+    double totalLossValue = 0.0;
+    int totalLossValueCounter = 0;
+
+    view->onTrainingStarted(iterationNumber);
+
+    for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
+        view->onIterationChanged(j + 1);
+        double lossSum = 0;
+        double correctAnswerSum = 0.0;
+        double answerCounter = 0.0;
+
+        for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
+            for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
+                if (isStopped)
+                    return;
+
+                if (isPaused) {
+                    onProcessPaused(i, j, k);
+                    return;
+                }
+
+                dataList.at(k)->start(i, j, true);
                 lossSum += dataList.at(k)->getLoss();
 
                 if (dataList.at(k)->getAnswer() == i)
@@ -108,7 +151,7 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
         totalLossValueCounter++;
     }
 
-    view->onTotalLossValueChanged(totalLossValue / totalLossValueCounter);
+    view->onTrainingTotalLossValueChanged(totalLossValue / totalLossValueCounter);
 }
 
 void MainInteractor::updateSinaps() {
@@ -466,7 +509,7 @@ void MainInteractor::onProcessStopped() {
         neuron->clean();
 
     clearProcessParameters();
-    view->onTrainingFinished();
+    view->onProcessFinished();
 }
 
 void MainInteractor::onProcessPaused(unsigned long pausedClassNumber, unsigned long pausedIterationNumber, unsigned long pausedNeuronNumber) {
