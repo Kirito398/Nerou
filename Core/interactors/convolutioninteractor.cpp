@@ -138,7 +138,7 @@ void ConvolutionInteractor::makeInputDelta() {
             if (i * value[i].size() >= inputDeltaCount)
                 this->inputDelta[i].push_back(0);
             else
-                this->inputDelta[i].push_back(temp[i * value[i].size()]);
+                this->inputDelta[i].push_back(temp[i * value[i].size() + j]);
         }
     }
 }

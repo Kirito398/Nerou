@@ -113,8 +113,6 @@ void MainInteractor::testing(unsigned long classNumber, unsigned long iterationN
 }
 
 void MainInteractor::train(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber) {
-    double correctAnswerSum = 0.0;
-    double answerCounter = 0.0;
     double totalLossValue = 0.0;
     int totalLossValueCounter = 0;
 
@@ -123,6 +121,8 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
     for (unsigned long j = pausedIterationNumber; j < iterationNumber; j++) {
         view->onIterationChanged(j + 1);
         double lossSum = 0;
+        double correctAnswerSum = 0.0;
+        double answerCounter = 0.0;
 
         for (unsigned long i = pausedClassNumber; i < classNumber; i++) {
             for (unsigned long k = pausedNeuronNumber; k < neuronNumber; k++) {
