@@ -164,7 +164,7 @@ void MainInteractor::updateSinaps() {
     double learningRange = calculateLearningRangeDecay(this->learningRange);
 
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps(learningRange, alpha);
+        sinaps->updateSinaps(learningRange, alpha, 0.9);
 
     learningRangeDecayCounter++;
 

@@ -4,6 +4,8 @@
 #include "listeners/SinapsListener.h"
 #include "models/weightmodel.h"
 
+#include <math.h>
+
 WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : WeightInterface(inputListener, outputListener)
 {
     view = nullptr;
@@ -23,6 +25,7 @@ void WeightInteractor::init() {
     delta = 0;
     grad = 0;
     prevDeltaWeight = 0;
+    prevS = 0;
 }
 
 WeightModel WeightInteractor::getModel() {
@@ -39,15 +42,19 @@ void WeightInteractor::setWeight(double weight) {
     this->weight = weight;
 }
 
-void WeightInteractor::updateSinaps(double learningRange, double alpha) {
+void WeightInteractor::updateSinaps(double learningRange, double alpha, double b) {
     //weight += deltaWeight;
     //if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
     if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
         return;
 
-    double deltaWeight = -grad * learningRange + alpha * prevDeltaWeight;
+    double s = b * prevS + (1 - b) * pow(grad, 2);
+    double deltaWeight = -grad * learningRange / sqrt(s + 0.00000001) + alpha * prevDeltaWeight;
+    //double deltaWeight = -grad * learningRange + alpha * prevDeltaWeight;
+
     weight += deltaWeight;
     prevDeltaWeight = deltaWeight;
+    prevS = s;
     grad = 0;
 }
 

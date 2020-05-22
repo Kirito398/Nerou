@@ -16,7 +16,7 @@ public:
 
 private:
     void init() override;
-    void updateSinaps(double learningRange, double alpha) override;
+    void updateSinaps(double learningRange, double alpha, double s) override;
     void sendSignal(std::vector<std::vector<double>> signal) override;
     std::vector<std::vector<double>> getValue() override;
     void deleteSinaps() override;

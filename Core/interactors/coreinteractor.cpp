@@ -35,7 +35,7 @@ void CoreInteractor::init() {
         prevDeltaWeight.push_back(std::vector<double>(coreSize, 0));
 }
 
-void CoreInteractor::updateSinaps(double learningRange, double alpha) {
+void CoreInteractor::updateSinaps(double learningRange, double alpha, double s) {
     std::vector<std::vector<double>> deltaWeight;
 
     for (unsigned int i = 0; i < coreSize; i++)

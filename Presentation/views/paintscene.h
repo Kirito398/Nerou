@@ -98,6 +98,7 @@ private:
     void onArrowsModeRelease(QGraphicsSceneMouseEvent *event);
     void onSelectorModeRelease(QGraphicsSceneMouseEvent *event);
     void updatePropertiesBox();
+    QList<MovingView *> sortMovingViewByID(QList<MovingView *> list);
 };
 
 #endif // PAINTSCENE_H

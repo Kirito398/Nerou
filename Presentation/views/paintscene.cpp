@@ -488,19 +488,24 @@ void PaintScene::onAddOutputNeuronsActionClicked() {
         return;
 
     int number = dlg.getNeuronsNumber().toInt();
+    int neuronType = dlg.getNeuronType();
 
     if (number <= 0)
         return;
 
     clearSelectedItem();
 
+    int outputViewSize = inputsView.at(0)->getType() == MovingView::Convolution ? number * inputsView.size() : number;
     double deltaY = (maxY - minY) < 0.05 ? maxY : (maxY + minY) / 2.0;
     double delta = 120;
-    double posX = maxX + 60 * number;
-    double posY = deltaY - ((number - 1) * delta) / 2.0;
+    double posX = maxX + 60 * outputViewSize;
+    double posY = deltaY - ((outputViewSize - 1) * delta) / 2.0;
 
-    for (int i = 0; i < number; i++)
-        interactor->createNewPerceptron(posX, posY + delta * i);
+    for (int j = 0; j < outputViewSize; j++)
+        if (neuronType)
+            interactor->createNewConvolution(posX, posY + delta * j);
+        else
+            interactor->createNewPerceptron(posX, posY + delta * j);
 
     selectedItems.clear();
     selectedItems = this->selectedItems();
@@ -512,11 +517,30 @@ void PaintScene::onAddOutputNeuronsActionClicked() {
             outputsView.append(view);
     }
 
-    for (auto inputView : inputsView) {
-        for (auto outputView : outputsView) {
-            addArrow(inputView, outputView);
-        }
+    inputsView = sortMovingViewByID(inputsView);
+    outputsView = sortMovingViewByID(outputsView);
+
+    if (inputsView.at(0)->getType() == MovingView::Convolution) {
+        int k = 0;
+        for (auto inputView : inputsView)
+            for (int i = 0; i < number; i++)
+                addArrow(inputView, outputsView.at(k++));
+    } else {
+        for (auto inputView : inputsView)
+            for (auto outputView : outputsView)
+                addArrow(inputView, outputView);
     }
+}
+
+QList<MovingView *> PaintScene::sortMovingViewByID(QList<MovingView *> list) {
+    auto size = list.size();
+
+    for (auto i = 0 ; i < size; i++)
+        for (auto j = 0; j < size - i - 1; j++)
+            if (list[j]->getID() > list[j + 1]->getID())
+                list.swapItemsAt(j, j + 1);
+
+    return list;
 }
 
 void PaintScene::onRunBtnClicked() {

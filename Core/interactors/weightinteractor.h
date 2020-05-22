@@ -15,7 +15,7 @@ public:
     double getDelta() override;
     void sendSignal(double signal) override;
     void init() override;
-    void updateSinaps(double learningRange, double alpha) override;
+    void updateSinaps(double learningRange, double alpha, double b) override;
     WeightModel getModel();
     void setWeight(double weight);
 
@@ -32,6 +32,7 @@ private:
     double delta;
     double grad;
     double prevDeltaWeight;
+    double prevS;
 };
 
 #endif // WEIGHTINTERACTOR_H

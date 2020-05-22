@@ -12,7 +12,7 @@ public:
 public:
     SinapsInteractor(SinapsListener *inputListener, SinapsListener *outputListener, SinapsType type);
     virtual void init() = 0;
-    virtual void updateSinaps(double learningRange, double alpha) = 0;
+    virtual void updateSinaps(double learningRange, double alpha, double b) = 0;
     virtual ~SinapsInteractor();
     SinapsType getType();
     SinapsListener *getInputNeuron();
