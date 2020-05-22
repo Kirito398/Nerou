@@ -71,6 +71,7 @@ private:
     void onTableDataModelLoaded(TableDataModel model) override;
     void train(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber);
     void testing(unsigned long classNumber, unsigned long iterationNumber, unsigned long neuronNumber);
+    double calculateLearningRangeDecay(double learningRange0);
 
 private:
     static MainInteractor *instance;
@@ -83,7 +84,8 @@ private:
     bool isStopped, isPaused, isDebug;
     unsigned long pausedClassNumber, pausedIterationNumber, pausedNeuronNumber;
     unsigned long epohNumber;
-    double learningRange, alpha;
+    double learningRange, alpha, learningRangeDecay;
+    unsigned long learningRangeDecayCounter;
     std::string currentProjectName;
     bool isTrainingProcessAnimated;
 };

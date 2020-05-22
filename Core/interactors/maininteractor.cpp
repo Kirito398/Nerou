@@ -18,14 +18,19 @@
 #include "models/coremodel.h"
 #include "models/tabledatamodel.h"
 
+#include <iostream>
+#include <math.h>
+
 MainInteractor::MainInteractor(RepositoryInterface *repository)
 {
     this->repository = repository;
     repository->setInteractor(this);
     createdItemsCounter = 0;
+    learningRangeDecayCounter = 0;
     epohNumber = 30;
     learningRange = 0.3;
     alpha = 0.0;
+    learningRangeDecay = 0.01;
     currentProjectName = "Untitled";
     isTrainingProcessAnimated = true;
 
@@ -53,6 +58,7 @@ void MainInteractor::run() {
     unsigned long trainingIterationNumber = dataList.at(0)->getTrainingIterationNumber();
     unsigned long testingIterationNumber = dataList.at(0)->getTestingIterationNumber();
     unsigned long neuronNumber = dataList.size();
+    learningRangeDecayCounter = 0;
 
     view->onProcessStarted(trainingIterationNumber + testingIterationNumber, epohNumber);
 
@@ -141,9 +147,9 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
                     correctAnswerSum++;
                 answerCounter++;
             }
-
-            updateSinaps();
         }
+
+        updateSinaps();
 
         view->onAccuracyChanged(correctAnswerSum / answerCounter);
         view->onErrorValueChanged(lossSum / classNumber);
@@ -155,8 +161,19 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
 }
 
 void MainInteractor::updateSinaps() {
+    double learningRange = calculateLearningRangeDecay(this->learningRange);
+
     for (auto sinaps : sinapsList)
         sinaps->updateSinaps(learningRange, alpha);
+
+    learningRangeDecayCounter++;
+
+    std::cout << learningRangeDecayCounter << " : " << learningRange <<  std::endl;
+}
+
+double MainInteractor::calculateLearningRangeDecay(double learningRange0) {
+    return learningRange0 / (1 + learningRangeDecay * learningRangeDecayCounter);
+    //return learningRange0 * exp(-learningRangeDecay * learningRangeDecayCounter);
 }
 
 void MainInteractor::createNewPerceptron(double x, double y) {
