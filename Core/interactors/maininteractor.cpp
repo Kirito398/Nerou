@@ -161,14 +161,14 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
 }
 
 void MainInteractor::updateSinaps() {
-    double learningRange = calculateLearningRangeDecay(this->learningRange);
+    //double learningRange = calculateLearningRangeDecay(this->learningRange);
 
     for (auto sinaps : sinapsList)
         sinaps->updateSinaps(learningRange, alpha, 0.9);
 
     learningRangeDecayCounter++;
 
-    std::cout << learningRangeDecayCounter << " : " << learningRange <<  std::endl;
+    //std::cout << learningRangeDecayCounter << " : " << learningRange <<  std::endl;
 }
 
 double MainInteractor::calculateLearningRangeDecay(double learningRange0) {

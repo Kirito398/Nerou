@@ -283,7 +283,7 @@ unsigned int DataInteractor::getAnswer() {
         if (classList[i].getNeuronID() == answerNeuronID)
             return i;
 
-    return classList.size();
+    return classList.size() + 1;
 }
 
 unsigned int DataInteractor::getMaxIndex(std::vector<double> value) {

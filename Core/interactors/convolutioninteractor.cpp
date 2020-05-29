@@ -23,8 +23,8 @@ void ConvolutionInteractor::onInputSignalChanged() {
     if (isActivateFunctionEnabled) activate();
 
     if (isAnimateTrainingProcessEnabled) {
-        //view->setOutValue(normalization(value));
-        view->setOutValue(value);
+        view->setOutValue(normalization(value));
+        //view->setOutValue(value);
         view->setActive(false);
     }
 

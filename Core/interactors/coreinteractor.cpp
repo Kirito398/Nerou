@@ -6,12 +6,14 @@
 #include "listeners/SinapsListener.h"
 #include "models/coremodel.h"
 
+#include <math.h>
+
 CoreInteractor::CoreInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : CoreInterface(inputListener, outputListener)
 {
     view = nullptr;
     isMaxPoolingEnabled = true;
     coreSize = 5;
-    maxPoolingCoreSize = 3;
+    maxPoolingCoreSize = 2;
 
     init();
 }
@@ -33,9 +35,13 @@ void CoreInteractor::init() {
     prevDeltaWeight.clear();
     for (unsigned int i = 0; i < coreSize; i++)
         prevDeltaWeight.push_back(std::vector<double>(coreSize, 0));
+
+    prevS.clear();
+    for (unsigned int i = 0; i < coreSize; i++)
+        prevS.push_back(std::vector<double>(coreSize, 0));
 }
 
-void CoreInteractor::updateSinaps(double learningRange, double alpha, double s) {
+void CoreInteractor::updateSinaps(double learningRange, double alpha, double b) {
     std::vector<std::vector<double>> deltaWeight;
 
     for (unsigned int i = 0; i < coreSize; i++)
@@ -43,7 +49,7 @@ void CoreInteractor::updateSinaps(double learningRange, double alpha, double s) 
 
     for (unsigned int i = 0; i < coreSize; i++)
         for (unsigned int j = 0; j < coreSize; j++)
-            deltaWeight[i][j] += -grad[i][j] * learningRange + prevDeltaWeight[i][j] * alpha;
+            deltaWeight[i][j] += optimize(grad[i][j], learningRange, alpha, prevDeltaWeight[i][j], b, prevS[i][j]);
 
     for (unsigned int i = 0; i < coreSize; i++)
         for (unsigned int j = 0; j < coreSize; j++)

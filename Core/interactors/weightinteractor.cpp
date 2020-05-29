@@ -4,8 +4,6 @@
 #include "listeners/SinapsListener.h"
 #include "models/weightmodel.h"
 
-#include <math.h>
-
 WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener *outputListener) : WeightInterface(inputListener, outputListener)
 {
     view = nullptr;
@@ -14,8 +12,8 @@ WeightInteractor::WeightInteractor(SinapsListener *inputListener, SinapsListener
 }
 
 void WeightInteractor::init() {
-    //if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
-    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    //if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
         weight = 1.0;
     else
         weight = random();
@@ -44,17 +42,14 @@ void WeightInteractor::setWeight(double weight) {
 
 void WeightInteractor::updateSinaps(double learningRange, double alpha, double b) {
     //weight += deltaWeight;
-    //if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
-    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    //if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data)
+    if (inputListener->getType() == NeuronType::Data || outputListener->getType() == NeuronType::Data || (inputListener->getType() == NeuronType::Convolution && outputListener->getType() == NeuronType::Perceptron))
         return;
 
-    double s = b * prevS + (1 - b) * pow(grad, 2);
-    double deltaWeight = -grad * learningRange / sqrt(s + 0.00000001) + alpha * prevDeltaWeight;
-    //double deltaWeight = -grad * learningRange + alpha * prevDeltaWeight;
+    double deltaWeight = optimize(grad, learningRange, alpha, prevDeltaWeight, b, prevS);
 
     weight += deltaWeight;
     prevDeltaWeight = deltaWeight;
-    prevS = s;
     grad = 0;
 }
 

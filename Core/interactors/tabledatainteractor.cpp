@@ -17,7 +17,7 @@ TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
     dataSet = new TableDataSetModel();
     currentAnswer = 0;
     currentLoss = 0;
-    epsilon = 0.1;
+    epsilon = 0.25;
     isTraining = false;
 }
 
@@ -156,7 +156,31 @@ unsigned int TableDataInteractor::getAnswer() {
         if (fabs(delta) > epsilon)
             currentAnswer++;
 
+//    if (fabs(currentDelta[currentAnswer]) > epsilon)
+//        currentAnswer++;
+
+//    unsigned int answerIndex = getMaxIndex(inputSignal);
+//    unsigned int correctIndex = getMaxIndex(currentMark);
+
+//    if (answerIndex != correctIndex)
+//        currentAnswer++;
+
     return currentAnswer;
+}
+
+unsigned int TableDataInteractor::getMaxIndex(std::vector<double> value) {
+    unsigned int index = 0;
+    double max = value[0];
+
+    for (unsigned int i = 0; i < value.size(); i++) {
+        if (max >= value[i])
+            continue;
+
+        max = value[i];
+        index = i;
+    }
+
+    return index;
 }
 
 std::vector<std::vector<std::string>> TableDataInteractor::loadTableValue(std::string path) {

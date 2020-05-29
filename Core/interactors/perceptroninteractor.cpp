@@ -96,7 +96,10 @@ void PerceptronInteractor::calculateOut() {
     for (unsigned long i = 0; i < inputSignalCount; i++)
         sum += inputSignal[i];
 
-    outValue = activateFunction(sum);
+    if (inputsSinaps.at(0)->getInputNeuron()->getType() == NeuronType::Convolution)
+        outValue = sum;
+    else
+        outValue = activateFunction(sum);
 
     if (isAnimateTrainingProcessEnabled)
         view->setOutValue(outValue);
@@ -112,7 +115,10 @@ void PerceptronInteractor::calculateDelta() {
     for (unsigned long i = 0; i < inputDeltaCount; i++)
         sum += inputDelta[i];
 
-    deltaValue = sum * reActivateFunction(outValue);
+    if (inputsSinaps.at(0)->getInputNeuron()->getType() == NeuronType::Convolution)
+        deltaValue = sum;
+    else
+        deltaValue = sum * reActivateFunction(outValue);
 }
 
 void PerceptronInteractor::sendSignal() {

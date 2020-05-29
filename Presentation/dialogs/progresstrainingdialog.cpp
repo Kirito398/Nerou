@@ -178,8 +178,11 @@ void ProgressTrainingDialog::initTimer() {
 void ProgressTrainingDialog::onTimeout() {
     seconds += 1;
 
-    QString hours = QString::number(seconds / 3600);
-    QString minuts = QString::number(seconds / 60);
+    unsigned long currentHours = seconds / 3600;
+    unsigned long currentMinuts = seconds / 60 - currentHours * 60;
+
+    QString hours = QString::number(currentHours);
+    QString minuts = QString::number(currentMinuts);
     QString second = QString::number(seconds % 60);
 
     if (hours.length() == 1)

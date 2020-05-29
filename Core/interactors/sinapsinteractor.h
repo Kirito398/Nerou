@@ -24,6 +24,7 @@ public:
 
 protected:
     double random();
+    double optimize(double grad, double learningRange, double alpha, double prevDelta, double b, double &prevS);
 
 protected:
     SinapsListener *inputListener;
@@ -32,7 +33,14 @@ protected:
     SinapsType type;
 
 private:
+    double gradient(double grad, double learningRange);
+    double momentum(double grad, double learningRange, double alpha, double prevDelta);
+    double rmsProp(double grad, double learningRange, double alpha, double prevDelta, double b, double &prevS);
+    double adam(double grad, double learningRange, double alpha, double prevDelta, double b, double &prevS);
+
+private:
     MainInteractorInterface *interactor;
+    unsigned long iterationNumber;
 };
 
 #endif // SINAPSINTERACTOR_H

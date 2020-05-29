@@ -181,11 +181,12 @@ void TableDataSetsDialog::accept() {
 
 void TableDataSetsDialog::applied() {
     double delimiter = 0.7;
-    int trainingSetSize = dataList.size() * delimiter;
+    int trainingSetSize = (dataList.size() - 1) * delimiter;
 
     presentor->clearDataSet();
     presentor->setDataSetMainPath(dataPath->text());
 
+    //Training input sets
     QStringList tableHeaders;
     for (auto item : inputsCheckBoxes)
         if (item->isChecked())
@@ -193,7 +194,7 @@ void TableDataSetsDialog::applied() {
 
     presentor->setInputsTitles(tableHeaders);
 
-    for (int i = 1; i < trainingSetSize; i++) {
+    for (int i = 1; i <= trainingSetSize; i++) {
         QStringList list;
 
         for (int j = 0; j < dataList[i].size(); j++)
@@ -203,25 +204,8 @@ void TableDataSetsDialog::applied() {
         presentor->addTrainingInputSet(list);
     }
 
-    tableHeaders.clear();
-    for (auto item : targetsCheckBoxes)
-        if (item->isChecked())
-            tableHeaders.append(item->text());
-
-    presentor->setTargetTitles(tableHeaders, view->getOutputsNeuronsList());
-
-    for (int i = 1; i < trainingSetSize; i++) {
-        QStringList list;
-
-        for (int j = 0; j < dataList[i].size(); j++)
-            if (tableHeaders.contains(dataList[0][j]))
-                list.append(dataList[i][j]);
-
-        presentor->addTrainingTargetSet(list);
-    }
-
-    //Testing sets
-    for (int i = trainingSetSize; i < dataList.size(); i++) {
+    //Testing input sets
+    for (int i = trainingSetSize + 1; i < dataList.size(); i++) {
         QStringList list;
 
         for (int j = 0; j < dataList[i].size(); j++)
@@ -231,7 +215,26 @@ void TableDataSetsDialog::applied() {
         presentor->addTestingInputSet(list);
     }
 
-    for (int i = trainingSetSize; i < dataList.size(); i++) {
+    //Training target sets
+    tableHeaders.clear();
+    for (auto item : targetsCheckBoxes)
+        if (item->isChecked())
+            tableHeaders.append(item->text());
+
+    presentor->setTargetTitles(tableHeaders, view->getOutputsNeuronsList());
+
+    for (int i = 1; i <= trainingSetSize; i++) {
+        QStringList list;
+
+        for (int j = 0; j < dataList[i].size(); j++)
+            if (tableHeaders.contains(dataList[0][j]))
+                list.append(dataList[i][j]);
+
+        presentor->addTrainingTargetSet(list);
+    }
+
+    //Testing target sets
+    for (int i = trainingSetSize + 1; i < dataList.size(); i++) {
         QStringList list;
 
         for (int j = 0; j < dataList[i].size(); j++)

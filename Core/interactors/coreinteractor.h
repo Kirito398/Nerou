@@ -16,7 +16,7 @@ public:
 
 private:
     void init() override;
-    void updateSinaps(double learningRange, double alpha, double s) override;
+    void updateSinaps(double learningRange, double alpha, double b) override;
     void sendSignal(std::vector<std::vector<double>> signal) override;
     std::vector<std::vector<double>> getValue() override;
     void deleteSinaps() override;
@@ -44,6 +44,7 @@ private:
     std::vector<std::vector<double>> inputSignal;
     std::vector<std::vector<double>> grad;
     std::vector<std::vector<double>> prevDeltaWeight;
+    std::vector<std::vector<double>> prevS;
     bool isMaxPoolingEnabled;
 };
 

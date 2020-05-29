@@ -53,6 +53,7 @@ private:
     void calculateLoss();
     void calculateDelta();
     void sendDelta();
+    unsigned int getMaxIndex(std::vector<double> value);
 
 private:
     TableDataPresentorListener *view;
