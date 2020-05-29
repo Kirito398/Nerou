@@ -152,8 +152,28 @@ void MainRepository::save(std::string path, std::vector<DataModel> dataModelList
 
         for (auto id : outputsNeuronsID)
             out << QString::number(id);
+
+        size = dataSet->getTestingIterationNumber();
+        out << QString::number(size);
+
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set = dataSet->getTestingInputSet(i);
+
+            out << QString::number(set.size());
+            for (auto item : set)
+                out << item;
+        }
+
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set = dataSet->getTestingTargetSet(i);
+
+            out << QString::number(set.size());
+            for (auto item : set)
+                out << item;
+        }
     }
 
+    //Сохранение синапсов
     for (size_t i = 0; i < weightSize; i++) {
         WeightModel model = weightModelList.at(i);
         out << QString::number(model.getID())
@@ -314,7 +334,7 @@ void MainRepository::load(std::string path) {
                 >> lossFunctionType;
 
         TableDataSetModel *dataSet = new TableDataSetModel();
-        QString mainPath, trainingIterationNumber;
+        QString mainPath, trainingIterationNumber, testingIterationNumber;
         in >> mainPath;
 
         dataSet->setMainPath(mainPath.toStdString());
@@ -391,6 +411,40 @@ void MainRepository::load(std::string path) {
         }
 
         dataSet->setOutputsNeuronsID(outputsNeuronsID);
+
+        //Testing
+        in >> testingIterationNumber;
+        size = testingIterationNumber.toULong();
+
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set;
+            QString setSizeString;
+            in >> setSizeString;
+
+            size_t setSize = setSizeString.toULong();
+            for (size_t j = 0; j < setSize; j++) {
+                double value;
+                in >> value;
+                set.push_back(value);
+            }
+
+            dataSet->addTestingInputSet(set);
+        }
+
+        for (unsigned long i = 0; i < size; i++) {
+            std::vector<double> set;
+            QString setSizeString;
+            in >> setSizeString;
+
+            size_t setSize = setSizeString.toULong();
+            for (size_t j = 0; j < setSize; j++) {
+                double value;
+                in >> value;
+                set.push_back(value);
+            }
+
+            dataSet->addTestingTargetSet(set);
+        }
 
         TableDataModel model;
         model.setX(posX);

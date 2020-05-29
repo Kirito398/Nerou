@@ -140,6 +140,13 @@ void TableDataInteractor::updateFromModel(TableDataModel model) {
     setTargetTitles(data->getTargetTitles(), data->getOutputsNeuronsID());
     for (unsigned long i = 0; i < size; i++)
         addTrainingTargetSet(data->getTrainingTargetSet(i));
+
+    size = data->getTestingIterationNumber();
+    for (unsigned long i = 0; i < size; i++)
+        addTestingInputSet(data->getTestingInputSet(i));
+
+    for (unsigned long i = 0; i < size; i++)
+        addTestingTargetSet(data->getTestingTargetSet(i));
 }
 
 
