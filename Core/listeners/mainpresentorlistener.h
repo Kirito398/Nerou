@@ -29,6 +29,7 @@ public:
     virtual void onProjectNameChanged(std::string name) = 0;
     virtual void onTrainingTotalLossValueChanged(double value) = 0;
     virtual void onTestingTotalLossValueChanged(double value) = 0;
+    virtual void updateGraphicScene() = 0;
 };
 
 #endif // MAINPRESENTORLISTENER_H

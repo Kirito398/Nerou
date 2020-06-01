@@ -54,14 +54,14 @@ void WeightInteractor::updateSinaps(double learningRange, double alpha, double b
 }
 
 void WeightInteractor::sendSignal(double signal) {
-    if (view != nullptr)
+    if (view != nullptr && isTrainingProcessAnimated)
         view->setActive(true);
 
     input = signal;
     value = input * weight;
     outputListener->onInputSignalChanged();
 
-    if (view != nullptr)
+    if (view != nullptr && isTrainingProcessAnimated)
         view->setActive(false);
 }
 

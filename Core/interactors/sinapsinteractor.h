@@ -21,6 +21,7 @@ public:
     void setID(unsigned long id);
     unsigned long getID() const;
     void removeSinaps();
+    void setTrainingProcessAnimated(bool value);
 
 protected:
     double random();
@@ -31,6 +32,7 @@ protected:
     SinapsListener *outputListener;
     unsigned long id;
     SinapsType type;
+    bool isTrainingProcessAnimated;
 
 private:
     double gradient(double grad, double learningRange);

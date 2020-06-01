@@ -25,14 +25,10 @@ public:
     void clear();
     unsigned long getTrainingIterationNumber();
     unsigned long getTestingIterationNumber();
-    std::vector<double> getTrainingInputsMax();
-    std::vector<double> getTestingInputsMax();
-    std::vector<double> getTrainingTargetsMax();
-    std::vector<double> getTestingTargetsMax();
-    std::vector<double> getTrainingInputsMin();
-    std::vector<double> getTestingInputsMin();
-    std::vector<double> getTrainingTargetsMin();
-    std::vector<double> getTestingTargetsMin();
+    std::vector<double> getInputsMax();
+    std::vector<double> getTargetsMax();
+    std::vector<double> getInputsMin();
+    std::vector<double> getTargetsMin();
     std::vector<unsigned long> getOutputsNeuronsID();
     void setOutputsNeuronsID(std::vector<unsigned long> outputsNeuronsID);
 
@@ -44,14 +40,10 @@ private:
     std::vector<std::vector<double>> testingTargetSet;
     std::vector<std::string> targetTitles;
     std::vector<std::string> inputTitles;
-    std::vector<double> trainingInputsMax;
-    std::vector<double> testingInputsMax;
-    std::vector<double> trainingTargetsMax;
-    std::vector<double> testingTargetsMax;
-    std::vector<double> trainingInputsMin;
-    std::vector<double> testingInputsMin;
-    std::vector<double> trainingTargetsMin;
-    std::vector<double> testingTargetsMin;
+    std::vector<double> inputsMax;
+    std::vector<double> targetsMax;
+    std::vector<double> inputsMin;
+    std::vector<double> targetsMin;
     std::vector<unsigned long> outputsNeuronsID;
 };
 

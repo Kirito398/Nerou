@@ -13,16 +13,21 @@ SinapsInteractor::SinapsInteractor(SinapsListener *inputListener, SinapsListener
     this->type = type;
     id = 0;
     iterationNumber = 0;
+    isTrainingProcessAnimated = true;
 }
 
 double SinapsInteractor::random() {
     return std::rand() % 100 / 100.0 - 0.5;
 }
 
+void SinapsInteractor::setTrainingProcessAnimated(bool value) {
+    isTrainingProcessAnimated = value;
+}
+
 double SinapsInteractor::optimize(double grad, double learningRange, double alpha, double prevDelta, double b, double &prevS) {
-    //return rmsProp(grad, learningRange, alpha, prevDelta, b, prevS);
+    return rmsProp(grad, learningRange, alpha, prevDelta, b, prevS);
     //return gradient(grad, learningRange);
-    return momentum(grad, learningRange, alpha, prevDelta);
+    //return momentum(grad, learningRange, alpha, prevDelta);
 }
 
 double SinapsInteractor::gradient(double grad, double learningRange) {

@@ -83,6 +83,7 @@ private:
     QStringList getOutputsNeuronsList() override;
     QList<QGraphicsItem *> getSelectedMovingView() override;
     void onProjectNameChanged(std::string name) override;
+    void updateGraphicScene() override;
     void addArrow();
     void addArrow(MovingView *startView, MovingView *endView);
     void addArrow(ArrowInteractorListener *listener, MovingView *startView, MovingView *endView);

@@ -64,6 +64,10 @@ void PaintScene::onIterationChanged(unsigned int currentIteration) {
     progressDialog->setCurrentIteration(currentIteration);
 }
 
+void PaintScene::updateGraphicScene() {
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
+}
+
 void PaintScene::onErrorValueChanged(double value) {
     progressDialog->setCurrentError(value);
 }

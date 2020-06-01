@@ -18,19 +18,19 @@ void TableDataSetModel::addTrainingInputSet(std::vector<double> set) {
 
     size_t size = set.size();
 
-    if (trainingInputsMax.empty())
-        trainingInputsMax = set;
+    if (inputsMax.empty())
+        inputsMax = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] > trainingInputsMax[i])
-            trainingInputsMax[i] = set[i];
+        if (set[i] > inputsMax[i])
+            inputsMax[i] = set[i];
 
-    if (trainingInputsMin.empty())
-        trainingInputsMin = set;
+    if (inputsMin.empty())
+        inputsMin = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] < trainingInputsMin[i])
-            trainingInputsMin[i] = set[i];
+        if (set[i] < inputsMin[i])
+            inputsMin[i] = set[i];
 }
 
 void TableDataSetModel::addTestingInputSet(std::vector<double> set) {
@@ -38,19 +38,19 @@ void TableDataSetModel::addTestingInputSet(std::vector<double> set) {
 
     size_t size = set.size();
 
-    if (testingInputsMax.empty())
-        testingInputsMax = set;
+    if (inputsMax.empty())
+        inputsMax = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] > testingInputsMax[i])
-            testingInputsMax[i] = set[i];
+        if (set[i] > inputsMax[i])
+            inputsMax[i] = set[i];
 
-    if (testingInputsMin.empty())
-        testingInputsMin = set;
+    if (inputsMin.empty())
+        inputsMin = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] < testingInputsMin[i])
-            testingInputsMin[i] = set[i];
+        if (set[i] < inputsMin[i])
+            inputsMin[i] = set[i];
 }
 
 void TableDataSetModel::addTrainingTargetSet(std::vector<double> set) {
@@ -58,19 +58,19 @@ void TableDataSetModel::addTrainingTargetSet(std::vector<double> set) {
 
     size_t size = set.size();
 
-    if (trainingTargetsMax.empty())
-        trainingTargetsMax = set;
+    if (targetsMax.empty())
+        targetsMax = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] > trainingTargetsMax[i])
-            trainingTargetsMax[i] = set[i];
+        if (set[i] > targetsMax[i])
+            targetsMax[i] = set[i];
 
-    if (trainingTargetsMin.empty())
-        trainingTargetsMin = set;
+    if (targetsMin.empty())
+        targetsMin = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] < trainingTargetsMin[i])
-            trainingTargetsMin[i] = set[i];
+        if (set[i] < targetsMin[i])
+            targetsMin[i] = set[i];
 }
 
 void TableDataSetModel::addTestingTargetSet(std::vector<double> set) {
@@ -78,19 +78,19 @@ void TableDataSetModel::addTestingTargetSet(std::vector<double> set) {
 
     size_t size = set.size();
 
-    if (testingTargetsMax.empty())
-        testingTargetsMax = set;
+    if (targetsMax.empty())
+        targetsMax = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] > testingTargetsMax[i])
-            testingTargetsMax[i] = set[i];
+        if (set[i] > targetsMax[i])
+            targetsMax[i] = set[i];
 
-    if (testingTargetsMin.empty())
-        testingTargetsMin = set;
+    if (targetsMin.empty())
+        targetsMin = set;
 
     for (size_t i = 0; i < size; i++)
-        if (set[i] < testingTargetsMin[i])
-            testingTargetsMin[i] = set[i];
+        if (set[i] < targetsMin[i])
+            targetsMin[i] = set[i];
 }
 
 std::vector<double> TableDataSetModel::getTrainingInputSet(size_t number) {
@@ -135,36 +135,20 @@ unsigned long TableDataSetModel::getTestingIterationNumber() {
     return testingInputSet.size();
 }
 
-std::vector<double> TableDataSetModel::getTrainingInputsMax() {
-    return trainingInputsMax;
+std::vector<double> TableDataSetModel::getInputsMax() {
+    return inputsMax;
 }
 
-std::vector<double> TableDataSetModel::getTestingInputsMax() {
-    return testingInputsMax;
+std::vector<double> TableDataSetModel::getTargetsMax() {
+    return targetsMax;
 }
 
-std::vector<double> TableDataSetModel::getTrainingTargetsMax() {
-    return trainingTargetsMax;
+std::vector<double> TableDataSetModel::getInputsMin() {
+    return inputsMin;
 }
 
-std::vector<double> TableDataSetModel::getTestingTargetsMax() {
-    return testingTargetsMax;
-}
-
-std::vector<double> TableDataSetModel::getTrainingInputsMin() {
-    return trainingInputsMin;
-}
-
-std::vector<double> TableDataSetModel::getTestingInputsMin() {
-    return testingInputsMin;
-}
-
-std::vector<double> TableDataSetModel::getTrainingTargetsMin() {
-    return trainingTargetsMin;
-}
-
-std::vector<double> TableDataSetModel::getTestingTargetsMin() {
-    return testingTargetsMin;
+std::vector<double> TableDataSetModel::getTargetsMin() {
+    return targetsMin;
 }
 
 std::vector<unsigned long> TableDataSetModel::getOutputsNeuronsID() {
@@ -183,13 +167,9 @@ void TableDataSetModel::clear() {
     testingTargetSet.clear();
     targetTitles.clear();
     inputTitles.clear();
-    trainingInputsMax.clear();
-    testingInputsMax.clear();
-    trainingTargetsMax.clear();
-    testingTargetsMax.clear();
-    trainingInputsMin.clear();
-    testingInputsMin.clear();
-    trainingTargetsMin.clear();
-    testingTargetsMin.clear();
+    inputsMax.clear();
+    targetsMax.clear();
+    inputsMin.clear();
+    targetsMin.clear();
     outputsNeuronsID.clear();
 }

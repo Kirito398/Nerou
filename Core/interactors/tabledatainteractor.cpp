@@ -17,7 +17,7 @@ TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
     dataSet = new TableDataSetModel();
     currentAnswer = 0;
     currentLoss = 0;
-    epsilon = 0.25;
+    epsilon = 0.2;
     isTraining = false;
 }
 
@@ -27,11 +27,11 @@ void TableDataInteractor::start(unsigned long classNumber, unsigned long iterati
     this->isTraining = isTraining;
 
     if (isTraining) {
-        value = makeNormalize(dataSet->getTrainingInputSet(iterationNumber), dataSet->getTrainingInputsMax(), dataSet->getTrainingInputsMin());
-        currentMark = makeNormalize(dataSet->getTrainingTargetSet(iterationNumber), dataSet->getTrainingTargetsMax(), dataSet->getTrainingTargetsMin());
+        value = makeNormalize(dataSet->getTrainingInputSet(iterationNumber), dataSet->getInputsMax(), dataSet->getInputsMin());
+        currentMark = makeNormalize(dataSet->getTrainingTargetSet(iterationNumber), dataSet->getTargetsMax(), dataSet->getTargetsMin());
     } else {
-        value = makeNormalize(dataSet->getTestingInputSet(iterationNumber), dataSet->getTestingInputsMax(), dataSet->getTestingInputsMin());
-        currentMark = makeNormalize(dataSet->getTestingTargetSet(iterationNumber), dataSet->getTestingTargetsMax(), dataSet->getTestingTargetsMin());
+        value = makeNormalize(dataSet->getTestingInputSet(iterationNumber), dataSet->getInputsMax(), dataSet->getInputsMin());
+        currentMark = makeNormalize(dataSet->getTestingTargetSet(iterationNumber), dataSet->getTargetsMax(), dataSet->getTargetsMin());
     }
 
     for (size_t i = 0; i < outputsSinaps.size(); i++) {

@@ -1,5 +1,7 @@
 #include "classmodel.h"
 
+#include <algorithm>
+
 ClassModel::ClassModel(unsigned long neuronID)
 {
     this->neuronID = neuronID;
@@ -12,6 +14,8 @@ ClassModel::ClassModel(unsigned long neuronID)
 void ClassModel::setTrainingPathsList(std::vector<std::string> list) {
     trainingPathsList.clear();
     trainingPathsList.swap(list);
+
+    std::random_shuffle(trainingPathsList.begin(), trainingPathsList.end());
 }
 
 void ClassModel::setTestingPathslist(std::vector<std::string> list) {

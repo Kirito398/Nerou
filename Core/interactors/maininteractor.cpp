@@ -113,6 +113,9 @@ void MainInteractor::testing(unsigned long classNumber, unsigned long iterationN
         view->onErrorValueChanged(lossSum / classNumber);
         totalLossValue += (lossSum / classNumber);
         totalLossValueCounter++;
+
+        if (!isTrainingProcessAnimated)
+            view->updateGraphicScene();
     }
 
     view->onTestingTotalLossValueChanged(totalLossValue / totalLossValueCounter);
@@ -155,6 +158,9 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
         view->onErrorValueChanged(lossSum / classNumber);
         totalLossValue += (lossSum / classNumber);
         totalLossValueCounter++;
+
+        if (!isTrainingProcessAnimated)
+            view->updateGraphicScene();
     }
 
     view->onTrainingTotalLossValueChanged(totalLossValue / totalLossValueCounter);
@@ -550,6 +556,9 @@ void MainInteractor::setAnimateTrainingProcessEnable(bool enable) {
 
     for (auto neuron : neuronsList)
         neuron->setAnimateTrainingProcessEnable(enable);
+
+    for (auto sinaps : sinapsList)
+        sinaps->setTrainingProcessAnimated(enable);
 }
 
 bool MainInteractor::getAnimateTrainingProcessEnable() {

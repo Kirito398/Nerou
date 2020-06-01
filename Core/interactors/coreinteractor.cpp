@@ -64,13 +64,17 @@ void CoreInteractor::updateSinaps(double learningRange, double alpha, double b) 
 }
 
 void CoreInteractor::sendSignal(std::vector<std::vector<double>> signal) {
-    view->setActive(true);
+    if (isTrainingProcessAnimated)
+        view->setActive(true);
+
     inputSignal.clear();
     inputSignal = signal;
     validConvolution(signal);
 
     outputListener->onInputSignalChanged();
-    view->setActive(false);
+
+    if (isTrainingProcessAnimated)
+        view->setActive(false);
 }
 
 std::vector<std::vector<double>> CoreInteractor::convolution(std::vector<std::vector<double>> input, std::vector<std::vector<double>> core) {
