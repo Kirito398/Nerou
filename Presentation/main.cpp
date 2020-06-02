@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QTranslator qtLanguageTranslator;
-    qtLanguageTranslator.load(QString("NerouLanguage_") + QString("ru_RU"));
+    qtLanguageTranslator.load(":/language/NerouLanguage_ru_RU.qm");
     qApp->installTranslator(&qtLanguageTranslator);
 
     MainWindow w;

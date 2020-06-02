@@ -592,13 +592,13 @@ void PaintScene::setPropertiesLayout(QBoxLayout *layout) {
     if (progressDialog == nullptr)
         progressDialog = new ProgressTrainingDialog();
 
-    QGroupBox *progress = new QGroupBox(tr("Progress"));
+    QGroupBox *progress = new QGroupBox(tr("Прогресс"));
     progress->setLayout(progressDialog->getMainLayout());
 
     if (parametersDialog == nullptr)
         parametersDialog = new ParametersDialog(interactor);
 
-    propertiesBox = new QGroupBox(tr("Properties"));
+    propertiesBox = new QGroupBox(tr("Свойства"));
     propertiesBox->setLayout(parametersDialog->getMainLayout());
 
     propertiesLayout->insertWidget(0, progress);

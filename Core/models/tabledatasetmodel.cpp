@@ -1,5 +1,7 @@
 #include "tabledatasetmodel.h"
 
+#include <algorithm>
+
 TableDataSetModel::TableDataSetModel()
 {
     mainPath = "";
@@ -157,6 +159,13 @@ std::vector<unsigned long> TableDataSetModel::getOutputsNeuronsID() {
 
 void TableDataSetModel::setOutputsNeuronsID(std::vector<unsigned long> outputsNeuronsID) {
     this->outputsNeuronsID = outputsNeuronsID;
+}
+
+void TableDataSetModel::shuffleData() {
+    std::random_shuffle(trainingInputSet.begin(), trainingInputSet.end());
+    std::random_shuffle(testingInputSet.begin(), testingInputSet.end());
+    std::random_shuffle(trainingTargetSet.begin(), trainingTargetSet.end());
+    std::random_shuffle(testingTargetSet.begin(), testingTargetSet.end());
 }
 
 void TableDataSetModel::clear() {

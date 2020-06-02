@@ -8,8 +8,8 @@
 
 AddOutputNeuronsDialog::AddOutputNeuronsDialog(QWidget *parent) : QDialog(parent)
 {   
-    setWindowTitle(tr("Add output neurons"));
-    setFixedSize(QSize(200,100));
+    setWindowTitle(tr("Добавление выходных нейронов"));
+    setFixedSize(QSize(300,150));
 
     layout = new QVBoxLayout();
 
@@ -22,11 +22,11 @@ AddOutputNeuronsDialog::AddOutputNeuronsDialog(QWidget *parent) : QDialog(parent
 
 void AddOutputNeuronsDialog::initNeuronTypeLayer() {
     QBoxLayout *neuronTypeLayout = new QHBoxLayout();
-    QLabel *lTitle = new QLabel(tr("Neuron type: "));
+    QLabel *lTitle = new QLabel(tr("Тип нейрона: "));
 
     cbNeuronType = new QComboBox();
-    cbNeuronType->addItem(tr("Perceptron"));
-    cbNeuronType->addItem(tr("Convolution"));
+    cbNeuronType->addItem(tr("Перцептрон"));
+    cbNeuronType->addItem(tr("Сверточный"));
 
     neuronTypeLayout->addWidget(lTitle);
     neuronTypeLayout->addWidget(cbNeuronType);
@@ -36,18 +36,18 @@ void AddOutputNeuronsDialog::initNeuronTypeLayer() {
 
 void AddOutputNeuronsDialog::initNeuronNumberLayer() {
     leNeuronsNumber = new QLineEdit();
-    leNeuronsNumber->setPlaceholderText(tr("Neurons number"));
+    leNeuronsNumber->setPlaceholderText(tr("Количество нейронов"));
     layout->addWidget(leNeuronsNumber);
 }
 
 void AddOutputNeuronsDialog::initControlLayer() {
     QBoxLayout *buttonsLayout = new QHBoxLayout();
 
-    QPushButton *pbOk = new QPushButton(tr("OK"));
+    QPushButton *pbOk = new QPushButton(tr("Добавить"));
     connect(pbOk, SIGNAL(clicked()), SLOT(accept()));
     buttonsLayout->addWidget(pbOk);
 
-    QPushButton *pbCancel = new QPushButton(tr("Cancel"));
+    QPushButton *pbCancel = new QPushButton(tr("Отмена"));
     connect(pbCancel, SIGNAL(clicked()), SLOT(reject()));
     buttonsLayout->addWidget(pbCancel);
 

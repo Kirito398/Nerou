@@ -17,5 +17,6 @@
         <file>images/forward_neuron_icon.png</file>
         <file>images/save_icon.png</file>
         <file>images/open_icon.png</file>
+        <file>language/NerouLanguage_ru_RU.qm</file>
     </qresource>
 </RCC>

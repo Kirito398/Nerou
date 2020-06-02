@@ -31,6 +31,7 @@ public:
     std::vector<double> getTargetsMin();
     std::vector<unsigned long> getOutputsNeuronsID();
     void setOutputsNeuronsID(std::vector<unsigned long> outputsNeuronsID);
+    void shuffleData();
 
 private:
     std::string mainPath;
