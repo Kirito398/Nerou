@@ -150,9 +150,11 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
                     correctAnswerSum++;
                 answerCounter++;
             }
+
+            updateSinaps();
         }
 
-        updateSinaps();
+        //updateSinaps();
 
         view->onAccuracyChanged(correctAnswerSum / answerCounter);
         view->onErrorValueChanged(lossSum / classNumber);
@@ -167,14 +169,14 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
 }
 
 void MainInteractor::updateSinaps() {
-    double learningRange = calculateLearningRangeDecay(this->learningRange);
+    //double learningRange = calculateLearningRangeDecay(this->learningRange);
 
     for (auto sinaps : sinapsList)
-        sinaps->updateSinaps(learningRange, alpha, 0.9);
+        sinaps->updateSinaps(learningRange, alpha, 0.99);
 
     learningRangeDecayCounter++;
 
-    std::cout << learningRangeDecayCounter << " : " << learningRange <<  std::endl;
+    //std::cout << learningRangeDecayCounter << " : " << learningRange <<  std::endl;
 }
 
 double MainInteractor::calculateLearningRangeDecay(double learningRange0) {

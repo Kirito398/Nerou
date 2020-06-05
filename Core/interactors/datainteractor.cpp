@@ -73,7 +73,6 @@ void DataInteractor::sendData() {
 
         CoreInterface *core = dynamic_cast<CoreInterface *>(sinaps);
 
-
         if (isColorMode)
             core->sendSignal(colorValue[coreCounter++ % 3]);
         else

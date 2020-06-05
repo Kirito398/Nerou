@@ -17,7 +17,7 @@ TableDataInteractor::TableDataInteractor() : NeuronInteractor(Data)
     dataSet = new TableDataSetModel();
     currentAnswer = 0;
     currentLoss = 0;
-    epsilon = 0.5;
+    epsilon = 0.4;
     isTraining = false;
 }
 

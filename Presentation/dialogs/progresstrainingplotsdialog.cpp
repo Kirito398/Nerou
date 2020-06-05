@@ -10,7 +10,7 @@ ProgressTrainingPlotsDialog::ProgressTrainingPlotsDialog()
     resize(QSize(1024, 720));
 
     xStep = 25;
-    yStep = 0.25;
+    yStep = 0.05;
 
     layout = new QVBoxLayout();
 
@@ -95,7 +95,7 @@ void ProgressTrainingPlotsDialog::initAccuracyChart() {
 void ProgressTrainingPlotsDialog::initTotalLossChart() {
     QChart *totalLossChart = new QChart();
     totalLossChart->setAnimationOptions(QChart::NoAnimation);
-    totalLossChart->legend()->setVisible(false);
+    //totalLossChart->legend()->setVisible(false);
 
     QChartView *chartView = new QChartView(totalLossChart);
     chartView->setRenderHint(QPainter::Antialiasing);
@@ -106,7 +106,7 @@ void ProgressTrainingPlotsDialog::initTotalLossChart() {
 
     totalLossAxisY = new QValueAxis();
     totalLossAxisY->setTitleText(tr("Loss"));
-    totalLossAxisY->setRange(0, 0.5);
+    totalLossAxisY->setRange(0, 0.25);
 
     totalTrainingLossSeries = new QLineSeries(this);
     totalTrainingLossSeries->setName(tr("Total training Loss"));

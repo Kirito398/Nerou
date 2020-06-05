@@ -96,7 +96,7 @@ void PerceptronInteractor::calculateOut() {
     for (unsigned long i = 0; i < inputSignalCount; i++)
         sum += inputSignal[i];
 
-    if (inputsSinaps.at(0)->getInputNeuron()->getType() == NeuronType::Convolution)
+    if (inputsSinaps.at(0)->getInputNeuron()->getType() == NeuronType::Convolution || inputsSinaps.at(0)->getInputNeuron()->getType() == Data)
         outValue = sum;
     else
         outValue = activateFunction(sum);
