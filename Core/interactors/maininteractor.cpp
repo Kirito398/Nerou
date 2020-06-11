@@ -151,10 +151,10 @@ void MainInteractor::train(unsigned long classNumber, unsigned long iterationNum
                 answerCounter++;
             }
 
-            updateSinaps();
+            //updateSinaps();
         }
 
-        //updateSinaps();
+        updateSinaps();
 
         view->onAccuracyChanged(correctAnswerSum / answerCounter);
         view->onErrorValueChanged(lossSum / classNumber);

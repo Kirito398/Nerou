@@ -17,7 +17,12 @@ SinapsInteractor::SinapsInteractor(SinapsListener *inputListener, SinapsListener
 }
 
 double SinapsInteractor::random() {
-    return std::rand() % 100 / 100.0 - 0.5;
+    //unsigned long inputN = inputListener->getInputSignalSize();
+    //unsigned long outputN = inputListener->getOutputSignalSize();
+
+    double sigma = 1.0;//sqrt(2.0 / (inputN + outputN));
+
+    return (std::rand() % 100 / 100.0 - 0.5) * sigma;
 }
 
 void SinapsInteractor::setTrainingProcessAnimated(bool value) {
@@ -25,9 +30,9 @@ void SinapsInteractor::setTrainingProcessAnimated(bool value) {
 }
 
 double SinapsInteractor::optimize(double grad, double learningRange, double alpha, double prevDelta, double b, double &prevS) {
-    return rmsProp(grad, learningRange, alpha, prevDelta, b, prevS);
+    //return rmsProp(grad, learningRange, alpha, prevDelta, b, prevS);
     //return gradient(grad, learningRange);
-    //return momentum(grad, learningRange, alpha, prevDelta);
+    return momentum(grad, learningRange, alpha, prevDelta);
 }
 
 double SinapsInteractor::gradient(double grad, double learningRange) {

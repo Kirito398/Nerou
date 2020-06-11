@@ -1,6 +1,7 @@
 #include "neuroninteractor.h"
 
 #include "math.h"
+#include "iostream"
 
 #include "interactors/sinapsinteractor.h"
 #include "interfaces/maininteractorinterface.h"
@@ -137,8 +138,11 @@ double NeuronInteractor::crossEntropyFunction(std::vector<double> answer, std::v
     unsigned int size = answer.size();
     double sum = 0;
 
+    if (__isnanl(answer[0]))
+        std::cout << "";
+
     for (unsigned int i = 0; i < size; i++)
-        sum += -(mark[i] * log(answer[i]));
+        sum += -(mark[i] * log(answer[i] + 0.00000001));
 
     return sum / size;
 }
@@ -223,6 +227,14 @@ void NeuronInteractor::removeSinaps(unsigned long sinapsID) {
 
 void NeuronInteractor::setAnimateTrainingProcessEnable(bool enable) {
     isAnimateTrainingProcessEnabled = enable;
+}
+
+unsigned long NeuronInteractor::getInputSignalSize() {
+    return inputsSinaps.size();
+}
+
+unsigned long NeuronInteractor::getOutputSignalSize() {
+    return outputsSinaps.size();
 }
 
 void NeuronInteractor::removeSinapses() {

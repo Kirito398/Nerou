@@ -4,10 +4,10 @@
 #include "listeners/perceptronpresentorlistener.h"
 #include "models/perceptronmodel.h"
 
+#include <math.h>
+
 PerceptronInteractor::PerceptronInteractor() : NeuronInteractor(Perceptron)
 {
-    inputSignal = nullptr;
-    inputDelta = nullptr;
     inputSignalCount = 0;
     inputDeltaCount = 0;
     view = nullptr;
@@ -74,20 +74,28 @@ bool PerceptronInteractor::getIsOutputNeuron() {
 }
 
 void PerceptronInteractor::makeInputSignal() {
-    inputSignal = new double[inputSignalCount];
+    inputSignal.clear();// = new double[inputSignalCount];
 
     for (unsigned long i = 0; i < inputSignalCount; i++) {
         WeightInterface *weight = static_cast<WeightInterface *>(inputsSinaps.at(i));
-        inputSignal[i] = weight->getValue();
+        //inputSignal[i] = weight->getValue();
+        double value = weight->getValue();
+
+        if (__isnanl(value)) {
+            inputSignal.push_back(0);
+        } else {
+            inputSignal.push_back(weight->getValue());
+        }
     }
 }
 
 void PerceptronInteractor::makeInputDelta() {
-    inputDelta = new double[inputDeltaCount];
+    inputDelta.clear(); // = new double[inputDeltaCount];
 
     for (unsigned long i = 0; i < inputDeltaCount; i++) {
         WeightInterface *weight = static_cast<WeightInterface *>(outputsSinaps.at(i));
-        inputDelta[i] = weight->getDelta();
+        //inputDelta[i] = weight->getDelta();
+        inputDelta.push_back(weight->getDelta());
     }
 }
 
@@ -136,16 +144,17 @@ void PerceptronInteractor::sendDelta() {
 }
 
 void PerceptronInteractor::clearInputSignal() {
-    delete [] inputSignal;
-    inputSignal = nullptr;
-
+    //delete [] inputSignal;
+    //inputSignal = nullptr;
+    inputSignal.clear();
     inputSignalCount = 0;
 }
 
 void PerceptronInteractor::clearInputDelta() {
-    delete [] inputDelta;
-    inputDelta = nullptr;
+    //delete [] inputDelta;
+    //inputDelta = nullptr;
 
+    inputDelta.clear();
     inputDeltaCount = 0;
 }
 

@@ -51,6 +51,8 @@ private:
     double reSigmoidFunction(double value);
     double reTanhFunction(double value);
     double reReluFunction(double value);
+    unsigned long getInputSignalSize() override;
+    unsigned long getOutputSignalSize() override;
 
 protected:
     unsigned long inputSignalCount;

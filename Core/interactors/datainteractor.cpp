@@ -138,12 +138,12 @@ unsigned long DataInteractor::getClassNumber() {
 }
 
 unsigned long DataInteractor::getTrainingIterationNumber() {
-    unsigned long number = 0;
+    unsigned long number = classList[0].getTrainingPathsList().size();
 
     for (auto item : classList) {
         unsigned long size = item.getTrainingPathsList().size();
 
-        if (size > number)
+        if (size < number)
             number = size;
     }
 
@@ -151,12 +151,12 @@ unsigned long DataInteractor::getTrainingIterationNumber() {
 }
 
 unsigned long DataInteractor::getTestingIterationNumber() {
-    unsigned long number = 0;
+    unsigned long number = classList[0].getTestingPathsList().size();
 
     for (auto item : classList) {
         unsigned long size = item.getTestingPathsList().size();
 
-        if (size > number)
+        if (size < number)
             number = size;
     }
 

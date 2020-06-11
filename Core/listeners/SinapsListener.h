@@ -11,6 +11,8 @@ public:
     virtual void removeSinaps(unsigned long sinapsID) = 0;
     virtual unsigned long getID() = 0;
     virtual NeuronType getType() = 0;
+    virtual unsigned long getInputSignalSize() = 0;
+    virtual unsigned long getOutputSignalSize() = 0;
 };
 
 #endif // SINAPSLISTENER_H

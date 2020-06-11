@@ -37,8 +37,10 @@ private:
 
 private:
     PerceptronPresentorListener *view;
-    double *inputSignal;
-    double *inputDelta;
+    std::vector<double> inputSignal;
+    std::vector<double> inputDelta;
+    //double *inputSignal;
+    //double *inputDelta;
     double outValue;
     double deltaValue;
 };
